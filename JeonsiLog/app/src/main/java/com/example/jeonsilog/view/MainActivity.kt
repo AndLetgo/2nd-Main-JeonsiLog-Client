@@ -1,7 +1,8 @@
-package com.example.jeonsilog
+package com.example.jeonsilog.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.jeonsilog.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
