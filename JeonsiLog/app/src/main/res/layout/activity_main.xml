@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fl_main"
-        android:background="@color/white"
+        android:background="@color/basic_white"
         app:labelVisibilityMode="unlabeled"
         app:itemRippleColor="@null"
         app:menu="@menu/menu_bn_main"/>
