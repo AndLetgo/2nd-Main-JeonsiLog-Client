@@ -13,7 +13,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
     FragmentSearchBinding::bind, R.layout.fragment_search
 ) {
     override fun init() {
-        
+
     }
 
 }
