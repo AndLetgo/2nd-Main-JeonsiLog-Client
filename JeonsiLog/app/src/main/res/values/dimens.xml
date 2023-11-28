@@ -12,4 +12,16 @@
     <dimen name="margin_36">36dp</dimen>
     <dimen name="margin_44">44dp</dimen>
     <dimen name="margin_48">48dp</dimen>
+
+    <!--    Text Size(sp)-->
+    <dimen name="text_14">14sp</dimen>
+    <dimen name="text_16">16sp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="text_20">20sp</dimen>
+
+    <!--    Text LineSpacing(px)-->
+    <dimen name="linespacing_22">22px</dimen>
+    <dimen name="linespacing_24">24px</dimen>
+    <dimen name="linespacing_26">26px</dimen>
+    <dimen name="linespacing_28">28px</dimen>
 </resources>
