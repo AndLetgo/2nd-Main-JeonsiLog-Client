@@ -6,19 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.jeonsilog.R
+import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.databinding.FragmentMyPageBinding
 
-class MyPageFragment : Fragment() {
+class MyPageFragment : BaseFragment<FragmentMyPageBinding>(
+    FragmentMyPageBinding::bind,R.layout.fragment_my_page) {
+    override fun init() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_page, container, false)
     }
 
 }
