@@ -46,4 +46,9 @@ dependencies {
     def GLIDE_VERSION = "4.16.0"
     implementation "com.github.bumptech.glide:glide:$GLIDE_VERSION"
     kapt "com.github.bumptech.glide:compiler:$GLIDE_VERSION"
+    
+    def RETROFIT_VERSION = "2.9.0"
+    implementation "com.squareup.retrofit2:$RETROFIT_VERSION"
+    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
+
 }
