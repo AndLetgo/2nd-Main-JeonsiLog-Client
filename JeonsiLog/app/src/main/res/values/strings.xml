@@ -1,5 +1,140 @@
 <resources>
     <string name="app_name">JeonsiLog</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Button -->
+    <string name="btn_delete">삭제</string>
+    <string name="btn_delete_dialog">삭제하기</string>
+    <string name="btn_report">신고</string>
+    <string name="btn_register">등록</string>
+    <string name="btn_modify">수정</string>
+    <string name="btn_cancel">취소</string>
+    <string name="btn_move">이동</string>
+    <string name="btn_close">닫기</string>
+
+    <string name="btn_public">공개</string>
+    <string name="btn_private">비공개</string>
+
+    <string name="btn_load_image">갤러리에서 불러오기</string>
+    <string name="btn_load_poster">전시회 포스터 불러오기</string>
+    <string name="btn_set_delete_image">이미지 삭제하기</string>
+    <string name="btn_set_defalut_image">기본 이미지로 변경</string>
+
+    <string name="btn_following">팔로잉</string>
+    <string name="btn_f4f">맞팔로우</string>
+
+    <string name="btn_logout">로그아웃</string>
+    <string name="btn_unlink">회원탈퇴</string>
+    <string name="btn_unlink_recheck">탈퇴하기</string>
+
+    <string name="btn_report_poster">불편함 접수하기</string>
+
+    <string name="btn_start">시작하기</string>
+    <string name="btn_refresh">새로고침</string>
+
+    <!-- Date -->
+    <string name="date_now">지금</string>
+    <string name="date_min">%d분 전</string>
+    <string name="date_hour">%d시간 전</string>
+    <string name="date_yesterday">어제</string>
+    <string name="date_day">%d일 전</string>
+
+    <!-- Dialog -->
+    <string name="dialog_reply_report">댓글 신고는 취소할 수 없어요. \n 해당 댓글을 신고하시겠어요?</string>
+    <string name="dialog_reply_delete">삭제된 댓글은 복구할 수 없어요. \n 해당 댓글을 삭제하시겠어요?</string>
+    <string name="dialog_close_review">지금까지 작성한 감상평이 사라져요. \n 창을 닫으시겠어요?</string>
+
+    <string name="dialog_unlink_comment">탈퇴 시, 모든 데이터가 삭제됩니다.</string>
+    <string name="dialog_unlink_sub_comment">정말 탈퇴하시겠어요?</string>
+
+    <string name="dialog_nick_modify_title">닉네임 수정</string>
+    <string name="dialog_nick_modify_hint">2~10글자, 특수문자 사용 불가</string>
+    <string name="dialog_nick_duplicate">중복된 닉네임이에요.</string>
+    <string name="dialog_nick_prohibited_words_check">부적절한 단어가 포함되어 있어요.</string>
+    <string name="dialog_failure_internet">인터넷에 연결할 수 없어요. \n 새로고침을 하거나 \n 네트워크 설정을 확인해주세요.</string>
+
+    <!-- Login -->
+    <string name="login_nick_placeholder">닉네임을 입력하세요.</string>
+    <string name="login_nick_hint">2~10글자, 특수문자 사용 불가</string>
+    <string name="login_nick_check_success">사용 가능한 닉네임이에요.</string>
+    <string name="login_nick_check_duplicate">중복된 닉네임이에요.</string>
+    <string name="login_nick_check_prohibited_words">부적절한 단어가 포함되어 있어요.</string>
+    <string name="login_nick_check_special_char">특수문자는 사용할 수 없어요.</string>
+
+    <!-- Home -->
+    <string name="home_title">요즘 뜨는 전시</string>
+
+    <!-- Exhibition -->
+    <string name="exhibition_information">전시회 정보</string>
+    <string name="exhibition_rating">평균 별점</string>
+    <string name="exhibition_review">감상평</string>
+    <string name="exhibition_reply">댓글</string>
+    <string name="exhibition_writing_review">감상평 작성하기</string>
+
+    <!-- Search -->
+    <string name="search_edit_hint">검색어를 입력하세요</string>
+    <string name="search_title">최근검색어</string>
+    <string name="search_random_exhibition">이런 전시회도 있어요</string>
+
+    <string name="search_tablayout_item1">전시</string>
+    <string name="search_tablayout_item2">전시장</string>
+    <string name="search_tablayout_item3">사용자</string>
+
+    <!-- PhotoCalendar -->
+    <string name="search_photocalendar_title">전시회 포스터 불러오기</string>
+    <string name="search_photocalendar_edit_hint">전시회명을 입력하세요</string>
+
+    <!-- Notification -->
+    <string name="noti_title">알림</string>
+    <string name="noti_following_tab">팔로잉</string>
+    <string name="noti_my_activity">나의 활동</string>
+
+    <!-- Mypage -->
+    <string name="mypage_title">마이페이지</string>
+
+    <string name="mypage_my_rating">나의 별점</string>
+    <string name="mypage_my_rating_count">내가 남긴 별점 개수: %d개</string>
+    <string name="mypage_my_review">나의 감상평</string>
+    <string name="mypage_review_count">내가 남긴 감상평 개수: %d개</string>
+    <string name="mypage_favorites">즐겨찾기</string>
+
+    <string name="mypage_following">팔로잉</string>
+    <string name="mypage_follower">팔로워</string>
+
+    <!-- OtherUserPage -->
+    <string name="other_rating">별점</string>
+    <string name="other_review">감상평</string>
+
+    <!-- Setting -->
+    <string name="setting_title">환경설정</string>
+    <string name="setting_noti">알림</string>
+    <string name="setting_following">팔로잉</string>
+    <string name="setting_my_activity">나의 활동</string>
+    <string name="setting_terms_of_service">이용약관</string>
+
+    <string name="setting_version">버전 정보 v.%s</string>
+
+    <!-- Admin Page -->
+    <string name="admin_report_reply">님의 댓글이 신고됐어요</string>
+    <string name="admin_report_poster">포스터 등록이 필요해요</string>
+    <string name="admin_report_review">님의 감상평이 신고됐어요</string>
+
+    <!-- Empty State -->
+    <string name="empty_search_title">검색 결과가 없어요</string>
+    <string name="empty_search_description">검색어를 다시 확인해 주세요</string>
+    <string name="empty_poster_title">포스터 이미지를 준비 중이에요</string>
+    <string name="empty_poster_description">조금만 기다려 주세요</string>
+    <string name="empty_my_follower">아직 팔로워가 없어요</string>
+    <string name="empty_my_following_title">아직 팔로잉이 없어요</string>
+    <string name="empty_my_following_description">원하는 사용자를 팔로우 해보세요</string>
+    <string name="empty_my_rating_title">아직 남긴 별점이 없어요</string>
+    <string name="empty_my_rating_description">전시회 관람 후, 별점을 남겨보세요</string>
+    <string name="empty_my_review_title">아직 남긴 감상평이 없어요</string>
+    <string name="empty_my_review_description">전시회 관람 후, 감상평을 남겨보세요</string>
+    <string name="empty_my_interest_title">아직 즐겨찾기가 없어요</string>
+    <string name="empty_my_interest_description">마음에 드는 전시회를 즐겨찾기 해보세요</string>
+    <string name="empty_other_follower">팔로워가 없어요</string>
+    <string name="empty_other_following">팔로잉이 없어요</string>
+    <string name="empty_other_rating">기록된 별점이 없어요</string>
+    <string name="empty_other_review">기록된 감상평이 없어요</string>
+    <string name="empty_other_photocalendar">포토캘린더가 비공개 되어있어요</string>
 </resources>
