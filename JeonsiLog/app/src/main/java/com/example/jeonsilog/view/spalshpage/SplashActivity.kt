@@ -30,9 +30,4 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
     private fun tokenValidation(): Boolean{
         return true
     }
-
-    private fun loadSettingInfo(){
-        // 환결설정 세팅 값과 온보딩 실행 여부
-        // Intent로 넘겨줄 예정
-    }
 }
