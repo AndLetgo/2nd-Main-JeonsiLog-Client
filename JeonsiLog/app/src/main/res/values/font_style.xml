@@ -3,46 +3,46 @@
     <style name="XL_bold">
         <item name="fontFamily">@font/noto_sans_kr_bold</item>
         <item name="android:textSize">@dimen/text_20</item>
-        <item name="android:lineSpacingExtra">@dimen/linespacing_28</item>
     </style>
     <style name="XL_regular">
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textSize">@dimen/text_20</item>
-        <item name="android:lineSpacingExtra">@dimen/linespacing_28</item>
     </style>
     <style name="L_bold">
         <item name="fontFamily">@font/noto_sans_kr_bold</item>
         <item name="android:textSize">@dimen/text_18</item>
-        <item name="android:lineSpacingExtra">@dimen/linespacing_26</item>
     </style>
     <style name="L_regular">
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textSize">@dimen/text_18</item>
-        <item name="android:lineSpacingExtra">@dimen/linespacing_26</item>
     </style>
     <style name="M_bold">
         <item name="fontFamily">@font/noto_sans_kr_bold</item>
         <item name="android:textSize">@dimen/text_16</item>
-        <item name="android:lineSpacingExtra">@dimen/linespacing_24</item>
     </style>
     <style name="M_medium">
         <item name="fontFamily">@font/noto_sans_kr_medium</item>
         <item name="android:textSize">@dimen/text_16</item>
+    </style>
+    <style name="M_medium_line_spacing" parent="M_medium">
         <item name="android:lineSpacingExtra">@dimen/linespacing_24</item>
     </style>
     <style name="M_regular">
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textSize">@dimen/text_16</item>
+    </style>
+    <style name="M_regular_line_spacing" parent="M_regular">
         <item name="android:lineSpacingExtra">@dimen/linespacing_24</item>
     </style>
     <style name="S_bold">
         <item name="fontFamily">@font/noto_sans_kr_bold</item>
         <item name="android:textSize">@dimen/text_14</item>
-        <item name="android:lineSpacingExtra">@dimen/linespacing_22</item>
     </style>
     <style name="S_regular">
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textSize">@dimen/text_14</item>
+    </style>
+    <style name="S_regular_line_spacing" parent="S_regular">
         <item name="android:lineSpacingExtra">@dimen/linespacing_22</item>
     </style>
 </resources>

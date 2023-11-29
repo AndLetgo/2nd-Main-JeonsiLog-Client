@@ -10,8 +10,7 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentSearchBinding
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(
-    FragmentSearchBinding::bind, R.layout.fragment_search
-) {
+    R.layout.fragment_search) {
     override fun init() {
 
     }
