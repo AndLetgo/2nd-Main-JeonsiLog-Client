@@ -10,8 +10,7 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentPhotoCalendarBinding
 
 class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
-    FragmentPhotoCalendarBinding::bind, R.layout.fragment_photo_calendar
-) {
+    R.layout.fragment_photo_calendar) {
     override fun init() {
 
     }

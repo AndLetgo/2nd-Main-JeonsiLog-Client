@@ -10,8 +10,7 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentNotificationBinding
 
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(
-    FragmentNotificationBinding::bind, R.layout.fragment_notification
-) {
+    R.layout.fragment_notification) {
 
     override fun init() {
 
