@@ -16,6 +16,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        def properties = new Properties()
+        properties.load(new FileInputStream(rootProject.file("local.properties")))
         def key = properties["KAKAO_NATIVE_KEY"]
         buildConfigField("String", "KAKAO_NATIVE_KEY", "\"$key\"")
         manifestPlaceholders["KAKAO_NATIVE_KEY"] = key.toString()
@@ -58,7 +60,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
 
-    implementation "com.kakao.sdk:v2-user:2.18.0"
+    implementation "com.kakao.sdk:v2-user:2.17.0"
 
     // By viewModels()
     implementation "androidx.activity:activity-ktx:1.1.0"
