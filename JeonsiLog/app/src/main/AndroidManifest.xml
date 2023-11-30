@@ -39,6 +39,7 @@
                     android:host="oauth"
                     android:scheme="kakao${KAKAO_NATIVE_KEY}" />
             </intent-filter>
+        </activity>
         <activity android:name=".view.MainActivity">
 
         </activity>

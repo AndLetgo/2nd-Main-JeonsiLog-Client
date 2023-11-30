@@ -41,7 +41,7 @@ class SignUpActivity: AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {
                 val inputText = p0.toString()
 
-                if (checker.isLengthValid(inputText) && !checker.hasSpecialCharacter(inputText) && !checker.hasProhibitedWord(inputText)) {
+                if (checker.allCheck(inputText)) {
                     //if(닉네임 중복 체크){
                     viewModel.setComment(getString(R.string.login_nick_check_success))
                     activeTransition(true)
@@ -59,6 +59,9 @@ class SignUpActivity: AppCompatActivity() {
                     }
                     else if (checker.hasProhibitedWord(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_prohibited_words))
+                    }
+                    else if(checker.isNotPair(inputText)){
+                        viewModel.setComment(getString(R.string.login_nick_check_is_pair))
                     }
                     activeTransition(false)
                 }
