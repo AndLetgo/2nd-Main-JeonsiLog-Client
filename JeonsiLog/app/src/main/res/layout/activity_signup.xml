@@ -59,10 +59,11 @@
             app:layout_constraintBottom_toBottomOf="@+id/bl_signup_bottom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.16"
+            app:layout_constraintHorizontal_bias="0.14"
             tools:ignore="ContentDescription" />
         
         <ImageButton
+            android:id="@+id/btn_update_profile_url"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_edit_img"
