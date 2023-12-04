@@ -12,7 +12,7 @@ import com.example.jeonsilog.databinding.FragmentSearchBinding
 class SearchFragment : BaseFragment<FragmentSearchBinding>(
     R.layout.fragment_search) {
     override fun init() {
-
+        var test =11
     }
 
 }
