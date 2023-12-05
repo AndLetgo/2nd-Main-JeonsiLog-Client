@@ -21,6 +21,8 @@ android {
         def key = properties["KAKAO_NATIVE_KEY"]
         buildConfigField("String", "KAKAO_NATIVE_KEY", "\"$key\"")
         manifestPlaceholders["KAKAO_NATIVE_KEY"] = key.toString()
+        def baseUrl = properties["BASE_URL"]
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
     }
 
     buildTypes {

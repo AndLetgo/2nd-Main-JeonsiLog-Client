@@ -19,7 +19,7 @@ class NickValidChecker {
     }
 
     fun hasSpecialCharacter(input: String): Boolean {
-        val regex = "[!@#\$%^&*()_+={}\\[\\]:;<>,.?/~|\\\\\\\"' ]"
+        val regex = "[!@#\$%^&*()_+={}\\[\\]:;<>,.?/~|\\\\\\\"'\\s-]"
         val pattern = Pattern.compile(regex)
         return pattern.matcher(input).find()
     }

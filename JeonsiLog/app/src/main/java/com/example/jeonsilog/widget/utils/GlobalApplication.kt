@@ -18,6 +18,8 @@ class GlobalApplication: Application() {
 
         getKeyHash()
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY)
+
+
     }
 
 

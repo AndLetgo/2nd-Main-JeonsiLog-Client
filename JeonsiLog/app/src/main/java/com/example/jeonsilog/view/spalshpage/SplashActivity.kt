@@ -34,7 +34,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
                     }
                     Handler(Looper.getMainLooper()).postDelayed({
                         val intent = Intent(this, LoginActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         startActivity(intent)
+                        finish()
                     }, 3000)
                 }
                 else {
@@ -45,7 +47,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
 
                     Handler(Looper.getMainLooper()).postDelayed({
                         val intent = Intent(this, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                         startActivity(intent)
+                        finish()
                     }, 3000)
                 }
             }
@@ -54,7 +58,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
             Log.d(TAG, "토큰이 존재하지 않음")
             Handler(Looper.getMainLooper()).postDelayed({
                 val intent = Intent(this, LoginActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 startActivity(intent)
+                finish()
             }, 3000)
         }
     }

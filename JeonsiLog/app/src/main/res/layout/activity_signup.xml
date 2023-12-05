@@ -4,6 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
+        <import type="com.example.jeonsilog.R"/>
+        <import type="android.content.Context"/>
+
         <variable
             name="vm"
             type="com.example.jeonsilog.viewmodel.SignUpViewModel" />
@@ -47,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/iv_jeonsilog_title"
-            app:layout_constraintBottom_toTopOf="@+id/btn_login"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login_start"
             app:layout_constraintVertical_bias="0.14" />
 
         <ImageView
@@ -78,8 +82,10 @@
             android:layout_height="48dp"
             android:hint="@string/login_nick_placeholder"
             android:inputType="text"
+            android:text="@{vm.etNick}"
             android:background="@drawable/et_nickname"
             android:paddingStart="@dimen/margin_16"
+            android:paddingEnd="0dp"
             android:cursorVisible="false"
             android:textColorHint="@color/gray_light_medium"
             style="@style/M_regular"
@@ -87,7 +93,8 @@
             app:layout_constraintStart_toEndOf="@+id/iv_login_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.2"
-            android:maxLength="10" />
+            android:maxLength="10"
+            android:onFocusChange="@{(v, hasFocus) -> vm.onNickFocusChange(v, hasFocus)}"/>
         
         <ImageButton
             android:id="@+id/ib_edit_clear"
@@ -99,6 +106,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/et_nick"
             android:padding="@dimen/margin_12"
             android:backgroundTint="#00000000"
+            android:visibility="@{vm.isNickFocused() ? View.VISIBLE : View.INVISIBLE}"
             tools:ignore="ContentDescription,SpeakableTextPresentCheck"/>
 
         <TextView
@@ -117,26 +125,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/iv_jeonsilog_title"
-            app:layout_constraintBottom_toTopOf="@+id/btn_login"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login_start"
             app:layout_constraintVertical_bias="0.56" />
 
-
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_login_start"
             android:layout_width="372dp"
             android:layout_height="54dp"
-            android:background="@drawable/shape_corner_round_start_btn"
+            android:background="@drawable/shape_corner_round_start_btn_activate"
             android:text="@string/btn_start"
             style="@style/M_medium"
-            android:textColor="@color/gray_medium"
+            android:textColor="@color/basic_white"
             android:padding="0dp"
             android:stateListAnimator="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.92" />
+            app:layout_constraintVertical_bias="0.92"
+            android:visibility="@{vm.btnFlag ? View.INVISIBLE : View.VISIBLE}"/>
 
+        <Button
+            android:id="@+id/btn_login_duplicate"
+            android:layout_width="372dp"
+            android:layout_height="54dp"
+            android:background="@{vm.checkableFlag ? context.getDrawable(R.drawable.shape_corner_round_start_btn_activate) : context.getDrawable(R.drawable.shape_corner_round_start_btn)}"
+            android:text="@string/btn_duplicate"
+            style="@style/M_medium"
+            android:textColor="@{vm.checkableFlag ? context.getColor(R.color.basic_white) : context.getColor(R.color.gray_medium)}"
+            android:padding="0dp"
+            android:stateListAnimator="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.92"
+            android:visibility="@{vm.btnFlag ? View.VISIBLE : View.INVISIBLE}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

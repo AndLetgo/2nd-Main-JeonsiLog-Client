@@ -20,7 +20,10 @@ class PreferenceUtil(context: Context) {
         return prefs.getBoolean("myActivityMode", true)
     }
 
-    // apply() => 비동기  commit() => 동기
+    fun getSignUpFinished(): Boolean {
+        return prefs.getBoolean("signUpFinished", false)
+    }
+
     fun setOnBoardingMode(p: Boolean) {
         prefs.edit().putBoolean("onBoardingMode", p).apply()
     }
@@ -31,6 +34,10 @@ class PreferenceUtil(context: Context) {
 
     fun setMyActivityMode(p: Boolean) {
         prefs.edit().putBoolean("myActivityMode", p).apply()
+    }
+
+    fun setSignUpFinished(p: Boolean) {
+        prefs.edit().putBoolean("signUpFinished", p).apply()
     }
 
 
