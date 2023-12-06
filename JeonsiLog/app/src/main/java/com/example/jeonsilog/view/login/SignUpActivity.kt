@@ -133,33 +133,41 @@ class SignUpActivity: AppCompatActivity() {
         }
 
         binding.btnLoginStart.setOnClickListener {
+            val data = SignUpData("","","","")
 
-            CoroutineScope(Dispatchers.Main).launch{
-                val data = SignUpData("","","","")
-
-                UserApiClient.instance.me { user, error ->
-                    if(error != null){
-                        Log.e(tag, error.message.toString())
-                    } else {
-                        if(user != null){
-                            data.providerId = user.id.toString()
-                            data.nickname = user.kakaoAccount!!.profile!!.nickname.toString()
-                            data.email = user.kakaoAccount!!.email.toString()
-                            data.profileImgUrl = user.kakaoAccount!!.profile!!.profileImageUrl.toString()
-                        }
+            UserApiClient.instance.me { user, error ->
+                if(error != null){
+                    Log.e(tag, error.message.toString())
+                } else {
+                    if(user != null){
+                        data.providerId = user.id.toString()
+                        data.nickname = user.kakaoAccount!!.profile!!.nickname.toString()
+                        data.email = user.kakaoAccount!!.email.toString()
+                        data.profileImgUrl = user.kakaoAccount!!.profile!!.profileImageUrl.toString()
                     }
                 }
-
-                AuthRepositoryImpl().postUser(data)
-
             }
 
-            prefs.setSignUpFinished(true)
+            CoroutineScope(Dispatchers.IO).launch{
+                try{
+                    val flag = AuthRepositoryImpl().postSignUp(data)
 
-            val intent = Intent(this, SplashActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            startActivity(intent)
-            finish()
+                    launch(Dispatchers.Main){
+                        if(flag){
+                            prefs.setSignUpFinished(true)
+
+                            val intent = Intent(this@SignUpActivity, SplashActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Toast.makeText(this@SignUpActivity, "에러", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: IOException){
+                    e.printStackTrace()
+                }
+            }
         }
 
         binding.ibEditClear.setOnClickListener {

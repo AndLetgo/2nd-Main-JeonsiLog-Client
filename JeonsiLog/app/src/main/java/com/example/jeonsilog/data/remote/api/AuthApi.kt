@@ -14,7 +14,7 @@ import retrofit2.http.Path
 
 interface AuthApi {
     @POST("/auth/sign-up")
-    suspend fun postUser(@Body userData: SignUpData): Response<OnlyMsgResponse>
+    suspend fun postSignUp(@Body userData: SignUpData): Response<OnlyMsgResponse>
 
     @GET("/auth/nickname/{nick}")
     suspend fun getIsAvailable(@Path("nick") nick: String): Response<IsAvailableResponse>

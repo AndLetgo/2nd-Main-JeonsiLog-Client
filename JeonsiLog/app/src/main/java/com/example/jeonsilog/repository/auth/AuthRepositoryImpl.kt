@@ -9,9 +9,16 @@ import com.example.jeonsilog.data.remote.dto.auth.SignUpData
 class AuthRepositoryImpl: AuthRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(AuthApi::class.java)
 
-    override suspend fun postUser(data: SignUpData) {
-        val response = service.postUser(data)
-        Log.d("Auth", response.body().toString())
+    override suspend fun postSignUp(data: SignUpData): Boolean {
+        val response = service.postSignUp(data)
+
+        return if(response.isSuccessful){
+            Log.d("Auth", response.body().toString())
+            true
+        } else {
+            Log.e("Auth", response.errorBody().toString())
+            false
+        }
     }
 
     override suspend fun getIsAvailable(nick: String): Boolean {

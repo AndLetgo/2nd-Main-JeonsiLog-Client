@@ -4,7 +4,7 @@ import com.example.jeonsilog.data.remote.dto.auth.LoginData
 import com.example.jeonsilog.data.remote.dto.auth.SignUpData
 
 interface AuthRepository {
-    suspend fun postUser(data: SignUpData)
+    suspend fun postSignUp(data: SignUpData): Boolean
 
     suspend fun getIsAvailable(nick: String): Boolean
 
