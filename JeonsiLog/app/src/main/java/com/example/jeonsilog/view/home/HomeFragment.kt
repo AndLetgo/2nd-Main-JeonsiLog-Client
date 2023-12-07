@@ -1,12 +1,10 @@
 package com.example.jeonsilog.view.home
 
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentHomeBinding
 import com.example.jeonsilog.viewmodel.HomeRvModel
-import com.example.jeonsilog.viewmodel.HomeViewModel
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
@@ -29,13 +27,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeRvAdapter = HomeRvAdapter(list)
         binding.rvHomeExhibition.adapter = homeRvAdapter
         binding.rvHomeExhibition.layoutManager = LinearLayoutManager(this.context)
-
-        val homeViewModel = HomeViewModel()
-        homeViewModel.id.observe(viewLifecycleOwner, Observer {
-            it?.let{
-                homeRvAdapter.addHeaderList(list)
-            }
-        })
     }
 
 }

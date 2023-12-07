@@ -1,11 +1,6 @@
 package com.example.jeonsilog.view
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
@@ -36,6 +31,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             }
             true
         }
+
     }
 
     fun setStateBn(isVisible:Boolean){
