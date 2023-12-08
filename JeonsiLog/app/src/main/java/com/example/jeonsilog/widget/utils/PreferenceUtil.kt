@@ -8,6 +8,10 @@ class PreferenceUtil(context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("AppSettingPrefs", Context.MODE_PRIVATE)
 
+    fun clearAll() {
+        prefs.edit().clear().apply()
+    }
+
     fun getOnBoardingMode(): Boolean {
         return prefs.getBoolean("onBoardingMode", true)
     }
@@ -22,6 +26,10 @@ class PreferenceUtil(context: Context) {
 
     fun getSignUpFinished(): Boolean {
         return prefs.getBoolean("signUpFinished", false)
+    }
+
+    fun getIsLoginState(): Boolean {
+        return prefs.getBoolean("isLoginState", false)
     }
 
     fun setOnBoardingMode(p: Boolean) {
@@ -40,7 +48,9 @@ class PreferenceUtil(context: Context) {
         prefs.edit().putBoolean("signUpFinished", p).apply()
     }
 
-
+    fun setIsLoginState(p: Boolean) {
+        prefs.edit().putBoolean("isLoginState", p).apply()
+    }
 
 
 
