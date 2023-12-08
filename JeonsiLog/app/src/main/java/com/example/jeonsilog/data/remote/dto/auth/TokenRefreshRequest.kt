@@ -1,5 +1,5 @@
 package com.example.jeonsilog.data.remote.dto.auth
 
-data class ReissuedData (
+data class TokenRefreshRequest (
     var refreshToken: String
 )
