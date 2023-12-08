@@ -10,18 +10,19 @@ import com.kakao.sdk.common.util.Utility
 class GlobalApplication: Application() {
     companion object {
         lateinit var prefs: PreferenceUtil
+        lateinit var encryptedPrefs: CryptedPreferenceUtil
     }
 
     override fun onCreate() {
         prefs = PreferenceUtil(applicationContext)
+        encryptedPrefs = CryptedPreferenceUtil(applicationContext)
+        encryptedPrefs.setAT("afa")
+
         super.onCreate()
 
         getKeyHash()
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY)
-
-
     }
-
 
     private fun getKeyHash(){
         val keyHash = Utility.getKeyHash(this)
