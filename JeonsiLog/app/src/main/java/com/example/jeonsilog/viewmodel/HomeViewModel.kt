@@ -3,6 +3,7 @@ package com.example.jeonsilog.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.w3c.dom.Text
 
 class HomeViewModel:ViewModel(){
     private var _id = MutableLiveData<Long>()
@@ -21,5 +22,27 @@ class HomeViewModel:ViewModel(){
     val operatingKeyword: LiveData<String>
         get() = _operatingKeyword
 
-//    private var _
+    private var _priceKeyword = MutableLiveData<String>()
+    val priceKeyword: LiveData<String>
+        get()=_priceKeyword
+
+    private var _price = MutableLiveData<String>()
+    val price: LiveData<String>
+        get() = _price
+
+    private var _startDate = MutableLiveData<String>()
+    val startDate: LiveData<String>
+        get() = _startDate
+
+    private var _endDate = MutableLiveData<String>()
+    val endDate: LiveData<String>
+        get() = _endDate
+
+    private var _information = MutableLiveData<Text>()
+    val information : LiveData<Text>
+        get() = _information
+
+    private var _rate = MutableLiveData<Double>()
+    val rate: LiveData<Double>
+        get() = _rate
 }

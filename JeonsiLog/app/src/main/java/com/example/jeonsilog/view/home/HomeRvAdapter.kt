@@ -3,6 +3,7 @@ package com.example.jeonsilog.view.home
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
@@ -26,6 +27,7 @@ class HomeRvAdapter(private val homeRvList:List<HomeRvModel>): RecyclerView.Adap
             if(position%2 == 0){
                 operating = "전시중"
                 price = "무료"
+                binding.tvKeywordOperating.isVisible = false
             }else{
                 operating = "전시전"
                 price = "유료"
