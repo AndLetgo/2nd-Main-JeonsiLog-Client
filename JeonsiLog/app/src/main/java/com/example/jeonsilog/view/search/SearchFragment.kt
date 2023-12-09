@@ -1,4 +1,4 @@
-package com.example.jeonsilog.view
+package com.example.jeonsilog.view.search
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,7 +12,18 @@ import com.example.jeonsilog.databinding.FragmentSearchBinding
 class SearchFragment : BaseFragment<FragmentSearchBinding>(
     R.layout.fragment_search) {
     override fun init() {
-        var test =11
+        replaceFragment(RecordSearchFragment())
     }
 
+
+
+
+
+
+    fun replaceFragment(fragment: Fragment) {
+        val transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.my_FrameLayout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
 }

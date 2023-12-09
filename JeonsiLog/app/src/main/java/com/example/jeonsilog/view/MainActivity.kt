@@ -1,12 +1,9 @@
 package com.example.jeonsilog.view
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.util.Log
-import androidx.databinding.DataBindingUtil
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
+import com.example.jeonsilog.view.search.SearchFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
 
@@ -19,7 +16,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,HomeFragment()).commit()
                 }
                 R.id.item_search->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,SearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,
+                        SearchFragment()
+                    ).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_photoCalendar->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,PhotoCalendarFragment()).commit()
