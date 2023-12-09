@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--    Dp Margin  -->
+    <dimen name="margin_2">2dp</dimen>
     <dimen name="margin_4">4dp</dimen>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="margin_12">12dp</dimen>
@@ -12,6 +13,17 @@
     <dimen name="margin_36">36dp</dimen>
     <dimen name="margin_44">44dp</dimen>
     <dimen name="margin_48">48dp</dimen>
+    <dimen name="margin_56">56dp</dimen>
+
+    <!--    Dp Item  -->
+    <dimen name="item_0">0dp</dimen>
+    <dimen name="item_4">4dp</dimen>
+    <dimen name="item_32">32dp</dimen>
+    <dimen name="item_40">40dp</dimen>
+    <dimen name="item_52">52dp</dimen>
+    <dimen name="item_74">74dp</dimen>
+    <dimen name="item_100">100dp</dimen>
+    <dimen name="item_132">132dp</dimen>
 
     <!--    Text Size(sp)-->
     <dimen name="text_14">14sp</dimen>
@@ -24,4 +36,8 @@
     <dimen name="linespacing_24">24px</dimen>
     <dimen name="linespacing_26">26px</dimen>
     <dimen name="linespacing_28">28px</dimen>
+
+    <!--    Dp Shadow  -->
+    <dimen name="shadow_2">2dp</dimen>
+    <dimen name="shadow_12">12dp</dimen>
 </resources>
