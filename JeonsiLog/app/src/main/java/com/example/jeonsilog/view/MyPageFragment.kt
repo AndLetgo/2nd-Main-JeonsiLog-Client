@@ -5,9 +5,14 @@ import android.util.Log
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentMyPageBinding
+import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.spalshpage.SplashActivity
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     override fun init() {
@@ -16,8 +21,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 if(error != null){
                     Log.e("LOGIN", error.message.toString())
                 }
-                val intent = Intent(this.context, SplashActivity::class.java)
-                startActivity(intent)
+                CoroutineScope(Dispatchers.IO).launch{
+                    AuthRepositoryImpl().signOut(encryptedPrefs.getAT().toString())
+                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val intent = Intent(requireContext(), SplashActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
 
@@ -26,9 +36,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 if(error != null){
                     Log.e("LOGIN", error.message.toString())
                 }
-                prefs.setSignUpFinished(false)
-                val intent = Intent(this.context, SplashActivity::class.java)
-                startActivity(intent)
+                CoroutineScope(Dispatchers.IO).launch{
+                    UserRepositoryImpl().doUnLink(encryptedPrefs.getAT().toString())
+                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    val intent = Intent(requireContext(), SplashActivity::class.java)
+                    startActivity(intent)
+                }
             }
         }
     }

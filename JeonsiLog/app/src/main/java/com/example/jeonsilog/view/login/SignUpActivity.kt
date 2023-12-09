@@ -21,7 +21,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.auth.SignUpData
+import com.example.jeonsilog.data.remote.dto.auth.SignInRequest
+import com.example.jeonsilog.data.remote.dto.auth.SignUpRequest
 import com.example.jeonsilog.databinding.ActivitySignupBinding
 import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
@@ -35,6 +36,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class SignUpActivity: AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -133,38 +136,33 @@ class SignUpActivity: AppCompatActivity() {
         }
 
         binding.btnLoginStart.setOnClickListener {
-            val data = SignUpData("","","","")
+            CoroutineScope(Dispatchers.Main).launch {
 
-            UserApiClient.instance.me { user, error ->
-                if(error != null){
-                    Log.e(tag, error.message.toString())
-                } else {
-                    if(user != null){
-                        data.providerId = user.id.toString()
-                        data.nickname = user.kakaoAccount!!.profile!!.nickname.toString()
-                        data.email = user.kakaoAccount!!.email.toString()
-                        data.profileImgUrl = user.kakaoAccount!!.profile!!.profileImageUrl.toString()
-                    }
-                }
-            }
+                try {
+                    val userData = getUserData()
+                    Log.d(tag, userData.toString())
 
-            CoroutineScope(Dispatchers.IO).launch{
-                try{
-                    val flag = AuthRepositoryImpl().postSignUp(data)
+                    if (userData != null) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            if (AuthRepositoryImpl().postSignUp(userData)) {
+                                val data = getUserDataFromKakao()
+                                if(AuthRepositoryImpl().signIn(data!!)){
 
-                    launch(Dispatchers.Main){
-                        if(flag){
-                            prefs.setSignUpFinished(true)
-
-                            val intent = Intent(this@SignUpActivity, SplashActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Toast.makeText(this@SignUpActivity, "에러", Toast.LENGTH_SHORT).show()
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        val intent = Intent(this@SignUpActivity, SplashActivity::class.java)
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                } else {
+                                    Log.d(tag, "로그인 에러")
+                                }
+                            } else {
+                                Log.d(tag, "회원가입 에러")
+                            }
                         }
                     }
-                } catch (e: IOException){
+                } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
@@ -177,6 +175,57 @@ class SignUpActivity: AppCompatActivity() {
         viewModel.profileImagePath.observe(this) { path ->
             path?.let {
                 loadProfileImage(it)
+            }
+        }
+    }
+
+    private suspend fun getUserData(): SignUpRequest? {
+        return suspendCoroutine { continuation ->
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Log.e(tag, error.message.toString())
+                    continuation.resume(null)
+                } else {
+                    if (user != null) {
+//                        val data = SignUpRequest(
+//                            providerId = user.id.toString(),
+//                            nickname = user.kakaoAccount!!.profile!!.nickname.toString(),
+//                            email = user.kakaoAccount!!.email.toString(),
+//                            profileImgUrl = user.kakaoAccount!!.profile!!.profileImageUrl.toString()
+//                        )
+                        val data = SignUpRequest(
+                            providerId = "testId3",
+                            email = "test3@gmail.com",
+                            nickname = binding.etNick.text.toString(),
+                            profileImgUrl = user.kakaoAccount!!.profile!!.profileImageUrl.toString()
+                        )
+                        continuation.resume(data)
+                    } else {
+                        continuation.resume(null)
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun getUserDataFromKakao(): SignInRequest? {
+        return suspendCoroutine { continuation ->
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    Log.e(tag, error.message.toString())
+                    continuation.resume(null)
+                } else {
+                    if (user != null) {
+//                        val data = SignInRequest(
+//                            providerId = user.id.toString(),
+//                            email = user.kakaoAccount!!.email.toString(),
+//                        )
+                        val data = SignInRequest("test3@gmail.com", "testId3")
+                        continuation.resume(data)
+                    } else {
+                        continuation.resume(null)
+                    }
+                }
             }
         }
     }

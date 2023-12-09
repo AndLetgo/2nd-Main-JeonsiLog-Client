@@ -6,11 +6,19 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.example.jeonsilog.data.remote.dto.auth.SignInRequest
 import com.example.jeonsilog.databinding.ActivityLoginBinding
+import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
+import com.example.jeonsilog.view.spalshpage.SplashActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class LoginActivity: AppCompatActivity() {
     private val tag = this.javaClass.simpleName
@@ -47,7 +55,7 @@ class LoginActivity: AppCompatActivity() {
         if (error != null) {
             Log.e(tag, "로그인 실패 $error")
         } else if (token != null) {
-            Log.d(tag, "로그인 성공 ${token.accessToken}")
+            Log.d(tag, "로그인 성공")
             nextActivity()
         }
     }
@@ -64,16 +72,9 @@ class LoginActivity: AppCompatActivity() {
 
                     UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
                 } else if (token != null) {
-                    Log.i(tag, "카카오톡으로 로그인 성공 ${token.accessToken}")
+                    Log.d(tag, "카카오톡으로 로그인 성공")
 
-                    UserApiClient.instance.me { user, error ->
-                        if(error != null){
-                            Log.e(tag, "사용자 정보 요청 실패", error)
-                        }
-                        else if(user != null){
-                            nextActivity()
-                        }
-                    }
+                    nextActivity()
                 }
             }
         } else {
@@ -82,7 +83,7 @@ class LoginActivity: AppCompatActivity() {
     }
 
     private fun nextActivity(){
-        val intent = Intent(this, SignUpActivity::class.java)
+        val intent = Intent(this, SplashActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         startActivity(intent)
         finish()
