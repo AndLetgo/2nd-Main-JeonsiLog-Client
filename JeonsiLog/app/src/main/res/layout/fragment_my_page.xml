@@ -11,11 +11,24 @@
         android:layout_height="match_parent"
         tools:context=".view.MyPageFragment">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="MyPage"
-            android:textSize="50dp" />
+            android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_logout"/>
+
+        <Button
+            android:id="@+id/btn_unlink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_unlink"/>
+
+        </LinearLayout>
 
     </FrameLayout>
 </layout>
