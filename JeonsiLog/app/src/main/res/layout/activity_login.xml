@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/lr_logo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.385">
+
+            <ImageView
+                android:layout_width="112.9dp"
+                android:layout_height="112.9dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/logo_jeonsilog" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_jeonsilog_title"
+            android:layout_width="113.75dp"
+            android:layout_height="28dp"
+            android:src="@drawable/illus_jeonsilog_title"
+            android:layout_marginTop="@dimen/margin_12"
+            app:layout_constraintTop_toBottomOf="@+id/lr_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <ImageButton
+            android:id="@+id/btn_login"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:src="@drawable/btn_kakao_login"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_jeonsilog_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.42"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
