@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.example.jeonsilog.R"/>
+        <import type="android.content.Context"/>
+
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.SignUpViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/lr_logo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.23">
+
+            <ImageView
+                android:layout_width="112.9dp"
+                android:layout_height="112.9dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/logo_jeonsilog"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_jeonsilog_title"
+            android:layout_width="113.75dp"
+            android:layout_height="28dp"
+            android:src="@drawable/illus_jeonsilog_title"
+            android:layout_marginTop="@dimen/margin_12"
+            app:layout_constraintTop_toBottomOf="@+id/lr_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.internal.BaselineLayout
+            android:id="@+id/bl_signup_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/iv_jeonsilog_title"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login_start"
+            app:layout_constraintVertical_bias="0.14" />
+
+        <ImageView
+            android:id="@+id/iv_login_profile"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:background="@drawable/shape_round_iv"
+            app:layout_constraintTop_toTopOf="@+id/bl_signup_top"
+            app:layout_constraintBottom_toBottomOf="@+id/bl_signup_bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.14"
+            tools:ignore="ContentDescription" />
+        
+        <ImageButton
+            android:id="@+id/btn_update_profile_url"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_edit_img"
+            android:background="#00000000"
+            app:layout_constraintEnd_toEndOf="@+id/iv_login_profile"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_login_profile"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck"/>
+
+        <EditText
+            android:id="@+id/et_nick"
+            android:layout_width="238dp"
+            android:layout_height="48dp"
+            android:hint="@string/login_nick_placeholder"
+            android:inputType="text"
+            android:text="@{vm.etNick}"
+            android:background="@drawable/et_nickname"
+            android:paddingStart="@dimen/margin_16"
+            android:paddingEnd="0dp"
+            android:cursorVisible="false"
+            android:textColorHint="@color/gray_light_medium"
+            style="@style/M_regular"
+            app:layout_constraintTop_toTopOf="@+id/iv_login_profile"
+            app:layout_constraintStart_toEndOf="@+id/iv_login_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.2"
+            android:maxLength="10"
+            android:onFocusChange="@{(v, hasFocus) -> vm.onNickFocusChange(v, hasFocus)}"/>
+        
+        <ImageButton
+            android:id="@+id/ib_edit_clear"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_delete_edit_text"
+            app:layout_constraintEnd_toEndOf="@+id/et_nick"
+            app:layout_constraintTop_toTopOf="@+id/et_nick"
+            app:layout_constraintBottom_toBottomOf="@+id/et_nick"
+            android:padding="@dimen/margin_12"
+            android:backgroundTint="#00000000"
+            android:visibility="@{vm.isNickFocused() ? View.VISIBLE : View.INVISIBLE}"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{vm.comment}"
+            style="@style/S_regular"
+            app:layout_constraintTop_toBottomOf="@+id/et_nick"
+            app:layout_constraintStart_toStartOf="@+id/et_nick"
+            android:layout_marginTop="-5dp"
+            android:layout_marginStart="@dimen/margin_8"/>
+
+
+        <com.google.android.material.internal.BaselineLayout
+            android:id="@+id/bl_signup_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/iv_jeonsilog_title"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login_start"
+            app:layout_constraintVertical_bias="0.56" />
+
+        <Button
+            android:id="@+id/btn_login_start"
+            android:layout_width="372dp"
+            android:layout_height="54dp"
+            android:background="@drawable/shape_corner_round_start_btn_activate"
+            android:text="@string/btn_start"
+            style="@style/M_medium"
+            android:textColor="@color/basic_white"
+            android:padding="0dp"
+            android:stateListAnimator="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.92"
+            android:visibility="@{vm.btnFlag ? View.INVISIBLE : View.VISIBLE}"/>
+
+        <Button
+            android:id="@+id/btn_login_duplicate"
+            android:layout_width="372dp"
+            android:layout_height="54dp"
+            android:background="@{vm.checkableFlag ? context.getDrawable(R.drawable.shape_corner_round_start_btn_activate) : context.getDrawable(R.drawable.shape_corner_round_start_btn)}"
+            android:text="@string/btn_duplicate"
+            style="@style/M_medium"
+            android:textColor="@{vm.checkableFlag ? context.getColor(R.color.basic_white) : context.getColor(R.color.gray_medium)}"
+            android:padding="0dp"
+            android:stateListAnimator="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.92"
+            android:visibility="@{vm.btnFlag ? View.VISIBLE : View.INVISIBLE}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
