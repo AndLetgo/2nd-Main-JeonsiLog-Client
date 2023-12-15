@@ -27,6 +27,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeRvAdapter = HomeRvAdapter(list)
         binding.rvHomeExhibition.adapter = homeRvAdapter
         binding.rvHomeExhibition.layoutManager = LinearLayoutManager(this.context)
+
+        binding.btnGoExhibition.setOnClickListener{
+
+        }
     }
 
 }
