@@ -1,48 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="XL_bold">
-        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    <style name="X_Large">
         <item name="android:textSize">@dimen/text_20</item>
+        <item name="android:lineSpacingExtra">@dimen/linespacing_28</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="XL_regular">
-        <item name="fontFamily">@font/noto_sans_kr_regular</item>
-        <item name="android:textSize">@dimen/text_20</item>
-    </style>
-    <style name="L_bold">
-        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    <style name="Large">
         <item name="android:textSize">@dimen/text_18</item>
+        <item name="android:lineSpacingExtra">@dimen/linespacing_26</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="L_regular">
-        <item name="fontFamily">@font/noto_sans_kr_regular</item>
-        <item name="android:textSize">@dimen/text_18</item>
-    </style>
-    <style name="M_bold">
-        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    <style name="Medium">
         <item name="android:textSize">@dimen/text_16</item>
-    </style>
-    <style name="M_medium">
-        <item name="fontFamily">@font/noto_sans_kr_medium</item>
-        <item name="android:textSize">@dimen/text_16</item>
-    </style>
-    <style name="M_medium_line_spacing" parent="M_medium">
         <item name="android:lineSpacingExtra">@dimen/linespacing_24</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
-    <style name="M_regular">
-        <item name="fontFamily">@font/noto_sans_kr_regular</item>
-        <item name="android:textSize">@dimen/text_16</item>
-    </style>
-    <style name="M_regular_line_spacing" parent="M_regular">
-        <item name="android:lineSpacingExtra">@dimen/linespacing_24</item>
-    </style>
-    <style name="S_bold">
-        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    <style name="Small">
         <item name="android:textSize">@dimen/text_14</item>
-    </style>
-    <style name="S_regular">
-        <item name="fontFamily">@font/noto_sans_kr_regular</item>
-        <item name="android:textSize">@dimen/text_14</item>
-    </style>
-    <style name="S_regular_line_spacing" parent="S_regular">
         <item name="android:lineSpacingExtra">@dimen/linespacing_22</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="XL_bold" parent="X_Large">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="XL_regular" parent="X_Large">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
+    </style>
+    <style name="L_bold" parent="Large">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="L_regular" parent="Large">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
+    </style>
+    <style name="M_bold" parent="Medium">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="M_medium" parent="Medium">
+        <item name="fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+    <style name="M_regular" parent="Medium">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
+    </style>
+    <style name="S_bold" parent="Small">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="S_regular" parent="Small">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
 </resources>

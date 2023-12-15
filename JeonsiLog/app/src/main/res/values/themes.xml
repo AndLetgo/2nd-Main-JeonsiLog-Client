@@ -1,11 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.JeonsiLog" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Base.Theme.JeonsiLog" parent="Theme.AppCompat.Light.NoActionBar">
+
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/basic_white</item>
     </style>
 
-    <style name="Theme.JeonsiLog" parent="Base.Theme.JeonsiLog" />
-
+    <style name="Theme.JeonsiLog" parent="Base.Theme.JeonsiLog" >
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
 
 </resources>

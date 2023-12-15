@@ -16,6 +16,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        def properties = new Properties()
+        properties.load(new FileInputStream(rootProject.file("local.properties")))
+        def key = properties["KAKAO_NATIVE_KEY"]
+        buildConfigField("String", "KAKAO_NATIVE_KEY", "\"$key\"")
+        manifestPlaceholders["KAKAO_NATIVE_KEY"] = key.toString()
+        def baseUrl = properties["BASE_URL"]
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
     }
 
     buildTypes {
@@ -33,6 +40,7 @@ android {
     }
     buildFeatures{
         dataBinding = true
+        buildConfig = true
     }
 }
 
@@ -54,4 +62,11 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
 
+    implementation "com.kakao.sdk:v2-user:2.18.0"
+
+    // By viewModels()
+    implementation "androidx.activity:activity-ktx:1.8.1"
+    implementation "androidx.fragment:fragment-ktx:1.6.2"
+
+    implementation "androidx.security:security-crypto-ktx:1.1.0-alpha06"
 }
