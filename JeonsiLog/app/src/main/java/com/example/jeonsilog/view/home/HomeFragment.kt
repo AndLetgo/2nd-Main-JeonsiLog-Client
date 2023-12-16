@@ -1,10 +1,13 @@
 package com.example.jeonsilog.view.home
 
+import android.app.Activity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentHomeBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.HomeRvModel
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
@@ -29,7 +32,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.rvHomeExhibition.layoutManager = LinearLayoutManager(this.context)
 
         binding.btnGoExhibition.setOnClickListener{
-
+            (activity as MainActivity).loadExtraActivity(0)
         }
     }
 
