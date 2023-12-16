@@ -1,18 +1,25 @@
 package com.example.jeonsilog.view.search
 
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.UserSearchItem
 
 
-class UserSearchItemAdapter(private val items: List<UserSearchItem>) : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
+class UserSearchItemAdapter(private val context: Context, private val items: List<UserSearchItem>) : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val nameTextView: TextView = view.findViewById(R.id.nameTextView)
+        val usernameTextView: TextView = view.findViewById(R.id.tv_user_name)
+        //val userprofileImageView:ImageView=view.findViewById(R.id.iv_user_profile)
 
     }
 
@@ -23,11 +30,15 @@ class UserSearchItemAdapter(private val items: List<UserSearchItem>) : RecyclerV
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.nameTextView.text = item.username
 
+        val unsplashUrl = "https://picsum.photos/id/${position}/200/300"
+        Glide.with(context)
+            .load(unsplashUrl)
+            .transform(CenterCrop(), RoundedCorners(R.dimen.item_48))
+            .into(holder.itemView.findViewById(R.id.iv_user_profile))
 
-        // 이미지 로딩
-        //Picasso.get().load(item.imageUrl).into(holder.imageView)
+        holder.usernameTextView.text = item.username
+
     }
 
     override fun getItemCount(): Int {

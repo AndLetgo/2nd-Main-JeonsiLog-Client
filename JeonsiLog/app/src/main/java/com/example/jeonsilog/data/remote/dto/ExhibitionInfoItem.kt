@@ -1,9 +1,10 @@
 package com.example.jeonsilog.data.remote.dto
 
 data class ExhibitionInfoItem(
-    val exhibitionname: String,
-    val exhibitionlocation: String,
-    val exhibitionplace: String,
-    val exhibitionprice: String,
-    val exhibitiondate: String,
+    val exhibitionImg: Int?,
+    val exhibitionName: String?,
+    val exhibitionLocation: String?,
+    val exhibitionPlace: String?,
+    val exhibitionPrice: String?,
+    val exhibitionDate: String?
 )
