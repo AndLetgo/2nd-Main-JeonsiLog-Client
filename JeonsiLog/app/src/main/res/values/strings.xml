@@ -87,8 +87,8 @@
 
     <!-- Notification -->
     <string name="noti_title">알림</string>
-    <string name="noti_following_tab">팔로잉</string>
-    <string name="noti_my_activity">나의 활동</string>
+    <string name="noti_activity_tab">활동</string>
+    <string name="noti_exhibition_tab">전시</string>
 
     <!-- Mypage -->
     <string name="mypage_title">마이페이지</string>

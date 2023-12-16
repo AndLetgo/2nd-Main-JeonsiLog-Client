@@ -5,6 +5,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.view.notification.NotificationFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
 
@@ -23,7 +24,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,PhotoCalendarFragment()).commit()
                 }
                 R.id.item_notification->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,NotificationFragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,
+                        NotificationFragment()
+                    ).commit()
                 }
                 R.id.item_mypage->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,MyPageFragment()).commit()
