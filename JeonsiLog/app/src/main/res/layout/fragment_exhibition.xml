@@ -20,12 +20,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nsv_bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/cl_bottom_sheet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_bottom_sheet"
-                    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+                    android:background="@drawable/shape_bottom_sheet">
 
                     <ImageView
                         android:id="@+id/iv_handle"
@@ -162,7 +165,7 @@
                             android:src="@drawable/ic_exhibition_go_web"
                             />
                     </LinearLayout>
-                    <com.google.android.material.divider.MaterialDivider
+                    <ImageView
                         android:id="@+id/divider"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_1"
@@ -247,6 +250,7 @@
                         android:layout_marginTop="@dimen/margin_32"
                         android:layout_marginEnd="@dimen/margin_24"/>
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_exhibition_review"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_0"
                         app:layout_constraintTop_toBottomOf="@id/tv_review_title"
@@ -255,6 +259,8 @@
                         android:clipToPadding="false"
                         android:paddingBottom="@dimen/margin_40"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.core.widget.NestedScrollView>
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
