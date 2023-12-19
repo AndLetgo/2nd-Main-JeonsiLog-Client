@@ -25,10 +25,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_mypage_rating"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_24"
+            android:layout_height="match_parent"
+            android:layout_marginTop="76dp"
+            android:layout_marginBottom="@dimen/margin_56"
             android:layout_marginHorizontal="@dimen/margin_20"
-            app:layout_constraintTop_toBottomOf="@+id/tv_mypage_rating_count" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_mypage_rating_empty_img"

@@ -26,6 +26,34 @@ class MyPageReviewFragment: BaseFragment<FragmentMyPageReviewBinding>(R.layout.f
                 "[김은영 : 서로를 안아주는 관계의 존재]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특소개해 줄 생각이에요. 특히 뎁스 작가의 작"
             )
         )
+        list.add(
+            MyPageReviewModel(
+                1,
+                "https://picsum.photos/id/200/200/300",
+                "[전시회 이름]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작"
+            )
+        )
+        list.add(
+            MyPageReviewModel(
+                2,
+                "https://picsum.photos/id/201/200/300",
+                "[김은영 : 서로를 안아주는 관계의 존재]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특소개해 줄 생각이에요. 특히 뎁스 작가의 작"
+            )
+        )
+        list.add(
+            MyPageReviewModel(
+                1,
+                "https://picsum.photos/id/200/200/300",
+                "[전시회 이름]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작"
+            )
+        )
+        list.add(
+            MyPageReviewModel(
+                2,
+                "https://picsum.photos/id/201/200/300",
+                "[김은영 : 서로를 안아주는 관계의 존재]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특소개해 줄 생각이에요. 특히 뎁스 작가의 작"
+            )
+        )
 
         if (list.isEmpty()) {
             binding.rvMypageReview.visibility = View.GONE

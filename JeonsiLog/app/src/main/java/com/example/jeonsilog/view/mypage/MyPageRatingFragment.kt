@@ -15,7 +15,12 @@ class MyPageRatingFragment:BaseFragment<FragmentMyPageRatingBinding>(R.layout.fr
         list.add(MyPageRatingModel(1, "[CONNECT]", 2.5f))
         list.add(MyPageRatingModel(2, "[안드레고]", 4f))
         list.add(MyPageRatingModel(3, "[전시로그]", 4.5f))
-        list.add(MyPageRatingModel(4, "[DEPth]", 5f))
+        list.add(MyPageRatingModel(4, "[안드로이드]", 5f))
+        list.add(MyPageRatingModel(1, "[CONNECT]", 2.5f))
+        list.add(MyPageRatingModel(2, "[안드레고]", 4f))
+        list.add(MyPageRatingModel(3, "[전시로그]", 4.5f))
+        list.add(MyPageRatingModel(4, "[안드로이드]", 5f))
+
 
         if(list.isEmpty()){
             binding.rvMypageRating.visibility = View.GONE

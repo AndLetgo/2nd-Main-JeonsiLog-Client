@@ -1,14 +1,18 @@
 package com.example.jeonsilog.view.mypage
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jeonsilog.databinding.ItemMyPageInterestBinding
 import com.example.jeonsilog.databinding.ItemMyPageRatingBinding
 import com.example.jeonsilog.databinding.ItemMyPageReviewBinding
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.SpannableStringUtil
+import java.lang.IllegalArgumentException
 
-class MyPageRvAdapter<T>(private val list: List<T>, private val type: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     inner class TypeRatingViewHolder(private val binding: ItemMyPageRatingBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: MyPageRatingModel){
             binding.tvMypageRatingItemTitle.text = data.title
@@ -30,10 +34,37 @@ class MyPageRvAdapter<T>(private val list: List<T>, private val type: Int): Recy
         }
     }
 
-//    inner class TypeInterestViewHolder(private val binding: ItemMyPageInterestBinding): RecyclerView.ViewHolder(binding.root){
-//        fun bind(data: MyPageInterestModel) {
-//        }
-//    }
+    inner class TypeInterestViewHolder(private val binding: ItemMyPageInterestBinding): RecyclerView.ViewHolder(binding.root){
+        fun bind(data: MyPageInterestModel) {
+            GlideApp.with(binding.ivMypageInterestExhibitionImg)
+                .load(data.imgUrl)
+                .into(binding.ivMypageInterestExhibitionImg)
+
+            binding.tvMypageInterestTitle.text = data.title
+            binding.tvMypageInterestAddress.text = data.address
+
+            binding.tvMypageInterestKeywordBefore.visibility = View.GONE
+            binding.tvMypageInterestKeywordOn.visibility = View.GONE
+            binding.tvMypageInterestKeywordFree.visibility = View.GONE
+
+            if(data.keyWord.contains(KeyWord.before)){
+                binding.tvMypageInterestKeywordBefore.visibility = View.VISIBLE
+            }
+            if(data.keyWord.contains(KeyWord.on)){
+                binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
+            }
+            if(data.keyWord.contains(KeyWord.free)){
+                binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
+            }
+
+            binding.ibMypageInterest.setOnClickListener {
+                list.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
+
+                // 서버에 즐겨찾기 해제 요청
+            }
+        }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -47,7 +78,7 @@ class MyPageRvAdapter<T>(private val list: List<T>, private val type: Int): Recy
                     )
                 )
             }
-            2 -> {
+            1 -> {
                 return TypeReviewViewHolder(
                     ItemMyPageReviewBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -57,15 +88,8 @@ class MyPageRvAdapter<T>(private val list: List<T>, private val type: Int): Recy
                 )
             }
             else -> {
-//                return TypeInterestViewHolder(
-//                    ItemMyPageInterestBinding.inflate(
-//                        LayoutInflater.from(parent.context),
-//                        parent,
-//                        false
-//                    )
-//                )
-                return TypeReviewViewHolder(
-                    ItemMyPageReviewBinding.inflate(
+                return TypeInterestViewHolder(
+                    ItemMyPageInterestBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
@@ -89,13 +113,16 @@ class MyPageRvAdapter<T>(private val list: List<T>, private val type: Int): Recy
                 holder as MyPageRvAdapter<*>.TypeReviewViewHolder
                 holder.bind(reviewData)
             }
-            else -> {
+            2 -> {
+                val interestData = list[position] as MyPageInterestModel
+                holder as MyPageRvAdapter<*>.TypeInterestViewHolder
+                holder.bind(interestData)
             }
+            else -> throw IllegalArgumentException("알 수 없는 뷰 홀더 유형")
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return type
     }
-
 }
