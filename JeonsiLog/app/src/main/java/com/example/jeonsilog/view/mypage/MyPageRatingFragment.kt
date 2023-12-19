@@ -24,7 +24,7 @@ class MyPageRatingFragment:BaseFragment<FragmentMyPageRatingBinding>(R.layout.fr
             binding.tvMypageRatingEmptyTitle.visibility = View.VISIBLE
             binding.tvMypageRatingEmptyDescription.visibility =View.VISIBLE
         } else {
-            val adapter = MyPageRvAdapter(list, 0)
+            val adapter = MyPageRvAdapter<MyPageRatingModel>(list, 0)
             binding.rvMypageRating.adapter = adapter
             binding.rvMypageRating.layoutManager = LinearLayoutManager(requireContext())
             binding.rvMypageRating.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
