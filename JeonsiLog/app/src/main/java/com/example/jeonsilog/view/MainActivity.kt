@@ -5,6 +5,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.view.mypage.MyPageFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
 
@@ -26,7 +27,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,NotificationFragment()).commit()
                 }
                 R.id.item_mypage->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,MyPageFragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,
+                        MyPageFragment()
+                    ).commit()
                 }
             }
             true
