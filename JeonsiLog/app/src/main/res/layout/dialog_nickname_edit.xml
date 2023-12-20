@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="com.example.jeonsilog.R"/>
+        <import type="android.content.Context"/>
+
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.MyPageNickEditDialogViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/margin_16"
+        android:layout_margin="@dimen/margin_44"
+        android:background="@drawable/shape_corner_round_dialog">
+
+        <TextView
+            android:id="@+id/tv_dialog_nick_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_nick_modify_title"
+            style="@style/M_medium"
+            android:textColor="@color/basic_black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_8" />
+
+        <EditText
+            android:id="@+id/et_dialog_nick_edit"
+            android:layout_width="284dp"
+            android:layout_height="48dp"
+            android:hint="@string/login_nick_placeholder"
+            android:inputType="text"
+            android:background="@drawable/et_nickname"
+            android:paddingStart="@dimen/margin_16"
+            android:paddingEnd="0dp"
+            android:cursorVisible="false"
+            android:textColorHint="@color/gray_light_medium"
+            style="@style/M_regular"
+            android:maxLength="10"
+            android:onFocusChange="@{(v, hasFocus) -> vm.onNickFocusChange(v, hasFocus)}"
+            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_nick_edit_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_32"
+            tools:ignore="Autofill" />
+
+        <ImageButton
+            android:id="@+id/ib_dialog_nick_edit_clear"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_delete_edit_text"
+            app:layout_constraintEnd_toEndOf="@+id/et_dialog_nick_edit"
+            app:layout_constraintTop_toTopOf="@+id/et_dialog_nick_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/et_dialog_nick_edit"
+            android:padding="@dimen/margin_12"
+            android:backgroundTint="@color/transparent"
+            android:visibility="@{vm.isNickFocused() ? View.VISIBLE : View.INVISIBLE}"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck"/>
+
+        <TextView
+            android:id="@+id/tv_dialog_nick_edit_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{vm.comment}"
+            style="@style/S_regular"
+            app:layout_constraintTop_toBottomOf="@+id/et_dialog_nick_edit"
+            app:layout_constraintStart_toStartOf="@+id/et_dialog_nick_edit"
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_8"/>
+
+        <Button
+            android:id="@+id/btn_dialog_nick_edit_cancel"
+            android:layout_width="142dp"
+            android:layout_height="44dp"
+            android:background="@drawable/shape_corner_round_start_btn"
+            android:text="@string/btn_cancel"
+            style="@style/M_medium"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintEnd_toStartOf="@id/btn_dialog_nick_edit_modify"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_nick_edit_comment"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_28"
+            android:layout_marginEnd="@dimen/margin_4"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <Button
+            android:id="@+id/btn_dialog_nick_edit_modify"
+            android:layout_width="142dp"
+            android:layout_height="44dp"
+            android:background="@{vm.flag ? context.getDrawable(R.drawable.shape_corner_round_start_btn_activate) : context.getDrawable(R.drawable.shape_corner_round_start_btn)}"
+            android:text="@string/btn_modify"
+            style="@style/M_medium"
+            android:textColor="@{vm.flag ? context.getColor(R.color.basic_white) : context.getColor(R.color.gray_medium)}"
+            app:layout_constraintStart_toEndOf="@+id/btn_dialog_nick_edit_cancel"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_nick_edit_comment"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_28"
+            android:layout_marginStart="@dimen/margin_4"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
