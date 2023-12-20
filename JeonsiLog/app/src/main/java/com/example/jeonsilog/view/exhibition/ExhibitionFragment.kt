@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -44,6 +46,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         exhibitionRvAdapter = ExhibitionRvAdapter(list)
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         binding.rvExhibitionReview.layoutManager = LinearLayoutManager(this.context)
+
     }
 
 }

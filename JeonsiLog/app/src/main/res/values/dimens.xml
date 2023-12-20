@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--    Dp Margin  -->
+    <dimen name="margin_0">0dp</dimen>
     <dimen name="margin_1">1dp</dimen>
     <dimen name="margin_2">2dp</dimen>
     <dimen name="margin_4">4dp</dimen>
@@ -49,6 +50,7 @@
     <dimen name="shadow_12">12dp</dimen>
 
     <!--    Dp Corner Radius  -->
+    <dimen name="radius_8">8dp</dimen>
     <dimen name="radius_12">12dp</dimen>
     <dimen name="radius_16">16dp</dimen>
     <dimen name="radius_30">30dp</dimen>

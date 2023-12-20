@@ -165,11 +165,11 @@
                             android:src="@drawable/ic_exhibition_go_web"
                             />
                     </LinearLayout>
-                    <ImageView
+                    <View
                         android:id="@+id/divider"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_1"
-                        android:backgroundTint="@color/gray_light"
+                        android:background="@color/gray_light"
                         app:layout_constraintTop_toBottomOf="@id/tv_place_time"
                         app:layout_constraintBottom_toTopOf="@id/tv_info_title"
                         android:layout_marginVertical="@dimen/margin_28"
@@ -214,14 +214,20 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_information"
                         android:layout_marginHorizontal="@dimen/margin_24"
                         android:layout_marginTop="@dimen/margin_32"/>
-                    <RatingBar
+                    <com.willy.ratingbar.BaseRatingBar
                         android:id="@+id/rating_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/item_45"
-                        android:stepSize="0.5"
-                        android:numStars="5"
-                        android:progressTint="@color/basic_point"
-                        android:progressBackgroundTint="@color/gray_light_medium"
+                        app:srb_numStars="5"
+                        app:srb_starWidth="@dimen/item_45"
+                        app:srb_starHeight="@dimen/item_45"
+                        app:srb_starPadding="@dimen/margin_4"
+                        app:srb_stepSize="0.5"
+                        app:srb_isIndicator="false"
+                        app:srb_clickable="true"
+                        app:srb_scrollable="true"
+                        app:srb_drawableEmpty="@drawable/ic_rating_empty_45"
+                        app:srb_drawableFilled="@drawable/ic_rating_full_45"
                         app:layout_constraintTop_toBottomOf="@id/tv_rating_title"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
