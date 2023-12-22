@@ -3,19 +3,15 @@ package com.example.jeonsilog.view.exhibition
 import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
-import com.example.jeonsilog.view.home.HomeRvAdapter
-import com.example.jeonsilog.viewmodel.HomeRvModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition) {
@@ -47,6 +43,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         binding.rvExhibitionReview.layoutManager = LinearLayoutManager(this.context)
 
+        exhibitionRvAdapter.setOnItemClickListener(object: ExhibitionRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: ReviewModel, position: Int) {
+                Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
+            }
+        })
     }
 
 }

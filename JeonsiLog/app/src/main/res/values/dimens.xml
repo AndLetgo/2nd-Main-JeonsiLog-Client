@@ -28,7 +28,9 @@
     <dimen name="item_32">32dp</dimen>
     <dimen name="item_40">40dp</dimen>
     <dimen name="item_45">45dp</dimen>
+    <dimen name="item_46">46dp</dimen>
     <dimen name="item_52">52dp</dimen>
+    <dimen name="item_56">56dp</dimen>
     <dimen name="item_74">74dp</dimen>
     <dimen name="item_100">100dp</dimen>
     <dimen name="item_132">132dp</dimen>
@@ -40,9 +42,9 @@
     <dimen name="text_20">20sp</dimen>
 
     <!--    Text LineSpacing(px)-->
-    <dimen name="linespacing_22">11px</dimen>
-    <dimen name="linespacing_24">12px</dimen>
-    <dimen name="linespacing_26">13px</dimen>
+    <dimen name="linespacing_22">0px</dimen>
+    <dimen name="linespacing_24">0px</dimen>
+    <dimen name="linespacing_26">0px</dimen>
     <dimen name="linespacing_28">0px</dimen>
 
     <!--    Dp Shadow  -->

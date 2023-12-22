@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_exhibition">
+    android:id="@+id/nav_exhibition"
+    app:startDestination="@id/exhibitionFragment">
 
+    <fragment
+        android:id="@+id/exhibitionFragment"
+        android:name="com.example.jeonsilog.view.exhibition.ExhibitionFragment"
+        android:label="ExhibitionFragment" >
+        <action
+            android:id="@+id/action_exhibitionFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
+        <action
+            android:id="@+id/action_exhibitionFragment_to_writingReviewFragment"
+            app:destination="@id/writingReviewFragment" />
+        <action
+            android:id="@+id/action_exhibitionFragment_to_exhibitionPosterFragment"
+            app:destination="@id/exhibitionPosterFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.example.jeonsilog.view.exhibition.ReviewFragment"
+        android:label="ReviewFragment" />
+    <fragment
+        android:id="@+id/exhibitionPosterFragment"
+        android:name="com.example.jeonsilog.view.exhibition.ExhibitionPosterFragment"
+        android:label="ExhibitionPosterFragment" />
+    <fragment
+        android:id="@+id/writingReviewFragment"
+        android:name="com.example.jeonsilog.view.exhibition.WritingReviewFragment"
+        android:label="WritingReviewFragment" />
 </navigation>

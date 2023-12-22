@@ -1,33 +1,26 @@
 package com.example.jeonsilog.view.exhibition
 
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.PopupMenu
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
 
-class ExhibitionRvAdapter(private val ReviewList:List<ReviewModel>): RecyclerView.Adapter<ExhibitionRvAdapter.RecycleViewHolder>()  {
-
+class ExhibitionRvAdapter(private val reviewList:List<ReviewModel>):
+    RecyclerView.Adapter<ExhibitionRvAdapter.RecycleViewHolder>()  {
+    private var listener: OnItemClickListener? = null
     inner class RecycleViewHolder(private val binding: ItemExhibitionReviewBinding):
         RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
-            binding.tvUserName.text = ReviewList[position].userId.toString()
+            binding.tvUserName.text = reviewList[position].userId.toString()
             binding.ibMenu.setOnClickListener{
-//                val wrapper = ContextThemeWrapper(it.context, R.style.popup_menu)
-                val popupMenu = PopupMenu(it.context, it)
-                popupMenu.menuInflater.inflate(R.menu.menu_exhibition_review_delete, popupMenu.menu)
-//                popupMenu.menu.getItem(0).setActionView(R.layout.item_popup_menu)
-//                //아이템 클릭 시
-//                popupMenu.setOnMenuItemClickListener {itemId ->
-//                    when(itemId){
-//                        R.id.menu_delete -> {}
-//                        else -> {}
-//                    }
-//                }
-                popupMenu.show()
+                ExtraActivity().setMenuButton(it)
             }
         }
     }
@@ -41,10 +34,23 @@ class ExhibitionRvAdapter(private val ReviewList:List<ReviewModel>): RecyclerVie
         return RecycleViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = ReviewList.size
+    override fun getItemCount(): Int = reviewList.size
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
         holder.bind(position)
+
+        if(position != RecyclerView.NO_POSITION){
+            holder.itemView.setOnClickListener {
+                listener?.onItemClick(holder.itemView, reviewList[position], position)
+            }
+        }
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(v: View, data: ReviewModel, position: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
+    }
 }
