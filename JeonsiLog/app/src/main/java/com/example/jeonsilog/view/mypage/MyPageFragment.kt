@@ -25,7 +25,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun init() {
         viewModel.getMyInfo()
         binding.vm = viewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = requireActivity()
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         _bsBinding = BottomSheetMypageProfileEditBinding.inflate(layoutInflater)
@@ -68,6 +68,20 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
         binding.ibMypageSetting.setOnClickListener {
             Log.d("TAG", "moveSettingPage")
+        }
+
+        binding.tvMypageFollow.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, MyPageListFragment(0))
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        binding.tvMypageFollowing.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, MyPageListFragment(1))
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
     }
     private fun showCustomDialog() {

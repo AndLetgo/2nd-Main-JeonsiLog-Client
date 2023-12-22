@@ -22,7 +22,7 @@
                 android:textColor="@color/basic_black"
                 android:background="@drawable/shape_corner_round_start_btn"
                 android:backgroundTint="@color/basic_white"
-                android:shadowColor="@null"/>
+                android:outlineProvider="none"/>
 
             <Button
                 android:id="@+id/btn_bottom_sheet_mypage_load_defalut"
@@ -35,7 +35,7 @@
                 android:textColor="@color/basic_black"
                 android:background="@drawable/shape_corner_round_start_btn"
                 android:backgroundTint="@color/basic_white"
-                android:shadowColor="@null"/>
+                android:outlineProvider="none"/>
 
         </LinearLayout>
 
