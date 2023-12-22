@@ -32,6 +32,10 @@ class MyPageViewModel: ViewModel() {
         _nick.value = nick
     }
 
+    fun setProfileImg(url: String){
+        _profileImg.value = url
+    }
+
     private var _flag = MutableLiveData<Boolean>(false)
     val flag: LiveData<Boolean>
         get() = _flag
