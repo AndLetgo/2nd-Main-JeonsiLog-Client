@@ -44,7 +44,7 @@
     <string name="dialog_reply_delete">삭제된 댓글은 복구할 수 없어요. \n 해당 댓글을 삭제하시겠어요?</string>
     <string name="dialog_close_review">지금까지 작성한 감상평이 사라져요. \n 창을 닫으시겠어요?</string>
 
-    <string name="dialog_unlink_comment">탈퇴 시, 모든 데이터가 삭제됩니다.</string>
+    <string name="dialog_unlink_comment">탈퇴 시, 모든 데이터가 사라져요.</string>
     <string name="dialog_unlink_sub_comment">정말 탈퇴하시겠어요?</string>
 
     <string name="dialog_nick_modify_title">닉네임 수정</string>

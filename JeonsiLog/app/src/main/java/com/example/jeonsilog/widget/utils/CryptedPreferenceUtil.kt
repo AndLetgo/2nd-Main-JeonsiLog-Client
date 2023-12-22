@@ -66,6 +66,14 @@ class CryptedPreferenceUtil(context: Context) {
         encryptedPrefs.edit().putInt("numFollower", p).apply()
     }
 
+    fun setIsRecvFollowing(p: Boolean){
+        encryptedPrefs.edit().putBoolean("isRecvFollowing", p).apply()
+    }
+
+    fun setIsRecvActive(p: Boolean){
+        encryptedPrefs.edit().putBoolean("isRecvActive", p).apply()
+    }
+
     fun getAT(): String?{
         return encryptedPrefs.getString("at", null)
     }
@@ -92,5 +100,13 @@ class CryptedPreferenceUtil(context: Context) {
 
     fun getNumFollower(): Int {
         return encryptedPrefs.getInt("numFollower", 0)
+    }
+
+    fun getIsRecvFollowing(): Boolean {
+        return encryptedPrefs.getBoolean("isRecvFollowing", true)
+    }
+
+    fun getIsRecvActive(): Boolean {
+        return encryptedPrefs.getBoolean("isRecvActive", true)
     }
 }

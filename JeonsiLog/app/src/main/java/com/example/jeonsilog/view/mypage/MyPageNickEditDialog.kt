@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -105,12 +104,9 @@ class MyPageNickEditDialog(private val parentVm: MyPageViewModel): DialogFragmen
 
         binding.apply {
             btnDialogNickEditCancel.setOnClickListener{
-                Toast.makeText(requireContext(), "Cancel", Toast.LENGTH_SHORT).show()
                 dismiss()
             }
             btnDialogNickEditModify.setOnClickListener {
-                Toast.makeText(requireContext(), "onModify", Toast.LENGTH_SHORT).show()
-
                 CoroutineScope(Dispatchers.IO).launch {
                     val flag = AuthRepositoryImpl().getIsAvailable(binding.etDialogNickEdit.text.toString())
 

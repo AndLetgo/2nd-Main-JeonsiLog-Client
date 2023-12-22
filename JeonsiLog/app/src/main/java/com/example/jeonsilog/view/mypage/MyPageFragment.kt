@@ -11,6 +11,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.BottomSheetMypageProfileEditBinding
 import com.example.jeonsilog.databinding.FragmentMyPageBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.MyPageViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -26,6 +27,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         viewModel.getMyInfo()
         binding.vm = viewModel
         binding.lifecycleOwner = requireActivity()
+
+        val mainActivity = activity as MainActivity
+        mainActivity.setStateBn(true)
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         _bsBinding = BottomSheetMypageProfileEditBinding.inflate(layoutInflater)
@@ -67,7 +71,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         }
 
         binding.ibMypageSetting.setOnClickListener {
-            Log.d("TAG", "moveSettingPage")
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, MyPageSettingFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
 
         binding.tvMypageFollow.setOnClickListener {
@@ -86,7 +93,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     }
     private fun showCustomDialog() {
         val customDialogFragment = MyPageNickEditDialog(viewModel)
-        customDialogFragment.show(parentFragmentManager, "custom_dialog")
+        customDialogFragment.show(parentFragmentManager, "MyPageNickEditDialog")
     }
 
     private val launcher: ActivityResultLauncher<Intent> = registerForActivityResult(
@@ -117,39 +124,3 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         _bsBinding = null
     }
 }
-
-
-
-
-
-
-
-//binding.btnLogout.setOnClickListener {
-//    UserApiClient.instance.logout { error ->
-//        if(error != null){
-//            Log.e("LOGIN", error.message.toString())
-//        }
-//        CoroutineScope(Dispatchers.IO).launch{
-//            AuthRepositoryImpl().signOut(encryptedPrefs.getAT().toString())
-//        }
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val intent = Intent(requireContext(), SplashActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
-//}
-//
-//binding.btnUnlink.setOnClickListener {
-//    UserApiClient.instance.unlink { error ->
-//        if(error != null){
-//            Log.e("LOGIN", error.message.toString())
-//        }
-//        CoroutineScope(Dispatchers.IO).launch{
-//            UserRepositoryImpl().doUnLink(encryptedPrefs.getAT().toString())
-//        }
-//        CoroutineScope(Dispatchers.Main).launch {
-//            val intent = Intent(requireContext(), SplashActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
-//}
