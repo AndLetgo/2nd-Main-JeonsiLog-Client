@@ -20,6 +20,7 @@
     <string name="btn_set_defalut_image">기본 이미지로 변경</string>
 
     <string name="btn_following">팔로잉</string>
+    <string name="btn_follow">팔로우</string>
     <string name="btn_f4f">맞팔로우</string>
 
     <string name="btn_logout">로그아웃</string>
@@ -105,6 +106,8 @@
     <!-- OtherUserPage -->
     <string name="other_rating">별점</string>
     <string name="other_review">감상평</string>
+    <string name="other_photo">포토캘린더</string>
+    <string name="other_nick_title">%s 님의 프로필</string>
 
     <!-- Setting -->
     <string name="setting_title">환경설정</string>
