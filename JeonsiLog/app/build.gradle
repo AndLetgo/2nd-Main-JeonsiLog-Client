@@ -69,4 +69,6 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.6.2"
 
     implementation "androidx.security:security-crypto-ktx:1.1.0-alpha06"
+
+    implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
 }

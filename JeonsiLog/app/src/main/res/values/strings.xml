@@ -109,6 +109,9 @@
     <string name="other_photo">포토캘린더</string>
     <string name="other_nick_title">%s 님의 프로필</string>
 
+    <string name="other_my_rating_count">%s 님이 남긴 별점 개수: %d개</string>
+    <string name="other_review_count">%s 님이 남긴 감상평 개수: %d개</string>
+
     <!-- Setting -->
     <string name="setting_title">환경설정</string>
     <string name="setting_noti">알림</string>

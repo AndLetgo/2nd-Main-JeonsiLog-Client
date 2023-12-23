@@ -5,6 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class OtherUserViewModel: ViewModel() {
+    private var _userId = MutableLiveData<Int>()
+    val userId: LiveData<Int>
+        get() = _userId
+
     private var _title = MutableLiveData<String>()
     val title: LiveData<String>
         get() = _title
