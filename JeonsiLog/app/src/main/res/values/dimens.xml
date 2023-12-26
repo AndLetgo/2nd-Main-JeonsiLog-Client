@@ -14,14 +14,18 @@
     <dimen name="margin_44">44dp</dimen>
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_84">84dp</dimen>
 
     <!--    Dp Item  -->
     <dimen name="item_0">0dp</dimen>
     <dimen name="item_4">4dp</dimen>
     <dimen name="item_32">32dp</dimen>
     <dimen name="item_40">40dp</dimen>
+    <dimen name="item_44">44dp</dimen>
     <dimen name="item_52">52dp</dimen>
+    <dimen name="item_56">56dp</dimen>
     <dimen name="item_74">74dp</dimen>
+    <dimen name="item_76">76dp</dimen>
     <dimen name="item_100">100dp</dimen>
     <dimen name="item_132">132dp</dimen>
 

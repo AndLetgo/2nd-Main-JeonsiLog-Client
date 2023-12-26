@@ -1,13 +1,16 @@
 package com.example.jeonsilog.view
 
 import android.view.View
+import androidx.activity.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
+import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
-
+    val viewModel: PhotoCalendarViewModel by viewModels()
     override fun init() {
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
@@ -20,7 +23,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,SearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_photoCalendar->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,PhotoCalendarFragment()).commit()
+
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,
+                        PhotoCalendarFragment(viewModel)
+                    ).commit()
                 }
                 R.id.item_notification->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,NotificationFragment()).commit()

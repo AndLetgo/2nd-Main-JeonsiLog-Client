@@ -29,9 +29,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
     override fun init() {
         val actionBar = supportActionBar
         actionBar?.hide()
-//        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
+        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
 
-        tokenValidation()
+        //tokenValidation()
     }
 
     private fun tokenValidation() {

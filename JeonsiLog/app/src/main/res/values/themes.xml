@@ -8,5 +8,17 @@
     <style name="Theme.JeonsiLog" parent="Base.Theme.JeonsiLog" >
         <item name="android:windowIsTranslucent">true</item>
     </style>
+    <style name="RoundCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/RoundCornerModalStyle</item>
+    </style>
 
+    <style name="RoundCornerModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_bn_round</item>
+    </style>
+    <style name="ThemeOverlay.NumberPicker" parent="Base.Theme.JeonsiLog">
+        <!-- NumberPicker divider color -->
+        <item name="colorControlNormal">@color/basic_point</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_regular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>
