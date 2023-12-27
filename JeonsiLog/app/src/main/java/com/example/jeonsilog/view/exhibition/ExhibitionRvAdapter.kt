@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.PopupMenu
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,7 @@ class ExhibitionRvAdapter(private val reviewList:List<ReviewModel>):
         fun bind(position: Int){
             binding.tvUserName.text = reviewList[position].userId.toString()
             binding.ibMenu.setOnClickListener{
-                ExtraActivity().setMenuButton(it)
+                listener?.onMenuBtnClick(it)
             }
         }
     }
@@ -48,6 +49,7 @@ class ExhibitionRvAdapter(private val reviewList:List<ReviewModel>):
 
     interface OnItemClickListener {
         fun onItemClick(v: View, data: ReviewModel, position: Int)
+        fun onMenuBtnClick(btn:View)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){

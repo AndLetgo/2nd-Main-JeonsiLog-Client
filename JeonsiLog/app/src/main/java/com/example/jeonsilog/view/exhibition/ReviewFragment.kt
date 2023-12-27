@@ -28,8 +28,15 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.rvExhibitionReviewReply.adapter = exhibitionReplyRvAdapter
         binding.rvExhibitionReviewReply.layoutManager = LinearLayoutManager(this.context)
 
+        exhibitionReplyRvAdapter.setOnItemClickListener(object : ExhibitionReplyRvAdapter.OnItemClickListener{
+            override fun onMenuBtnClick(btn: View) {
+                ExtraActivity().setMenuButton(btn, parentFragmentManager)
+            }
+
+        })
+
         binding.ibMenu.setOnClickListener {
-            (activity as ExtraActivity).setMenuButton(it)
+            (activity as ExtraActivity).setMenuButton(it, parentFragmentManager)
         }
 
         binding.btnEnterReply.setOnClickListener{

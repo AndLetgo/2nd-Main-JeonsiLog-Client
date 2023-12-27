@@ -47,6 +47,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             override fun onItemClick(v: View, data: ReviewModel, position: Int) {
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
             }
+
+            override fun onMenuBtnClick(btn: View) {
+                ExtraActivity().setMenuButton(btn, parentFragmentManager)
+            }
+
         })
     }
 

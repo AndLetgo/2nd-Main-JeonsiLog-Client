@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import com.example.jeonsilog.databinding.ItemReviewReplyBinding
 
 class ExhibitionReplyRvAdapter(private val replyList: List<ReplyModel>) :
     RecyclerView.Adapter<ExhibitionReplyRvAdapter.RecycleViewHolder>(){
-
+    private var listener: OnItemClickListener? = null
     inner class RecycleViewHolder(private val binding: ItemReviewReplyBinding):
         RecyclerView.ViewHolder(binding.root){
         fun bind(item: ReplyModel){
@@ -17,7 +18,7 @@ class ExhibitionReplyRvAdapter(private val replyList: List<ReplyModel>) :
             binding.tvDate.text = item.date
             binding.tvReplyContent.text = item.contents
             binding.ibMenu.setOnClickListener {
-                ExtraActivity().setMenuButton(it)
+                listener?.onMenuBtnClick(it)
             }
         }
     }
@@ -35,5 +36,13 @@ class ExhibitionReplyRvAdapter(private val replyList: List<ReplyModel>) :
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
         holder.bind(replyList[position])
+    }
+
+    interface OnItemClickListener {
+        fun onMenuBtnClick(btn: View)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
     }
 }

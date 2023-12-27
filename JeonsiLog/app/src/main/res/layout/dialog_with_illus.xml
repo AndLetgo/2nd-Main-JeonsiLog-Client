@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/radius_16">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_16">
+            <ImageView
+                android:id="@+id/iv_dialog_illus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/margin_20"
+                android:src="@drawable/illus_dialog_report"/>
+            <TextView
+                android:id="@+id/tv_dialog_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/iv_dialog_illus"
+                android:text="@string/dialog_reply_report"
+                style="@style/M_medium"
+                android:textColor="@color/basic_black"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/margin_16"/>
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="@dimen/item_0"
+                app:layout_constraintDimensionRatio="1:0.3"
+                app:layout_constraintTop_toBottomOf="@id/tv_dialog_message"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_confirm"
+                android:layout_marginTop="@dimen/margin_40"
+                android:background="@drawable/shape_corner_round_start_btn"
+                android:layout_marginEnd="@dimen/margin_4"
+                android:text="@string/btn_cancel"
+                android:textColor="@color/gray_medium"
+                style="@style/M_medium"/>
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="@dimen/item_0"
+                app:layout_constraintDimensionRatio="1:0.3"
+                app:layout_constraintTop_toBottomOf="@id/tv_dialog_message"
+                app:layout_constraintStart_toEndOf="@id/btn_cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/margin_40"
+                android:layout_marginStart="@dimen/margin_4"
+                android:background="@drawable/shape_corner_round_start_btn_activate"
+                android:text="@string/btn_report"
+                style="@style/M_medium"
+                android:textColor="@color/basic_white"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
