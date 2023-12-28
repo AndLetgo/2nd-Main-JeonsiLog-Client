@@ -85,6 +85,13 @@
     <!-- PhotoCalendar -->
     <string name="search_photocalendar_title">전시회 포스터 불러오기</string>
     <string name="search_photocalendar_edit_hint">전시회명을 입력하세요</string>
+    <string name="calendar_mon">월</string>
+    <string name="calendar_tue">화</string>
+    <string name="calendar_wed">수</string>
+    <string name="calendar_thu">목</string>
+    <string name="calendar_fri">금</string>
+    <string name="calendar_sat">토</string>
+    <string name="calendar_sun">일</string>
 
     <!-- Notification -->
     <string name="noti_title">알림</string>
