@@ -54,8 +54,14 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         })
 
+        //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
             Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment)
+        }
+
+        //poster page
+        binding.ivPosterImage.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_posterFragment)
         }
     }
 

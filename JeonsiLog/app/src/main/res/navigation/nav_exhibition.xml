@@ -15,25 +15,20 @@
             android:id="@+id/action_exhibitionFragment_to_writingReviewFragment"
             app:destination="@id/writingReviewFragment"/>
         <action
-            android:id="@+id/action_exhibitionFragment_to_exhibitionPosterFragment"
-            app:destination="@id/exhibitionPosterFragment" />
+            android:id="@+id/action_exhibitionFragment_to_posterFragment"
+            app:destination="@id/PosterFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.example.jeonsilog.view.exhibition.ReviewFragment"
         android:label="ReviewFragment" />
     <fragment
-        android:id="@+id/exhibitionPosterFragment"
-        android:name="com.example.jeonsilog.view.exhibition.ExhibitionPosterFragment"
-        android:label="ExhibitionPosterFragment" />
+        android:id="@+id/PosterFragment"
+        android:name="com.example.jeonsilog.view.exhibition.PosterFragment"
+        android:label="PosterFragment" />
     <fragment
         android:id="@+id/writingReviewFragment"
         android:name="com.example.jeonsilog.view.exhibition.WritingReviewFragment"
         android:label="WritingReviewFragment" >
-        <action
-            android:id="@+id/action_writingReviewFragment_to_exhibitionFragment"
-            app:destination="@id/exhibitionFragment"
-            app:popUpTo="@id/exhibitionFragment"
-            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>
