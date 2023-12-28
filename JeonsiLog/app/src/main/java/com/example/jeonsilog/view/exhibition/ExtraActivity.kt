@@ -1,20 +1,11 @@
 package com.example.jeonsilog.view.exhibition
 
-import android.app.Dialog
-import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
-import androidx.core.view.isVisible
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityExtraBinding
-import com.example.jeonsilog.view.home.HomeFragment
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 
 class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.inflate(it)}) {
     val TAG = "Dialog"
@@ -38,7 +29,7 @@ class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.
         popupMenu.setOnMenuItemClickListener {item ->
             when(item.itemId){
                 R.id.menu_delete -> {
-                    showCustomDialog(fragment,"")
+                    showCustomDialog(fragment,"삭제_댓글")
                 }
                 else -> {}
             }
@@ -48,8 +39,8 @@ class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.
     }
 
     //dialog
-    private fun showCustomDialog(fragment: FragmentManager, tag:String) {
-        val customDialogFragment = DialogWithIllus()
-        customDialogFragment.show(fragment, "Dialog")
+    fun showCustomDialog(fragment: FragmentManager, tag:String) {
+        val customDialogFragment = DialogWithIllus(tag)
+        customDialogFragment.show(fragment, tag)
     }
 }

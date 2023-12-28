@@ -17,6 +17,7 @@
     <dimen name="margin_44">44dp</dimen>
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_76">76dp</dimen>
 
     <!--    Dp Item  -->
     <dimen name="item_0">0dp</dimen>
@@ -34,6 +35,7 @@
     <dimen name="item_74">74dp</dimen>
     <dimen name="item_100">100dp</dimen>
     <dimen name="item_132">132dp</dimen>
+    <dimen name="item_142">142dp</dimen>
 
     <!--    Text Size(sp)-->
     <dimen name="text_14">14sp</dimen>

@@ -53,6 +53,10 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
 
         })
+
+        binding.btnWritingReview.setOnClickListener{
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment)
+        }
     }
 
 }
