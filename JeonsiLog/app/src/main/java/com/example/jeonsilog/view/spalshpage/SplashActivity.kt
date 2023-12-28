@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.example.jeonsilog.base.BaseActivity
+import com.example.jeonsilog.data.remote.api.ApiTest
 import com.example.jeonsilog.data.remote.dto.auth.SignInRequest
 import com.example.jeonsilog.databinding.ActivitySplashBinding
 import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
@@ -29,9 +30,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
     override fun init() {
         val actionBar = supportActionBar
         actionBar?.hide()
-//        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
+        ApiTest()
+        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
 
-        tokenValidation()
+//        tokenValidation()
     }
 
     private fun tokenValidation() {
