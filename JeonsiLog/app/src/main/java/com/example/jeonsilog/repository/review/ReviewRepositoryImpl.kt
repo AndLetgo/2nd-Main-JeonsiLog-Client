@@ -14,23 +14,21 @@ class ReviewRepositoryImpl: ReviewRepository {
     override suspend fun getMyReviews(token: String): Response<GetReviewsResponse> {
         val response = service.getMyReviews("Bearer $token")
 
-//        return if(response.isSuccessful && response.body()!!.check){
-//            response
-//        } else {
-//            response
-//        }
-        return response
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
     }
 
     override suspend fun getOtherReviews(token: String, userId: Int): Response<GetReviewsResponse> {
         val response = service.getOtherReviews("Bearer $token", userId)
 
-//        return if(response.isSuccessful && response.body()!!.check){
-//            response
-//        } else {
-//            response
-//        }
-        return response
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
     }
 
     override suspend fun getReviews(
@@ -39,12 +37,11 @@ class ReviewRepositoryImpl: ReviewRepository {
     ): Response<GetReviewsExhibitionResponse> {
         val response = service.getReviews("Bearer $token", exhibitionId)
 
-//        return if(response.isSuccessful && response.body()!!.check){
-//            response
-//        } else {
-//            response
-//        }
-        return response
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
     }
 
     override suspend fun postReview(
