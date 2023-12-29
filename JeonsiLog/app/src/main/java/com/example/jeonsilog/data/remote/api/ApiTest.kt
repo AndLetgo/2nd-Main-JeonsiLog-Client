@@ -1,6 +1,6 @@
 package com.example.jeonsilog.data.remote.api
 
-import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
+import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 class ApiTest {
     // android1 로 로그인(userId = 7)
     private val token1 =
-        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNzAzODM4MDYzLCJleHAiOjE3MDM4NDE2NjN9.NfqI6ncdp0SU8ho8tMJZmEFtY4zwYfEnBGo9JpUbMy6ckdyoQNryiFGOHl22VyZzVuiwQ-XRP5DBzHiBErzQpA"
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiaWF0IjoxNzAzODQxNzk3LCJleHAiOjE3MDM4NDUzOTd9.rbfSggm-XV8aAkL9gasQCD855j95K3VtHQ9H4mPxiFezRNGrxSqaITB3oeQlbbZPObeG9gKz76HmzeFW-GFsQg"
 
     // android2 로 로그인(userId = 8)
     private val token2 =
@@ -17,8 +17,9 @@ class ApiTest {
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            InterestRepositoryImpl().deleteInterest(token1, 1)
-            InterestRepositoryImpl().getInterest(token1)
+            FollowRepositoryImpl().deleteFollower(token2, 7)
+            FollowRepositoryImpl().getMyFollowing(token1)
+            FollowRepositoryImpl().getMyFollower(token1)
         }
     }
 }
