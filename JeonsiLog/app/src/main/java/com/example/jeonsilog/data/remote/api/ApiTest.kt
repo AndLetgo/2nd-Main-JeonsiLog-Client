@@ -1,6 +1,6 @@
 package com.example.jeonsilog.data.remote.api
 
-import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
+import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,8 +13,7 @@ class ApiTest {
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            RatingRepositoryImpl().deleteRating(token, 1)
-            RatingRepositoryImpl().getMyRatings(token)
+            PlaceRepositoryImpl().searchPlaces(token, "한국", 0)
         }
     }
 }
