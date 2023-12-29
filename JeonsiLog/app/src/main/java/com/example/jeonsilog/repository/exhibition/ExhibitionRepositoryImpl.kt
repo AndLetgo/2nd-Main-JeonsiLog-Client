@@ -7,7 +7,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.GetExhibitionsResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetRandomPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
-import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionResponse
+import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
 import retrofit2.Response
 
@@ -74,7 +74,7 @@ class ExhibitionRepositoryImpl: ExhibitionRepository {
     override suspend fun patchExhibition(
         token: String,
         body: PatchExhibitionRequest
-    ): Response<PatchExhibitionResponse> {
+    ): Response<OnlyMsgResponse> {
         val response = service.patchExhibition("Bearer $token", body)
 
         return if(response.isSuccessful && response.body()!!.check){

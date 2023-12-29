@@ -1,8 +1,8 @@
-package com.example.jeonsilog.data.remote.dto.exhibition
+package com.example.jeonsilog.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class PatchExhibitionResponse(
+data class OnlyMsgResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")

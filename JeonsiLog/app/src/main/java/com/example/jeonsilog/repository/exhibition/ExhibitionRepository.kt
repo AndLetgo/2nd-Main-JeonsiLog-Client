@@ -5,7 +5,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.GetExhibitionsResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetRandomPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
-import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionResponse
+import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -51,5 +51,5 @@ interface ExhibitionRepository {
     suspend fun patchExhibition(
         @Header("Authorization") token: String,
         @Body body: PatchExhibitionRequest
-    ): Response<PatchExhibitionResponse>
+    ): Response<OnlyMsgResponse>
 }
