@@ -2,22 +2,19 @@ package com.example.jeonsilog.data.remote.dto.user
 
 import com.google.gson.annotations.SerializedName
 
-data class MyInfoResponse(
+data class SearchUserResponse(
+
     @SerializedName("check")
-    var check: Boolean,
+    val check: Boolean,
     @SerializedName("information")
-    var information: MyInfoInformation
+    val informationEntity: List<SearchUserInformationEntity>
 )
 
-data class MyInfoInformation(
+data class SearchUserInformationEntity(
     @SerializedName("userId")
-    var userId: Int,
+    val userId: Int,
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImgUrl")
-    val profileImgUrl: String,
-    @SerializedName("numFollowing")
-    val numFollowing: Int,
-    @SerializedName("numFollower")
-    val numFollower: Int
+    val profileImgUrl: String
 )

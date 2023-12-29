@@ -2,14 +2,14 @@ package com.example.jeonsilog.data.remote.dto.user
 
 import com.google.gson.annotations.SerializedName
 
-data class UnLinkResponse(
+data class EditNickResponse(
     @SerializedName("check")
     var check: Boolean,
     @SerializedName("information")
-    var information: UnLinkInformation
+    var information: EditNickInformation
 )
 
-data class UnLinkInformation(
+data class EditNickInformation(
     @SerializedName("message")
     val message: String
 )
