@@ -1,7 +1,6 @@
 package com.example.jeonsilog.data.remote.api
 
-import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
-import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,8 +17,8 @@ class ApiTest {
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            ReviewRepositoryImpl().postReview(token2, PostReviewRequest(1, "test2"))
-            ReviewRepositoryImpl().getOtherReviews(token1, 8)
+            InterestRepositoryImpl().deleteInterest(token1, 1)
+            InterestRepositoryImpl().getInterest(token1)
         }
     }
 }
