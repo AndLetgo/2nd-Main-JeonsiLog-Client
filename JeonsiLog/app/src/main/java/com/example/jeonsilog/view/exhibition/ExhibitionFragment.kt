@@ -63,6 +63,10 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         binding.ivPosterImage.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_posterFragment)
         }
+
+        binding.llExhibitionPlace.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
+        }
     }
 
 }

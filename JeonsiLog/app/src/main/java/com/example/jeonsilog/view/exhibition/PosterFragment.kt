@@ -1,33 +1,11 @@
 package com.example.jeonsilog.view.exhibition
 
-import android.app.DownloadManager
-import android.content.Context.DOWNLOAD_SERVICE
-import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.util.Log
-import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.viewModels
 import androidx.viewpager.widget.ViewPager
-import com.example.jeonsilog.Manifest
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentPosterBinding
 import com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.FileWriter
-import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class PosterFragment : BaseFragment<FragmentPosterBinding>(
     R.layout.fragment_poster) {
@@ -89,7 +67,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
 
     //접근 권한
     private fun requestPermission(){
-        
+
     }
 
 }

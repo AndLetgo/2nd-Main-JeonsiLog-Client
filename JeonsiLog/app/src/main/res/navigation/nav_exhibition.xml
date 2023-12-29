@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_exhibitionFragment_to_posterFragment"
             app:destination="@id/PosterFragment" />
+        <action
+            android:id="@+id/action_exhibitionFragment_to_exhibitionPlaceFragment"
+            app:destination="@id/exhibitionPlaceFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewFragment"
@@ -31,4 +34,8 @@
         android:name="com.example.jeonsilog.view.exhibition.WritingReviewFragment"
         android:label="WritingReviewFragment" >
     </fragment>
+    <fragment
+        android:id="@+id/exhibitionPlaceFragment"
+        android:name="com.example.jeonsilog.view.exhibition.ExhibitionPlaceFragment"
+        android:label="ExhibitionPlaceFragment" />
 </navigation>
