@@ -8,7 +8,6 @@
     <style name="Theme.JeonsiLog" parent="Base.Theme.JeonsiLog" >
         <item name="android:windowIsTranslucent">true</item>
     </style>
-
     <style name="RoundCornerBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/RoundCornerModalStyle</item>
     </style>

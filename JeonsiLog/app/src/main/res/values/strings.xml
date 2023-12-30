@@ -4,12 +4,13 @@
     <!-- Button -->
     <string name="btn_delete">삭제</string>
     <string name="btn_delete_dialog">삭제하기</string>
-    <string name="btn_report">신고</string>
+    <string name="btn_report">신고하기</string>
     <string name="btn_register">등록</string>
     <string name="btn_modify">수정</string>
     <string name="btn_cancel">취소</string>
     <string name="btn_move">이동</string>
     <string name="btn_close">닫기</string>
+    <string name="btn_wrting_review_close">창 닫기</string>
 
     <string name="btn_public">공개</string>
     <string name="btn_private">비공개</string>
@@ -41,8 +42,8 @@
     <string name="date_day">%d일 전</string>
 
     <!-- Dialog -->
-    <string name="dialog_reply_report">댓글 신고는 취소할 수 없어요. \n 해당 댓글을 신고하시겠어요?</string>
-    <string name="dialog_reply_delete">삭제된 댓글은 복구할 수 없어요. \n 해당 댓글을 삭제하시겠어요?</string>
+    <string name="dialog_report">%1$s 신고는 취소할 수 없어요. \n 해당 %1$s을 신고하시겠어요?</string>
+    <string name="dialog_delete">삭제된 %1$s은 복구할 수 없어요. \n 해당 %1$s을 삭제하시겠어요?</string>
     <string name="dialog_close_review">지금까지 작성한 감상평이 사라져요. \n 창을 닫으시겠어요?</string>
 
     <string name="dialog_unlink_comment">탈퇴 시, 모든 데이터가 삭제됩니다.</string>
@@ -68,14 +69,19 @@
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>
+    <string name="exhibition_more_info">...더보기</string>
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>
     <string name="exhibition_reply">댓글</string>
     <string name="exhibition_writing_review">감상평 작성하기</string>
+    <string name="exhibition_writing_review_hint">여기에 감상평을 입력하세요!</string>
+    <string name="exhibition_reply_hint">댓글을 남겨 보세요!</string>
+    <string name="exhibition_writing_review_count">(%d/1000)</string>
 
     <!-- Search -->
     <string name="search_edit_hint">검색어를 입력하세요</string>
-    <string name="search_title">최근검색어</string>
+    <string name="search_recent_title">최근검색어</string>
+    <string name="search_title">검색</string>
     <string name="search_random_exhibition">이런 전시회도 있어요</string>
 
     <string name="search_tablayout_item1">전시</string>
@@ -92,11 +98,18 @@
     <string name="calendar_fri">금</string>
     <string name="calendar_sat">토</string>
     <string name="calendar_sun">일</string>
+    <string name="sun_tx">일</string>
+    <string name="mon_tx">월</string>
+    <string name="tue_tx">화</string>
+    <string name="wed_tx">수</string>
+    <string name="thu_tx">목</string>
+    <string name="fri_tx">금</string>
+    <string name="sat_tx">토</string>
 
     <!-- Notification -->
     <string name="noti_title">알림</string>
-    <string name="noti_following_tab">팔로잉</string>
-    <string name="noti_my_activity">나의 활동</string>
+    <string name="noti_activity_tab">활동</string>
+    <string name="noti_exhibition_tab">전시</string>
 
     <!-- Mypage -->
     <string name="mypage_title">마이페이지</string>
@@ -152,4 +165,6 @@
     <string name="empty_other_rating">기록된 별점이 없어요</string>
     <string name="empty_other_review">기록된 감상평이 없어요</string>
     <string name="empty_other_photocalendar">포토캘린더가 비공개 되어있어요</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

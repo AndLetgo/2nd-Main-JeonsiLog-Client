@@ -11,6 +11,9 @@ class GlobalApplication: Application() {
     companion object {
         lateinit var prefs: PreferenceUtil
         lateinit var encryptedPrefs: CryptedPreferenceUtil
+
+        var exhibitionId: Int = 0
+        var extraActivityReference: Int = 0
     }
 
     override fun onCreate() {
