@@ -1,21 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="viewModel"
+            type="com.example.jeonsilog.viewmodel.PhotoCalendarViewModel" />
 
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.PhotoCalendarFragment">
+        tools:context=".view.photocalendar.PhotoCalendarFragment">
 
-        <TextView
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="PhotoCalendar"
-            android:textSize="50dp" />
+            android:layout_height="@dimen/margin_56"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+            <TextView
+                android:id="@+id/tv_year_month"
+                style="@style/XL_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2023s"
+                android:textColor="@color/basic_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ToggleButton
+                android:id="@+id/tb_public_private"
+                style="@style/S_bold"
+                android:layout_width="@dimen/item_74"
+                android:layout_height="@dimen/item_32"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:background="@drawable/shape_item_keyword"
+                android:elevation="@dimen/shadow_2"
+                android:gravity="center"
+                android:textOn="@string/btn_public"
+                android:textOff="@string/btn_private"
+                android:checked="true"
+                android:textColor="@color/basic_point"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_32"
+            android:layout_marginTop="@dimen/margin_32"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <TextView
+                android:id="@+id/tv_sun"
+                style="@style/S_regular"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/sun_tx"
+                android:textColor="@color/gray_medium" />
+
+            <TextView
+                android:id="@+id/tv_mon"
+                style="@style/S_regular"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/mon_tx"
+                android:textColor="@color/gray_medium" />
+
+            <TextView
+                android:id="@+id/tv_tue"
+                style="@style/S_regular"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/tue_tx"
+                android:textColor="@color/gray_medium" />
+
+            <TextView
+                android:id="@+id/tv_wed"
+                style="@style/S_regular"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/wed_tx"
+                android:textColor="@color/gray_medium" />
+
+            <TextView
+                android:id="@+id/tv_thu"
+                style="@style/S_regular"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/thu_tx"
+                android:textColor="@color/gray_medium" />
+
+            <TextView
+                android:id="@+id/tv_fri"
+                style="@style/S_regular"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/fri_tx"
+                android:textColor="@color/gray_medium" />
+
+            <TextView
+                android:id="@+id/tv_sat"
+                style="@style/S_regular"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/sat_tx"
+                android:textColor="@color/gray_medium" />
+
+        </LinearLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_photo_calendar"
+            android:layout_width="@dimen/item_0"
+            android:layout_height="500dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

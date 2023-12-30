@@ -12,9 +12,11 @@ import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
+
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
 
@@ -32,7 +34,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     ).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_photoCalendar->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,PhotoCalendarFragment()).commit()
+
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,
+                        PhotoCalendarFragment()
+                    ).commit()
                 }
                 R.id.item_notification->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,
