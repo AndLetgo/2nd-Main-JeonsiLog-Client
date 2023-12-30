@@ -3,13 +3,16 @@ package com.example.jeonsilog.view
 import android.content.Context
 import android.graphics.Rect
 import android.view.MotionEvent
+import android.content.Intent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
+import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -52,6 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 //        val mainActivity = activity as MainActivity
 //        mainActivity.setStateBn(false)
     }
+
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus
@@ -67,5 +71,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             }
         }
         return super.dispatchTouchEvent(event)
+
+
+    fun loadExtraActivity(type:Int){
+        extraActivityReference = type
+        val intent = Intent(this, ExtraActivity::class.java)
+        startActivity(intent)
+
     }
 }

@@ -4,53 +4,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.ExhibitionPlaceViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_exhibitionplace"
+        android:layout_height="match_parent"
+        tools:context=".view.exhibition.ExhibitionPlaceFragment">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전시장명"
+                style="@style/XL_bold"
+                android:textColor="@color/basic_black"/>
+        </androidx.appcompat.widget.Toolbar>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_exhibition"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_0"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_212"
-            android:src="@drawable/illus_empty_search"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_empty01"
-            style="@style/XL_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_20"
-            android:text="@string/empty_search_title"
-            app:layout_constraintEnd_toEndOf="@+id/iv_empty"
-            app:layout_constraintStart_toStartOf="@+id/iv_empty"
-            app:layout_constraintTop_toBottomOf="@+id/iv_empty" />
-
-        <TextView
-            android:id="@+id/tv_empty02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4"
-            style="@style/XL_regular"
-            android:text="@string/empty_search_description"
-            android:fontFamily="@font/noto_sans_kr_regular"
-            app:layout_constraintEnd_toEndOf="@+id/iv_empty"
-            app:layout_constraintStart_toStartOf="@+id/iv_empty"
-            app:layout_constraintTop_toBottomOf="@+id/tv_empty01" />
+            android:layout_marginTop="@dimen/margin_12"
+            tools:listitem="@layout/item_exhibition_place"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

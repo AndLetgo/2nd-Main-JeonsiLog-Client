@@ -24,6 +24,13 @@
                 android:layout_height="20dp"
                 android:src="@drawable/illus_jeonsilog_title"
                 android:layout_marginStart="@dimen/margin_28"/>
+            <Button
+                android:id="@+id/btn_go_exhibition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전시회"
+                android:layout_gravity="end"
+                />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
