@@ -1,5 +1,6 @@
 package com.example.jeonsilog.data.remote.api
 
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +15,8 @@ class ApiTest {
         "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNzAzODQ1NjU4LCJleHAiOjE3MDM4NDkyNTh9.30Pu3UvURotODkGfic-uin_V6eXulqPUd0ba80ZKQV4nEriO8naAkOCnVYRvYUM0O5zOW_SmCgUIHeEtg4NL5A"
 
     init {
+        println("${encryptedPrefs.getRT()} / ${encryptedPrefs.getAT()}")
+
         CoroutineScope(Dispatchers.IO).launch {
         }
     }

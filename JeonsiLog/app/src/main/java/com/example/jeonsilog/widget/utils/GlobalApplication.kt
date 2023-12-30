@@ -2,22 +2,21 @@ package com.example.jeonsilog.widget.utils
 
 import android.app.Application
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.example.jeonsilog.BuildConfig
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
-
 
 class GlobalApplication: Application() {
     companion object {
         lateinit var prefs: PreferenceUtil
         lateinit var encryptedPrefs: CryptedPreferenceUtil
+        var isFinish = MutableLiveData(false)
     }
 
     override fun onCreate() {
         prefs = PreferenceUtil(applicationContext)
         encryptedPrefs = CryptedPreferenceUtil(applicationContext)
-        encryptedPrefs.setAT("afa")
-
         super.onCreate()
 
         getKeyHash()

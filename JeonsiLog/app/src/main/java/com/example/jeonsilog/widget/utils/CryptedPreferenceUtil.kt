@@ -74,12 +74,12 @@ class CryptedPreferenceUtil(context: Context) {
         encryptedPrefs.edit().putBoolean("isRecvActive", p).apply()
     }
 
-    fun getAT(): String?{
-        return encryptedPrefs.getString("at", null)
+    fun getAT(): String{
+        return encryptedPrefs.getString("at", null).toString()
     }
 
-    fun getRT(): String? {
-        return encryptedPrefs.getString("rt", null)
+    fun getRT(): String {
+        return encryptedPrefs.getString("rt", null).toString()
     }
 
     fun getNN(): String? {
