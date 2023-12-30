@@ -6,45 +6,51 @@
         tools:context=".view.MainActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_nav_admin"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_admin"/>
+        <FrameLayout
+            android:id="@+id/fl_main"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
-    <FrameLayout
-        android:id="@+id/fl_main"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_0"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnv_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/shape_bn_round"
-        android:elevation="@dimen/shadow_12"
-        app:labelVisibilityMode="unlabeled"
-        app:itemBackground="@null"
-        app:itemIconTint="@drawable/selector_bn_color"
-        app:menu="@menu/menu_bn_main"
-        android:paddingHorizontal="@dimen/margin_4"/>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnv_admin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/shape_bn_round"
-        android:elevation="@dimen/shadow_12"
-        app:labelVisibilityMode="unlabeled"
-        app:itemBackground="@null"
-        app:itemIconTint="@drawable/selector_bn_color"
-        app:menu="@menu/menu_bn_admin"
-        android:paddingHorizontal="@dimen/margin_24"/>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnv_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/shape_bn_round"
+            android:elevation="@dimen/shadow_12"
+            app:labelVisibilityMode="unlabeled"
+            app:itemBackground="@null"
+            app:itemIconTint="@drawable/selector_bn_color"
+            app:menu="@menu/menu_bn_main"
+            android:paddingHorizontal="@dimen/margin_4"/>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnv_admin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/shape_bn_round"
+            android:elevation="@dimen/shadow_12"
+            app:labelVisibilityMode="unlabeled"
+            app:itemBackground="@null"
+            app:itemIconTint="@drawable/selector_bn_color"
+            app:menu="@menu/menu_bn_admin"
+            android:paddingHorizontal="@dimen/margin_24"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

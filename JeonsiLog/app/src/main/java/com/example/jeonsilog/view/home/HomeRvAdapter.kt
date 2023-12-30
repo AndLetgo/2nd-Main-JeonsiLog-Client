@@ -2,22 +2,25 @@ package com.example.jeonsilog.view.home
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 import com.example.jeonsilog.databinding.RvTitleAreaBinding
-import com.example.jeonsilog.viewmodel.HomeRvModel
+import com.example.jeonsilog.viewmodel.ExhibitionModel
 import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
-class HomeRvAdapter(private val homeRvList:List<HomeRvModel>): RecyclerView.Adapter<ViewHolder>(){
+class HomeRvAdapter(private val exhibitionList:List<ExhibitionModel>): RecyclerView.Adapter<ViewHolder>(){
     private val tag = this.javaClass.simpleName
+    private var listener: OnItemClickListener? = null
+
     inner class ViewHolder(val binding: ItemHomeExhibitionBinding):
         RecyclerView.ViewHolder(binding.root){
-        fun bind(item: HomeRvModel){
+        fun bind(item: ExhibitionModel){
             Log.d(tag, "bind: ")
             binding.tvTitle.text = item.title
             binding.tvAddress.text = item.address
@@ -59,15 +62,28 @@ class HomeRvAdapter(private val homeRvList:List<HomeRvModel>): RecyclerView.Adap
         }
     }
 
-    override fun getItemCount(): Int = homeRvList.size +1
+    override fun getItemCount(): Int = exhibitionList.size +1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
             is HeaderHolder -> {}
             is ViewHolder -> {
-                holder.bind(homeRvList[position-1])
+                holder.bind(exhibitionList[position-1])
+
+                if(position != RecyclerView.NO_POSITION){
+                    holder.itemView.setOnClickListener {
+                        listener?.onItemClick(holder.itemView, exhibitionList[position-1], position-1)
+                    }
+                }
             }
         }
+    }
 
+    interface OnItemClickListener {
+        fun onItemClick(v: View, data: ExhibitionModel, position: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
     }
 }

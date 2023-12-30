@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--    Dp Margin  -->
+    <dimen name="margin_0">0dp</dimen>
+    <dimen name="margin_1">1dp</dimen>
     <dimen name="margin_2">2dp</dimen>
     <dimen name="margin_4">4dp</dimen>
     <dimen name="margin_8">8dp</dimen>
@@ -11,33 +13,54 @@
     <dimen name="margin_28">28dp</dimen>
     <dimen name="margin_32">32dp</dimen>
     <dimen name="margin_36">36dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
     <dimen name="margin_44">44dp</dimen>
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_76">76dp</dimen>
+    <dimen name="margin_96">96dp</dimen>
 
     <!--    Dp Item  -->
     <dimen name="item_0">0dp</dimen>
+    <dimen name="item_1">1dp</dimen>
     <dimen name="item_4">4dp</dimen>
+    <dimen name="item_18">18dp</dimen>
+    <dimen name="item_24">24dp</dimen>
+    <dimen name="item_28">28dp</dimen>
     <dimen name="item_32">32dp</dimen>
     <dimen name="item_40">40dp</dimen>
+    <dimen name="item_45">45dp</dimen>
+    <dimen name="item_46">46dp</dimen>
     <dimen name="item_52">52dp</dimen>
+    <dimen name="item_56">56dp</dimen>
     <dimen name="item_74">74dp</dimen>
+    <dimen name="item_84">84dp</dimen>
     <dimen name="item_100">100dp</dimen>
+    <dimen name="item_108">108dp</dimen>
     <dimen name="item_132">132dp</dimen>
+    <dimen name="item_142">142dp</dimen>
 
     <!--    Text Size(sp)-->
+    <dimen name="text_11">11sp</dimen>
     <dimen name="text_14">14sp</dimen>
     <dimen name="text_16">16sp</dimen>
     <dimen name="text_18">18sp</dimen>
     <dimen name="text_20">20sp</dimen>
 
     <!--    Text LineSpacing(px)-->
-    <dimen name="linespacing_22">22px</dimen>
-    <dimen name="linespacing_24">24px</dimen>
-    <dimen name="linespacing_26">26px</dimen>
-    <dimen name="linespacing_28">28px</dimen>
+    <dimen name="linespacing_22">0px</dimen>
+    <dimen name="linespacing_24">0px</dimen>
+    <dimen name="linespacing_26">0px</dimen>
+    <dimen name="linespacing_28">0px</dimen>
 
     <!--    Dp Shadow  -->
     <dimen name="shadow_2">2dp</dimen>
     <dimen name="shadow_12">12dp</dimen>
+
+    <!--    Dp Corner Radius  -->
+    <dimen name="radius_8">8dp</dimen>
+    <dimen name="radius_12">12dp</dimen>
+    <dimen name="radius_16">16dp</dimen>
+    <dimen name="radius_30">30dp</dimen>
+    <dimen name="radius_40">40dp</dimen>
 </resources>

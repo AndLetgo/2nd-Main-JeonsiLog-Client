@@ -1,6 +1,6 @@
 package com.example.jeonsilog.viewmodel
 
-data class HomeRvModel(
+data class ExhibitionModel(
     val id:Long,
     val title:String,
     val address:String,
