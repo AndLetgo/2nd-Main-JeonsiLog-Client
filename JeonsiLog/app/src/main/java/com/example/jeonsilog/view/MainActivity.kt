@@ -1,9 +1,14 @@
 package com.example.jeonsilog.view
 
+import android.content.Intent
 import android.view.View
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
+import com.example.jeonsilog.view.exhibition.ExtraActivity
+import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.home.HomeFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -43,5 +48,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         //사용 시 해당 프레그먼트에서 아래처럼 사용하면 됨 (확인 후 이 부분은 지우셔도 됩니다)
 //        val mainActivity = activity as MainActivity
 //        mainActivity.setStateBn(false)
+    }
+
+    fun loadExtraActivity(type:Int){
+        extraActivityReference = type
+        val intent = Intent(this, ExtraActivity::class.java)
+        startActivity(intent)
     }
 }

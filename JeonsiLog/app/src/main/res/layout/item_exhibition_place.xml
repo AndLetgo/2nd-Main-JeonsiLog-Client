@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/margin_24"
+        android:paddingVertical="@dimen/margin_12">
+
+        <ImageView
+            android:id="@+id/iv_exhibition_poster"
+            android:layout_width="@dimen/item_84"
+            android:layout_height="@dimen/item_108"
+            android:src="@color/gray_light_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_exhibition_name"
+            style="@style/M_medium"
+            android:layout_width="@dimen/item_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:text="전시회명"
+            android:textColor="@color/basic_black"
+            app:layout_constraintBottom_toTopOf="@+id/tv_exhibition_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/iv_exhibition_poster"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_exhibition_date"
+            style="@style/S_regular"
+            android:layout_width="@dimen/item_0"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:text="date"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/iv_exhibition_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_exhibition_name" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_12"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_exhibition_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_exhibition_date">
+
+            <TextView
+                android:id="@+id/tv_keyword_operating"
+                style="@style/S_bold"
+                android:layout_width="@dimen/item_74"
+                android:layout_height="@dimen/item_32"
+                android:background="@drawable/shape_corner_round_full"
+                android:elevation="@dimen/shadow_2"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="시작전"
+                android:textColor="@color/basic_point"
+                android:layout_margin="@dimen/margin_2" />
+
+            <TextView
+                android:id="@+id/tv_keyword_price"
+                style="@style/S_bold"
+                android:layout_width="@dimen/item_74"
+                android:layout_height="@dimen/item_32"
+                android:layout_marginVertical="@dimen/margin_2"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/margin_2"
+                android:background="@drawable/shape_corner_round_full"
+                android:elevation="@dimen/shadow_2"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="무료"
+                android:textColor="@color/basic_point" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
