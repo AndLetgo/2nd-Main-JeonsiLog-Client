@@ -4,8 +4,14 @@ import android.util.Log
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.UserApi
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
+import com.example.jeonsilog.data.remote.dto.user.MyInfoResponse
+import com.example.jeonsilog.data.remote.dto.user.PatchAlarmActiveResponse
+import com.example.jeonsilog.data.remote.dto.user.PatchAlarmFollowingResponse
+import com.example.jeonsilog.data.remote.dto.user.PatchCalendarOpenResponse
+import com.example.jeonsilog.data.remote.dto.user.SearchUserResponse
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
+import retrofit2.Response
 
 
 class UserRepositoryImpl: UserRepository {
@@ -50,6 +56,59 @@ class UserRepositoryImpl: UserRepository {
         } else {
             Log.e(tag, "닉네임 수정 실패")
             false
+        }
+    }
+
+    override suspend fun getOtherInfo(token: String, userId: Int): Response<MyInfoResponse> {
+        val response = service.getOtherInfo("Bearer $token", userId)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun searchUserInfo(
+        token: String,
+        searchWord: String
+    ): Response<SearchUserResponse> {
+        val response = service.searchUserInfo("Bearer $token", searchWord)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun patchCalendarOpen(token: String): Response<PatchCalendarOpenResponse> {
+        val response = service.patchCalendarOpen("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun patchAlarmActive(token: String): Response<PatchAlarmActiveResponse> {
+        val response = service.patchAlarmActive("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun patchAlarmFollowing(token: String): Response<PatchAlarmFollowingResponse> {
+        val response = service.patchAlarmFollowing("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.jeonsilog.view
 
+import android.content.Intent
+import android.util.Log
 import android.content.Context
 import android.graphics.Rect
 import android.view.MotionEvent
@@ -12,6 +14,9 @@ import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.view.spalshpage.SplashActivity
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFinish
+import com.kakao.sdk.user.UserApiClient
 import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
@@ -20,6 +25,7 @@ import com.example.jeonsilog.view.search.SearchFragment
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
+    private val tag = this.javaClass.simpleName
 
     override fun init() {
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
@@ -54,6 +60,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             true
         }
 
+        isFinish.observe(this){
+            Log.d(tag, "isFinish: $it")
+            if(it){kakaoLogOut("RefreshToken 만료로 인한")}
+        }
     }
 
     fun setStateBn(isVisible:Boolean){
@@ -65,6 +75,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         //사용 시 해당 프레그먼트에서 아래처럼 사용하면 됨 (확인 후 이 부분은 지우셔도 됩니다)
 //        val mainActivity = activity as MainActivity
 //        mainActivity.setStateBn(false)
+    }
+
+    private fun kakaoLogOut(msg: String){
+        UserApiClient.instance.logout { error ->
+            if(error != null){
+                Log.e(tag, "$msg 로그아웃 실패")
+            } else {
+                Log.d(tag, "$msg 로그아웃 진행")
+                val intent = Intent(this@MainActivity, SplashActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                startActivity(intent)
+                isFinish.value = false
+                finish()
+            }
+        }
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -82,6 +107,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             }
         }
         return super.dispatchTouchEvent(event)
+    }
 
 
     fun loadExtraActivity(type:Int){
