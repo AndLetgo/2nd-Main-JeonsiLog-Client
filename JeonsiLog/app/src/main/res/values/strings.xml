@@ -45,11 +45,11 @@
     <string name="dialog_delete">삭제된 %1$s은 복구할 수 없어요. \n 해당 %1$s을 삭제하시겠어요?</string>
     <string name="dialog_close_review">지금까지 작성한 감상평이 사라져요. \n 창을 닫으시겠어요?</string>
 
-    <string name="dialog_unlink_comment">탈퇴 시, 모든 데이터가 삭제됩니다.</string>
+    <string name="dialog_unlink_comment">탈퇴 시, 모든 데이터가 사라져요.</string>
     <string name="dialog_unlink_sub_comment">정말 탈퇴하시겠어요?</string>
 
     <string name="dialog_nick_modify_title">닉네임 수정</string>
-    <string name="dialog_nick_modify_hint">2~10글자, 특수문자 사용 불가</string>
+    <string name="dialog_nick_modify_hint">2~10글자, 특수문자, 공백 사용 불가</string>
     <string name="dialog_nick_duplicate">중복된 닉네임이에요.</string>
     <string name="dialog_nick_prohibited_words_check">부적절한 단어가 포함되어 있어요.</string>
     <string name="dialog_failure_internet">인터넷에 연결할 수 없어요. \n 새로고침을 하거나 \n 네트워크 설정을 확인해주세요.</string>
@@ -65,6 +65,11 @@
 
     <!-- Home -->
     <string name="home_title">요즘 뜨는 전시</string>
+
+    <!-- Keyword -->
+    <string name="keyword_state_before">시작 전</string>
+    <string name="keyword_state_on">전시 중</string>
+    <string name="keyword_free">무료</string>
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>

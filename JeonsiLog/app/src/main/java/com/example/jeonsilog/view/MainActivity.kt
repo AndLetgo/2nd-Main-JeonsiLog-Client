@@ -12,6 +12,7 @@ import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
@@ -45,7 +46,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     ).commit()
                 }
                 R.id.item_mypage->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,MyPageFragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,
+                        MyPageFragment()
+                    ).commit()
                 }
             }
             true

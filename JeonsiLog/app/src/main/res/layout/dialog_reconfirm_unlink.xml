@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/margin_16"
+        android:layout_margin="@dimen/margin_44"
+        android:background="@drawable/shape_corner_round_dialog">
+
+        <TextView
+            android:id="@+id/tv_dialog_reconfirm_unlink_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_unlink_comment"
+            style="@style/M_medium"
+            android:textColor="@color/basic_black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_32" />
+
+        <TextView
+            android:id="@+id/tv_dialog_reconfirm_unlink_sub_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_unlink_sub_comment"
+            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_reconfirm_unlink_comment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_4"/>
+
+        <Button
+            android:id="@+id/btn_dialog_reconfirm_do_unlink"
+            android:layout_width="142dp"
+            android:layout_height="44dp"
+            android:background="@drawable/shape_corner_round_start_btn"
+            android:text="@string/btn_unlink_recheck"
+            style="@style/M_medium"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintEnd_toStartOf="@id/btn_dialog_reconfirm_unlink_cancel"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_reconfirm_unlink_sub_comment"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/item_40"
+            android:layout_marginEnd="@dimen/margin_4"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:outlineProvider="none"/>
+
+        <Button
+            android:id="@+id/btn_dialog_reconfirm_unlink_cancel"
+            android:layout_width="142dp"
+            android:layout_height="44dp"
+            android:background="@drawable/shape_corner_round_start_btn_activate"
+            android:text="@string/btn_close"
+            android:textColor="@color/basic_white"
+            style="@style/M_medium"
+            app:layout_constraintStart_toEndOf="@+id/btn_dialog_reconfirm_do_unlink"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_reconfirm_unlink_sub_comment"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/item_40"
+            android:layout_marginStart="@dimen/margin_4"
+            android:outlineProvider="none"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
