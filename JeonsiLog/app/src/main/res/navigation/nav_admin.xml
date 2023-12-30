@@ -19,9 +19,16 @@
         <action
             android:id="@+id/action_adminExhibitionFragment_to_adminPosterFragment"
             app:destination="@id/adminPosterFragment" />
+        <action
+            android:id="@+id/action_adminExhibitionFragment_to_adminReviewFragment"
+            app:destination="@id/adminReviewFragment" />
     </fragment>
     <fragment
         android:id="@+id/adminPosterFragment"
         android:name="com.example.jeonsilog.view.admin.AdminPosterFragment"
         android:label="AdminPosterFragment" />
+    <fragment
+        android:id="@+id/adminReviewFragment"
+        android:name="com.example.jeonsilog.view.admin.AdminReviewFragment"
+        android:label="AdminReviewFragment" />
 </navigation>

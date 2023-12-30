@@ -15,6 +15,7 @@
             android:id="@+id/iv_poster_image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_0"
+            android:adjustViewBounds="true"
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/illus_dialog_warning"/>
 
@@ -57,7 +58,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="@dimen/margin_40"
                         android:layout_marginEnd="@dimen/margin_16"
-                        android:background="@color/basic_white"/>
+                        android:background="@color/transparent"/>
 
                     <TextView
                         android:id="@+id/tv_exhibition_name"
@@ -175,6 +176,8 @@
                             android:layout_width="@dimen/item_32"
                             android:layout_height="@dimen/item_32"
                             android:src="@drawable/ic_exhibition_call"
+                            android:scaleType="centerCrop"
+                            android:background="@color/transparent"
                             android:layout_marginHorizontal="@dimen/margin_8"
                             />
                         <ImageButton
@@ -182,7 +185,8 @@
                             android:layout_width="@dimen/item_32"
                             android:layout_height="@dimen/item_32"
                             android:src="@drawable/ic_exhibition_go_web"
-                            />
+                            android:scaleType="centerCrop"
+                            android:background="@color/transparent"/>
                     </LinearLayout>
                     <View
                         android:id="@+id/divider"
@@ -224,41 +228,13 @@
                         app:layout_constraintBottom_toBottomOf="@id/tv_information"
                         android:background="@color/basic_white"/>
                     <TextView
-                        android:id="@+id/tv_rating_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/exhibition_rating"
-                        style="@style/M_medium"
-                        android:textColor="@color/basic_black"
-                        app:layout_constraintTop_toBottomOf="@id/tv_information"
-                        android:layout_marginHorizontal="@dimen/margin_24"
-                        android:layout_marginTop="@dimen/margin_32"/>
-                    <com.willy.ratingbar.BaseRatingBar
-                        android:id="@+id/rating_bar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/item_45"
-                        app:srb_numStars="5"
-                        app:srb_starWidth="@dimen/item_45"
-                        app:srb_starHeight="@dimen/item_45"
-                        app:srb_starPadding="@dimen/margin_4"
-                        app:srb_stepSize="0.5"
-                        app:srb_isIndicator="false"
-                        app:srb_clickable="true"
-                        app:srb_scrollable="true"
-                        app:srb_drawableEmpty="@drawable/ic_rating_empty_45"
-                        app:srb_drawableFilled="@drawable/ic_rating_full_45"
-                        app:layout_constraintTop_toBottomOf="@id/tv_rating_title"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="@dimen/margin_12"/>
-                    <TextView
                         android:id="@+id/tv_review_title"
                         android:layout_width="@dimen/item_0"
                         android:layout_height="wrap_content"
                         android:text="@string/exhibition_review"
                         style="@style/M_medium"
                         android:textColor="@color/basic_black"
-                        app:layout_constraintTop_toBottomOf="@id/rating_bar"
+                        app:layout_constraintTop_toBottomOf="@id/tv_information"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/btn_writing_review"
                         android:layout_marginHorizontal="@dimen/margin_24"
@@ -270,7 +246,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_writing"
                         android:background="@color/basic_white"
-                        app:layout_constraintTop_toBottomOf="@id/rating_bar"
+                        app:layout_constraintTop_toBottomOf="@id/tv_information"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="@dimen/margin_32"
                         android:layout_marginEnd="@dimen/margin_24"/>
