@@ -18,6 +18,8 @@
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
     <dimen name="margin_76">76dp</dimen>
+    <dimen name="margin_212">212dp</dimen>
+
 
     <!--    Dp Item  -->
     <dimen name="item_0">0dp</dimen>

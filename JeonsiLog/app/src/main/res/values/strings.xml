@@ -79,9 +79,10 @@
 
     <!-- Search -->
     <string name="search_edit_hint">검색어를 입력하세요</string>
-    <string name="search_title">최근검색어</string>
+    <string name="search_recent_title">최근검색어</string>
+    <string name="search_title">검색</string>
     <string name="search_random_exhibition">이런 전시회도 있어요</string>
-
+색
     <string name="search_tablayout_item1">전시</string>
     <string name="search_tablayout_item2">전시장</string>
     <string name="search_tablayout_item3">사용자</string>

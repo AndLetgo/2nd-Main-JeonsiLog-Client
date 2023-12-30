@@ -48,7 +48,9 @@
                     android:scheme="kakao${KAKAO_NATIVE_KEY}" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity"></activity>
+        <activity android:name=".view.MainActivity"
+            android:windowSoftInputMode="adjustNothing">
+        </activity>
     </application>
 
 </manifest>
