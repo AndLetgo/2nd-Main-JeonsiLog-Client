@@ -12,6 +12,7 @@ import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
 
@@ -34,7 +35,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,PhotoCalendarFragment()).commit()
                 }
                 R.id.item_notification->{
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,NotificationFragment()).commit()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,
+                        NotificationFragment()
+                    ).commit()
                 }
                 R.id.item_mypage->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,MyPageFragment()).commit()
