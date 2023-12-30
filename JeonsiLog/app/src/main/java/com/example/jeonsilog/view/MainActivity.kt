@@ -9,6 +9,7 @@ import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
+import com.example.jeonsilog.view.home.HomeFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
 

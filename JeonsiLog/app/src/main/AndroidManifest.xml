@@ -8,7 +8,9 @@
 
     <application
         android:name=".widget.utils.GlobalApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
@@ -31,14 +33,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.login.LoginActivity" />
-        <activity android:name=".view.login.SignUpActivity" />
+        <activity android:name=".view.login.LoginActivity"/>
+        <activity android:name=".view.login.SignUpActivity"/>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 

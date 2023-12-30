@@ -19,6 +19,7 @@
         <item name="android:textSize">@dimen/text_14</item>
         <item name="android:lineSpacingExtra">@dimen/linespacing_22</item>
         <item name="android:includeFontPadding">false</item>
+
     </style>
     <style name="Keyword_bold">
         <item name="android:textSize">@dimen/text_11</item>
