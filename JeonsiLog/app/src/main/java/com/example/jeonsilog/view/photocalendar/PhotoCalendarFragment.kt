@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.photocalendar
 
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -17,11 +18,13 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-class PhotoCalendarFragment(val viewModel: PhotoCalendarViewModel) : BaseFragment<FragmentPhotoCalendarBinding>(
+class PhotoCalendarFragment() : BaseFragment<FragmentPhotoCalendarBinding>(
     R.layout.fragment_photo_calendar) {
     lateinit var selectedDateCurrent: LocalDate
     lateinit var selectedDate: LocalDate
     override fun init() {
+
+        val viewModel = ViewModelProvider(requireActivity()).get(PhotoCalendarViewModel::class.java)
         val currentItem = Int.MAX_VALUE / 2
         selectedDateCurrent  = LocalDate.now()
         selectedDate  = LocalDate.now()

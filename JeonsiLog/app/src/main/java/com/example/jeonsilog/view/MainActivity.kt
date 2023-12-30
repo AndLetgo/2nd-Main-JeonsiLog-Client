@@ -10,7 +10,7 @@ import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
-    val viewModel: PhotoCalendarViewModel by viewModels()
+
     override fun init() {
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
@@ -25,7 +25,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 R.id.item_photoCalendar->{
 
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,
-                        PhotoCalendarFragment(viewModel)
+                        PhotoCalendarFragment()
                     ).commit()
                 }
                 R.id.item_notification->{
