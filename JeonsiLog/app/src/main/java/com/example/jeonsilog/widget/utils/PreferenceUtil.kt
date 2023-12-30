@@ -2,6 +2,10 @@ package com.example.jeonsilog.widget.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+
+import org.json.JSONArray
+import kotlin.math.log
 
 class PreferenceUtil(context: Context) {
 
@@ -51,7 +55,29 @@ class PreferenceUtil(context: Context) {
     fun setIsLoginState(p: Boolean) {
         prefs.edit().putBoolean("isLoginState", p).apply()
     }
+    fun getRecorList(): ArrayList<String> {
+        var itemlist = prefs.getString("serachData", null)
+        var resultArr : ArrayList<String> = ArrayList()
 
+        if (itemlist!=null){
+            var arrJson = JSONArray(itemlist)
+            for(i in 0 until arrJson.length()){
+                resultArr.add(arrJson.optString(i))
+            }
+        }
 
+        //  변환하는 과정
+        return resultArr
+    }
+
+    fun setRecorList(resultArr: ArrayList<String>) {
+        var jsonArr = JSONArray()
+        for(i in resultArr){
+            jsonArr.put(i)
+        }
+        var result = jsonArr.toString()
+
+        prefs.edit().putString("serachData", result).apply()
+    }
 
 }

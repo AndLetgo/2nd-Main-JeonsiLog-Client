@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools">
+
+
+<data>
+
+</data>
+<LinearLayout
+    tools:context=".view.photocalendar.LoadBottomDialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:weightSum="3"
+    android:paddingVertical="16dp"
+
+    >
+
+    <Button
+        android:id="@+id/bt_load_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_load_image"
+        android:background="@color/transparent"
+        style="@style/M_regular"
+        android:textColor="@color/basic_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/bt_load_poster"
+        android:layout_marginTop="@dimen/margin_12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_load_poster"
+        android:background="@color/transparent"
+        style="@style/M_regular"
+        android:textColor="@color/basic_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/bt_set_delete_image"
+        android:layout_marginTop="@dimen/margin_12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_set_delete_image"
+        android:background="@color/transparent"
+        style="@style/M_regular"
+        android:textColor="@color/basic_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</LinearLayout>
+</layout>

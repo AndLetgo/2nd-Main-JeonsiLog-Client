@@ -19,6 +19,12 @@
         <item name="android:textSize">@dimen/text_14</item>
         <item name="android:lineSpacingExtra">@dimen/linespacing_22</item>
         <item name="android:includeFontPadding">false</item>
+
+    </style>
+    <style name="Keyword_bold">
+        <item name="android:textSize">@dimen/text_11</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
     </style>
 
     <style name="XL_bold" parent="X_Large">
@@ -48,4 +54,5 @@
     <style name="S_regular" parent="Small">
         <item name="fontFamily">@font/noto_sans_kr_regular</item>
     </style>
+
 </resources>
