@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_exhibition"
+    app:startDestination="@id/exhibitionFragment">
+
+    <fragment
+        android:id="@+id/exhibitionFragment"
+        android:name="com.example.jeonsilog.view.exhibition.ExhibitionFragment"
+        android:label="ExhibitionFragment" >
+        <action
+            android:id="@+id/action_exhibitionFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
+        <action
+            android:id="@+id/action_exhibitionFragment_to_writingReviewFragment"
+            app:destination="@id/writingReviewFragment"/>
+        <action
+            android:id="@+id/action_exhibitionFragment_to_posterFragment"
+            app:destination="@id/PosterFragment" />
+        <action
+            android:id="@+id/action_exhibitionFragment_to_exhibitionPlaceFragment"
+            app:destination="@id/exhibitionPlaceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.example.jeonsilog.view.exhibition.ReviewFragment"
+        android:label="ReviewFragment" />
+    <fragment
+        android:id="@+id/PosterFragment"
+        android:name="com.example.jeonsilog.view.exhibition.PosterFragment"
+        android:label="PosterFragment" />
+    <fragment
+        android:id="@+id/writingReviewFragment"
+        android:name="com.example.jeonsilog.view.exhibition.WritingReviewFragment"
+        android:label="WritingReviewFragment" >
+    </fragment>
+    <fragment
+        android:id="@+id/exhibitionPlaceFragment"
+        android:name="com.example.jeonsilog.view.exhibition.ExhibitionPlaceFragment"
+        android:label="ExhibitionPlaceFragment" />
+</navigation>

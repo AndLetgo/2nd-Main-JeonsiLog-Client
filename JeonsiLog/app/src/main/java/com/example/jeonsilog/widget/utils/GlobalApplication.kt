@@ -12,6 +12,9 @@ class GlobalApplication: Application() {
         lateinit var prefs: PreferenceUtil
         lateinit var encryptedPrefs: CryptedPreferenceUtil
         var isFinish = MutableLiveData(false)
+
+        var exhibitionId: Int = 0
+        var extraActivityReference: Int = 0
     }
 
     override fun onCreate() {

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.exhibition.WritingReviewFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/XL_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exhibition_writing_review"
+                android:textColor="@color/basic_black" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <EditText
+            android:id="@+id/et_writing_review"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_0"
+            android:background="@drawable/shape_et_stroke"
+            android:hint="@string/exhibition_writing_review_hint"
+            android:textColorHint="@color/gray_medium"
+            style="@style/M_regular"
+            android:textColor="@color/gray_dark"
+            android:maxLength="1000"
+            android:layout_marginHorizontal="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_12"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toTopOf="@id/btn_cancel"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:padding="@dimen/margin_12"
+            android:paddingBottom="@dimen/margin_32"
+            android:gravity="top|start"/>
+        <TextView
+            android:id="@+id/tv_count_writing_review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exhibition_writing_review_count"
+            style="@style/S_regular"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintEnd_toEndOf="@id/et_writing_review"
+            app:layout_constraintBottom_toBottomOf="@id/et_writing_review"
+            android:layout_margin="@dimen/margin_8"/>
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="@dimen/item_142"
+            android:layout_height="@dimen/item_45"
+            android:background="@drawable/shape_corner_round_start_btn"
+            android:text="@string/btn_cancel"
+            style="@style/M_medium"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintEnd_toStartOf="@+id/btn_confirm"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_writing_review"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/margin_76"
+            android:layout_marginEnd="@dimen/margin_4"/>
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="@dimen/item_142"
+            android:layout_height="@dimen/item_45"
+            android:background="@drawable/shape_corner_round_start_btn_activate"
+            android:text="@string/btn_register"
+            style="@style/M_medium"
+            android:textColor="@color/basic_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_cancel"
+            app:layout_constraintTop_toTopOf="@id/btn_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/margin_76"
+            android:layout_marginStart="@dimen/margin_4"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
