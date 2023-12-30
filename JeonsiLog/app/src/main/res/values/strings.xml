@@ -139,4 +139,6 @@
     <string name="empty_other_rating">기록된 별점이 없어요</string>
     <string name="empty_other_review">기록된 감상평이 없어요</string>
     <string name="empty_other_photocalendar">포토캘린더가 비공개 되어있어요</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

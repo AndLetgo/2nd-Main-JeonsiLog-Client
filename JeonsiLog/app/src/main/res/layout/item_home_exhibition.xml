@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/margin_24"
         android:paddingVertical="@dimen/margin_16"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/basic_white">
 
         <ImageView
             android:id="@+id/iv_poster"

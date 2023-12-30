@@ -31,7 +31,20 @@
         app:itemIconTint="@drawable/selector_bn_color"
         app:menu="@menu/menu_bn_main"
         android:paddingHorizontal="@dimen/margin_4"/>
-
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnv_admin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/shape_bn_round"
+        android:elevation="@dimen/shadow_12"
+        app:labelVisibilityMode="unlabeled"
+        app:itemBackground="@null"
+        app:itemIconTint="@drawable/selector_bn_color"
+        app:menu="@menu/menu_bn_admin"
+        android:paddingHorizontal="@dimen/margin_24"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

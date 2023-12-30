@@ -1,16 +1,23 @@
 package com.example.jeonsilog.view
 
 import android.view.View
+import androidx.core.view.isVisible
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
+import com.example.jeonsilog.view.admin.AdminManagingFragment
+import com.example.jeonsilog.view.admin.AdminReportFragment
 import com.example.jeonsilog.view.home.HomeFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
 
     override fun init() {
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
+        //admin인지 판단하는 로직 추가
+        binding.bnvMain.isVisible = false
+        binding.bnvAdmin.isVisible = true
 
+        //Main Bottom Nav
         binding.bnvMain.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.item_home->{
@@ -32,6 +39,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             true
         }
 
+        //Admin Bottom Nav
+        binding.bnvAdmin.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.item_admin_home->{
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
+                }
+                R.id.item_admin_search->{
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,SearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
+                }
+                R.id.item_admin_report->{
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminReportFragment()).commit()
+                }
+                R.id.item_admin_managing->{
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminManagingFragment()).commit()
+                }
+            }
+            true
+        }
     }
 
     fun setStateBn(isVisible:Boolean){
