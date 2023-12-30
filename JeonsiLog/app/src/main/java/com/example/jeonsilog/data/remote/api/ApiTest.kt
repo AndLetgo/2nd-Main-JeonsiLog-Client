@@ -1,5 +1,6 @@
 package com.example.jeonsilog.data.remote.api
 
+import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,13 @@ class ApiTest {
         println("${encryptedPrefs.getRT()} / ${encryptedPrefs.getAT()}")
 
         CoroutineScope(Dispatchers.IO).launch {
+            val response = ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(), 1)
+
+            if(response.isSuccessful && response.body()!!.check){
+
+            } else {
+
+            }
         }
     }
 }

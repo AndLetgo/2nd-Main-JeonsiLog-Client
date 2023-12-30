@@ -7,12 +7,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
 
-
     <application
         android:name=".widget.utils.GlobalApplication"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
-        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,7 +19,6 @@
         android:roundIcon="@drawable/logo_jeonsilog"
         android:supportsRtl="true"
         android:theme="@style/Theme.JeonsiLog"
-        android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
             android:name=".view.exhibition.ExtraActivity"

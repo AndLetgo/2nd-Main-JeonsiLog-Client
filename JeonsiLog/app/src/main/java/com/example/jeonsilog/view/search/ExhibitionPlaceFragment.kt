@@ -16,10 +16,11 @@ import com.example.jeonsilog.data.remote.dto.ExhibitionPlaceItem
 import com.example.jeonsilog.data.remote.dto.Test_Data
 import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
 import com.example.jeonsilog.databinding.FragmentExihibitionInfoBinding
+import com.example.jeonsilog.databinding.FragmentSearchExhibitionPlaceBinding
 import com.example.jeonsilog.viewmodel.SearchViewModel
 
 
-class ExhibitionPlaceFragment(itemlist: List<Int>) : BaseFragment<FragmentExhibitionPlaceBinding>(R.layout.fragment_exhibition_place) {
+class ExhibitionPlaceFragment(itemlist: List<Int>) : BaseFragment<FragmentSearchExhibitionPlaceBinding>(R.layout.fragment_search_exhibition_place) {
     var itemlist=itemlist
     lateinit var viewModel: SearchViewModel
     override fun init() {

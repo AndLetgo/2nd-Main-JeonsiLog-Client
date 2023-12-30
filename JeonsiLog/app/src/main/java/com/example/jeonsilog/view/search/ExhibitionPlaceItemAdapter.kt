@@ -16,7 +16,7 @@ import com.example.jeonsilog.data.remote.dto.ExhibitionPlaceItem
 class ExhibitionPlaceItemAdapter(private val context: Context, private val items: List<ExhibitionPlaceItem>) : RecyclerView.Adapter<ExhibitionPlaceItemAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val nameTextView: TextView = view.findViewById(R.id.tv_place_name)
+        val nameTextView: TextView = view.findViewById(R.id.tv_exhibition_name)
 
     }
 
@@ -31,8 +31,8 @@ class ExhibitionPlaceItemAdapter(private val context: Context, private val items
         val unsplashUrl = "https://picsum.photos/id/${position+100}/200/300"
         Glide.with(context)
             .load(unsplashUrl)
-            .transform(CenterCrop(), RoundedCorners(R.dimen.item_48))
-            .into(holder.itemView.findViewById(R.id.iv_place_profile))
+            .transform(CenterCrop(), RoundedCorners(R.dimen.radius_8))
+            .into(holder.itemView.findViewById(R.id.iv_exhibition_poster))
 
         holder.nameTextView.text = item.exhibitionPlaceItemName
 

@@ -5,7 +5,6 @@ import android.util.Log
 import android.content.Context
 import android.graphics.Rect
 import android.view.MotionEvent
-import android.content.Intent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
