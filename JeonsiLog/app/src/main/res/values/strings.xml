@@ -21,6 +21,7 @@
     <string name="btn_set_defalut_image">기본 이미지로 변경</string>
 
     <string name="btn_following">팔로잉</string>
+    <string name="btn_follow">팔로우</string>
     <string name="btn_f4f">맞팔로우</string>
 
     <string name="btn_logout">로그아웃</string>
@@ -87,7 +88,7 @@
     <string name="search_recent_title">최근검색어</string>
     <string name="search_title">검색</string>
     <string name="search_random_exhibition">이런 전시회도 있어요</string>
-색
+
     <string name="search_tablayout_item1">전시</string>
     <string name="search_tablayout_item2">전시장</string>
     <string name="search_tablayout_item3">사용자</string>
@@ -95,6 +96,13 @@
     <!-- PhotoCalendar -->
     <string name="search_photocalendar_title">전시회 포스터 불러오기</string>
     <string name="search_photocalendar_edit_hint">전시회명을 입력하세요</string>
+    <string name="calendar_mon">월</string>
+    <string name="calendar_tue">화</string>
+    <string name="calendar_wed">수</string>
+    <string name="calendar_thu">목</string>
+    <string name="calendar_fri">금</string>
+    <string name="calendar_sat">토</string>
+    <string name="calendar_sun">일</string>
     <string name="sun_tx">일</string>
     <string name="mon_tx">월</string>
     <string name="tue_tx">화</string>
@@ -123,6 +131,11 @@
     <!-- OtherUserPage -->
     <string name="other_rating">별점</string>
     <string name="other_review">감상평</string>
+    <string name="other_photo">포토캘린더</string>
+    <string name="other_nick_title">%s 님의 프로필</string>
+
+    <string name="other_my_rating_count">%s 님이 남긴 별점 개수: %d개</string>
+    <string name="other_review_count">%s 님이 남긴 감상평 개수: %d개</string>
 
     <!-- Setting -->
     <string name="setting_title">환경설정</string>

@@ -21,4 +21,5 @@
         <item name="android:fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textSize">16sp</item>
     </style>
+
 </resources>

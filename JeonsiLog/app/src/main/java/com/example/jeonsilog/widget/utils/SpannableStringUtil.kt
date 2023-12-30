@@ -48,11 +48,8 @@ class SpannableStringUtil {
                 endIndex + 1,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-            Log.d("Span", "성공")
             return spannableString
         } else {
-            // 대괄호가 없거나 시작 대괄호가 끝 대괄호보다 뒤에 있는 경우
-            Log.d("Span", "실패")
             return SpannableString(str)
         }
     }
