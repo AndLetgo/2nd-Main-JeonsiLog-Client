@@ -38,7 +38,11 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
         }
 
         binding.ibMypageSettingGoWeb.setOnClickListener {
-            openWebPage("https://docs.google.com/document/d/1ZMVXli4c3rOtBK0lNJQViQ1m7ieJ70pGVbGyF9td9FY/edit#heading=h.6cm70xjtnwpk")
+            val webpage = Uri.parse("https://sites.google.com/view/jeonsilog/%ED%99%88")
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+            if(intent.resolveActivity(requireActivity().packageManager) != null){
+                startActivity(intent)
+            }
         }
 
         binding.tvMypageSettingLogout.setOnClickListener {
@@ -47,7 +51,7 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
                     Log.e("LOGIN", error.message.toString())
                 }
                 CoroutineScope(Dispatchers.IO).launch{
-                    if(AuthRepositoryImpl().signOut(encryptedPrefs.getAT().toString())){
+                    if(AuthRepositoryImpl().signOut(encryptedPrefs.getAT())){
                         launch(Dispatchers.Main) {
                             val intent = Intent(requireContext(), SplashActivity::class.java)
                             startActivity(intent)
@@ -65,14 +69,6 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
             showCustomDialog()
         }
 
-    }
-
-    private fun openWebPage(url: String){
-        val webpage = Uri.parse(url)
-        val intent = Intent(Intent.ACTION_VIEW, webpage)
-        if(intent.resolveActivity(requireActivity().packageManager) != null){
-            startActivity(intent)
-        }
     }
 
     private fun showCustomDialog() {
