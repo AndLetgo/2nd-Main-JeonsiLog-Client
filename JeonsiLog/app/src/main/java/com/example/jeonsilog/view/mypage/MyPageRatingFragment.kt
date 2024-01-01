@@ -6,20 +6,35 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
 import com.example.jeonsilog.databinding.FragmentMyPageRatingBinding
+import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.SpannableStringUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class MyPageRatingFragment:BaseFragment<FragmentMyPageRatingBinding>(R.layout.fragment_my_page_rating) {
+    private var numRating = 0
+    private var list = mutableListOf<GetMyRatingsDataEntity>()
+
     override fun init() {
-        val list = mutableListOf<MyPageRatingModel>()
-        list.add(MyPageRatingModel(1, "[CONNECT]", 2.5f))
-        list.add(MyPageRatingModel(2, "[안드레고]", 4f))
-        list.add(MyPageRatingModel(3, "[전시로그]", 4.5f))
-        list.add(MyPageRatingModel(4, "[안드로이드]", 5f))
-        list.add(MyPageRatingModel(1, "[CONNECT]", 2.5f))
-        list.add(MyPageRatingModel(2, "[안드레고]", 4f))
-        list.add(MyPageRatingModel(3, "[전시로그]", 4.5f))
-        list.add(MyPageRatingModel(4, "[안드로이드]", 5f))
+        runBlocking(Dispatchers.IO){
+            val response = RatingRepositoryImpl().getMyRatings(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check){
+                numRating = response.body()!!.information.numRating
+                val data = response.body()!!.information.dataEntity.listIterator()
+                while (data.hasNext()){
+                    val temp = data.next()
+                    list.add(GetMyRatingsDataEntity(
+                        ratingId = temp.ratingId,
+                        exhibitionId = temp.exhibitionId,
+                        exhibitionName = "[${temp.exhibitionName}]",
+                        rate = temp.rate)
+                    )
+                }
+            }
+        }
 
 
         if(list.isEmpty()){
@@ -29,12 +44,12 @@ class MyPageRatingFragment:BaseFragment<FragmentMyPageRatingBinding>(R.layout.fr
             binding.tvMypageRatingEmptyTitle.visibility = View.VISIBLE
             binding.tvMypageRatingEmptyDescription.visibility =View.VISIBLE
         } else {
-            val adapter = MyPageRvAdapter<MyPageRatingModel>(list, 0)
+            val adapter = MyPageRvAdapter<GetMyRatingsDataEntity>(list, 0)
             binding.rvMypageRating.adapter = adapter
             binding.rvMypageRating.layoutManager = LinearLayoutManager(requireContext())
             binding.rvMypageRating.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
 
-            binding.tvMypageRatingCount.text = SpannableStringUtil().highlightNumber(getString(R.string.mypage_my_rating_count, list.size), requireContext())
+            binding.tvMypageRatingCount.text = SpannableStringUtil().highlightNumber(getString(R.string.mypage_my_rating_count, numRating), requireContext())
         }
     }
 }

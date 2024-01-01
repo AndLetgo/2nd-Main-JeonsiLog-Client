@@ -2,8 +2,10 @@ package com.example.jeonsilog.view.mypage
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -11,11 +13,21 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.BottomSheetMypageProfileEditBinding
 import com.example.jeonsilog.databinding.FragmentMyPageBinding
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.MyPageViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.ImageUtil
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.io.IOException
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
@@ -59,10 +71,16 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             bottomSheetDialog.show()
         }
 
+
         bsBinding!!.btnBottomSheetMypageLoadImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            launcher.launch(intent)
-            bottomSheetDialog.dismiss()
+            val mActivity = activity as MainActivity
+            if(mActivity.checkPermissions(requireContext())){
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                launcher.launch(intent)
+                bottomSheetDialog.dismiss()
+            } else {
+                Toast.makeText(requireContext(), "갤러리 접근 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         bsBinding!!.btnBottomSheetMypageLoadDefalut.setOnClickListener {
@@ -99,14 +117,31 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     private val launcher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val imagePath = result.data!!.data
+            val imageUri = result.data!!.data
 
-            if (imagePath != null) {
+            if (imageUri != null) {
                 try {
-                    viewModel.setProfileImg(imagePath.toString())
+                    viewModel.setProfileImg(imageUri.toString())
+                    patchMyProfileImg(imageUri)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
+            }
+        }
+    }
+
+    private fun patchMyProfileImg(uri: Uri) {
+        val file = File(ImageUtil().absolutelyPath(requireContext(), uri))
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val filePart = MultipartBody.Part.createFormData("img", file.name, requestBody)
+
+        CoroutineScope(Dispatchers.IO).launch{
+            val response = UserRepositoryImpl().uploadProfileImg(encryptedPrefs.getAT(), filePart)
+            Log.d(tag, filePart.body.toString())
+            if(response.isSuccessful && response.body()!!.check){
+                Log.d("Upload", "Image uploaded successfully")
+            } else {
+                Log.e("Upload", "Image upload failed")
             }
         }
     }

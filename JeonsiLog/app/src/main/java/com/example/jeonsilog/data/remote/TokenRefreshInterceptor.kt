@@ -53,8 +53,6 @@ class TokenRefreshInterceptor : Authenticator {
             .post(jsonObject.toString().toRequestBody(mediaType))
             .build()
 
-        Log.d(tag, "${jsonObject}")
-
         try {
             val refreshResponse = OkHttpClient().newCall(refreshRequest).execute()
             val refreshResponseJson =
@@ -77,7 +75,7 @@ class TokenRefreshInterceptor : Authenticator {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     encryptedPrefs.clearAll()
-                    prefs.clearAll()
+                    prefs.setIsLoginState(false)
                     isFinish.value = true
                 }
             }
@@ -87,7 +85,7 @@ class TokenRefreshInterceptor : Authenticator {
 
             CoroutineScope(Dispatchers.Main).launch {
                 encryptedPrefs.clearAll()
-                prefs.clearAll()
+                prefs.setIsLoginState(false)
                 isFinish.value = true
             }
         }

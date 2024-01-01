@@ -14,7 +14,7 @@ interface FollowApi {
     @GET("/api/follows/follower")
     suspend fun getMyFollower(
         @Header("Authorization") token: String
-    ): Response<GetMyFollowingResponse>
+    ): Response<GetOtherFollowingResponse>
 
     @GET("/api/follows/follower/{userId}")
     suspend fun getOtherFollower(
