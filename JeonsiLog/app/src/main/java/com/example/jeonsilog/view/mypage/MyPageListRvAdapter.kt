@@ -8,9 +8,15 @@ import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingInformation
 import com.example.jeonsilog.databinding.ItemMyPageListFollowBinding
 import com.example.jeonsilog.databinding.ItemMyPageListFollowingBinding
+import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -67,19 +73,30 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
 
 
     inner class TypeFollowingViewHolder(private val binding: ItemMyPageListFollowingBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: MyPageListFollowingModel) {
+        fun bind(data: GetMyFollowingInformation) {
             GlideApp.with(binding.ivMypageListFollowingProfile)
-                .load(data.url)
+                .load(data.profileImgUrl)
                 .optionalCircleCrop()
                 .into(binding.ivMypageListFollowingProfile)
 
-            binding.tvMypageListFollowNick.text = data.nick
+            binding.tvMypageListFollowNick.text = data.nickname
 
             binding.btnMypageListFollowing.setOnClickListener {
                 list.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
 
                 // 서버에 팔로우 취소 요청
+                CoroutineScope(Dispatchers.IO).launch {
+                    FollowRepositoryImpl().deleteFollow(encryptedPrefs.getAT(), data.followUserId)
+                }
+            }
+
+            binding.ivMypageListFollowingProfile.setOnClickListener {
+                // 해당 유저 프로필로 이동
+            }
+
+            binding.tvMypageListFollowNick.setOnClickListener {
+                // 해당 유저 프로필로 이동
             }
         }
     }
@@ -118,7 +135,7 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
                 holder.bind(followerData)
             }
             1 -> {
-                val followingData = list[position] as MyPageListFollowingModel
+                val followingData = list[position] as GetMyFollowingInformation
                 holder as MyPageListRvAdapter<*>.TypeFollowingViewHolder
                 holder.bind(followingData)
             }
