@@ -3,11 +3,10 @@ package com.example.jeonsilog.data.remote.dto.interest
 import com.google.gson.annotations.SerializedName
 
 data class GetInterestResponse(
-
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val informationEntity: List<GetInterestInformationEntity>
+    val information: List<GetInterestInformationEntity>
 )
 
 data class GetInterestInformationEntity(

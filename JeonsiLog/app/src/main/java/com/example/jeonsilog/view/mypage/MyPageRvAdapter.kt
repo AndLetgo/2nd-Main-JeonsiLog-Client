@@ -10,7 +10,12 @@ import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
 import com.example.jeonsilog.databinding.ItemMyPageInterestBinding
 import com.example.jeonsilog.databinding.ItemMyPageRatingBinding
 import com.example.jeonsilog.databinding.ItemMyPageReviewBinding
+import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -49,6 +54,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
         fun bind(data: GetInterestInformationEntity) {
             GlideApp.with(binding.ivMypageInterestExhibitionImg)
                 .load(data.imageUrl)
+                .centerCrop()
                 .into(binding.ivMypageInterestExhibitionImg)
 
             binding.tvMypageInterestTitle.text = data.exhibitionName
@@ -73,6 +79,9 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
                 notifyItemRemoved(adapterPosition)
 
                 // 서버에 즐겨찾기 해제 요청
+                CoroutineScope(Dispatchers.IO).launch{
+                    InterestRepositoryImpl().deleteInterest(encryptedPrefs.getAT(), data.exhibitionId)
+                }
             }
 
             // 클릭리스너 - 해당 전시회 상세 페이지
