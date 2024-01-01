@@ -23,18 +23,36 @@
             tools:ignore="ContentDescription" />
 
         <TextView
+            android:id="@+id/tv_mypage_review_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/S_bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/basic_black"
+            app:layout_constraintTop_toTopOf="@id/iv_mypage_review_exhibition_img"
+            app:layout_constraintBottom_toTopOf="@+id/tv_mypage_review_content"
+            app:layout_constraintStart_toEndOf="@+id/iv_mypage_review_exhibition_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/margin_12"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_4"/>
+
+        <TextView
             android:id="@+id/tv_mypage_review_content"
-            android:layout_width="288dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             style="@style/S_regular"
-            android:maxLines="3"
+            android:maxLines="2"
             android:ellipsize="end"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/basic_black"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mypage_review_title"
+            app:layout_constraintBottom_toBottomOf="@id/iv_mypage_review_exhibition_img"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_mypage_review_exhibition_img"
             android:layout_marginStart="@dimen/margin_12"
-            android:layout_marginEnd="@dimen/margin_8"/>
-
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_4"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

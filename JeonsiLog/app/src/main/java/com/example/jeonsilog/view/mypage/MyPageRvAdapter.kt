@@ -11,7 +11,6 @@ import com.example.jeonsilog.databinding.ItemMyPageInterestBinding
 import com.example.jeonsilog.databinding.ItemMyPageRatingBinding
 import com.example.jeonsilog.databinding.ItemMyPageReviewBinding
 import com.example.jeonsilog.widget.utils.GlideApp
-import com.example.jeonsilog.widget.utils.SpannableStringUtil
 import java.lang.IllegalArgumentException
 
 class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -33,9 +32,11 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
         fun bind(data: GetReviewsDataEntity) {
             GlideApp.with(binding.ivMypageReviewExhibitionImg)
                 .load(data.exhibitionImgUrl)
+                .centerCrop()
                 .into(binding.ivMypageReviewExhibitionImg)
 
-            binding.tvMypageReviewContent.text = SpannableStringUtil().boldTextBetweenBrackets(data.contents)
+            binding.tvMypageReviewTitle.text = data.exhibitionName
+            binding.tvMypageReviewContent.text = data.contents
 
             // 클릭리스너 - 해당 전시회 상세 페이지
             itemView.setOnClickListener {
