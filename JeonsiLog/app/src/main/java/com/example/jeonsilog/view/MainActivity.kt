@@ -1,13 +1,17 @@
 package com.example.jeonsilog.view
 
+import android.Manifest
 import android.content.Intent
 import android.util.Log
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.os.Build
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.core.content.ContextCompat
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
@@ -25,6 +29,16 @@ import com.example.jeonsilog.view.search.SearchFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
     private val tag = this.javaClass.simpleName
+    private val REQUIRED_PERMISSONS = if(Build.VERSION.SDK_INT < 33){
+        arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    } else {
+        arrayOf(
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+    }
 
     override fun init() {
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
@@ -114,5 +128,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         val intent = Intent(this, ExtraActivity::class.java)
         startActivity(intent)
 
+    }
+
+    fun checkPermissions(context: Context): Boolean{
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(REQUIRED_PERMISSONS, 100)
+            }
+        } else {
+            if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(REQUIRED_PERMISSONS, 101)
+            }
+        }
+
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+        } else {
+            !(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        }
     }
 }
