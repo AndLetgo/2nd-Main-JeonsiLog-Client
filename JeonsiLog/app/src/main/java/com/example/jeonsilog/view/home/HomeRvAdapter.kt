@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 import com.example.jeonsilog.databinding.RvTitleAreaBinding
 import com.example.jeonsilog.viewmodel.ExhibitionModel
+import com.example.jeonsilog.viewmodel.HomeRvModel
 import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 class HomeRvAdapter(private val exhibitionList:List<ExhibitionModel>): RecyclerView.Adapter<ViewHolder>(){
+
     private val tag = this.javaClass.simpleName
     private var listener: OnItemClickListener? = null
 

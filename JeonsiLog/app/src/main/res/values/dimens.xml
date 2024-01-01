@@ -18,22 +18,28 @@
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
     <dimen name="margin_76">76dp</dimen>
+    <dimen name="margin_84">84dp</dimen>
     <dimen name="margin_96">96dp</dimen>
+    <dimen name="margin_212">212dp</dimen>
 
     <!--    Dp Item  -->
     <dimen name="item_0">0dp</dimen>
     <dimen name="item_1">1dp</dimen>
+    <dimen name="item_2">2dp</dimen>
     <dimen name="item_4">4dp</dimen>
     <dimen name="item_18">18dp</dimen>
     <dimen name="item_24">24dp</dimen>
     <dimen name="item_28">28dp</dimen>
     <dimen name="item_32">32dp</dimen>
     <dimen name="item_40">40dp</dimen>
+    <dimen name="item_44">44dp</dimen>
     <dimen name="item_45">45dp</dimen>
     <dimen name="item_46">46dp</dimen>
+    <dimen name="item_48">48dp</dimen>
     <dimen name="item_52">52dp</dimen>
     <dimen name="item_56">56dp</dimen>
     <dimen name="item_74">74dp</dimen>
+    <dimen name="item_76">76dp</dimen>
     <dimen name="item_84">84dp</dimen>
     <dimen name="item_100">100dp</dimen>
     <dimen name="item_108">108dp</dimen>

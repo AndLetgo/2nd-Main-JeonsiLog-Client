@@ -15,5 +15,9 @@ data class MyInfoInformation(
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImgUrl")
-    val profileImgUrl: String
+    val profileImgUrl: String,
+    @SerializedName("numFollowing")
+    val numFollowing: Int,
+    @SerializedName("numFollower")
+    val numFollower: Int
 )

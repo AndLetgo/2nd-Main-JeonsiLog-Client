@@ -9,6 +9,7 @@ import com.example.jeonsilog.databinding.FragmentHomeBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.admin.AdminExhibitionFragment
 import com.example.jeonsilog.viewmodel.ExhibitionModel
+import com.example.jeonsilog.viewmodel.HomeRvModel
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 

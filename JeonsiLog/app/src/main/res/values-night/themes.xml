@@ -4,4 +4,13 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+    
+<!--    <style name="popup_style_right_over" parent="@style/Widget.AppCompat.PopupMenu.Overflow">-->
+<!--        <item name="android:dropDownHorizontalOffset">-100dp</item>-->
+<!--        <item name="android:dropDownVerticalOffset">8dp</item>-->
+<!--        <item name="background">@color/basic_white</item>-->
+<!--    </style>-->
+    <style name="popup_menu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="popupMenuBackground">@drawable/shape_popup_menu</item>
+    </style>
 </resources>

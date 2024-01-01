@@ -6,5 +6,6 @@ data class ExhibitionModel(
     val address:String,
     val place:String,
     val operatingKeyword:String,
-    val priceKeyword:String
+    val priceKeyword:String,
+    val date: String
 )
