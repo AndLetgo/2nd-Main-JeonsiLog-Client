@@ -2,12 +2,15 @@ package com.example.jeonsilog.view.home
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 import com.example.jeonsilog.databinding.RvTitleAreaBinding
+import com.example.jeonsilog.view.exhibition.ExhibitionRvAdapter
+import com.example.jeonsilog.view.exhibition.ReviewModel
 import com.example.jeonsilog.viewmodel.ExhibitionModel
 import com.example.jeonsilog.viewmodel.HomeRvModel
 import java.lang.ClassCastException
@@ -16,6 +19,7 @@ private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
 class HomeRvAdapter(private val homeRvList:List<ExhibitionModel>): RecyclerView.Adapter<ViewHolder>(){
     private val tag = this.javaClass.simpleName
+    private var listener: OnItemClickListener? = null
     inner class ViewHolder(val binding: ItemHomeExhibitionBinding):
         RecyclerView.ViewHolder(binding.root){
         fun bind(item: ExhibitionModel){
@@ -67,8 +71,22 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionModel>): RecyclerView.
             is HeaderHolder -> {}
             is ViewHolder -> {
                 holder.bind(homeRvList[position-1])
+
+                if(position != RecyclerView.NO_POSITION){
+                    holder.itemView.setOnClickListener {
+                        listener?.onItemClick(holder.itemView, homeRvList[position], position)
+                    }
+                }
             }
         }
 
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(v: View, data: ExhibitionModel, position: Int)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
     }
 }

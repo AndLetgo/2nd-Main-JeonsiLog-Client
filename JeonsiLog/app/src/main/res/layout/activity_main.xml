@@ -22,15 +22,16 @@
         android:id="@+id/bnv_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/shape_bn_round"
-        android:elevation="@dimen/shadow_12"
+        app:elevation="@dimen/shadow_2"
         app:labelVisibilityMode="unlabeled"
         app:itemBackground="@null"
         app:itemIconTint="@drawable/selector_bn_color"
         app:menu="@menu/menu_bn_main"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:paddingHorizontal="@dimen/margin_4"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

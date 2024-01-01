@@ -42,8 +42,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
 
         encryptedPrefs.clearAll()
 
-//        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
-        tokenValidation()
+        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
+//        tokenValidation()
     }
 
     private fun tokenValidation() {

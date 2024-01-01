@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/margin_24"
         android:paddingVertical="@dimen/margin_16"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/basic_white">
 
         <ImageView
             android:id="@+id/iv_poster"
@@ -23,7 +24,8 @@
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_12"
             android:orientation="vertical"
-            android:layout_marginVertical="@dimen/margin_8">
+            android:layout_marginVertical="@dimen/margin_8"
+            android:background="@color/basic_white">
 
             <TextView
                 android:id="@+id/tv_title"
@@ -54,8 +56,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="bottom">
-
+                android:gravity="bottom"
+                android:background="@color/basic_white"
+                android:spotShadowAlpha="0">
                 <TextView
                     android:id="@+id/tv_keyword_operating"
                     android:layout_width="@dimen/item_74"
@@ -67,8 +70,7 @@
                     android:textColor="@color/basic_point"
                     android:gravity="center"
                     android:layout_marginStart="@dimen/margin_2"
-                    android:layout_marginBottom="@dimen/margin_2" />
-
+                    android:layout_marginBottom="@dimen/margin_2"/>
                 <TextView
                     android:id="@+id/tv_keyword_price"
                     android:layout_width="@dimen/item_74"
@@ -80,7 +82,8 @@
                     android:textColor="@color/basic_point"
                     android:gravity="center"
                     android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginBottom="@dimen/margin_2" />
+                    android:layout_marginBottom="@dimen/margin_2"
+                    android:spotShadowAlpha="0"/>
             </LinearLayout>
         </LinearLayout>
 

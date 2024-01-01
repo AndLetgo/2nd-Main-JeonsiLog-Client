@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.home
 
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -30,9 +31,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.rvHomeExhibition.adapter = homeRvAdapter
         binding.rvHomeExhibition.layoutManager = LinearLayoutManager(this.context)
 
-        binding.btnGoExhibition.setOnClickListener{
-            (activity as MainActivity).loadExtraActivity(0)
-        }
+        homeRvAdapter.setOnItemClickListener(object : HomeRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: ExhibitionModel, position: Int) {
+                (activity as MainActivity).loadExtraActivity(0)
+            }
+        })
     }
 
 }
