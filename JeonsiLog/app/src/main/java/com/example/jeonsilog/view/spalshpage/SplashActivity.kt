@@ -27,8 +27,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBinding.inflate(it)})) {
     private val tag = this.javaClass.simpleName
-    private val testId = "android1"
-    private val testEmail = "android1@gmail.com"
+    private val testId = "android5"
+    private val testEmail = "android5@gmail.com"
 
     override fun init() {
         isFinish.observe(this){

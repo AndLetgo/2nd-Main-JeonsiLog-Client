@@ -7,7 +7,7 @@ data class GetOtherFollowingResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val informationEntity: List<GetOtherFollowingInformation>
+    val information: List<GetOtherFollowingInformation>
 )
 
 data class GetOtherFollowingInformation(

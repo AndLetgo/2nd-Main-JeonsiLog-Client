@@ -12,6 +12,8 @@ class GlobalApplication: Application() {
         lateinit var prefs: PreferenceUtil
         lateinit var encryptedPrefs: CryptedPreferenceUtil
         var isFinish = MutableLiveData(false)
+        var isFollowerUpdate = MutableLiveData(false)
+        var isFollowingUpdate = MutableLiveData(false)
 
         var exhibitionId: Int = 0
         var extraActivityReference: Int = 0

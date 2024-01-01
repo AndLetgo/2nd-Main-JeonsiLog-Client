@@ -10,7 +10,7 @@ import retrofit2.Response
 class FollowRepositoryImpl: FollowRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(FollowApi::class.java)
 
-    override suspend fun getMyFollower(token: String): Response<GetMyFollowingResponse> {
+    override suspend fun getMyFollower(token: String): Response<GetOtherFollowingResponse> {
         val response = service.getMyFollower("Bearer $token")
 
         return if(response.isSuccessful && response.body()!!.check){
