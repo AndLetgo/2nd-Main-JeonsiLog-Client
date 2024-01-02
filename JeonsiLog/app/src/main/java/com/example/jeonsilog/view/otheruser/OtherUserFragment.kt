@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentOtherUserBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.OtherUserViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.google.android.material.tabs.TabLayoutMediator
@@ -13,6 +14,9 @@ class OtherUserFragment(private val otherUserId: Int): BaseFragment<FragmentOthe
     private val viewModel: OtherUserViewModel by viewModels()
 
     override fun init() {
+        val mActivity = activity as MainActivity
+        mActivity.setStateBn(false)
+
         viewModel.getOtherUserInfo(otherUserId)
 
         viewModel.following.observe(this){
