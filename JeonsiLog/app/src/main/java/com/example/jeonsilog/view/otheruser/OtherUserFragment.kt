@@ -43,7 +43,7 @@ class OtherUserFragment(private val otherUserId: Int): BaseFragment<FragmentOthe
 
         val tabTextList = listOf(getString(R.string.other_rating), getString(R.string.other_review), getString(R.string.other_photo))
 
-        binding.vpOtherUser.adapter = OtherUserVpAdapter(this.requireActivity(), viewModel)
+        binding.vpOtherUser.adapter = OtherUserVpAdapter(this.requireActivity(), viewModel, otherUserId)
 
         TabLayoutMediator(binding.tlOtherUser, binding.vpOtherUser){ tab, pos ->
             tab.text = tabTextList[pos]
