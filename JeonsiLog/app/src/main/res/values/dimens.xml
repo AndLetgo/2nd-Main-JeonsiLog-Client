@@ -66,6 +66,7 @@
     <dimen name="shadow_12">12dp</dimen>
 
     <!--    Dp Corner Radius  -->
+    <dimen name="radius_4">4dp</dimen>
     <dimen name="radius_8">8dp</dimen>
     <dimen name="radius_12">12dp</dimen>
     <dimen name="radius_16">16dp</dimen>

@@ -1,12 +1,20 @@
 package com.example.jeonsilog.view.home
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
@@ -15,34 +23,66 @@ import com.example.jeonsilog.view.exhibition.ExhibitionRvAdapter
 import com.example.jeonsilog.view.exhibition.ReviewModel
 import com.example.jeonsilog.viewmodel.ExhibitionModel
 import com.example.jeonsilog.viewmodel.HomeRvModel
+import com.example.jeonsilog.viewmodel.HomeViewModel
 import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
-class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>): RecyclerView.Adapter<ViewHolder>(){
+class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val context:Context): RecyclerView.Adapter<ViewHolder>(){
     private val tag = this.javaClass.simpleName
     private var listener: OnItemClickListener? = null
+
     inner class ViewHolder(val binding: ItemHomeExhibitionBinding):
         RecyclerView.ViewHolder(binding.root){
         fun bind(item: ExhibitionsInfo){
             Log.d(tag, "bind: ")
             binding.tvTitle.text = item.exhibitionName
-            binding.tvAddress.text = item.place.placeAddress
-            binding.tvPlace.text = item.place.placeName
-            var operating = ""
-            var price = ""
-            if(position%2 == 0){
-                operating = "전시중"
-                price = "무료"
-                binding.tvKeywordOperating.isVisible = false
-            }else{
-                operating = "전시전"
-                price = "유료"
-            }
-            binding.tvKeywordOperating.text = operating
-            binding.tvKeywordPrice.text = price
-        }
 
+            var address = ""
+            if(item.place.placeAddress != null){
+                val addressList = item.place.placeAddress.split(" ")
+                address = "${addressList[0]} ${addressList[1]}"
+                binding.tvAddress.visibility = View.VISIBLE
+                binding.tvAddress.text = address
+            }else{
+                binding.tvAddress.isGone = true
+            }
+
+            if(item.place.placeName !=null){
+                binding.tvPlace.visibility = View.VISIBLE
+                binding.tvPlace.text = item.place.placeName
+            }else{
+                binding.tvPlace.isGone = true
+            }
+
+            var operatingKeyword = ""
+            when(item.operatingKeyword){
+                "ON_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_on)
+                "BEFORE_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_before)
+            }
+            var priceKeyword = ""
+            when(item.priceKeyword){
+                "FREE" -> priceKeyword = context.getString(R.string.keyword_free)
+                else -> binding.tvKeywordSecond.isGone = true
+            }
+
+            if(operatingKeyword!=""){
+                binding.tvKeywordFirst.text = operatingKeyword
+                binding.tvKeywordSecond.text = priceKeyword
+            }else{
+                if(priceKeyword!=""){
+                    binding.tvKeywordSecond.isGone = true
+                    binding.tvKeywordFirst.text = priceKeyword
+                }else {
+                    binding.tvKeywordFirst.isGone
+                }
+            }
+
+            Glide.with(context)
+                .load(item.imageUrl)
+                .transform(CenterCrop(), RoundedCorners(16))
+                .into(binding.ivPoster)
+        }
     }
 
     class HeaderHolder(val binding:RvTitleAreaBinding):RecyclerView.ViewHolder(binding.root)

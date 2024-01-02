@@ -17,13 +17,16 @@
         <ImageView
             android:id="@+id/iv_poster"
             android:layout_width="@dimen/item_100"
-            android:layout_height="@dimen/item_132" />
+            android:layout_height="@dimen/item_132"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/illus_empty_poster"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_12"
             android:orientation="vertical"
+            android:layout_gravity="center_vertical"
             android:layout_marginVertical="@dimen/margin_8"
             android:background="@color/basic_white">
 
@@ -32,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/M_medium"
-                android:text="title"
+                android:text="tittitletitletitetitletitletetitletitle"
                 android:textColor="@color/basic_black" />
 
             <TextView
@@ -40,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/S_regular"
-                android:text="address"
+                android:text="addressaddressaddressaddressaddr"
                 android:textColor="@color/gray_medium"
                 android:layout_marginTop="@dimen/margin_4" />
 
@@ -49,18 +52,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/S_regular"
-                android:text="place"
+                android:text="placeplacaceplaceplaceplaceplace"
                 android:textColor="@color/gray_medium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="bottom"
+                android:gravity="center_vertical"
                 android:background="@color/basic_white"
-                android:spotShadowAlpha="0">
+                android:spotShadowAlpha="0"
+                android:layout_marginTop="@dimen/margin_12">
                 <TextView
-                    android:id="@+id/tv_keyword_operating"
+                    android:id="@+id/tv_keyword_first"
                     android:layout_width="@dimen/item_74"
                     android:layout_height="@dimen/item_32"
                     android:background="@drawable/shape_corner_round_full"
@@ -69,10 +73,9 @@
                     style="@style/S_bold"
                     android:textColor="@color/basic_point"
                     android:gravity="center"
-                    android:layout_marginStart="@dimen/margin_2"
-                    android:layout_marginBottom="@dimen/margin_2"/>
+                    android:layout_margin="@dimen/margin_2"/>
                 <TextView
-                    android:id="@+id/tv_keyword_price"
+                    android:id="@+id/tv_keyword_second"
                     android:layout_width="@dimen/item_74"
                     android:layout_height="@dimen/item_32"
                     android:background="@drawable/shape_corner_round_full"
@@ -81,8 +84,8 @@
                     style="@style/S_bold"
                     android:textColor="@color/basic_point"
                     android:gravity="center"
+                    android:layout_marginVertical="@dimen/margin_2"
                     android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginBottom="@dimen/margin_2"
                     android:spotShadowAlpha="0"/>
             </LinearLayout>
         </LinearLayout>
