@@ -9,18 +9,20 @@ import com.example.jeonsilog.viewmodel.OtherUserViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.google.android.material.tabs.TabLayoutMediator
 
-class OtherUserFragment: BaseFragment<FragmentOtherUserBinding>(R.layout.fragment_other_user) {
+class OtherUserFragment(private val otherUserId: Int): BaseFragment<FragmentOtherUserBinding>(R.layout.fragment_other_user) {
     private val viewModel: OtherUserViewModel by viewModels()
 
     override fun init() {
-        binding.vm = viewModel
-        testViewModel()
-        loadImage()
+        viewModel.getOtherUserInfo(otherUserId)
+
+        viewModel.following.observe(this){
+            binding.vm = viewModel
+            viewModel.setTitle(requireContext())
+            loadImage()
+        }
 
         binding.btnOtherUserFollowing.setOnClickListener {
             viewModel.changeFlag()
-
-            // 서버에 팔로우 여부
         }
 
         viewModel.flag.observe(this) {
@@ -46,11 +48,6 @@ class OtherUserFragment: BaseFragment<FragmentOtherUserBinding>(R.layout.fragmen
         TabLayoutMediator(binding.tlOtherUser, binding.vpOtherUser){ tab, pos ->
             tab.text = tabTextList[pos]
         }.attach()
-    }
-
-    private fun testViewModel(){
-        viewModel.testSet()
-        viewModel.setTitle(getString(R.string.other_nick_title, viewModel.nick.value))
     }
 
     private fun loadImage(){
