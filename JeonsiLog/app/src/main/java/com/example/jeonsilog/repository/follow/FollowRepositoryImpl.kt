@@ -4,6 +4,7 @@ import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.FollowApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingResponse
+import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerResponse
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingResponse
 import retrofit2.Response
 
@@ -20,7 +21,7 @@ class FollowRepositoryImpl: FollowRepository {
         }
     }
 
-    override suspend fun getOtherFollower(token: String, userId: Int): Response<GetOtherFollowingResponse> {
+    override suspend fun getOtherFollower(token: String, userId: Int): Response<GetOtherFollowerResponse> {
         val response = service.getOtherFollower("Bearer $token", userId)
 
         return if(response.isSuccessful && response.body()!!.check){

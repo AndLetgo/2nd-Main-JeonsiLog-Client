@@ -52,6 +52,20 @@ class OtherUserFragment(private val otherUserId: Int): BaseFragment<FragmentOthe
         TabLayoutMediator(binding.tlOtherUser, binding.vpOtherUser){ tab, pos ->
             tab.text = tabTextList[pos]
         }.attach()
+
+        binding.tvOtherUserFollow.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, OtherUserListFragment(0, otherUserId))
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        binding.tvOtherUserFollowing.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_main, OtherUserListFragment(1, otherUserId))
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
     }
 
     private fun loadImage(){

@@ -2,6 +2,7 @@ package com.example.jeonsilog.repository.follow
 
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingResponse
+import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerResponse
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingResponse
 import retrofit2.Response
 import retrofit2.http.DELETE
@@ -20,7 +21,7 @@ interface FollowRepository {
     suspend fun getOtherFollower(
         @Header("Authorization") token: String,
         @Path("userId") userId: Int
-    ): Response<GetOtherFollowingResponse>
+    ): Response<GetOtherFollowerResponse>
 
     @GET("/api/follows/following")
     suspend fun getMyFollowing(
