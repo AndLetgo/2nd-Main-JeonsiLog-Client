@@ -27,14 +27,10 @@ import kotlin.coroutines.suspendCoroutine
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBinding.inflate(it)})) {
     private val tag = this.javaClass.simpleName
-    private val testId = "android1"
-    private val testEmail = "android1@gmail.com"
-
+    private val testId = "android5"
+    private val testEmail = "android5@gmail.com"
 
     override fun init() {
-        val actionBar = supportActionBar
-        actionBar?.hide()
-
         isFinish.observe(this){
             Log.d(tag, "isFinish: $it")
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
@@ -143,11 +139,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
             startActivity(intent)
             finish()
         }, 2000)
-    }
-
-    private fun testActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
     }
 
     private fun kakaoLogOut(msg: String){
