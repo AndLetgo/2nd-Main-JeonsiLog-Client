@@ -27,6 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private val tag = this.javaClass.simpleName
 
     override fun init() {
+//        Log.d(TAG, "init: ")
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
         binding.bnvMain.setOnItemSelectedListener {

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 import com.example.jeonsilog.databinding.RvTitleAreaBinding
 import com.example.jeonsilog.view.exhibition.ExhibitionRvAdapter
@@ -17,16 +19,16 @@ import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
-class HomeRvAdapter(private val homeRvList:List<ExhibitionModel>): RecyclerView.Adapter<ViewHolder>(){
+class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>): RecyclerView.Adapter<ViewHolder>(){
     private val tag = this.javaClass.simpleName
     private var listener: OnItemClickListener? = null
     inner class ViewHolder(val binding: ItemHomeExhibitionBinding):
         RecyclerView.ViewHolder(binding.root){
-        fun bind(item: ExhibitionModel){
+        fun bind(item: ExhibitionsInfo){
             Log.d(tag, "bind: ")
-            binding.tvTitle.text = item.title
-            binding.tvAddress.text = item.address
-            binding.tvPlace.text = item.place
+            binding.tvTitle.text = item.exhibitionName
+            binding.tvAddress.text = item.place.placeAddress
+            binding.tvPlace.text = item.place.placeName
             var operating = ""
             var price = ""
             if(position%2 == 0){
@@ -43,7 +45,7 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionModel>): RecyclerView.
 
     }
 
-    class HeaderHolder(val binding:RvTitleAreaBinding):RecyclerView.ViewHolder(binding.root){}
+    class HeaderHolder(val binding:RvTitleAreaBinding):RecyclerView.ViewHolder(binding.root)
     override fun getItemViewType(position: Int): Int {
         return if(position==0){
             ITEM_VIEW_TYPE_HEADER
@@ -83,7 +85,7 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionModel>): RecyclerView.
     }
 
     interface OnItemClickListener {
-        fun onItemClick(v: View, data: ExhibitionModel, position: Int)
+        fun onItemClick(v: View, data: ExhibitionsInfo, position: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){
