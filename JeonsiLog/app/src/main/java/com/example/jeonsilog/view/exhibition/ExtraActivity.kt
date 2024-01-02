@@ -2,17 +2,21 @@ package com.example.jeonsilog.view.exhibition
 
 import android.view.View
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityExtraBinding
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 
 class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.inflate(it)}) {
     val TAG = "Dialog"
     override fun init() {
-//        when(extraActivityReference){
-//            0 -> binding.fcvNavFrame.isVisible
-//        }
+        when(extraActivityReference){
+            0 -> {
+                binding.fcvNavFrame.isVisible
+            }
+        }
 
     }
 

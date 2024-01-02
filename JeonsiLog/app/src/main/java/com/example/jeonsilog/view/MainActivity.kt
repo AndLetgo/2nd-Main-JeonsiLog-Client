@@ -25,6 +25,7 @@ import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -41,6 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
     override fun init() {
+//        Log.d(TAG, "init: ")
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
         binding.bnvMain.setOnItemSelectedListener {
@@ -123,8 +125,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
 
-    fun loadExtraActivity(type:Int){
+    fun loadExtraActivity(type:Int, newExhibitionId:Int){
         extraActivityReference = type
+        exhibitionId = newExhibitionId
         val intent = Intent(this, ExtraActivity::class.java)
         startActivity(intent)
 

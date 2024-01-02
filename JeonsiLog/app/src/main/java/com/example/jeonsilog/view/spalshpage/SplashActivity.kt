@@ -36,6 +36,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
         }
 
+//        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
         tokenValidation()
     }
 
