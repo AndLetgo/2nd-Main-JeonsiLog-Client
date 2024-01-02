@@ -13,9 +13,9 @@
         <ImageView
             android:id="@+id/iv_poster_image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_0"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/illus_dialog_warning"/>
+            android:adjustViewBounds="true" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/fl_bottom_sheet"

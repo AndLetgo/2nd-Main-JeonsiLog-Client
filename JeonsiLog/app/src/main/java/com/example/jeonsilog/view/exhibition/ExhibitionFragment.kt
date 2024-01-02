@@ -9,8 +9,13 @@ import android.view.WindowManager
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -80,12 +85,36 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     }
 
     private fun getExhibitionInfo(){
-        runBlocking(Dispatchers.IO) {
+        val data: ExhibitionInfo? = runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(), exhibitionId)
             if(response.isSuccessful && response.body()!!.check){
-
+                response.body()!!.information
+            }else{
+                null
             }
         }
+        if(data != null){
+            Log.d("exhibition", "getExhibitionInfo: ${data.imageUrl}")
+            Glide.with(requireContext())
+                .load(data.imageUrl)
+                .into(binding.ivPosterImage)
+
+            binding.tvExhibitionName.text = data.exhibitionName
+            binding.tvAddress.text = data.place.address
+            binding.tvPlaceName.text = data.place.placeName
+
+            var date = ""
+            if(data.startDate!=null){
+                date = subStringDate(data.startDate) + " ~ " + subStringDate(data.endDate)
+            }
+            binding.tvDate.text = date
+        }
+
     }
 
+    private fun subStringDate(date:String):String{
+        var newDate = ""
+        newDate = date.substring(0,4) +"."+date.substring(4,6)+ "."+date.substring(6)
+        return newDate
+    }
 }
