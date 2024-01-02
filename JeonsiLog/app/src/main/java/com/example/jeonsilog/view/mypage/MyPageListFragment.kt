@@ -3,12 +3,16 @@ package com.example.jeonsilog.view.mypage
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentMyPageListBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MyPageListFragment(private val startTab: Int): BaseFragment<FragmentMyPageListBinding>(R.layout.fragment_my_page_list) {
 
     override fun init() {
+        val mActivity = activity as MainActivity
+        mActivity.setStateBn(true)
+
         binding.tvMypageListNick.text = encryptedPrefs.getNN()
 
         binding.vpMypageList.adapter = MyPageListVpAdapter(this.requireActivity())

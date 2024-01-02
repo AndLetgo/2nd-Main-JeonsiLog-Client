@@ -87,9 +87,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         }else{
             binding.bnvMain.visibility = View.GONE
         }
-        //사용 시 해당 프레그먼트에서 아래처럼 사용하면 됨 (확인 후 이 부분은 지우셔도 됩니다)
-//        val mainActivity = activity as MainActivity
-//        mainActivity.setStateBn(false)
     }
 
     private fun kakaoLogOut(msg: String){
