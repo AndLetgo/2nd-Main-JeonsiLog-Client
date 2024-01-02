@@ -37,5 +37,9 @@
     <fragment
         android:id="@+id/exhibitionPlaceFragment"
         android:name="com.example.jeonsilog.view.exhibition.ExhibitionPlaceFragment"
-        android:label="ExhibitionPlaceFragment" />
+        android:label="ExhibitionPlaceFragment" >
+        <action
+            android:id="@+id/action_exhibitionPlaceFragment_to_exhibitionFragment"
+            app:destination="@id/exhibitionFragment" />
+    </fragment>
 </navigation>

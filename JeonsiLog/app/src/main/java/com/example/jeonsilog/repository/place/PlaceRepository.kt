@@ -9,14 +9,14 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface PlaceRepository {
-    @GET("/places/exhibition/{placeId}")
+    @GET("/api/places/exhibition/{placeId}")
     suspend fun getPlaces(
         @Header("Authorization") token: String,
         @Path("placeId") placeId: Int,
         @Query("page") page: Int
     ): Response<GetPlacesResponse>
 
-    @GET("/places/search/{searchWord}")
+    @GET("/api/places/search/{searchWord}")
     suspend fun searchPlaces(
         @Header("Authorization") token: String,
         @Path("searchWord") searchWord: String,

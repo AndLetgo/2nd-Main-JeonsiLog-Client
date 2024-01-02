@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
             <TextView
+                android:id="@+id/tv_tool_bar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="전시장명"
