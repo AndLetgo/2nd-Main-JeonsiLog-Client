@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
@@ -24,6 +25,8 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlin.math.log
+import kotlin.math.max
 
 class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition) {
     private lateinit var exhibitionRvAdapter: ExhibitionRvAdapter
@@ -108,8 +111,25 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 date = subStringDate(data.startDate) + " ~ " + subStringDate(data.endDate)
             }
             binding.tvDate.text = date
-        }
 
+            val sampleText = "많은 화제가 되고 있는 류지안 작가의 신작과 MOONLIGHT 시리즈, HERITAGE 시리즈, THE MOON 작품을 비롯하여, 김종언 작가님의 밤새… 시리즈를 만나보실 수 있습니다. 더불어 김동우 작가님의 조각상도 함께 만나보세요."
+            binding.tvInformation.text = sampleText
+            var check = true
+            binding.tvReadMoreInfo.setOnClickListener {
+                if(check){
+                    binding.tvInformation.maxLines = Int.MAX_VALUE
+                    binding.tvReadMoreInfo.visibility = View.GONE
+                    check = !check
+                }
+            }
+            binding.tvInformation.setOnClickListener {
+                if(!check){
+                    binding.tvInformation.maxLines = 3
+                    binding.tvReadMoreInfo.visibility = View.VISIBLE
+                    check = !check
+                }
+            }
+        }
     }
 
     private fun subStringDate(date:String):String{
@@ -117,4 +137,5 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         newDate = date.substring(0,4) +"."+date.substring(4,6)+ "."+date.substring(6)
         return newDate
     }
+
 }
