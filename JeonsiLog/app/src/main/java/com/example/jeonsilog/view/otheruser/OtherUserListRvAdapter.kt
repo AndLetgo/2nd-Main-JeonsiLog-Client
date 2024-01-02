@@ -2,6 +2,7 @@ package com.example.jeonsilog.view.otheruser
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getDrawable
@@ -43,6 +44,12 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                 binding.btnOtherUserListFollowing.text = getString(context, R.string.btn_follow)
                 binding.btnOtherUserListFollowing.background = getDrawable(context, R.drawable.shape_corner_round_follower_btn_activate)
                 binding.btnOtherUserListFollowing.setTextColor(getColor(context, R.color.basic_white))
+            }
+
+            if(data.followUserId == encryptedPrefs.getUI()){
+                binding.btnOtherUserListFollowing.visibility = View.GONE
+            } else {
+                binding.btnOtherUserListFollowing.visibility = View.VISIBLE
             }
 
             binding.btnOtherUserListFollowing.setOnClickListener {
@@ -101,6 +108,12 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                 binding.btnOtherUserListFollowing.text = getString(context, R.string.btn_follow)
                 binding.btnOtherUserListFollowing.background = getDrawable(context, R.drawable.shape_corner_round_follower_btn_activate)
                 binding.btnOtherUserListFollowing.setTextColor(getColor(context, R.color.basic_white))
+            }
+
+            if(data.followUserId == encryptedPrefs.getUI()){
+                binding.btnOtherUserListFollowing.visibility = View.GONE
+            } else {
+                binding.btnOtherUserListFollowing.visibility = View.VISIBLE
             }
 
             binding.btnOtherUserListFollowing.setOnClickListener {
