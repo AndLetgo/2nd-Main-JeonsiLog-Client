@@ -6,55 +6,39 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
 import com.example.jeonsilog.databinding.FragmentOtherUserReviewBinding
+import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.OtherUserViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.SpannableStringUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
-class OtherUserReviewFragment(private val vm: OtherUserViewModel): BaseFragment<FragmentOtherUserReviewBinding>(R.layout.fragment_other_user_review) {
+class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val otherUserId: Int): BaseFragment<FragmentOtherUserReviewBinding>(R.layout.fragment_other_user_review) {
+    private var numReview = 0
+    private val list = mutableListOf<GetReviewsDataEntity>()
+
     override fun init() {
-        val list = mutableListOf<OtherUserReviewModel>()
-        list.add(
-            OtherUserReviewModel(
-                1,
-                "https://picsum.photos/id/200/200/300",
-                "[전시회 이름]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작"
-            )
-        )
-        list.add(
-            OtherUserReviewModel(
-                2,
-                "https://picsum.photos/id/201/200/300",
-                "[김은영 : 서로를 안아주는 관계의 존재]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특소개해 줄 생각이에요. 특히 뎁스 작가의 작"
-            )
-        )
-        list.add(
-            OtherUserReviewModel(
-                1,
-                "https://picsum.photos/id/200/200/300",
-                "[전시회 이름]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작"
-            )
-        )
-        list.add(
-            OtherUserReviewModel(
-                2,
-                "https://picsum.photos/id/201/200/300",
-                "[김은영 : 서로를 안아주는 관계의 존재]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특소개해 줄 생각이에요. 특히 뎁스 작가의 작"
-            )
-        )
-        list.add(
-            OtherUserReviewModel(
-                1,
-                "https://picsum.photos/id/200/200/300",
-                "[전시회 이름]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작"
-            )
-        )
-        list.add(
-            OtherUserReviewModel(
-                2,
-                "https://picsum.photos/id/201/200/300",
-                "[김은영 : 서로를 안아주는 관계의 존재]\n재미있게 관람했습니다. 특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특소개해 줄 생각이에요. 특히 뎁스 작가의 작"
-            )
-        )
+        runBlocking(Dispatchers.IO){
+            val response = ReviewRepositoryImpl().getOtherReviews(GlobalApplication.encryptedPrefs.getAT(), otherUserId)
+            if(response.isSuccessful && response.body()!!.check){
+                numReview = response.body()!!.information.numReview
+                val data = response.body()!!.information.dataEntity.listIterator()
+                while (data.hasNext()){
+                    val temp = data.next()
+                    list.add(
+                        GetReviewsDataEntity(
+                            reviewId = temp.reviewId,
+                            exhibitionId = temp.exhibitionId,
+                            exhibitionName = "[${temp.exhibitionName}]",
+                            contents = temp.contents,
+                            exhibitionImgUrl = temp.exhibitionImgUrl
+                        )
+                    )
+                }
+            }
+        }
 
         if (list.isEmpty()) {
             binding.rvOtherUserReview.visibility = View.GONE
@@ -62,7 +46,7 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel): BaseFragment<
             binding.ivOtherUserReviewEmptyImg.visibility = View.VISIBLE
             binding.tvOtherUserReviewEmptyTitle.visibility = View.VISIBLE
         } else {
-            val adapter = OtherUserRvAdapter<OtherUserReviewModel>(list, 1)
+            val adapter = OtherUserRvAdapter<GetReviewsDataEntity>(list, 1)
             binding.rvOtherUserReview.adapter = adapter
             binding.rvOtherUserReview.layoutManager = LinearLayoutManager(requireContext())
             binding.rvOtherUserReview.addItemDecoration(
@@ -80,6 +64,17 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel): BaseFragment<
                 ),
                 requireContext()
             )
+
+            vm.nick.observe(this){
+                binding.tvOtherUserReviewCount.text = SpannableStringUtil().highlightNumber(
+                    getString(
+                        R.string.other_review_count,
+                        vm.nick.value,
+                        list.size
+                    ),
+                    requireContext()
+                )
+            }
         }
     }
 }

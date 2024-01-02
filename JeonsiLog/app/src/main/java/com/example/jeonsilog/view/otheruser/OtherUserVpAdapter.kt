@@ -11,7 +11,7 @@ class OtherUserVpAdapter(fragmentActivity: FragmentActivity, private val vm: Oth
     override fun createFragment(position: Int): Fragment {
         return when(position) {
             0 -> OtherUserRatingFragment(vm, otherUserId)
-            1 -> OtherUserReviewFragment(vm)
+            1 -> OtherUserReviewFragment(vm, otherUserId)
             2 -> OtherUserCalendarFragment()
             else -> throw IllegalArgumentException("유효하지 않은 인덱스 번호: $position")
         }
