@@ -3,27 +3,18 @@ package com.example.jeonsilog.view.home
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 import com.example.jeonsilog.databinding.RvTitleAreaBinding
-import com.example.jeonsilog.view.exhibition.ExhibitionRvAdapter
-import com.example.jeonsilog.view.exhibition.ReviewModel
-import com.example.jeonsilog.viewmodel.ExhibitionModel
-import com.example.jeonsilog.viewmodel.HomeRvModel
-import com.example.jeonsilog.viewmodel.HomeViewModel
 import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_HEADER = 0

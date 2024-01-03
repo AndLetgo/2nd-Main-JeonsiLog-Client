@@ -24,7 +24,8 @@
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.example.jeonsilog.view.exhibition.ReviewFragment"
-        android:label="ReviewFragment" />
+        android:label="ReviewFragment" >
+    </fragment>
     <fragment
         android:id="@+id/PosterFragment"
         android:name="com.example.jeonsilog.view.exhibition.PosterFragment"

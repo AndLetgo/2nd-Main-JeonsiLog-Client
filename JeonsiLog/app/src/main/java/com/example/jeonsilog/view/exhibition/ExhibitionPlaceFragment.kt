@@ -6,6 +6,7 @@ import android.view.View
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
@@ -50,6 +51,18 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
         })
 
         setExhibitionRvByPage(0)
+
+        //recyclerView 페이징 처리
+        binding.rvExhibition.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+                if(rvPosition == totalCount){
+                    setExhibitionRvByPage(totalCount)
+                }
+            }
+        })
     }
 
     private fun setExhibitionRvByPage(totalCount:Int){

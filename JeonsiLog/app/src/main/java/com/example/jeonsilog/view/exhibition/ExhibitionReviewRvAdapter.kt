@@ -1,25 +1,38 @@
 package com.example.jeonsilog.view.exhibition
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.PopupMenu
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
 
-class ExhibitionRvAdapter(private val reviewList:List<ReviewModel>):
-    RecyclerView.Adapter<ExhibitionRvAdapter.RecycleViewHolder>()  {
+class ExhibitionReviewRvAdapter(
+    private val reviewList:List<GetReviewsExhibitionInformationEntity>,
+    private val context: Context):
+    RecyclerView.Adapter<ExhibitionReviewRvAdapter.RecycleViewHolder>()  {
+
     private var listener: OnItemClickListener? = null
     inner class RecycleViewHolder(private val binding: ItemExhibitionReviewBinding):
         RecyclerView.ViewHolder(binding.root){
-        fun bind(position: Int){
-            binding.tvUserName.text = reviewList[position].userId.toString()
+        fun bind(item: GetReviewsExhibitionInformationEntity){
+            Log.d("review", "bind: adapter nickname: ${item.nickname}")
+            binding.tvUserName.text = item.nickname
+            binding.tvReviewContent.text = item.contents
+            binding.brbExhibitionReviewRating.rating = item.rate.toFloat()
+            binding.tvReplyCount.text = "${context.getString(R.string.exhibition_reply)} ${item.numReply}"
+//            binding.tvReviewDate.text = item.
+            Glide.with(context)
+                .load(item.imgUrl)
+                .transform(CenterCrop(), RoundedCorners(80))
+                .into(binding.ivProfile)
+
             binding.ibMenu.setOnClickListener{
                 listener?.onMenuBtnClick(it)
             }
@@ -38,7 +51,7 @@ class ExhibitionRvAdapter(private val reviewList:List<ReviewModel>):
     override fun getItemCount(): Int = reviewList.size
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
-        holder.bind(position)
+        holder.bind(reviewList[position])
 
         if(position != RecyclerView.NO_POSITION){
             holder.itemView.setOnClickListener {
@@ -48,7 +61,7 @@ class ExhibitionRvAdapter(private val reviewList:List<ReviewModel>):
     }
 
     interface OnItemClickListener {
-        fun onItemClick(v: View, data: ReviewModel, position: Int)
+        fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int)
         fun onMenuBtnClick(btn:View)
     }
 

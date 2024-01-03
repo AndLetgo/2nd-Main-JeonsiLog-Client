@@ -5,35 +5,34 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.WindowManager
 import androidx.core.os.bundleOf
-import androidx.core.view.isGone
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
-import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.viewmodel.ReviewViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlin.math.log
-import kotlin.math.max
 
 class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition) {
-    private lateinit var exhibitionRvAdapter: ExhibitionRvAdapter
+    private lateinit var exhibitionRvAdapter: ExhibitionReviewRvAdapter
     private var data: ExhibitionInfo? = null
     private var thisExhibitionId = 0
+    private lateinit var reviewList: MutableList<GetReviewsExhibitionInformationEntity>
+    private val reviewViewModel: ReviewViewModel by activityViewModels()
+
     override fun init() {
         val bundle = arguments
         bundle?. let {
@@ -59,29 +58,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
 
         //RecyclerView
-        val list = listOf<ReviewModel>(
-            ReviewModel(0,0,"address",0,""),
-            ReviewModel(1,0,"address",0,""),
-            ReviewModel(2,0,"address",0,""),
-            ReviewModel(3,0,"address",0,""),
-            ReviewModel(4,0,"address",0,""),
-            ReviewModel(5,0,"address",0,""),
-            ReviewModel(6,0,"address",0,"")
-        )
-        exhibitionRvAdapter = ExhibitionRvAdapter(list)
-        binding.rvExhibitionReview.adapter = exhibitionRvAdapter
-        binding.rvExhibitionReview.layoutManager = LinearLayoutManager(this.context)
-
-        exhibitionRvAdapter.setOnItemClickListener(object: ExhibitionRvAdapter.OnItemClickListener{
-            override fun onItemClick(v: View, data: ReviewModel, position: Int) {
-                Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
-            }
-
-            override fun onMenuBtnClick(btn: View) {
-                ExtraActivity().setMenuButton(btn, parentFragmentManager)
-            }
-
-        })
+        getReviewInfo()
 
         //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
@@ -113,7 +90,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         }
 
-        Log.d("exhibition", "getExhibitionInfo: ${data?.imageUrl}")
         Glide.with(requireContext())
             .load(data?.imageUrl)
             .into(binding.ivPosterImage)
@@ -150,7 +126,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 check = !check
             }
         }
-
     }
 
     private fun subStringDate(date:String):String{
@@ -159,4 +134,35 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         return newDate
     }
 
+    private fun getReviewInfo(){
+        reviewList = mutableListOf()
+
+        reviewList.add(
+            GetReviewsExhibitionInformationEntity(
+                0,0,"https://url.kr/f4p861","sample","sample contents",3.5,3)
+        )
+
+        runBlocking(Dispatchers.IO) {
+            val response = ReviewRepositoryImpl().getReviews(encryptedPrefs.getAT(), thisExhibitionId)
+            if(response.isSuccessful && response.body()!!.check){
+                reviewList.addAll(response.body()!!.informationEntity)
+            }else{
+                null
+            }
+        }
+        exhibitionRvAdapter = ExhibitionReviewRvAdapter(reviewList, requireContext())
+        binding.rvExhibitionReview.adapter = exhibitionRvAdapter
+        binding.rvExhibitionReview.layoutManager = LinearLayoutManager(this.context)
+
+        exhibitionRvAdapter.setOnItemClickListener(object: ExhibitionReviewRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int) {
+                //감상평 페이지로 이동
+                reviewViewModel.setReviewInfo(data)
+                Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
+            }
+            override fun onMenuBtnClick(btn: View) {
+                ExtraActivity().setMenuButton(btn, parentFragmentManager)
+            }
+        })
+    }
 }

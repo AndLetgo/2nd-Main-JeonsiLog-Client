@@ -79,16 +79,16 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
         }
 
         //이미지 다운로드
-        binding.ibDownload.setOnClickListener {
-            val image = this.posterList!![viewPager.currentItem]
-            Log.d("download", "init: imageurl: $image")
-            lifecycleScope.launch(Dispatchers.IO) {
-                val bitmap = downloadImageToBitmap(image)
-                if(bitmap != null){
-                    downloadImage(bitmap)
-                }
-            }
-        }
+//        binding.ibDownload.setOnClickListener {
+//            val image = this.posterList!![viewPager.currentItem]
+//            Log.d("download", "init: imageurl: $image")
+//            lifecycleScope.launch(Dispatchers.IO) {
+//                val bitmap = downloadImageToBitmap(image)
+//                if(bitmap != null){
+//                    downloadImage(bitmap)
+//                }
+//            }
+//        }
     }
 
     //이미지 다운로드

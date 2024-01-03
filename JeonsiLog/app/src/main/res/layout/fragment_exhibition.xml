@@ -26,7 +26,8 @@
                 android:id="@+id/nsv_bottom_sheet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+                android:background="@color/basic_white">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
