@@ -17,6 +17,7 @@ class GlobalApplication: Application() {
 
         var exhibitionId: Int = 0
         var extraActivityReference: Int = 0
+        val testDefalutImg = "https://www.lab2050.org/common/img/default_profile.png"
     }
 
     override fun onCreate() {

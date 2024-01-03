@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.data.remote.dto.auth.SignInRequest
 import com.example.jeonsilog.databinding.ActivitySplashBinding
@@ -27,8 +28,6 @@ import kotlin.coroutines.suspendCoroutine
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBinding.inflate(it)})) {
     private val tag = this.javaClass.simpleName
-    private val testId = "android5"
-    private val testEmail = "android5@gmail.com"
 
     override fun init() {
         isFinish.observe(this){
@@ -36,7 +35,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
         }
 
-//        testActivity() // 테스트용 = 바로 메인페이지로 넘어감
         tokenValidation()
     }
 
@@ -80,6 +78,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
                                     }
                                 } else {
                                     Log.d(tag, "서버 로그인 실패")
+                                    prefs.clearAll()
+                                    encryptedPrefs.clearAll()
+                                    Toast.makeText(this@SplashActivity, "카카오 계정 정보가 유효하지 않습니다.", Toast.LENGTH_LONG).show()
                                 }
                             }
                         } else {
@@ -118,11 +119,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
                     continuation.resume(SignInRequest("", ""))
                 } else {
                     if (user != null) {
-//                        val data = SignInRequest(
-//                            providerId = user.id.toString(),
-//                            email = user.kakaoAccount!!.email.toString(),
-//                        )
-                        val data = SignInRequest(testEmail, testId)
+                        val data = SignInRequest(
+                            providerId = user.id.toString(),
+                            email = user.kakaoAccount!!.email.toString(),
+                        )
+//                        val data = SignInRequest(testEmail, testId)
                         continuation.resume(data)
                     } else {
                         continuation.resume(SignInRequest("", ""))
