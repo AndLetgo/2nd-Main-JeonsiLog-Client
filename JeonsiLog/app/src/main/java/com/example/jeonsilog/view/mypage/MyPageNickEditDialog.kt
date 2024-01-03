@@ -36,15 +36,9 @@ class MyPageNickEditDialog(private val parentVm: MyPageViewModel): DialogFragmen
         super.onStart()
 
         val widthInDp = 324
-        val heightInDp = 242
 
         val widthInPixels = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, widthInDp.toFloat(),
-            resources.displayMetrics
-        ).toInt()
-
-        val heightInPixels = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, heightInDp.toFloat(),
             resources.displayMetrics
         ).toInt()
 
@@ -87,9 +81,10 @@ class MyPageNickEditDialog(private val parentVm: MyPageViewModel): DialogFragmen
                     else if (checker.hasSpecialCharacter(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_special_char))
                     }
-                    else if (checker.hasProhibitedWord(inputText)){
-                        viewModel.setComment(getString(R.string.login_nick_check_prohibited_words))
-                    }
+                    // 서버 API 대기중
+//                    else if (){
+//                        viewModel.setComment(getString(R.string.login_nick_check_prohibited_words))
+//                    }
                     else if(checker.isNotPair(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_is_pair))
                     }
@@ -113,8 +108,7 @@ class MyPageNickEditDialog(private val parentVm: MyPageViewModel): DialogFragmen
                     launch(Dispatchers.Main){
                         if(flag){
                             launch(Dispatchers.IO) {
-                                encryptedPrefs.setAT("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzAzMDg2NjI1LCJleHAiOjE3MDMwOTAyMjV9.ZOl6t8gdbOb0Fzry4CXB2rOka4ts4pWh6kvl7i0r6sQ0GBOgHHkp9yntotUDt-GI9RcCtN-KhizL_01EqhhJaQ")
-                                val flag2 = UserRepositoryImpl().patchNick(encryptedPrefs.getAT()!!, EditNickRequest(binding.etDialogNickEdit.text.toString()))
+                                val flag2 = UserRepositoryImpl().patchNick(encryptedPrefs.getAT(), EditNickRequest(binding.etDialogNickEdit.text.toString()))
 
                                 launch(Dispatchers.Main) {
                                     if(flag2){

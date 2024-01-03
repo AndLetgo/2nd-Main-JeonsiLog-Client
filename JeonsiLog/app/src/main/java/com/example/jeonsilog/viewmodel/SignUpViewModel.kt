@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class SignUpViewModel: ViewModel(){
     private var _comment = MutableLiveData("")
     private var _isNickFocused = MutableLiveData(false)
-    private var _btnFlag = MutableLiveData(true)
+    private var _btnFlag = MutableLiveData(false)
     private var _checkableFlag = MutableLiveData(false)
     private var _etNick = MutableLiveData("")
     private var _profileImagePath = MutableLiveData("")
@@ -40,11 +40,9 @@ class SignUpViewModel: ViewModel(){
 
     fun duplicateCheck(nick: String, comment: String){
         viewModelScope.launch(Dispatchers.IO){
-            val flag = AuthRepositoryImpl().getIsAvailable(nick)
-
             launch(Dispatchers.Main) {
-                if(flag){
-                    onBtnFlagChange(false)
+                if(AuthRepositoryImpl().getIsAvailable(nick)){
+                    onBtnFlagChange(true)
                 } else {
                     setComment(comment)
                 }
