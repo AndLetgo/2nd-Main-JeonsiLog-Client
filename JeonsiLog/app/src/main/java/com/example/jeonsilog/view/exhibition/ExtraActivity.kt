@@ -2,14 +2,18 @@ package com.example.jeonsilog.view.exhibition
 
 import android.view.View
 import android.widget.PopupMenu
+import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityExtraBinding
+import com.example.jeonsilog.viewmodel.ReviewViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 
 class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.inflate(it)}) {
+    private val reviewViewModel: ReviewViewModel by viewModels()
     val TAG = "Dialog"
     override fun init() {
         when(extraActivityReference){

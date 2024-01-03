@@ -22,8 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/v_divider"
-            android:layout_marginTop="@dimen/margin_16"
-            android:gravity="center_vertical">
+            android:layout_marginTop="@dimen/margin_16">
             <ImageView
                 android:id="@+id/iv_profile"
                 android:layout_width="@dimen/item_24"
@@ -39,12 +38,13 @@
                 android:text="User"
                 style="@style/M_regular"
                 android:textColor="@color/gray_dark"
-                android:layout_marginStart="@dimen/margin_8"
                 app:layout_constraintStart_toEndOf="@id/iv_profile"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="@dimen/margin_8"
+                android:layout_marginBottom="@dimen/margin_1"/>
             <com.willy.ratingbar.BaseRatingBar
-                android:id="@+id/rv_exhibition_review"
+                android:id="@+id/brb_exhibition_review_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srb_numStars="5"
@@ -69,7 +69,8 @@
                 android:background="@color/basic_white"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="@dimen/margin_2"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <TextView
             android:id="@+id/tv_review_content"
@@ -77,24 +78,27 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/cl_top"
             android:layout_marginTop="@dimen/margin_12"
-            android:text="특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작품이 인상 깊었습니다. 특이한 작품도 많았고 보는 내내 즐"
+            android:text="특이한 작품도 많았고 보는 내내품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작품이 인상 깊었습니다. 특이한 작품도 많았고 보는 내내 즐"
             style="@style/M_regular"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:textColor="@color/gray_dark"/>
-        <TextView
-            android:id="@+id/tv_more_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/exhibition_more_info"
-            style="@style/M_bold"
-            android:textColor="@color/gray_dark"
-            app:layout_constraintEnd_toEndOf="@id/tv_review_content"
-            app:layout_constraintBottom_toBottomOf="@id/tv_review_content"/>
+<!--        <TextView-->
+<!--            android:id="@+id/tv_more_info"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/exhibition_more_info"-->
+<!--            style="@style/M_bold"-->
+<!--            android:textColor="@color/gray_dark"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/tv_review_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/tv_review_content"/>-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_review_content"
             android:layout_marginTop="@dimen/margin_16">
             <TextView
+                android:id="@+id/tv_reply_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/exhibition_reply"
@@ -104,6 +108,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
             <TextView
+                android:id="@+id/tv_review_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="어제"

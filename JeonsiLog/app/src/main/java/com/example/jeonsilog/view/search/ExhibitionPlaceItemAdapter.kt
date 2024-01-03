@@ -32,7 +32,7 @@ class ExhibitionPlaceItemAdapter(private val context: Context, private val items
         Glide.with(context)
             .load(unsplashUrl)
             .transform(CenterCrop(), RoundedCorners(R.dimen.radius_8))
-            .into(holder.itemView.findViewById(R.id.iv_exhibition_poster))
+            .into(holder.itemView.findViewById(R.id.iv_poster))
 
         holder.nameTextView.text = item.exhibitionPlaceItemName
 

@@ -74,7 +74,7 @@
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>
-    <string name="exhibition_more_info">...더보기</string>
+    <string name="exhibition_more_info">&#160;...더보기</string>
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>
     <string name="exhibition_reply">댓글</string>
