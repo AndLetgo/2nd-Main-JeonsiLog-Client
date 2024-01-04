@@ -23,6 +23,10 @@ data class ExhibitionInfo(
     val operatingKeyword: String,
     @SerializedName("priceKeyword")
     val priceKeyword: String,
+    @SerializedName("information")
+    val information: String,
+    @SerializedName("rate")
+    val rate: Float,
     @SerializedName("imageUrl")
     val imageUrl: String,
     @SerializedName("place")
