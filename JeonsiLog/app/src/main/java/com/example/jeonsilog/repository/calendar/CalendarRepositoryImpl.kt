@@ -3,11 +3,13 @@ package com.example.jeonsilog.repository.calendar
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.CalendarApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.calendar.DeletePhotoRequest
 import com.example.jeonsilog.data.remote.dto.calendar.GetPhotoResponse
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromGalleryRequest
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromPosterRequest
-import com.example.jeonsilog.data.remote.dto.calendar.UploadImageReqEntity
+
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 
 class CalendarRepositoryImpl: CalendarRepository {
@@ -52,7 +54,7 @@ class CalendarRepositoryImpl: CalendarRepository {
 
     override suspend fun postPhotoFromGallery(
         token: String,
-        uploadImageReq: PostPhotoFromGalleryRequest,
+        uploadImageReq: RequestBody,
         img: MultipartBody.Part
     ): Response<OnlyMsgResponse> {
         val response = service.postPhotoFromGallery("Bearer $token", uploadImageReq, img)
@@ -66,7 +68,7 @@ class CalendarRepositoryImpl: CalendarRepository {
 
     override suspend fun deletePhoto(
         token: String,
-        body: UploadImageReqEntity
+        body: DeletePhotoRequest
     ): Response<OnlyMsgResponse> {
         val response = service.deletePhoto("Bearer $token", body)
 

@@ -56,7 +56,7 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
         //넘버피커 최대 최소값 설정
         binding.npMonth.minValue=1
         binding.npMonth.maxValue=12
-        binding.npYear.minValue=2020
+        binding.npYear.minValue=2000
         binding.npYear.maxValue=2050
         //넘버피커 세팅
         binding.npYear.value=dateYear
