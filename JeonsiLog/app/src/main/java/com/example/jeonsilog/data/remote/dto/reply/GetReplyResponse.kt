@@ -6,7 +6,7 @@ data class GetReplyResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: GetReplyInformation
+    val information: List<GetReplyInformation>
 )
 
 data class GetReplyInformation(

@@ -1,9 +1,13 @@
 package com.example.jeonsilog.view.login
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
@@ -19,22 +23,31 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.auth.SignInRequest
 import com.example.jeonsilog.data.remote.dto.auth.SignUpRequest
 import com.example.jeonsilog.databinding.ActivitySignupBinding
 import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.spalshpage.SplashActivity
 import com.example.jeonsilog.viewmodel.SignUpViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.testDefalutImg
+import com.example.jeonsilog.widget.utils.ImageUtil
 import com.example.jeonsilog.widget.utils.NickValidChecker
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -44,6 +57,7 @@ class SignUpActivity: AppCompatActivity() {
     private val viewModel: SignUpViewModel by viewModels()
     private val tag = this.javaClass.simpleName
     private var backPressedTime: Long = 0L
+    private var uploadImg: Uri? = null
 
 
     private val callback = object : OnBackPressedCallback(true) {
@@ -59,8 +73,6 @@ class SignUpActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val actionBar = supportActionBar
-        actionBar?.hide()
 
         if(prefs.getSignUpFinished()){
             val intent = Intent(this, MainActivity::class.java)
@@ -82,8 +94,7 @@ class SignUpActivity: AppCompatActivity() {
                 Log.e(tag, "사용자 정보 요청 실패 $error")
             } else if (user != null) {
                 Log.d(tag, "사용자 정보 요청 성공 : $user")
-                val profileUri = user.kakaoAccount?.profile?.profileImageUrl!!.toString()
-                viewModel.setProfileUrl(profileUri)
+                viewModel.setProfileUrl(testDefalutImg)
             }
         }
 
@@ -96,7 +107,7 @@ class SignUpActivity: AppCompatActivity() {
         binding.etNick.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 viewModel.setComment(getString(R.string.login_nick_hint))
-                viewModel.onBtnFlagChange(true)
+                viewModel.onBtnFlagChange(false)
                 viewModel.onCheckableFlagChange(false)
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -114,9 +125,10 @@ class SignUpActivity: AppCompatActivity() {
                     else if (checker.hasSpecialCharacter(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_special_char))
                     }
-                    else if (checker.hasProhibitedWord(inputText)){
-                        viewModel.setComment(getString(R.string.login_nick_check_prohibited_words))
-                    }
+                    // API 제작 대기중
+//                    else if (){
+//                        viewModel.setComment(getString(R.string.login_nick_check_prohibited_words))
+//                    }
                     else if(checker.isNotPair(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_is_pair))
                     }
@@ -126,13 +138,18 @@ class SignUpActivity: AppCompatActivity() {
         })
 
         binding.btnUpdateProfileUrl.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//            intent.type = "image/*"
-            launcher.launch(intent)
+            if(checkPermissions(this)){
+                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                launcher.launch(intent)
+            } else {
+                Toast.makeText(this, "갤러리 접근 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnLoginDuplicate.setOnClickListener {
-            viewModel.duplicateCheck(binding.etNick.text.toString(), getString(R.string.login_nick_check_duplicate))
+            if(viewModel.checkableFlag.value == true){
+                viewModel.duplicateCheck(binding.etNick.text.toString(), getString(R.string.login_nick_check_duplicate))
+            }
         }
 
         binding.btnLoginStart.setOnClickListener {
@@ -147,6 +164,7 @@ class SignUpActivity: AppCompatActivity() {
                             if (AuthRepositoryImpl().postSignUp(userData)) {
                                 val data = getUserDataFromKakao()
                                 if(AuthRepositoryImpl().signIn(data!!)){
+                                    patchMyProfileImg()
 
                                     CoroutineScope(Dispatchers.Main).launch {
                                         val intent = Intent(this@SignUpActivity, SplashActivity::class.java)
@@ -187,17 +205,11 @@ class SignUpActivity: AppCompatActivity() {
                     continuation.resume(null)
                 } else {
                     if (user != null) {
-//                        val data = SignUpRequest(
-//                            providerId = user.id.toString(),
-//                            nickname = user.kakaoAccount!!.profile!!.nickname.toString(),
-//                            email = user.kakaoAccount!!.email.toString(),
-//                            profileImgUrl = user.kakaoAccount!!.profile!!.profileImageUrl.toString()
-//                        )
                         val data = SignUpRequest(
-                            providerId = "testId3",
-                            email = "test3@gmail.com",
-                            nickname = binding.etNick.text.toString(),
-                            profileImgUrl = user.kakaoAccount!!.profile!!.profileImageUrl.toString()
+                            providerId = user.id.toString(),
+                            nickname = viewModel.etNick.value!!,
+                            email = user.kakaoAccount!!.email.toString(),
+                            profileImgUrl = testDefalutImg
                         )
                         continuation.resume(data)
                     } else {
@@ -216,11 +228,10 @@ class SignUpActivity: AppCompatActivity() {
                     continuation.resume(null)
                 } else {
                     if (user != null) {
-//                        val data = SignInRequest(
-//                            providerId = user.id.toString(),
-//                            email = user.kakaoAccount!!.email.toString(),
-//                        )
-                        val data = SignInRequest("test3@gmail.com", "testId3")
+                        val data = SignInRequest(
+                            providerId = user.id.toString(),
+                            email = user.kakaoAccount!!.email.toString(),
+                        )
                         continuation.resume(data)
                     } else {
                         continuation.resume(null)
@@ -233,16 +244,35 @@ class SignUpActivity: AppCompatActivity() {
     private val launcher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val imagePath = result.data!!.data
+            uploadImg = result.data!!.data!!
 
-            if (imagePath != null) {
+            if (uploadImg != null) {
                 try {
-                    viewModel.setProfileUrl(imagePath.toString())
+                    viewModel.setProfileUrl(uploadImg.toString())
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
             }
         }
+    }
+
+    private fun patchMyProfileImg() {
+        if(uploadImg != null){
+            val file = File(ImageUtil().absolutelyPath(this, uploadImg!!))
+            val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            val filePart = MultipartBody.Part.createFormData("img", file.name, requestBody)
+
+            CoroutineScope(Dispatchers.IO).launch{
+                val response = UserRepositoryImpl().uploadProfileImg(GlobalApplication.encryptedPrefs.getAT(), filePart)
+                Log.d(tag, filePart.body.toString())
+                if(response.isSuccessful && response.body()!!.check){
+                    Log.d("Upload", "Image uploaded successfully")
+                } else {
+                    Log.e("Upload", "Image upload failed")
+                }
+            }
+        }
+        // null이면 기본 이미지 저장
     }
 
     private fun loadProfileImage(path: String){
@@ -268,5 +298,23 @@ class SignUpActivity: AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    private fun checkPermissions(context: Context): Boolean{
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(arrayOf(Manifest.permission.READ_MEDIA_IMAGES), 100)
+            }
+        } else {
+            if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 101)
+            }
+        }
+
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
+        } else {
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        }
     }
 }

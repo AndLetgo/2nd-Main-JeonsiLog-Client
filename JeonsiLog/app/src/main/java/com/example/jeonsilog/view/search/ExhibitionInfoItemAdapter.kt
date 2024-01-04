@@ -35,7 +35,6 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
         val exhibitionnameTextView: TextView = view.findViewById(R.id.tv_title)
         val exhibitionlocationTextView: TextView = view.findViewById(R.id.tv_address)
         val exhibitionplaceTextView: TextView = view.findViewById(R.id.tv_place)
-
         val exhibitiondateTextViewBefore: TextView = view.findViewById(R.id.tv_keyword_operating_before)
         val exhibitiondateTextViewIng: TextView = view.findViewById(R.id.tv_keyword_operating_ing)
         val exhibitionpriceTextViewFree: TextView = view.findViewById(R.id.tv_keyword_price_free)

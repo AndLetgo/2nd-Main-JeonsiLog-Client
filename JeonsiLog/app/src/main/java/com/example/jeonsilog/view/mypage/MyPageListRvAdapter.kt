@@ -13,6 +13,8 @@ import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingInformation
 import com.example.jeonsilog.databinding.ItemMyPageListFollowBinding
 import com.example.jeonsilog.databinding.ItemMyPageListFollowingBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowerUpdate
@@ -80,11 +82,11 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowProfile.setOnClickListener{
-                // 타 유저 프로필로 이동
+                moveOtherUserProfile(data.followUserId)
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                // 타 유저 프로필로 이동
+                moveOtherUserProfile(data.followUserId)
             }
         }
     }
@@ -112,11 +114,11 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowingProfile.setOnClickListener {
-                // 해당 유저 프로필로 이동
+                moveOtherUserProfile(data.followUserId)
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                // 해당 유저 프로필로 이동
+                moveOtherUserProfile(data.followUserId)
             }
         }
     }
@@ -165,5 +167,13 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
 
     override fun getItemViewType(position: Int): Int {
         return type
+    }
+
+    private fun moveOtherUserProfile(otherUserId: Int){
+        val fragment = OtherUserFragment(otherUserId)
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

@@ -19,6 +19,7 @@
     <dimen name="margin_56">56dp</dimen>
     <dimen name="margin_76">76dp</dimen>
     <dimen name="margin_84">84dp</dimen>
+    <dimen name="margin_88">88dp</dimen>
     <dimen name="margin_212">212dp</dimen>
     <dimen name="margin_224">224dp</dimen>
 
@@ -63,6 +64,7 @@
 
     <!--    Dp Shadow  -->
     <dimen name="shadow_2">2dp</dimen>
+    <dimen name="shadow_6">6dp</dimen>
     <dimen name="shadow_12">12dp</dimen>
 
     <!--    Dp Corner Radius  -->

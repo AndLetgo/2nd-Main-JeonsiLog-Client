@@ -38,6 +38,7 @@ class LoadPageRvAdapter(private val context: Context, private val edittext:Strin
         val exhibitiondateTextViewIng: TextView = view.findViewById(R.id.tv_keyword_operating_ing)
         val exhibitionpriceTextViewFree: TextView = view.findViewById(R.id.tv_keyword_price_free)
 
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

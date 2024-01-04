@@ -68,13 +68,13 @@
     <string name="home_title">요즘 뜨는 전시</string>
 
     <!-- Keyword -->
-    <string name="keyword_state_before">시작 전</string>
-    <string name="keyword_state_on">전시 중</string>
+    <string name="keyword_state_before">시작전</string>
+    <string name="keyword_state_on">전시중</string>
     <string name="keyword_free">무료</string>
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>
-    <string name="exhibition_more_info">...더보기</string>
+    <string name="exhibition_more_info">&#160;...더보기</string>
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>
     <string name="exhibition_reply">댓글</string>

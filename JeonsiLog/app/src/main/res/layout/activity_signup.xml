@@ -19,17 +19,17 @@
 
         <RelativeLayout
             android:id="@+id/lr_logo"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.23">
+            app:layout_constraintVertical_bias="0.12">
 
             <ImageView
-                android:layout_width="112.9dp"
-                android:layout_height="112.9dp"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/logo_jeonsilog"
                 tools:ignore="ContentDescription" />
@@ -60,25 +60,26 @@
             android:layout_height="74dp"
             android:background="@drawable/shape_round_iv"
             app:layout_constraintTop_toTopOf="@+id/bl_signup_top"
-            app:layout_constraintBottom_toBottomOf="@+id/bl_signup_bottom"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.14"
+            android:layout_marginTop="@dimen/margin_20"
             tools:ignore="ContentDescription" />
-        
+
         <ImageButton
             android:id="@+id/btn_update_profile_url"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/ic_edit_img"
-            android:background="#00000000"
+            android:background="@color/transparent"
             app:layout_constraintEnd_toEndOf="@+id/iv_login_profile"
             app:layout_constraintBottom_toBottomOf="@+id/iv_login_profile"
+            android:layout_marginEnd="-12dp"
+            android:layout_marginBottom="-12dp"
             tools:ignore="ContentDescription,SpeakableTextPresentCheck"/>
 
         <EditText
             android:id="@+id/et_nick"
-            android:layout_width="238dp"
+            android:layout_width="192dp"
             android:layout_height="48dp"
             android:hint="@string/login_nick_placeholder"
             android:inputType="text"
@@ -89,12 +90,14 @@
             android:cursorVisible="false"
             android:textColorHint="@color/gray_light_medium"
             style="@style/M_regular"
-            app:layout_constraintTop_toTopOf="@+id/iv_login_profile"
-            app:layout_constraintStart_toEndOf="@+id/iv_login_profile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
             android:maxLength="10"
-            android:onFocusChange="@{(v, hasFocus) -> vm.onNickFocusChange(v, hasFocus)}"/>
+            android:onFocusChange="@{(v, hasFocus) -> vm.onNickFocusChange(v, hasFocus)}"
+            app:layout_constraintTop_toBottomOf="@id/iv_login_profile"
+            android:layout_marginTop="@dimen/margin_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_login_duplicate"
+            android:layout_marginStart="60dp"
+            tools:ignore="Autofill" />
         
         <ImageButton
             android:id="@+id/ib_edit_clear"
@@ -116,9 +119,25 @@
             style="@style/S_regular"
             app:layout_constraintTop_toBottomOf="@+id/et_nick"
             app:layout_constraintStart_toStartOf="@+id/et_nick"
-            android:layout_marginTop="-5dp"
+            android:layout_marginTop="@dimen/margin_4"
             android:layout_marginStart="@dimen/margin_8"/>
 
+        <Button
+            android:id="@+id/btn_login_duplicate"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:background="@{vm.checkableFlag ? context.getDrawable(R.drawable.shape_corner_round_start_btn_activate) : context.getDrawable(R.drawable.shape_corner_round_start_btn)}"
+            android:text="@string/btn_duplicate"
+            style="@style/M_medium"
+            android:textColor="@{vm.checkableFlag ? context.getColor(R.color.basic_white) : context.getColor(R.color.gray_medium)}"
+            android:padding="0dp"
+            android:stateListAnimator="@null"
+            app:layout_constraintTop_toTopOf="@id/et_nick"
+            app:layout_constraintBottom_toBottomOf="@id/et_nick"
+            app:layout_constraintStart_toEndOf="@id/et_nick"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginEnd="60dp" />
 
         <com.google.android.material.internal.BaselineLayout
             android:id="@+id/bl_signup_bottom"
@@ -132,35 +151,17 @@
             android:id="@+id/btn_login_start"
             android:layout_width="372dp"
             android:layout_height="54dp"
-            android:background="@drawable/shape_corner_round_start_btn_activate"
+            android:background="@{vm.btnFlag ? context.getDrawable(R.drawable.shape_corner_round_start_btn_activate) : context.getDrawable(R.drawable.shape_corner_round_start_btn)}"
             android:text="@string/btn_start"
             style="@style/M_medium"
-            android:textColor="@color/basic_white"
+            android:textColor="@{vm.btnFlag ? context.getColor(R.color.basic_white) : context.getColor(R.color.gray_medium)}"
             android:padding="0dp"
             android:stateListAnimator="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.92"
-            android:visibility="@{vm.btnFlag ? View.INVISIBLE : View.VISIBLE}"/>
-
-        <Button
-            android:id="@+id/btn_login_duplicate"
-            android:layout_width="372dp"
-            android:layout_height="54dp"
-            android:background="@{vm.checkableFlag ? context.getDrawable(R.drawable.shape_corner_round_start_btn_activate) : context.getDrawable(R.drawable.shape_corner_round_start_btn)}"
-            android:text="@string/btn_duplicate"
-            style="@style/M_medium"
-            android:textColor="@{vm.checkableFlag ? context.getColor(R.color.basic_white) : context.getColor(R.color.gray_medium)}"
-            android:padding="0dp"
-            android:stateListAnimator="@null"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.92"
-            android:visibility="@{vm.btnFlag ? View.VISIBLE : View.INVISIBLE}"/>
+            app:layout_constraintVertical_bias="0.92" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

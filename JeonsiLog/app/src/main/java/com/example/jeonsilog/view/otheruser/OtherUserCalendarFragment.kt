@@ -1,7 +1,5 @@
 package com.example.jeonsilog.view.otheruser
 
-import android.os.Bundle
-
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.fragment.app.viewModels
@@ -13,43 +11,9 @@ import com.example.jeonsilog.viewmodel.OtherUserCalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 
-class OtherUserCalendarFragment: BaseFragment<FragmentOtherUserCalendarBinding>(R.layout.fragment_other_user_calendar) {
+class OtherUserCalendarFragment(private val otherUserId: Int): BaseFragment<FragmentOtherUserCalendarBinding>(R.layout.fragment_other_user_calendar) {
     private val viewModel: OtherUserCalendarViewModel by viewModels()
     private lateinit var adapter: OtherUserCalendarRvAdapter
-//    private lateinit var gestureDetector: GestureDetector
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
-//            override fun onFling(
-//                e1: MotionEvent?,
-//                e2: MotionEvent,
-//                distanceX: Float,
-//                distanceY: Float
-//            ): Boolean {
-//                println(e1 ?: "null")
-//                if (e1 != null && e2 != null) {
-//                    val deltaY = e2.y - e1.y
-//                    println(deltaY)
-//                    if (deltaY > 0) {
-//                        // 위로 스와이프
-//                        viewModel.processVerticalSwipeUp()
-//                    } else if (deltaY < 0) {
-//                        // 아래로 스와이프
-//                        viewModel.processVerticalSwipeDown()
-//                    }
-//                }
-//
-//                return true
-//            }
-//        })
-//
-//        binding.rvOtherUserCalendar.setOnTouchListener { _, event ->
-//            gestureDetector.onTouchEvent(event)
-//            true
-//        }
-    }
 
     override fun init() {
         binding.vm = viewModel
@@ -67,7 +31,7 @@ class OtherUserCalendarFragment: BaseFragment<FragmentOtherUserCalendarBinding>(
         })
 
         viewModel.selectedDate.observe(this){
-            viewModel.getImageList()
+            viewModel.getImageList(otherUserId)
             daysInMonthArray(LocalDate.of(viewModel.selectedDate.value!!.slice(0..3).toInt(), viewModel.selectedDate.value!!.slice(6..7).toInt(), 1))
         }
 
@@ -81,10 +45,10 @@ class OtherUserCalendarFragment: BaseFragment<FragmentOtherUserCalendarBinding>(
         }
 
         binding.ibOtherUserNextMonth.setOnClickListener {
-            viewModel.processVerticalSwipeUp()
+            viewModel.nextMonth()
         }
         binding.ibOtherUserPrevMonth.setOnClickListener {
-            viewModel.processVerticalSwipeDown()
+            viewModel.prevMonth()
         }
     }
 

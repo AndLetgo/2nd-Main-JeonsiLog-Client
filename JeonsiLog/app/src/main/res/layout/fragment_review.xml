@@ -52,7 +52,7 @@
                 app:layout_constraintStart_toEndOf="@id/iv_profile"
                 app:layout_constraintTop_toTopOf="parent"/>
             <com.willy.ratingbar.BaseRatingBar
-                android:id="@+id/rv_exhibition_review"
+                android:id="@+id/brb_exhibition_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srb_numStars="5"
@@ -87,6 +87,7 @@
                 style="@style/M_regular"
                 android:textColor="@color/gray_dark"/>
             <TextView
+                android:id="@+id/tv_reply_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/exhibition_reply"
@@ -97,6 +98,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="@dimen/margin_16"/>
             <TextView
+                android:id="@+id/tv_review_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="어제"

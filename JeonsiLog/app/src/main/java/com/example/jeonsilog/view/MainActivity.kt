@@ -25,6 +25,7 @@ import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -41,6 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
     override fun init() {
+//        Log.d(TAG, "init: ")
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
         binding.bnvMain.setOnItemSelectedListener {
@@ -85,9 +87,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         }else{
             binding.bnvMain.visibility = View.GONE
         }
-        //사용 시 해당 프레그먼트에서 아래처럼 사용하면 됨 (확인 후 이 부분은 지우셔도 됩니다)
-//        val mainActivity = activity as MainActivity
-//        mainActivity.setStateBn(false)
     }
 
     private fun kakaoLogOut(msg: String){
@@ -123,8 +122,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
 
-    fun loadExtraActivity(type:Int){
+    fun loadExtraActivity(type:Int, newExhibitionId:Int){
         extraActivityReference = type
+        exhibitionId = newExhibitionId
         val intent = Intent(this, ExtraActivity::class.java)
         startActivity(intent)
 
