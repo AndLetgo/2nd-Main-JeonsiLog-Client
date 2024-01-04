@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JeonsiLog</string>
+    <string name="app_name">전시로그</string>
 
     <!-- Button -->
     <string name="btn_delete">삭제</string>
