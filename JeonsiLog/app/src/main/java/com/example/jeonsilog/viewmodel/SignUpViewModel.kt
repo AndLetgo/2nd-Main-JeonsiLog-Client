@@ -16,6 +16,10 @@ class SignUpViewModel: ViewModel(){
     private var _checkableFlag = MutableLiveData(false)
     private var _etNick = MutableLiveData("")
     private var _profileImagePath = MutableLiveData("")
+    private var _tosIsCheckedTos = MutableLiveData(false)
+    private var _tosIsCheckedPermissionPhoto = MutableLiveData(false)
+    private var _tosIsCheckedAll = MutableLiveData(false)
+    private var _firstRequest = MutableLiveData(0)
 
     val comment: LiveData<String>
         get() = _comment
@@ -65,5 +69,47 @@ class SignUpViewModel: ViewModel(){
 
     fun setProfileUrl(path: String){
         _profileImagePath.value = path
+    }
+
+    val tosIsCheckedTos: LiveData<Boolean>
+        get() = _tosIsCheckedTos
+
+    val tosIsCheckedPermissionPhoto: LiveData<Boolean>
+        get() = _tosIsCheckedPermissionPhoto
+
+    val tosIsCheckedAll: LiveData<Boolean>
+        get() = _tosIsCheckedAll
+
+    fun changeAll(p: Boolean){
+        _tosIsCheckedTos.value = p
+        _tosIsCheckedPermissionPhoto.value = p
+        _tosIsCheckedAll.value = p
+    }
+
+    fun changeTosTos(p: Boolean){
+        _tosIsCheckedTos.value = p
+
+        _tosIsCheckedAll.value = tosIsCheckedTos.value!! && tosIsCheckedPermissionPhoto.value!!
+    }
+
+    fun changeTosPhoto(p: Boolean){
+        _tosIsCheckedPermissionPhoto.value = p
+
+        _tosIsCheckedAll.value = tosIsCheckedTos.value!! && tosIsCheckedPermissionPhoto.value!!
+    }
+
+    val firstRequest: LiveData<Int>
+        get() = _firstRequest
+
+    fun changeFirstRequest(p: Int){
+        _firstRequest.value = p
+    }
+
+    private var _updateFlag = MutableLiveData(false)
+    val updateFlag: LiveData<Boolean>
+        get() = _updateFlag
+
+    fun setUpdateFlag(p: Boolean){
+        _updateFlag.value = p
     }
 }
