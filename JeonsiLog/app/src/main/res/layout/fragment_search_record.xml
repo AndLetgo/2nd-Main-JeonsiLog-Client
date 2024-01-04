@@ -104,10 +104,13 @@
             android:layout_marginEnd="@dimen/margin_24"
             android:divider="@color/transparent"
             android:dividerHeight="0px"
-            app:layout_constraintBottom_toTopOf="@+id/gl"
+
+            app:layout_constraintBottom_toTopOf="@+id/tv_search_random_title"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_search_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_search_title"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/tv_search_random_title"
@@ -117,29 +120,20 @@
             android:layout_marginStart="@dimen/margin_16"
             android:text="@string/search_random_exhibition"
             android:textColor="@color/basic_black"
+            app:layout_constraintBottom_toTopOf="@+id/ll_search"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lv_search" />
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.6"
-            />
 
         <LinearLayout
             android:id="@+id/ll_search"
             android:layout_width="@dimen/item_0"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_4"
             android:orientation="horizontal"
             android:weightSum="2"
-
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_search_random_title">
+            app:layout_constraintStart_toStartOf="parent">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -155,7 +149,7 @@
                     android:layout_marginTop="@dimen/margin_8"
                     android:layout_marginEnd="@dimen/margin_8"
                     android:layout_marginBottom="@dimen/margin_8"
-                    android:background="@drawable/ic_arrow_back"
+                    android:background="@drawable/shape_edit_reound"
                     app:layout_constraintDimensionRatio="1:1.15"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -165,10 +159,11 @@
                     android:id="@+id/tv_random_01"
                     style="@style/M_medium"
                     android:layout_width="@dimen/item_0"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/item_96"
                     android:layout_marginStart="@dimen/margin_4"
                     android:layout_marginTop="@dimen/margin_4"
                     android:layout_marginEnd="@dimen/margin_4"
+                    android:maxLines="4"
                     android:text="@{search_data.randomExhibitionList[0].exhibitionName}"
                     android:textColor="@color/basic_black"
                     app:layout_constraintEnd_toEndOf="@+id/iv_random_01"
@@ -190,7 +185,7 @@
                     android:layout_marginTop="@dimen/margin_8"
                     android:layout_marginEnd="@dimen/margin_8"
                     android:layout_marginBottom="@dimen/margin_8"
-                    android:background="@drawable/ic_arrow_back"
+                    android:background="@drawable/shape_edit_reound"
                     app:layout_constraintDimensionRatio="1:1.15"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -200,10 +195,11 @@
                     android:id="@+id/tv_random_02"
                     style="@style/M_medium"
                     android:layout_width="@dimen/item_0"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/item_96"
                     android:layout_marginStart="@dimen/margin_4"
                     android:layout_marginTop="@dimen/margin_4"
                     android:layout_marginEnd="@dimen/margin_4"
+                    android:maxLines="4"
                     android:text="@{search_data.randomExhibitionList[1].exhibitionName}"
                     android:textColor="@color/basic_black"
                     app:layout_constraintEnd_toEndOf="@+id/iv_random_02"

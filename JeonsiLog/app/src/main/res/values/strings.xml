@@ -85,6 +85,7 @@
 
     <!-- Search -->
     <string name="search_edit_hint">검색어를 입력하세요</string>
+    <string name="search_exhibition_name">전시회를 검색해 주세요</string>
     <string name="search_recent_title">최근검색어</string>
     <string name="search_title">검색</string>
     <string name="search_random_exhibition">이런 전시회도 있어요</string>
@@ -95,7 +96,7 @@
 
     <!-- PhotoCalendar -->
     <string name="search_photocalendar_title">전시회 포스터 불러오기</string>
-    <string name="search_photocalendar_edit_hint">전시회명을 입력하세요</string>
+    <string name="search_photocalendar_edit_hint">전시회 이름을 입력하세요</string>
     <string name="calendar_mon">월</string>
     <string name="calendar_tue">화</string>
     <string name="calendar_wed">수</string>

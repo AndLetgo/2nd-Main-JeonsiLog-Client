@@ -38,13 +38,6 @@ abstract class BaseFragment<B : ViewDataBinding>(
         _binding = null
         super.onDestroyView()
     }
-//    fun showLoadingDialog(context: Context) {
-//        mLoadingDialog = LoadingDialog(context)
-//        mLoadingDialog.show()
-//    }
-//    fun dismissLoadingDialog() {
-//        if (mLoadingDialog.isShowing) {
-//            mLoadingDialog.dismiss()
-//        }
-//    }
+
+
 }

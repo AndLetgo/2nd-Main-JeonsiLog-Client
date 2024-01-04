@@ -45,8 +45,6 @@ class RecordItemAdapter(
             itemList.removeAt(position)
             viewModel.updateItemList(itemList)
             prefs.setRecorList(itemList)
-
-            //@@
         }
 
         return view

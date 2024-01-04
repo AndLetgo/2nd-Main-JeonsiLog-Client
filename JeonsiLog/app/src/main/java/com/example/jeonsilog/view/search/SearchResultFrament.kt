@@ -17,6 +17,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentSearchRecordBinding
@@ -61,7 +62,12 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
 
         val pagerAdapter = SearchResultAdapter(childFragmentManager, lifecycle,ediytextstr,initialTabPosition,viewModel)
         binding.vpResult.adapter=pagerAdapter
-
+        binding.vpResult.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                // 페이지가 선택될 때 호출
+                binding.tlResult.setScrollPosition(position, 0f, true)
+            }
+        })
         //EditText설정(검색어받아오기)
         binding.etSearchResult.setText(ediytextstr)
         //EditText설정(검색어가 비어있는 경우 X버튼 설정)
