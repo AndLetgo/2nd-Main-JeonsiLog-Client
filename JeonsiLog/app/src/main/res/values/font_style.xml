@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="X_Large">
+        <item name="android:textSize">@dimen/text_20</item>
+        <item name="android:lineSpacingExtra">@dimen/linespacing_28</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <style name="Large">
+        <item name="android:textSize">@dimen/text_18</item>
+        <item name="android:lineSpacingExtra">@dimen/linespacing_26</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <style name="Medium">
+        <item name="android:textSize">@dimen/text_16</item>
+        <item name="android:lineSpacingExtra">@dimen/linespacing_24</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <style name="Small">
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="android:lineSpacingExtra">@dimen/linespacing_22</item>
+        <item name="android:includeFontPadding">false</item>
+
+    </style>
+    <style name="Keyword_bold">
+        <item name="android:textSize">@dimen/text_11</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+
+    <style name="XL_bold" parent="X_Large">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="XL_regular" parent="X_Large">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
+    </style>
+    <style name="L_bold" parent="Large">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="L_regular" parent="Large">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
+    </style>
+    <style name="M_bold" parent="Medium">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="M_medium" parent="Medium">
+        <item name="fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
+    <style name="M_regular" parent="Medium">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
+    </style>
+    <style name="S_bold" parent="Small">
+        <item name="fontFamily">@font/noto_sans_kr_bold</item>
+    </style>
+    <style name="S_regular" parent="Small">
+        <item name="fontFamily">@font/noto_sans_kr_regular</item>
+    </style>
+
+</resources>

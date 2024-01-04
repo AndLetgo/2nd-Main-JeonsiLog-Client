@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.OtherUserCalendarViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_other_user_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/margin_56">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_other_user_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_other_user_year_month"
+                style="@style/XL_bold"
+                android:text="@{vm.selectedDate}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/basic_black"/>
+
+            <ImageButton
+                android:id="@+id/ib_other_user_next_month"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_next"
+                android:background="@color/transparent"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_8"
+                tools:ignore="ContentDescription" />
+
+            <ImageButton
+                android:id="@+id/ib_other_user_prev_month"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="@color/transparent"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_8"
+                tools:ignore="ContentDescription" />
+        </androidx.appcompat.widget.Toolbar>
+        
+        <LinearLayout
+            android:id="@+id/ll_other_user_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_4"
+            app:layout_constraintTop_toBottomOf="@+id/tb_other_user_calendar">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/calendar_sun"
+                style="@style/S_regular"
+                android:textAlignment="center"
+                android:textColor="@color/basic_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/S_regular"
+                android:text="@string/calendar_mon"
+                android:textAlignment="center"
+                android:textColor="@color/basic_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/calendar_tue"
+                android:textAlignment="center"
+                android:textColor="@color/basic_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/calendar_wed"
+                style="@style/S_regular"
+                android:textAlignment="center"
+                android:textColor="@color/basic_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/calendar_thu"
+                style="@style/S_regular"
+                android:textAlignment="center"
+                android:textColor="@color/basic_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/calendar_fri"
+                style="@style/S_regular"
+                android:textAlignment="center"
+                android:textColor="@color/basic_black" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/calendar_sat"
+                style="@style/S_regular"
+                android:textAlignment="center"
+                android:textColor="@color/basic_black" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_other_user_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_other_user_calendar"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/iv_other_user_calendar_empty_img"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/illus_empty_photocalendar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.35"
+            tools:ignore="ContentDescription"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_other_user_calendar_empty_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_other_photocalendar"
+            style="@style/M_bold"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_other_user_calendar_empty_img"
+            android:layout_marginTop="@dimen/margin_20"
+            android:visibility="gone"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

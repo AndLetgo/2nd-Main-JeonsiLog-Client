@@ -1,7 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.JeonsiLog" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.JeonsiLog" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:ambientShadowAlpha">0.2</item>
+        <item name="android:spotShadowAlpha">0</item>
+        <!-- Customize your light theme here. -->
+    </style>
+    
+<!--    <style name="popup_style_right_over" parent="@style/Widget.AppCompat.PopupMenu.Overflow">-->
+<!--        <item name="android:dropDownHorizontalOffset">-100dp</item>-->
+<!--        <item name="android:dropDownVerticalOffset">8dp</item>-->
+<!--        <item name="background">@color/basic_white</item>-->
+<!--    </style>-->
+    <style name="popup_menu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="popupMenuBackground">@drawable/shape_popup_menu</item>
     </style>
 </resources>
