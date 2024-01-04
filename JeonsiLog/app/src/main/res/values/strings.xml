@@ -171,6 +171,11 @@
     <string name="empty_other_rating">기록된 별점이 없어요</string>
     <string name="empty_other_review">기록된 감상평이 없어요</string>
     <string name="empty_other_photocalendar">포토캘린더가 비공개 되어있어요</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- 약관 동의 -->
+    <string name="tos_comment">전시로그를 이용하시려면\n동의가 필요해요</string>
+    <string name="tos_all">전체 동의</string>
+    <string name="tos_tos">개인정보 처리방침 (필수)</string>
+    <string name="tos_permission_photo">사진 접근 권한 동의 (선택)</string>
+    <string name="tos_next">다음</string>
 </resources>
