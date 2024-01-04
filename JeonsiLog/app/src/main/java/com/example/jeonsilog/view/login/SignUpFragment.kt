@@ -165,7 +165,7 @@ class SignUpFragment: BaseFragment<FragmentSignupBinding>(R.layout.fragment_sign
                     if (user != null) {
                         val data = SignUpRequest(
                             providerId = user.id.toString(),
-                            nickname = viewModel.etNick.value!!,
+                            nickname = binding.etNick.text.toString(),
                             email = user.kakaoAccount!!.email.toString(),
                             profileImgUrl = GlobalApplication.testDefalutImg
                         )
