@@ -3,7 +3,6 @@ package com.example.jeonsilog.data.remote.dto.exhibition
 import com.google.gson.annotations.SerializedName
 
 data class SearchResponse(
-
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
@@ -22,10 +21,15 @@ data class SearchInformationEntity(
     @SerializedName("imageUrl")
     val imageUrl: String,
     @SerializedName("place")
-    val place: SearchPlaceEntity
+    val place: SearchPlaceEntity,
+
 )
 
 data class SearchPlaceEntity(
     @SerializedName("placeId")
-    val placeId: Int
+    val placeId: Int,
+    @SerializedName("placeName")
+    val placeName: String,
+    @SerializedName("placeAddress")
+    val placeAddress: String
 )

@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.photocalendar
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,15 +14,24 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.databinding.ViewLoadPageDialogBinding
+import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.view.search.ExhibitionInfoItemAdapter
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 
 
-class LoadPageDialog(private val viewModel: PhotoCalendarViewModel,var cellDate:String) : DialogFragment(),OnItemListener02 {
-
+class LoadPageDialog(private var selectedDate: LocalDate,private val listener: CommunicationListener) : DialogFragment() {
     private var _binding: ViewLoadPageDialogBinding? = null
     private val binding get() = _binding!!
 
@@ -31,14 +41,22 @@ class LoadPageDialog(private val viewModel: PhotoCalendarViewModel,var cellDate:
         savedInstanceState: Bundle?
     ): View? {
         _binding = ViewLoadPageDialogBinding.inflate(inflater, container, false)
-        setEmptyView()
+
         return binding.root
     }
 
-    fun setEmptyView(){
-        binding.ivEmptyLoad.isGone=true
-        binding.tvEmptyLoad01.isGone=true
-        binding.tvEmptyLoad02.isGone=true
+    fun checkEmptyListFalse(){
+        binding.ivEmptyLoad.isVisible=false
+        binding.tvEmptyLoad01.isVisible=false
+        binding.tvEmptyLoad02.isVisible=false
+    }
+    fun checkEmptyListTrue(){
+        binding.ivEmptyLoad.setBackgroundResource(R.drawable.illus_empty_search)
+        binding.ivEmptyLoad.isVisible=true
+        binding.tvEmptyLoad01.isVisible=true
+        binding.tvEmptyLoad01.setText(R.string.empty_search_title)
+        binding.tvEmptyLoad02.isVisible=true
+        binding.tvEmptyLoad02.setText(R.string.empty_search_description)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,8 +85,12 @@ class LoadPageDialog(private val viewModel: PhotoCalendarViewModel,var cellDate:
         params.height = ViewGroup.LayoutParams.MATCH_PARENT
         binding.root.layoutParams = params
         binding.ivRecordDelete.isGone=true
+
         setEditBoxDeleteBt()
         setOnEditorActionListener()
+        showKeyboard()
+
+
     }
 
     fun setOnEditorActionListener(){
@@ -76,17 +98,14 @@ class LoadPageDialog(private val viewModel: PhotoCalendarViewModel,var cellDate:
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
             ) {
-
                 // 키보드의 완료 버튼이 눌렸을 때 수행할 동작
                 var enteredText = binding.etLoadPage.text.toString()
                 if(enteredText.isBlank()) {
                     Toast.makeText(context, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
                 }else{
-                    setLayoutView(findItemIndicesByExhibitionName(viewModel.exhibitionlist,enteredText))
+                    setLayoutView(enteredText)
                     hideSoftKeyboard()
                 }
-
-
                 return@setOnEditorActionListener true
             }
             false
@@ -117,56 +136,52 @@ class LoadPageDialog(private val viewModel: PhotoCalendarViewModel,var cellDate:
         //텍스트 삭제버튼 visibility
         binding.ivRecordDelete.visibility = if (show) View.VISIBLE else View.GONE
     }
-    fun findItemIndicesByExhibitionName(exhibitionList: List<Test_Item>, search: String): List<Int> {
-        val indices = mutableListOf<Int>()
-        for ((index, item) in exhibitionList.withIndex()) {
-            if (item.exhibitionName?.contains(search, ignoreCase = true) == true ||
-                item.exhibitionLocation?.contains(search, ignoreCase = true) == true ||
-                item.exhibitionPlace?.contains(search, ignoreCase = true) == true ||
-                item.exhibitionPrice?.contains(search, ignoreCase = true) == true ||
-                item.exhibitionDate?.contains(search, ignoreCase = true) == true
-            ) {
-                indices.add(index)
-            }
-        }
-        return indices
-    }
-    fun setLayoutView(itemlist: List<Int>){
-        setEmptyView()
+
+    fun setLayoutView(edittext:String){
+
         //리사이클러뷰 제어
         binding.rvLoadPage.layoutManager = LinearLayoutManager(requireContext())
-        var items=extractItemsByIndices(viewModel.exhibitionlist,itemlist)
-        val adapter = context?.let { LoadPageRvAdapter(it,items,viewModel,this,cellDate) }
-        binding.rvLoadPage.adapter = adapter
-        Log.d("TAG", "$items: ")
-        if(items.size==0){
-            binding.ivEmptyLoad.isGone=false
-            binding.tvEmptyLoad01.isGone=false
-            binding.tvEmptyLoad02.isGone=false
-        }
-    }
+        var adapter: LoadPageRvAdapter?
+        var list: List<SearchInformationEntity>?
+        runBlocking(Dispatchers.IO) {
+            val response = ExhibitionRepositoryImpl().searchExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,0)
+            if(response.isSuccessful && response.body()!!.check){
+                val searchExhibitionResponse = response.body()
+                list=searchExhibitionResponse?.informationEntity
+            }
+            else{
+                val searchExhibitionResponse = response.body()
+                list=searchExhibitionResponse?.informationEntity
 
-    fun extractItemsByIndices(exhibitionList: List<Test_Item>, indices: List<Int>): List<Test_Item> {
-        //검색해서 나온 인덱스 리스트를 전시회 리스트에서 추출
-        return indices.mapNotNull { index ->
-            if (index in exhibitionList.indices) {
-                exhibitionList[index]
-            } else {
-                null
             }
         }
+        if (!list.isNullOrEmpty()){
+            adapter = context?.let { LoadPageRvAdapter(it,edittext,list!!.toMutableList(),selectedDate,listener,this) }
+            checkEmptyListFalse()
+        }
+        else{
+            adapter =LoadPageRvAdapter(requireContext(),edittext,list?.toMutableList() ?: mutableListOf(),selectedDate,listener,this)
+            checkEmptyListTrue()
+        }
+        binding.rvLoadPage.adapter = adapter
     }
+
     private fun hideSoftKeyboard() {
         val imm =
             requireActivity().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view?.windowToken, 0)
     }
+    private fun showKeyboard() {
+        view?.postDelayed({
+            Log.d("TAG", "showKeyboard: ")
+            binding.etLoadPage.requestFocus()
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.etLoadPage, InputMethodManager.SHOW_IMPLICIT)
+        }, 130)
+
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onItemClick() {
-        dismiss()
     }
 }

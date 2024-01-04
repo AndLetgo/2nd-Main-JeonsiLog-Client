@@ -1,11 +1,13 @@
 package com.example.jeonsilog.repository.calendar
 
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.calendar.DeletePhotoRequest
 import com.example.jeonsilog.data.remote.dto.calendar.GetPhotoResponse
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromGalleryRequest
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromPosterRequest
-import com.example.jeonsilog.data.remote.dto.calendar.UploadImageReqEntity
+
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -40,13 +42,13 @@ interface CalendarRepository {
     @POST("/api/calendars/image")
     suspend fun postPhotoFromGallery(
         @Header("Authorization") token: String,
-        @Part("uploadImageReq") uploadImageReq: PostPhotoFromGalleryRequest,
+        @Part("uploadImageReq") uploadImageReq: RequestBody,
         @Part img: MultipartBody.Part,
     ): Response<OnlyMsgResponse>
 
     @DELETE("/api/calendars")
     suspend fun deletePhoto(
         @Header("Authorization") token: String,
-        @Body body: UploadImageReqEntity
+        @Body body: DeletePhotoRequest
     ): Response<OnlyMsgResponse>
 }
