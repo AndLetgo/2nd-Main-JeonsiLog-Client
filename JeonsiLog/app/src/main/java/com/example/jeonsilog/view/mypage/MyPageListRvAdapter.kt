@@ -81,11 +81,11 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowProfile.setOnClickListener{
-                (context as MainActivity).moveOtherUserProfile(data.followUserId)
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId)
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
             }
         }
     }
@@ -113,11 +113,11 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowingProfile.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId)
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId)
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
             }
         }
     }
