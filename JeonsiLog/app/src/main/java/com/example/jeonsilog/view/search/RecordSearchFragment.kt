@@ -22,6 +22,7 @@ import com.example.jeonsilog.data.remote.dto.ExhibitionRandom
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.databinding.FragmentSearchRecordBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -98,6 +99,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                 //랜덤이미지 로드 실패시
 
             }
+            //클릭 처리
         }
 
     }
@@ -137,9 +139,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                     addItem(enteredText)
                     prefs.setRecorList(itemList)
                     //프래그먼트 전환 코드
-
-                    (parentFragment as? SearchFragment)?.replaceFragment(SearchResultFrament(enteredText))
-
+                    (context as MainActivity).moveSearchResultFrament(enteredText)
                     hideSoftKeyboard(requireActivity())
                     return@setOnEditorActionListener true
                 }

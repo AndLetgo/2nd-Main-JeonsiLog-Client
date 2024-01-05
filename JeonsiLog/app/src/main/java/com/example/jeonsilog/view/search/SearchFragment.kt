@@ -9,17 +9,11 @@ import android.view.ViewGroup
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentSearchBinding
+import com.example.jeonsilog.view.MainActivity
 
-class SearchFragment : BaseFragment<FragmentSearchBinding>(
+class SearchFragment(val fragment: Fragment) : BaseFragment<FragmentSearchBinding>(
     R.layout.fragment_search) {
     override fun init() {
-        replaceFragment(RecordSearchFragment())
-    }
-
-    fun replaceFragment(fragment: Fragment) {
-        val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.fl_search, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        (context as MainActivity).moveRecordSearchFragment()
     }
 }

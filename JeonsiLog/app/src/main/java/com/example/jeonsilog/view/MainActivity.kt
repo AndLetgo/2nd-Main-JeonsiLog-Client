@@ -24,8 +24,10 @@ import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.view.otheruser.OtherUserFragment
+import com.example.jeonsilog.view.search.RecordSearchFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
+import com.example.jeonsilog.view.search.SearchResultFrament
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 
@@ -54,7 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 }
                 R.id.item_search->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,
-                        SearchFragment()
+                        SearchFragment(RecordSearchFragment())
                     ).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_photoCalendar->{
@@ -171,4 +173,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 .commit()
         }
     }
+    fun moveRecordSearchFragment(){
+        val fragment = RecordSearchFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+    fun moveSearchResultFrament(str :String){
+        val fragment = SearchResultFrament(str)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
 }

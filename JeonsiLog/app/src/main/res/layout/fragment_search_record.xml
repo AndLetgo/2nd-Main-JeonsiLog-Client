@@ -55,6 +55,8 @@
                 android:drawableLeft="@drawable/ic_search"
                 android:hint="검색어를 입력하세요"
                 android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:paddingStart="@dimen/margin_8"
                 android:textColor="@color/gray_dark"
                 android:textColorHint="@color/gray_medium"
