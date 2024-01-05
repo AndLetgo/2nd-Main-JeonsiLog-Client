@@ -60,19 +60,22 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.tvMypageInterestTitle.text = data.exhibitionName
             binding.tvMypageInterestAddress.text = data.placeName
 
-            binding.tvMypageInterestKeywordBefore.visibility = View.GONE
-            binding.tvMypageInterestKeywordOn.visibility = View.GONE
-            binding.tvMypageInterestKeywordFree.visibility = View.GONE
+            when(data.operatingKeyword){
+                "ON_DISPLAY" -> binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
+                "BEFORE_DISPLAY" -> binding.tvMypageInterestKeywordBefore.visibility = View.VISIBLE
+                else -> {
+                    binding.tvMypageInterestKeywordBefore.visibility = View.GONE
+                    binding.tvMypageInterestKeywordOn.visibility = View.GONE
+                }
+            }
 
-            if(data.operatingKeyword == "시작전"){
-                binding.tvMypageInterestKeywordBefore.visibility = View.VISIBLE
+            when(data.priceKeyword){
+                "FREE" -> binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
+                else -> binding.tvMypageInterestKeywordFree.visibility = View.GONE
             }
-            if(data.operatingKeyword == "전시중"){
-                binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
-            }
-            if(data.priceKeyword == "무료"){
-                binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
-            }
+
+//            "ON_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_on)
+//            "BEFORE_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_before)
 
             binding.ibMypageInterest.setOnClickListener {
                 list.removeAt(adapterPosition)
