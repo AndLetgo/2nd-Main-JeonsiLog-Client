@@ -11,6 +11,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
@@ -34,6 +36,8 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibition
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
     private val tag = this.javaClass.simpleName
+    private var backPressedTime: Long = 0L
+
     private val REQUIRED_PERMISSONS = if(Build.VERSION.SDK_INT < 33){
         arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -45,8 +49,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         )
     }
 
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if(supportFragmentManager.backStackEntryCount != 0){
+                supportFragmentManager.popBackStack()
+            } else {
+                if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                    finish()
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    Toast.makeText(applicationContext, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     override fun init() {
-//        Log.d(TAG, "init: ")
+        this.onBackPressedDispatcher.addCallback(this, callback)
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
         binding.bnvMain.setOnItemSelectedListener {
