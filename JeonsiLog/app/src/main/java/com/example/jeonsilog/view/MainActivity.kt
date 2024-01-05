@@ -23,6 +23,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
+import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
@@ -148,5 +149,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             !(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         }
+    }
+
+
+    // 타 유저 프로필로 이동(해당 유저 아이디 필요)
+    fun moveOtherUserProfile(otherUserId: Int){
+        val fragment = OtherUserFragment(otherUserId)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
