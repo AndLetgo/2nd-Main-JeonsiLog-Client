@@ -69,6 +69,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
     }
 
     private fun loadImage(){
+        //(context as MainActivity).
         GlideApp.with(this)
             .load(viewModel.profileImg.value)
             .optionalCircleCrop()
