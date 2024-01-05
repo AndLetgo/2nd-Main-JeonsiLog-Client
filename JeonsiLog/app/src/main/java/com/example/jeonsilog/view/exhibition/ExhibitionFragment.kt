@@ -1,21 +1,12 @@
 package com.example.jeonsilog.view.exhibition
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Context.CLIPBOARD_SERVICE
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -24,12 +15,9 @@ import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
-import com.example.jeonsilog.data.remote.dto.rating.PostRatingRequest
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
-import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
-import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ReviewViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -40,7 +28,7 @@ import kotlinx.coroutines.runBlocking
 
 class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition) {
     private lateinit var exhibitionRvAdapter: ExhibitionReviewRvAdapter
-    private var exhibitionInfoData: ExhibitionInfo? = null
+    private var data: ExhibitionInfo? = null
     private var thisExhibitionId = 0
     private lateinit var reviewList: MutableList<GetReviewsExhibitionInformationEntity>
     private val reviewViewModel: ReviewViewModel by activityViewModels()
@@ -72,13 +60,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         //RecyclerView
         getReviewInfo()
 
-//        binding.tbInterest.isChecked = true
-
         //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
-            val bundle = Bundle()
-            bundle.putInt("exhibitionId", thisExhibitionId)
-            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment, bundle)
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment)
         }
 
         //포스터
@@ -90,50 +74,14 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         binding.llExhibitionPlace.setOnClickListener {
 //            val bundle = bundleOf("placeId" to (data?.place?.placeId ?: ""))
             val bundle = Bundle()
-            bundle.putInt("placeId", exhibitionInfoData!!.place.placeId)
-            bundle.putString("placeName", exhibitionInfoData!!.place.placeName)
+            bundle.putInt("placeId", data!!.place.placeId)
+            bundle.putString("placeName", data!!.place.placeName)
             Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment,bundle)
-        }
-
-        //Interest
-        binding.tbInterest.setOnCheckedChangeListener { _, isChecked ->
-            when(isChecked){
-                true -> {
-                    runBlocking(Dispatchers.IO){
-                        val response = InterestRepositoryImpl().postInterest(encryptedPrefs.getAT(), thisExhibitionId)
-                        if(response.isSuccessful && response.body()!!.check){
-                            Log.d("interest", "init: 등록 성공")
-                        }
-                    }
-                }
-                false ->{
-                    runBlocking(Dispatchers.IO) {
-                        val response = InterestRepositoryImpl().deleteInterest(encryptedPrefs.getAT(), thisExhibitionId)
-                        if(response.isSuccessful && response.body()!!.check){
-                            Log.d("interest", "init: 삭제 성공")
-                        }
-                    }
-                }
-            }
-        }
-        //Call
-        binding.ibCall.setOnClickListener {
-            //null 처리 필요
-            val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.tel)
-            clipboardManager.setPrimaryClip(clipData)
-            Toast.makeText(requireContext(), "copy success", Toast.LENGTH_SHORT).show()
-        }
-        //Link
-        binding.ibGoWeb.setOnClickListener {
-            //null 처리 필요
-            var intent = Intent(Intent.ACTION_VIEW, Uri.parse(exhibitionInfoData?.place?.homePage))
-            startActivity(intent)
         }
     }
 
     private fun getExhibitionInfo(){
-        exhibitionInfoData = runBlocking(Dispatchers.IO) {
+        data = runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(), thisExhibitionId)
             if(response.isSuccessful && response.body()!!.check){
                 response.body()!!.information
@@ -143,74 +91,26 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
 
         Glide.with(requireContext())
-            .load(exhibitionInfoData?.imageUrl)
+            .load(data?.imageUrl)
             .into(binding.ivPosterImage)
 
-        binding.tvExhibitionName.text = exhibitionInfoData?.exhibitionName
-        binding.tvAddress.text = exhibitionInfoData?.place?.address
+        binding.tvExhibitionName.text = data?.exhibitionName
+        binding.tvAddress.text = data?.place?.address
 
-        if(exhibitionInfoData?.place?.placeName !=null){
-            binding.tvPlaceName.text = exhibitionInfoData?.place?.placeName
+        if(data?.place?.placeName !=null){
+            binding.tvPlaceName.text = data?.place?.placeName
         }else{
             binding.llExhibitionPlace.visibility = View.GONE
         }
 
         var date = ""
-        if(exhibitionInfoData?.startDate!=null){
-            date = subStringDate(exhibitionInfoData!!.startDate) + " ~ " + subStringDate(exhibitionInfoData!!.endDate)
+        if(data?.startDate!=null){
+            date = subStringDate(data!!.startDate) + " ~ " + subStringDate(data!!.endDate)
         }
         binding.tvDate.text = date
 
-        //전시회 정보
-        Log.d("information", "getExhibitionInfo: ${exhibitionInfoData?.information}")
-        if(exhibitionInfoData?.information!=null){
-            Log.d("information", "getExhibitionInfo: not null")
-//            binding.tvInformation.text = exhibitionInfoData?.information
-            binding.tvInformation.text ="많은 화제가 되고 있는 류지안 작가의 신작과 MOONLIGHT 시리즈, HERITAGE 시리즈, THE MOON 작품을 비롯하여, 김종언 작가님의 밤새… 시리즈를 만나보실 수 있습니다. 더불어 김동우 작가님의 조각상도 함께 만나보세요."
-            Log.d("information", "getExhibitionInfo: lineHeight: ${binding.tvInformation.height}")
-            if(binding.tvInformation.height>=3){
-                binding.tvReadMoreInfo.visibility = View.VISIBLE
-            }else{
-                binding.tvReadMoreInfo.visibility = View.GONE
-            }
-        }else{
-            Log.d("information", "getExhibitionInfo: null")
-            binding.tvInfoTitle.visibility = View.GONE
-            binding.tvInformation.visibility = View.GONE
-            binding.tvReadMoreInfo.visibility = View.GONE
-        }
-
-        //별점 조회
-        binding.tvRatingRate.text = exhibitionInfoData?.rate.toString()
-        //별점 등록
-        binding.ratingBar.setOnRatingChangeListener { _, rating, _ ->
-            if(rating <= 0.5){
-                runBlocking(Dispatchers.IO) {
-                    val response = RatingRepositoryImpl().deleteRating(encryptedPrefs.getAT(), exhibitionId)
-                    if(response.isSuccessful && response.body()!!.check){
-                        Log.d("rating", "deleteRating: suceessful")
-                    }
-                }
-            }else{
-                runBlocking(Dispatchers.IO) {
-                    val post = PostRatingRequest(thisExhibitionId, rating.toDouble())
-                    val response = RatingRepositoryImpl().patchRating(encryptedPrefs.getAT(), post)
-                    if(response.isSuccessful && response.body()!!.check){
-                        Log.d("rating", "patchRating: suceessful")
-                    }else{
-                        runBlocking(Dispatchers.IO) {
-                            val post = PostRatingRequest(thisExhibitionId, rating.toDouble())
-                            val response = RatingRepositoryImpl().postRating(encryptedPrefs.getAT(), post)
-                            if(response.isSuccessful && response.body()!!.check){
-                                Log.d("rating", "postRating: suceessful")
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-
+        val sampleText = "많은 화제가 되고 있는 류지안 작가의 신작과 MOONLIGHT 시리즈, HERITAGE 시리즈, THE MOON 작품을 비롯하여, 김종언 작가님의 밤새… 시리즈를 만나보실 수 있습니다. 더불어 김동우 작가님의 조각상도 함께 만나보세요."
+        binding.tvInformation.text = sampleText
         var check = true
         binding.tvReadMoreInfo.setOnClickListener {
             if(check){

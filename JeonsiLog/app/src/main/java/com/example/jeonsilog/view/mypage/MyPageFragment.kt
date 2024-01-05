@@ -63,10 +63,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         }.attach()
 
         binding.ibMypageNickEdit.setOnClickListener {
+            Log.d("TAG", "editNick")
             showCustomDialog()
         }
 
         binding.ibMypageProfileEdit.setOnClickListener {
+            Log.d("TAG", "editProfile")
             bottomSheetDialog.show()
         }
 

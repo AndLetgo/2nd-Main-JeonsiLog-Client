@@ -4,14 +4,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
+import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
+import com.example.jeonsilog.viewmodel.ExhibitionModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 

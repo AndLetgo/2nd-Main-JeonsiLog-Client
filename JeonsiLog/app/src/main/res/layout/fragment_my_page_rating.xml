@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="76dp"
+            android:layout_marginBottom="@dimen/margin_56"
             android:layout_marginHorizontal="@dimen/margin_20"
             app:layout_constraintTop_toTopOf="parent" />
 

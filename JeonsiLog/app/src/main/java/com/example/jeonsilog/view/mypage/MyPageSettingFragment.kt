@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import com.example.jeonsilog.BuildConfig
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentMyPageSettingBinding
@@ -26,7 +25,7 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
 
         binding.switchMypageSettingFollowing.isChecked = encryptedPrefs.getIsRecvFollowing()
         binding.switchMypageSettingActivity.isChecked = encryptedPrefs.getIsRecvActive()
-        binding.tvMypageSettingVersion.text = getString(R.string.setting_version, BuildConfig.VERSION_NAME)
+        binding.tvMypageSettingVersion.text = getString(R.string.setting_version, "0.0.1")
 
         binding.switchMypageSettingFollowing.setOnCheckedChangeListener { _, _ ->
             runBlocking(Dispatchers.IO){

@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.jeonsilog.R
-import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 
@@ -30,15 +29,15 @@ class RecordItemAdapter(
         val view = inflater.inflate(mResource, parent, false)
 
         val itemTextView: TextView = view.findViewById(R.id.SearchTx)
-        val itemVㅑew: ConstraintLayout = view.findViewById(R.id.item_search_record)
+        val itemVIew: ConstraintLayout = view.findViewById(R.id.item_search_record)
         val deleteButton: ImageView = view.findViewById(R.id.deleteBt)
 
         val currentItem: String = getItem(position).toString()
         var itemList= prefs.getRecorList()
         //@@
         itemTextView.text = currentItem
-        itemVㅑew.setOnClickListener {
-            (context as MainActivity).moveSearchResultFrament(currentItem)
+        itemVIew.setOnClickListener {
+            frag?.replaceFragment(SearchResultFrament(currentItem))
         }
         deleteButton.setOnClickListener {
             remove(currentItem)

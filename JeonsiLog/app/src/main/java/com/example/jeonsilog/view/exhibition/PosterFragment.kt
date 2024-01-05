@@ -38,7 +38,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
         viewPager = binding.vpPoster
 
         posterList = mutableListOf()
-
+//        val poster =
         runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getPoster(encryptedPrefs.getAT(), exhibitionId)
             if(response.isSuccessful && response.body()!!.check){

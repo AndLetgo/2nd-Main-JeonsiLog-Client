@@ -10,8 +10,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionPlaceBinding
+import com.example.jeonsilog.databinding.ItemReviewReplyBinding
+import com.example.jeonsilog.view.home.HomeRvAdapter
+import com.example.jeonsilog.viewmodel.ExhibitionModel
 
 class ExhibitionPlaceRvAdapter(private val placeList: List<GetPlacesInformationEntity>, private val context: Context) :
     RecyclerView.Adapter<ExhibitionPlaceRvAdapter.RecycleViewHolder>() {

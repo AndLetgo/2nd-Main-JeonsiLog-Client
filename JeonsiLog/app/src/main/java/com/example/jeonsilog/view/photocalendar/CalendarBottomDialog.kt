@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import com.example.jeonsilog.databinding.ViewCalendarDialogBinding
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -23,8 +22,6 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
         _binding = ViewCalendarDialogBinding.inflate(inflater, container, false)
         setDateDialog(date)
         setDate()
-        dialog?.getWindow()?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-
         //이동버튼
         binding.tvMove.setOnClickListener {
             //뷰모델에 선택 날짜 저장

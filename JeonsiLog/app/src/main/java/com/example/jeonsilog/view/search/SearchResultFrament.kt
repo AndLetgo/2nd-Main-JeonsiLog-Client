@@ -22,14 +22,11 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentSearchRecordBinding
 import com.example.jeonsilog.databinding.FragmentSearchResultBinding
-import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 
 class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
     lateinit var itemList: ArrayList<String>
@@ -46,6 +43,7 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
         setLayoutView()
         addTextChangedListener()    //EditText의 검색어가 변경될경우(EditTextdml x버튼 제어)
         setOnEditorActionListener() //EditText 검색기능 수행
+
         //x버튼
         binding.ivResultDelete.setOnClickListener {
             binding.etSearchResult.text.clear()
@@ -160,13 +158,14 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
 
     }
     fun onBackPressedDispatcher(){
-        Log.d("onBackPressedDispatcher", "onBackPressedDispatcher: ")
-        //메인의 moveOtherUserProfile 호출 후 replaceFragment호출
-
         //뒤로가기 버튼 처리
+        requireActivity().onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // 뒤로 가기 시 실행되는 코드
+                (parentFragment as? SearchFragment)?.replaceFragment(RecordSearchFragment())
 
-
-
+            }
+        })
     }
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -184,7 +183,6 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
     override fun onDestroyView() {
         super.onDestroyView()
         bottomNavigationView?.visibility = View.VISIBLE
-
     }
 
 

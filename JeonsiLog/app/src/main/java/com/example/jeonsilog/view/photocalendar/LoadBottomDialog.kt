@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
-import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.calendar.DeletePhotoRequest
 import com.example.jeonsilog.data.remote.dto.calendar.GetPhotoInformation
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromGalleryRequest
@@ -57,7 +56,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate,
         savedInstanceState: Bundle?
     ): View? {
         _binding = ViewLoadDialogBinding.inflate(inflater, container, false)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
+
         SetDeleteImage()
         setBtLoadPoster()
         setBtLoadImage()

@@ -3,11 +3,7 @@ package com.example.jeonsilog.view.mypage
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.interest.GetInterestInformationEntity
 import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
@@ -47,7 +43,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.tvMypageReviewTitle.text = data.exhibitionName
             binding.tvMypageReviewContent.text = data.contents
 
-            // 클릭리스너 - 해당 전시회 상세 페이지로 이동로 이동
+            // 클릭리스너 - 해당 전시회 상세 페이지
             itemView.setOnClickListener {
 
             }
@@ -58,46 +54,34 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
         fun bind(data: GetInterestInformationEntity) {
             GlideApp.with(binding.ivMypageInterestExhibitionImg)
                 .load(data.imageUrl)
-                .transform(CenterCrop(), RoundedCorners(16))
+                .centerCrop()
                 .into(binding.ivMypageInterestExhibitionImg)
 
             binding.tvMypageInterestTitle.text = data.exhibitionName
+            binding.tvMypageInterestAddress.text = data.placeName
 
-            binding.tvMypageInterestAddress.text = placeName(data.placeName)
+            binding.tvMypageInterestKeywordBefore.visibility = View.GONE
+            binding.tvMypageInterestKeywordOn.visibility = View.GONE
+            binding.tvMypageInterestKeywordFree.visibility = View.GONE
 
-            when(data.operatingKeyword){
-                "ON_DISPLAY" -> binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
-                "BEFORE_DISPLAY" -> binding.tvMypageInterestKeywordBefore.visibility = View.VISIBLE
-                else -> {
-                    binding.tvMypageInterestKeywordBefore.visibility = View.GONE
-                    binding.tvMypageInterestKeywordOn.visibility = View.GONE
-                }
+            if(data.operatingKeyword == "시작전"){
+                binding.tvMypageInterestKeywordBefore.visibility = View.VISIBLE
             }
-
-            when(data.priceKeyword){
-                "FREE" -> binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
-                else -> binding.tvMypageInterestKeywordFree.visibility = View.GONE
+            if(data.operatingKeyword == "전시중"){
+                binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
             }
-
-            var state = true
-            binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_active)
+            if(data.priceKeyword == "무료"){
+                binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
+            }
 
             binding.ibMypageInterest.setOnClickListener {
-//                list.removeAt(adapterPosition)
-//                notifyItemRemoved(adapterPosition)
-                if(state){
-                    binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_inactive)
-                    CoroutineScope(Dispatchers.IO).launch{
-                        InterestRepositoryImpl().deleteInterest(encryptedPrefs.getAT(), data.exhibitionId)
-                    }
-                } else {
-                    binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_active)
-                    CoroutineScope(Dispatchers.IO).launch{
-                        InterestRepositoryImpl().postInterest(encryptedPrefs.getAT(), data.exhibitionId)
-                    }
-                }
+                list.removeAt(adapterPosition)
+                notifyItemRemoved(adapterPosition)
 
-                state = !state
+                // 서버에 즐겨찾기 해제 요청
+                CoroutineScope(Dispatchers.IO).launch{
+                    InterestRepositoryImpl().deleteInterest(encryptedPrefs.getAT(), data.exhibitionId)
+                }
             }
 
             // 클릭리스너 - 해당 전시회 상세 페이지
@@ -165,18 +149,5 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
 
     override fun getItemViewType(position: Int): Int {
         return type
-    }
-
-    private fun placeName(input: String?): String {
-        return if(input.isNullOrEmpty()){
-            ""
-        } else {
-            val index = input.indexOf('(')
-            if (index != -1) {
-                input.substring(0, index)
-            } else {
-                input
-            }
-        }
     }
 }

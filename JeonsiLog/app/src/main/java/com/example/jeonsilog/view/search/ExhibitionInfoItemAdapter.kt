@@ -19,7 +19,6 @@ import com.example.jeonsilog.data.remote.dto.ExhibitionInfoItem
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
-import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -104,7 +103,6 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
         holder.itemView.setOnClickListener {
             //@@클릭처리
             //전시회 id
-            (context as MainActivity).loadExtraActivity(0, item.exhibitionId)
         }
 
 

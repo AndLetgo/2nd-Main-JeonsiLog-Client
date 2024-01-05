@@ -81,7 +81,7 @@
     <string name="exhibition_writing_review">감상평 작성하기</string>
     <string name="exhibition_writing_review_hint">여기에 감상평을 입력하세요!</string>
     <string name="exhibition_reply_hint">댓글을 남겨 보세요!</string>
-    <string name="exhibition_writing_review_count">(%1$s/1000)</string>
+    <string name="exhibition_writing_review_count">(%d/1000)</string>
 
     <!-- Search -->
     <string name="search_edit_hint">검색어를 입력하세요</string>

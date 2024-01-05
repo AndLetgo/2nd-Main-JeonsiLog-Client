@@ -1,6 +1,7 @@
 package com.example.jeonsilog.data.remote
 
 import com.example.jeonsilog.BuildConfig
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -21,15 +22,20 @@ object RetrofitClient {
         return interceptor
     }
 
-    private val client = OkHttpClient().newBuilder()
+    private fun tokenRefreshInterceptor(): Authenticator {
+        return TokenRefreshInterceptor()
+    }
+
+    private val interceptor = OkHttpClient().newBuilder()
         .addNetworkInterceptor(loggingInterceptor())
-        .authenticator(TokenRefreshInterceptor())
+        .authenticator(tokenRefreshInterceptor())
         .build()
+
 
     fun getRetrofit(): Retrofit? {
         return retrofit ?: Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
-            .client(client)
+            .client(interceptor)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
