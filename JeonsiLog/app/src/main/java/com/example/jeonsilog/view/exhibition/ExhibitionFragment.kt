@@ -76,7 +76,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
-            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment)
+            val bundle = Bundle()
+            bundle.putInt("exhibitionId", thisExhibitionId)
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment, bundle)
         }
 
         //포스터
