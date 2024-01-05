@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.data.remote.dto.interest.GetInterestInformationEntity
 import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
@@ -43,7 +45,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.tvMypageReviewTitle.text = data.exhibitionName
             binding.tvMypageReviewContent.text = data.contents
 
-            // 클릭리스너 - 해당 전시회 상세 페이지
+            // 클릭리스너 - 해당 전시회 상세 페이지로 이동로 이동
             itemView.setOnClickListener {
 
             }
@@ -54,24 +56,24 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
         fun bind(data: GetInterestInformationEntity) {
             GlideApp.with(binding.ivMypageInterestExhibitionImg)
                 .load(data.imageUrl)
-                .centerCrop()
+                .transform(CenterCrop(), RoundedCorners(16))
                 .into(binding.ivMypageInterestExhibitionImg)
 
             binding.tvMypageInterestTitle.text = data.exhibitionName
             binding.tvMypageInterestAddress.text = data.placeName
 
-            binding.tvMypageInterestKeywordBefore.visibility = View.GONE
-            binding.tvMypageInterestKeywordOn.visibility = View.GONE
-            binding.tvMypageInterestKeywordFree.visibility = View.GONE
+            when(data.operatingKeyword){
+                "ON_DISPLAY" -> binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
+                "BEFORE_DISPLAY" -> binding.tvMypageInterestKeywordBefore.visibility = View.VISIBLE
+                else -> {
+                    binding.tvMypageInterestKeywordBefore.visibility = View.GONE
+                    binding.tvMypageInterestKeywordOn.visibility = View.GONE
+                }
+            }
 
-            if(data.operatingKeyword == "시작전"){
-                binding.tvMypageInterestKeywordBefore.visibility = View.VISIBLE
-            }
-            if(data.operatingKeyword == "전시중"){
-                binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
-            }
-            if(data.priceKeyword == "무료"){
-                binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
+            when(data.priceKeyword){
+                "FREE" -> binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
+                else -> binding.tvMypageInterestKeywordFree.visibility = View.GONE
             }
 
             binding.ibMypageInterest.setOnClickListener {

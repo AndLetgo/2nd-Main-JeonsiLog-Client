@@ -82,11 +82,13 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
             }
 
             binding.ivOtherUserListFollowProfile.setOnClickListener{
-                moveOtherUserProfile(data.followUserId)
+
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
             }
 
             binding.tvOtherUserListFollowNick.setOnClickListener {
-                moveOtherUserProfile(data.followUserId)
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+
             }
         }
     }
