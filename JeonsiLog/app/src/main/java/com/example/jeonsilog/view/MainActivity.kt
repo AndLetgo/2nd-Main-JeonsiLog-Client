@@ -153,8 +153,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
 
     // 타 유저 프로필로 이동(해당 유저 아이디 필요)
-    fun moveOtherUserProfile(otherUserId: Int){
-        val fragment = OtherUserFragment(otherUserId)
+    fun moveOtherUserProfile(otherUserId: Int, otherUserNick: String){
+        val fragment = OtherUserFragment(otherUserId, otherUserNick)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_main, fragment)
             .addToBackStack(null)
