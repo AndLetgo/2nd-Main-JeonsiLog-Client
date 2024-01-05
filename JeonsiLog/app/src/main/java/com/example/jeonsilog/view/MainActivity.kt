@@ -26,6 +26,7 @@ import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 
 
@@ -154,10 +155,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
     // 타 유저 프로필로 이동(해당 유저 아이디 필요)
     fun moveOtherUserProfile(otherUserId: Int, otherUserNick: String){
-        val fragment = OtherUserFragment(otherUserId, otherUserNick)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_main, fragment)
-            .addToBackStack(null)
-            .commit()
+        if(otherUserId == encryptedPrefs.getUI()){
+            binding.bnvMain.selectedItemId = R.id.item_mypage
+
+            val fragment = MyPageFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_main, fragment)
+                .addToBackStack(null)
+                .commit()
+        } else {
+            val fragment = OtherUserFragment(otherUserId, otherUserNick)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_main, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

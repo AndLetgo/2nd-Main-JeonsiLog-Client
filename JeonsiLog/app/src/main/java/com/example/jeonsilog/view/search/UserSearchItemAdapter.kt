@@ -54,7 +54,7 @@ class UserSearchItemAdapter(private val context: Context,private val edittext:St
 
 
         holder.itemView.setOnClickListener {
-            (context as MainActivity).moveOtherUserProfile(item.userId)
+            (context as MainActivity).moveOtherUserProfile(item.userId, item.nickname)
         }
 
     }
