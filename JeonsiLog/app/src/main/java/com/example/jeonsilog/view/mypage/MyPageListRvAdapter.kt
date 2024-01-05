@@ -170,7 +170,7 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
     }
 
     private fun moveOtherUserProfile(otherUserId: Int){
-        val fragment = OtherUserFragment(otherUserId)
+        val fragment = OtherUserFragment(otherUserId,"")
         (context as MainActivity).supportFragmentManager.beginTransaction()
             .replace(R.id.fl_main, fragment)
             .addToBackStack(null)

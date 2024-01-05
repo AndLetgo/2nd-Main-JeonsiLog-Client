@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.otheruser
 
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -55,7 +56,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
         }.attach()
 
         binding.tvOtherUserFollow.setOnClickListener {
-            val transaction = requireActivity().supportFragme
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fl_main, OtherUserListFragment(0, otherUserId, otherUserNick))
 
             transaction.addToBackStack(null)

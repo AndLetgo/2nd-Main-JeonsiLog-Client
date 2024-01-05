@@ -21,7 +21,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 
-class UserSearchItemAdapter(private val context: Context,private val edittext:String, private val list:MutableList <SearchUserInformationEntity>) : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
+class UserSearchItemAdapter(
+    private val context: Context,private val edittext:String, private val list:MutableList <SearchUserInformationEntity>)
+    : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
     var itemPage=0
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val usernameTextView: TextView = view.findViewById(R.id.tv_user_name)
@@ -38,12 +40,13 @@ class UserSearchItemAdapter(private val context: Context,private val edittext:St
         val item = list[position]
         //list.size가 position 보다 커야함
         //list의 마지막요소가 아닌 마지막 전요소에서 비교
-        if (list.size>5){
-            if (list.size-4==position){
-                itemPage+=1
+        if (list.size > 5) {
+            if (list.size - 4 == position) {
+                itemPage += 1
                 runBlocking(Dispatchers.IO) {
-                    val response = UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(),edittext)
-                    if(response.isSuccessful && response.body()!!.check){
+                    val response =
+                        UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), edittext)
+                    if (response.isSuccessful && response.body()!!.check) {
                         val searchUserResponse = response.body()
                         list.addAll(searchUserResponse?.informationEntity!!.toMutableList())
                     }
@@ -59,13 +62,13 @@ class UserSearchItemAdapter(private val context: Context,private val edittext:St
         holder.itemView.setOnClickListener {
             //유저 id
 
-        holder.itemView.setOnClickListener {
-            (context as MainActivity).moveOtherUserProfile(item.userId, item.nickname)
+            holder.itemView.setOnClickListener {
+                (context as MainActivity).moveOtherUserProfile(item.userId, item.nickname)
+
+            }
 
         }
-
     }
-
     override fun getItemCount(): Int {
         return list.size
     }
