@@ -8,3 +8,7 @@ data class ExhibitionInfoItem(
     val exhibitionPrice: String?,
     val exhibitionDate: String?
 )
+data class ExhibitionRandom(
+    val exhibitionImg: String?,
+    val exhibitionName: String?
+)

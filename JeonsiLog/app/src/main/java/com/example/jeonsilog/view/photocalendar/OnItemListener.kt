@@ -1,4 +1,7 @@
 package com.example.jeonsilog.view.photocalendar
 
-interface OnItemListener {    fun onItemClick(dayText: String)
+import java.time.LocalDate
+
+interface OnItemListener {    fun onItemClick(itemDate: LocalDate)
+
 }

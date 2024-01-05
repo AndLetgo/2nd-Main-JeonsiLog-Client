@@ -5,7 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class PostPhotoFromGalleryRequest (
 
     @SerializedName("uploadImageReq")
-    val uploadImageReq: UploadImageReqEntity
+    val uploadImageReq: UploadImageReqEntity,
+    @SerializedName("img")
+    val img: String,
 )
 
 data class UploadImageReqEntity(

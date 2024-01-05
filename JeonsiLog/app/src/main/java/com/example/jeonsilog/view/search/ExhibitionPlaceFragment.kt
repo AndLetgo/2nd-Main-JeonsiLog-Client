@@ -14,42 +14,57 @@ import com.example.jeonsilog.data.remote.dto.ExhibitionInfoItem
 import com.example.jeonsilog.data.remote.dto.ExhibitionPlaceItem
 
 import com.example.jeonsilog.data.remote.dto.Test_Data
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
+import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
 import com.example.jeonsilog.databinding.FragmentExihibitionInfoBinding
 import com.example.jeonsilog.databinding.FragmentSearchExhibitionPlaceBinding
+import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.viewmodel.SearchViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 
-class ExhibitionPlaceFragment(itemlist: List<Int>) : BaseFragment<FragmentSearchExhibitionPlaceBinding>(R.layout.fragment_search_exhibition_place) {
-    var itemlist=itemlist
+class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<FragmentSearchExhibitionPlaceBinding>(R.layout.fragment_search_exhibition_place) {
     lateinit var viewModel: SearchViewModel
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        checkEmptyList()
+        checkEmptyListFalse()
         setLayoutView()
     }
-    fun checkEmptyList(){
-        if(itemlist.size!=0){
-            binding.ivEmpty.isGone=true
-            binding.tvEmpty01.isGone=true
-            binding.tvEmpty02.isGone=true
-        }
+    fun checkEmptyListTrue(){
+        binding.ivEmpty.isGone=true
+        binding.tvEmpty01.isGone=true
+        binding.tvEmpty02.isGone=true
+    }
+    fun checkEmptyListFalse(){
+        binding.ivEmpty.isGone=false
+        binding.tvEmpty01.isGone=false
+        binding.tvEmpty02.isGone=false
     }
     fun setLayoutView(){
         //리사이클러뷰 제어
         binding.rvExhibitionplace.layoutManager = LinearLayoutManager(requireContext())
-        var items=extractItemsByIndices(viewModel.exhibitionplacelist,itemlist)
-        val adapter = context?.let { ExhibitionPlaceItemAdapter(it,items) }
-        binding.rvExhibitionplace.adapter = adapter
-    }
-    fun extractItemsByIndices(exhibitionList: List<ExhibitionPlaceItem>, indices: List<Int>): List<ExhibitionPlaceItem> {
-        //검색해서 나온 인덱스 리스트를 전시회 리스트에서 추출
-        return indices.mapNotNull { index ->
-            if (index in exhibitionList.indices) {
-                exhibitionList[index]
-            } else {
-                null
+        var adapter: ExhibitionPlaceItemAdapter?
+        var list: List<SearchPlacesInformationEntity>?
+        runBlocking(Dispatchers.IO) {
+            val response = PlaceRepositoryImpl().searchPlaces(encryptedPrefs.getAT(),edittext,0)
+            if(response.isSuccessful && response.body()!!.check){
+                val searchPlaceResponse = response.body()
+                list=searchPlaceResponse?.informationEntity
             }
+            else{
+                val searchPlaceResponse = response.body()
+                list=searchPlaceResponse?.informationEntity
+            }
+        }
+        if (!list.isNullOrEmpty()){
+            adapter = context?.let { ExhibitionPlaceItemAdapter(it,edittext,list!!.toMutableList()) }
+            binding.rvExhibitionplace.adapter = adapter
+            checkEmptyListTrue()
         }
     }
 }

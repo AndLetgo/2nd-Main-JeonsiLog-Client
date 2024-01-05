@@ -16,7 +16,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(
         replaceFragment(RecordSearchFragment())
     }
 
-
     fun replaceFragment(fragment: Fragment) {
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.fl_search, fragment)

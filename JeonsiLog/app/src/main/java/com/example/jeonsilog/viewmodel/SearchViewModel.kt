@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.ExhibitionInfoItem
 import com.example.jeonsilog.data.remote.dto.ExhibitionPlaceItem
+import com.example.jeonsilog.data.remote.dto.ExhibitionRandom
 import com.example.jeonsilog.data.remote.dto.UserSearchItem
 
 class SearchViewModel  : ViewModel() {
@@ -31,7 +32,7 @@ class SearchViewModel  : ViewModel() {
     fun updateText(newText: String) {
         search_record_title.set(newText)
     }
-    var randomExhibitionList= listOf<ExhibitionInfoItem>()
+    var randomExhibitionList= arrayListOf<ExhibitionRandom>()
     var unsplashUrl01 = ""
     var unsplashUrl02 = ""
     fun setRandomList(){

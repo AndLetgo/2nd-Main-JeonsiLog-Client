@@ -13,7 +13,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentPhotoCalendarBinding
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -25,6 +32,7 @@ class PhotoCalendarFragment() : BaseFragment<FragmentPhotoCalendarBinding>(
     override fun init() {
 
         val viewModel = ViewModelProvider(requireActivity()).get(PhotoCalendarViewModel::class.java)
+        binding.lifecycleOwner=requireActivity()
         val currentItem = Int.MAX_VALUE / 2
         selectedDateCurrent  = LocalDate.now()
         selectedDate  = LocalDate.now()
@@ -36,13 +44,12 @@ class PhotoCalendarFragment() : BaseFragment<FragmentPhotoCalendarBinding>(
 
         })
         binding.tvYearMonth.text=monthYearFromDate(selectedDateCurrent)
-        val adapter = InfinitePagerAdapter(requireActivity(),viewModel)
+        val adapter = InfinitePagerAdapter(requireActivity())
         binding.vpPhotoCalendar.adapter = adapter
         binding.vpPhotoCalendar.offscreenPageLimit = 1
 
         binding.vpPhotoCalendar.setCurrentItem(currentItem, false)
-
-
+        checkPathCalendarOpen()
         binding.vpPhotoCalendar.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 //// Handle page selection if needed
@@ -58,22 +65,29 @@ class PhotoCalendarFragment() : BaseFragment<FragmentPhotoCalendarBinding>(
                 binding.tvYearMonth.text=monthYearFromDate(selectedDate)
             }
         })
-        binding.tbPublicPrivate.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // ToggleButton이 On인 경우의 동작
-                // 예: 텍스트 색상 변경
-                binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.basic_point))
-            } else {
-                // ToggleButton이 Off인 경우의 동작
-                // 예: 텍스트 색상을 다시 기본 색상으로 변경
-                binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.gray_medium))
-            }
+        binding.tbPublicPrivate.setOnClickListener {
+            checkPathCalendarOpen()
         }
         binding.tvYearMonth.setOnClickListener {
             val bottomSheetDialogFragment = CalendarBottomDialog(selectedDate,viewModel)
             bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
             bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
 
+        }
+    }
+    private fun checkPathCalendarOpen(){
+        runBlocking(Dispatchers.IO) {
+            val response = UserRepositoryImpl().patchCalendarOpen(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check){
+                CoroutineScope(Dispatchers.Main).launch{
+                    binding.tbPublicPrivate.isChecked=response.body()!!.information.open
+                    if (binding.tbPublicPrivate.isChecked){
+                        binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.basic_point))
+                    }else{
+                        binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.gray_medium))
+                    }
+                }
+            }
         }
     }
     private fun monthYearFromDate(date: LocalDate): String{
