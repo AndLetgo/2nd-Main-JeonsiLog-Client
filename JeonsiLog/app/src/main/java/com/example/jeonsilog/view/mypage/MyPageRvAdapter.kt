@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.data.remote.dto.interest.GetInterestInformationEntity
 import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
@@ -43,7 +45,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.tvMypageReviewTitle.text = data.exhibitionName
             binding.tvMypageReviewContent.text = data.contents
 
-            // 클릭리스너 - 해당 전시회 상세 페이지
+            // 클릭리스너 - 해당 전시회 상세 페이지로 이동로 이동
             itemView.setOnClickListener {
 
             }
@@ -54,7 +56,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
         fun bind(data: GetInterestInformationEntity) {
             GlideApp.with(binding.ivMypageInterestExhibitionImg)
                 .load(data.imageUrl)
-                .centerCrop()
+                .transform(CenterCrop(), RoundedCorners(16))
                 .into(binding.ivMypageInterestExhibitionImg)
 
             binding.tvMypageInterestTitle.text = data.exhibitionName
@@ -73,9 +75,6 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
                 "FREE" -> binding.tvMypageInterestKeywordFree.visibility = View.VISIBLE
                 else -> binding.tvMypageInterestKeywordFree.visibility = View.GONE
             }
-
-//            "ON_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_on)
-//            "BEFORE_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_before)
 
             binding.ibMypageInterest.setOnClickListener {
                 list.removeAt(adapterPosition)
