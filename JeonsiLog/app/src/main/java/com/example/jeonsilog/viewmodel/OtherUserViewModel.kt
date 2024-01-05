@@ -111,6 +111,6 @@ class OtherUserViewModel: ViewModel() {
             }
         }
 
-
+        getOtherUserInfo(userId.value!!)
     }
 }
