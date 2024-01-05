@@ -47,6 +47,7 @@ class OtherUserViewModel: ViewModel() {
 
     fun setTitle(context: Context){
         _title.value = context.getString(R.string.other_nick_title, nick.value)
+
     }
 
     fun getOtherUserInfo(otherUserId: Int){
@@ -110,7 +111,6 @@ class OtherUserViewModel: ViewModel() {
                 }
             }
         }
-
         getOtherUserInfo(userId.value!!)
     }
 }

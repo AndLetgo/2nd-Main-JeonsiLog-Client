@@ -3,6 +3,7 @@ package com.example.jeonsilog.view.otheruser
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentOtherUserListBinding
+
 import com.google.android.material.tabs.TabLayoutMediator
 
 class OtherUserListFragment(private val startTab: Int, private val otherUserId: Int, private val otherUserNick: String): BaseFragment<FragmentOtherUserListBinding>(R.layout.fragment_other_user_list) {

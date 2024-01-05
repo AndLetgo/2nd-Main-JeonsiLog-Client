@@ -42,6 +42,7 @@
             tools:ignore="SpeakableTextPresentCheck"
 
             app:tabBackground="@drawable/shape_tab_underline"
+
             />
 
         <androidx.viewpager2.widget.ViewPager2

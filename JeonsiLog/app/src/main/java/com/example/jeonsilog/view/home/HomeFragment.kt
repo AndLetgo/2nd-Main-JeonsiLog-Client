@@ -5,13 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.FragmentHomeBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.viewmodel.ExhibitionModel
-import com.example.jeonsilog.viewmodel.HomeRvModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

@@ -53,16 +53,17 @@
                         android:textColor="@color/basic_black"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="@dimen/margin_40"
-                        android:layout_marginStart="@dimen/margin_24"
-                        android:layout_marginEnd="@dimen/margin_12" />
+                        android:layout_marginHorizontal="@dimen/margin_24"/>
 
                     <LinearLayout
                         android:id="@+id/ll_exhibition_place"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/tv_exhibition_name"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="@dimen/margin_20"
                         android:orientation="horizontal"
                         android:layout_marginHorizontal="@dimen/margin_24"
@@ -136,11 +137,13 @@
                         android:layout_marginEnd="@dimen/margin_24"
                         android:layout_marginTop="@dimen/margin_8"
                         android:gravity="end">
-                        <ImageButton
-                            android:id="@+id/ib_interest"
+                        <ToggleButton
+                            android:id="@+id/tb_interest"
                             android:layout_width="@dimen/item_32"
                             android:layout_height="@dimen/item_32"
-                            android:src="@drawable/selector_btn_interest"
+                            android:textOn=""
+                            android:textOff=""
+                            android:background="@drawable/selector_btn_interest"
                             />
                         <ImageButton
                             android:id="@+id/ib_call"
@@ -197,13 +200,24 @@
                         android:background="@color/basic_white"/>
                     <TextView
                         android:id="@+id/tv_rating_title"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/exhibition_rating"
                         style="@style/M_medium"
                         android:textColor="@color/basic_black"
                         app:layout_constraintTop_toBottomOf="@id/tv_information"
-                        android:layout_marginHorizontal="@dimen/margin_24"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_24"
+                        android:layout_marginTop="@dimen/margin_32"/>
+                    <TextView
+                        android:id="@+id/tv_rating_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/M_medium"
+                        android:textColor="@color/basic_point"
+                        app:layout_constraintStart_toEndOf="@id/tv_rating_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_information"
+                        android:layout_marginStart="@dimen/margin_4"
                         android:layout_marginTop="@dimen/margin_32"/>
                     <com.willy.ratingbar.BaseRatingBar
                         android:id="@+id/rating_bar"

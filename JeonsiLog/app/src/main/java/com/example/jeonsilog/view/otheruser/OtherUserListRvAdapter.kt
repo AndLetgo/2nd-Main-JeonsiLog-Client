@@ -82,11 +82,13 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
             }
 
             binding.ivOtherUserListFollowProfile.setOnClickListener{
+
                 (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
             }
 
             binding.tvOtherUserListFollowNick.setOnClickListener {
                 (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+
             }
         }
     }
@@ -176,5 +178,13 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
 
     override fun getItemViewType(position: Int): Int {
         return type
+    }
+
+    private fun moveOtherUserProfile(otherUserId: Int){
+        val fragment = OtherUserFragment(otherUserId)
+        (context as MainActivity).supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
