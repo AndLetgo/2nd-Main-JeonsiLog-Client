@@ -12,7 +12,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/basic_white">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -143,6 +144,8 @@
 
             app:tabIndicatorColor="@color/basic_point"
             tools:ignore="SpeakableTextPresentCheck"
+
+            app:tabBackground="@drawable/shape_tab_underline"
             />
 
         <androidx.viewpager2.widget.ViewPager2

@@ -11,6 +11,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
@@ -23,13 +25,19 @@ import com.kakao.sdk.user.UserApiClient
 import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
+import com.example.jeonsilog.view.otheruser.OtherUserFragment
+import com.example.jeonsilog.view.search.RecordSearchFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.view.search.SearchFragment
+import com.example.jeonsilog.view.search.SearchResultFrament
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
     private val tag = this.javaClass.simpleName
+    private var backPressedTime: Long = 0L
+
     private val REQUIRED_PERMISSONS = if(Build.VERSION.SDK_INT < 33){
         arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -41,8 +49,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         )
     }
 
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if(supportFragmentManager.backStackEntryCount != 0){
+                supportFragmentManager.popBackStack()
+            } else {
+                if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                    finish()
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    Toast.makeText(applicationContext, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     override fun init() {
-//        Log.d(TAG, "init: ")
+        this.onBackPressedDispatcher.addCallback(this, callback)
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
         binding.bnvMain.setOnItemSelectedListener {
@@ -52,7 +75,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 }
                 R.id.item_search->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,
-                        SearchFragment()
+                        SearchFragment(RecordSearchFragment())
                     ).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_photoCalendar->{
@@ -149,4 +172,39 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                     ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
         }
     }
+
+
+    // 타 유저 프로필로 이동(해당 유저 아이디 필요)
+    fun moveOtherUserProfile(otherUserId: Int, otherUserNick: String){
+        if(otherUserId == encryptedPrefs.getUI()){
+            binding.bnvMain.selectedItemId = R.id.item_mypage
+
+            val fragment = MyPageFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_main, fragment)
+                .addToBackStack(null)
+                .commit()
+        } else {
+            val fragment = OtherUserFragment(otherUserId, otherUserNick)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_main, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+    fun moveRecordSearchFragment(){
+        val fragment = RecordSearchFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+    fun moveSearchResultFrament(str :String){
+        val fragment = SearchResultFrament(str)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
 }
