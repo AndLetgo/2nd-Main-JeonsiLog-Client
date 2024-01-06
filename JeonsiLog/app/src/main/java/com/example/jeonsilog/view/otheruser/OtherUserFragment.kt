@@ -55,7 +55,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
         }.attach()
 
         binding.tvOtherUserFollow.setOnClickListener {
-            val transaction = requireActivity().supportFragme
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fl_main, OtherUserListFragment(0, otherUserId, otherUserNick))
 
             transaction.addToBackStack(null)
