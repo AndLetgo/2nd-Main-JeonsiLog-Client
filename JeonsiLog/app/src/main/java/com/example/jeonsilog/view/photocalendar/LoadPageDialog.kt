@@ -23,17 +23,20 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.databinding.ViewLoadPageDialogBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.search.ExhibitionInfoItemAdapter
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 
 
-class LoadPageDialog(private var selectedDate: LocalDate,private val listener: CommunicationListener) : DialogFragment() {
+class LoadPageDialog(private var selectedDate: LocalDate,private val listener: CommunicationListener,private var myEditText:String?) : DialogFragment() {
     private var _binding: ViewLoadPageDialogBinding? = null
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +44,13 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         savedInstanceState: Bundle?
     ): View? {
         _binding = ViewLoadPageDialogBinding.inflate(inflater, container, false)
+        isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(LoadPageDialog(selectedDate,listener,myEditText))
+                isRefresh.value = false
 
+            }
+        }
         return binding.root
     }
 
@@ -60,6 +69,8 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setLayoutView(myEditText)
+
         // 다이얼로그의 배경을 투명하게 설정
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
 
@@ -88,9 +99,9 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
 
         setEditBoxDeleteBt()
         setOnEditorActionListener()
+
+
         showKeyboard()
-
-
     }
 
     fun setOnEditorActionListener(){
@@ -99,11 +110,13 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
             ) {
                 // 키보드의 완료 버튼이 눌렸을 때 수행할 동작
-                var enteredText = binding.etLoadPage.text.toString()
-                if(enteredText.isBlank()) {
+                myEditText = binding.etLoadPage.text.toString()
+
+                if(myEditText!!.isBlank()) {
                     Toast.makeText(context, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
                 }else{
-                    setLayoutView(enteredText)
+
+                    setLayoutView(myEditText!!)
                     hideSoftKeyboard()
                 }
                 return@setOnEditorActionListener true
@@ -137,33 +150,37 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         binding.ivRecordDelete.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    fun setLayoutView(edittext:String){
+    fun setLayoutView(edittext:String?){
+        if (edittext!=null){
+            //리사이클러뷰 제어
+            binding.rvLoadPage.layoutManager = LinearLayoutManager(requireContext())
+            var adapter: LoadPageRvAdapter?
+            var list: List<SearchInformationEntity>?
+            runBlocking(Dispatchers.IO) {
+                val response = ExhibitionRepositoryImpl().searchExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,0)
+                if(response.isSuccessful && response.body()!!.check){
+                    val searchExhibitionResponse = response.body()
+                    list=searchExhibitionResponse?.informationEntity
+                }
+                else{
+                    val searchExhibitionResponse = response.body()
+                    list=searchExhibitionResponse?.informationEntity
 
-        //리사이클러뷰 제어
-        binding.rvLoadPage.layoutManager = LinearLayoutManager(requireContext())
-        var adapter: LoadPageRvAdapter?
-        var list: List<SearchInformationEntity>?
-        runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().searchExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,0)
-            if(response.isSuccessful && response.body()!!.check){
-                val searchExhibitionResponse = response.body()
-                list=searchExhibitionResponse?.informationEntity
+                }
+            }
+            if (!list.isNullOrEmpty()){
+                adapter = context?.let { LoadPageRvAdapter(it,edittext,list!!.toMutableList(),selectedDate,listener,this) }
+                checkEmptyListFalse()
             }
             else{
-                val searchExhibitionResponse = response.body()
-                list=searchExhibitionResponse?.informationEntity
-
+                adapter =LoadPageRvAdapter(requireContext(),edittext,list?.toMutableList() ?: mutableListOf(),selectedDate,listener,this)
+                checkEmptyListTrue()
             }
+            binding.rvLoadPage.adapter = adapter
+        }else{
+
         }
-        if (!list.isNullOrEmpty()){
-            adapter = context?.let { LoadPageRvAdapter(it,edittext,list!!.toMutableList(),selectedDate,listener,this) }
-            checkEmptyListFalse()
-        }
-        else{
-            adapter =LoadPageRvAdapter(requireContext(),edittext,list?.toMutableList() ?: mutableListOf(),selectedDate,listener,this)
-            checkEmptyListTrue()
-        }
-        binding.rvLoadPage.adapter = adapter
+
     }
 
     private fun hideSoftKeyboard() {
@@ -177,7 +194,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
             binding.etLoadPage.requestFocus()
             val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(binding.etLoadPage, InputMethodManager.SHOW_IMPLICIT)
-        }, 130)
+        }, 200)
 
     }
     override fun onDestroyView() {

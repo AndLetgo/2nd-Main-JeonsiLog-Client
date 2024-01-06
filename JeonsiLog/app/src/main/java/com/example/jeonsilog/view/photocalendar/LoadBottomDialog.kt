@@ -25,7 +25,9 @@ import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromGalleryReques
 import com.example.jeonsilog.data.remote.dto.calendar.UploadImageReqEntity
 import com.example.jeonsilog.databinding.ViewLoadDialogBinding
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.ImageUtil
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
@@ -44,8 +46,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class LoadBottomDialog(private var selectedDate: LocalDate,
-                       val Position:Int, private val listener: CommunicationListener) : BottomSheetDialogFragment() {
+class LoadBottomDialog(private var selectedDate: LocalDate, private val listener: CommunicationListener) : BottomSheetDialogFragment() {
     val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
     val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 2
     private var _binding: ViewLoadDialogBinding? = null
@@ -57,6 +58,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate,
         savedInstanceState: Bundle?
     ): View? {
         _binding = ViewLoadDialogBinding.inflate(inflater, container, false)
+
         setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
         SetDeleteImage()
         setBtLoadPoster()
@@ -77,7 +79,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate,
             if(response.isSuccessful && response.body()!!.check){
                 list= response.body()!!.information
             } else {
-                list= response.body()!!.information
+                list= listOf()
             }
         }
         if (!list.isNullOrEmpty()){
@@ -112,7 +114,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate,
             // 기존 다이얼로그 닫기
             dismiss()
             // 새로운 다이얼로그 열기
-            val loadPageDialog = LoadPageDialog(selectedDate,listener)
+            val loadPageDialog = LoadPageDialog(selectedDate,listener,null)
             loadPageDialog.show(parentFragmentManager, "LoadPageDialogTag")
         }
     }

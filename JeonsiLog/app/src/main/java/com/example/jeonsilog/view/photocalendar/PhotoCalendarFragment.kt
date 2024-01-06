@@ -14,9 +14,11 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentPhotoCalendarBinding
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +27,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-class PhotoCalendarFragment() : BaseFragment<FragmentPhotoCalendarBinding>(
+class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
     R.layout.fragment_photo_calendar) {
     lateinit var selectedDateCurrent: LocalDate
     lateinit var selectedDate: LocalDate
@@ -33,6 +35,12 @@ class PhotoCalendarFragment() : BaseFragment<FragmentPhotoCalendarBinding>(
 
         val viewModel = ViewModelProvider(requireActivity()).get(PhotoCalendarViewModel::class.java)
         binding.lifecycleOwner=requireActivity()
+        isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(PhotoCalendarFragment())
+                isRefresh.value = false
+            }
+        }
         val currentItem = Int.MAX_VALUE / 2
         selectedDateCurrent  = LocalDate.now()
         selectedDate  = LocalDate.now()
