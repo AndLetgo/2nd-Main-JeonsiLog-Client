@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- 배경색을 검은색으로 설정 -->
+    <solid android:color="#59000000" />
+    <!-- 모양 크기 지정 -->
+</shape>

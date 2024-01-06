@@ -84,6 +84,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         params.width = ViewGroup.LayoutParams.MATCH_PARENT
         params.height = ViewGroup.LayoutParams.MATCH_PARENT
         binding.root.layoutParams = params
+
         binding.ivRecordDelete.isGone=true
 
         setEditBoxDeleteBt()

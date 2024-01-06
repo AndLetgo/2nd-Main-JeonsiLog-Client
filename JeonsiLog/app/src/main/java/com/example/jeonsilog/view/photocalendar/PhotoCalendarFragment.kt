@@ -70,7 +70,7 @@ class PhotoCalendarFragment() : BaseFragment<FragmentPhotoCalendarBinding>(
         }
         binding.tvYearMonth.setOnClickListener {
             val bottomSheetDialogFragment = CalendarBottomDialog(selectedDate,viewModel)
-            bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
+            //bottomSheetDialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
             bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
 
         }
