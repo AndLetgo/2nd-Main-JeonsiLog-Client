@@ -11,9 +11,14 @@ class GlobalApplication: Application() {
     companion object {
         lateinit var prefs: PreferenceUtil
         lateinit var encryptedPrefs: CryptedPreferenceUtil
+        var networkState = MutableLiveData(true)
+        lateinit var globalContext: GlobalApplication
+            private set
+
         var isFinish = MutableLiveData(false)
         var isFollowerUpdate = MutableLiveData(false)
         var isFollowingUpdate = MutableLiveData(false)
+        var isRefresh = MutableLiveData(false)
 
         var exhibitionId: Int = 0
         var extraActivityReference: Int = 0
@@ -21,9 +26,10 @@ class GlobalApplication: Application() {
     }
 
     override fun onCreate() {
+        super.onCreate()
         prefs = PreferenceUtil(applicationContext)
         encryptedPrefs = CryptedPreferenceUtil(applicationContext)
-        super.onCreate()
+        globalContext = this
 
         getKeyHash()
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY)
@@ -32,5 +38,9 @@ class GlobalApplication: Application() {
     private fun getKeyHash(){
         val keyHash = Utility.getKeyHash(this)
         Log.d("Hash", keyHash)
+    }
+
+    fun exitApp(){
+        android.os.Process.killProcess(android.os.Process.myPid())
     }
 }
