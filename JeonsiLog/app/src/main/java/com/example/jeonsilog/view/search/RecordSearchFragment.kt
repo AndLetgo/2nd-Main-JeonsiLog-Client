@@ -60,13 +60,27 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
     }
 
     private fun addItem(searchData: String) {
+        //=======================================================================================//
+        val itemListValue = viewModel.itemlist.value
+        Log.d("내부테스트", "추가전 리스트: $itemListValue")
+        val index = getIndexIfExists(itemListValue, searchData)
+        if (index != -1) {
+            Log.d("내부테스트", "기존 검색기록에 존재O")
+            viewModel.removeItemAt(index)
+        }else{
+            Log.d("내부테스트", "기존 검색기록에 존재X")
+        }
         adapter.add(searchData)
-        viewModel.updateItemList(itemList)
-
+        Log.d("내부테스트", "추가후 리스트: ${viewModel.itemlist.value}")
+        viewModel.itemlist.value?.let { viewModel.updateItemList(it) }
+        //=======================================================================================//
+    }
+    fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
+        return itemListValue?.indexOf(searchData) ?: -1
     }
     fun loadRandomList(){
         viewModel.randomExhibitionList.clear()
-        viewModel.setRandomList()
+
         val radiusDp = 8f
         val radiusPx =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, radiusDp, context?.resources?.displayMetrics).toInt()
@@ -104,6 +118,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
 
     }
     fun loadSearchList(){
+        //=======================================================================================//
         itemList=prefs.getRecorList()
 
         viewModel.itemlist.observe(this, Observer { itemList ->
@@ -118,12 +133,14 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
         }else{
             viewModel.updateText("최근검색어")
         }
+        //=======================================================================================//
     }
     fun setSearchList(){
+        //=======================================================================================//
         //최근검색어 리스트뷰의 아이템을 클릭시 SearchFragment의 replaceFragment()을 실행하기위해 frag 어댑터에 전달
-        var frag=(parentFragment as? SearchFragment)
-        adapter = RecordItemAdapter(requireContext(), R.layout.item_search_record, itemList,frag,viewModel)
+        adapter = RecordItemAdapter(requireContext(), R.layout.item_search_record, itemList,viewModel)
         binding.lvSearch.adapter=adapter
+        //=======================================================================================//
     }
     fun setOnEditorActionListener(){
         //키보드 완료 버튼 눌럿을시 실행
@@ -140,6 +157,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                     prefs.setRecorList(itemList)
                     //프래그먼트 전환 코드
                     (context as MainActivity).moveSearchResultFrament(enteredText)
+
                     hideSoftKeyboard(requireActivity())
                     return@setOnEditorActionListener true
                 }

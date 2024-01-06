@@ -2,36 +2,26 @@ package com.example.jeonsilog.view.search
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.core.view.isGone
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.databinding.FragmentSearchRecordBinding
 import com.example.jeonsilog.databinding.FragmentSearchResultBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 
-class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
+class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
     lateinit var itemList: ArrayList<String>
     var  bottomNavigationView: BottomNavigationView?=null
     var ediytextstr=str
@@ -56,8 +46,8 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
         itemList= prefs.getRecorList()
     }
     fun setbottomNavigation(){
-        bottomNavigationView = requireActivity().findViewById(R.id.bnv_main)
-        bottomNavigationView?.visibility = View.GONE
+        val mActivity = context as MainActivity
+        mActivity.setStateBn(false)
     }
     fun setLayoutView(){
         //뷰페이저설정(검색어)
@@ -135,6 +125,7 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
                 if(enteredText.isBlank()) {
                     Toast.makeText(context, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
                 }else{
+                    //=======================================================================================//
                     if (itemList.size>=4){
                         itemList.removeAt(3)
                     }
@@ -150,9 +141,8 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
 
                     binding.vpResult.currentItem = currentTabPosition
                     hideSoftKeyboard(requireActivity())
+                    //=======================================================================================//
                 }
-
-
                 return@setOnEditorActionListener true
             }
             false

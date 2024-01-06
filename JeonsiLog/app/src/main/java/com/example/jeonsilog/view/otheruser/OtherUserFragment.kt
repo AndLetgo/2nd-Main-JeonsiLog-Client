@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.otheruser
 
+import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -16,7 +17,8 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
     private val viewModel: OtherUserViewModel by viewModels()
 
     override fun init() {
-        val mActivity = activity as MainActivity
+        Log.d("setStateBn", "setStateBn: ")
+        val mActivity = context as MainActivity
         mActivity.setStateBn(false)
 
         viewModel.getOtherUserInfo(otherUserId)
