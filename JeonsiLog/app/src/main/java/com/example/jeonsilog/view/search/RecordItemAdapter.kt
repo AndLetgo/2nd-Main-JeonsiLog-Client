@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.search
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +13,17 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
+import kotlinx.coroutines.runBlocking
 
 
 class RecordItemAdapter(
     context: Context, resource: Int, objects: List<String>,
-    private var viewModel: SearchViewModel
-) :
+    private var viewModel: SearchViewModel,private val callback: AdapterCallback) :
     ArrayAdapter<String>(context, resource, objects) {
 
     private val mContext: Context = context
     private val mResource: Int = resource
-    private val MAX_ITEMS = 4
+
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = LayoutInflater.from(mContext)
@@ -33,35 +34,38 @@ class RecordItemAdapter(
         val deleteButton: ImageView = view.findViewById(R.id.deleteBt)
 
         val currentItem: String = getItem(position).toString()
-        var itemList= prefs.getRecorList()
-        //@@
+        viewModel.setItemlist(prefs.getRecorList())
         itemTextView.text = currentItem
         itemView.setOnClickListener {
             //1.검색기록 클릭처리
             (context as MainActivity).moveSearchResultFrament(currentItem)
         }
         deleteButton.setOnClickListener {
-            //
-            remove(currentItem)
-            notifyDataSetChanged()
-            itemList.removeAt(position)
-            viewModel.updateItemList(itemList)
-            prefs.setRecorList(itemList)
+
+            val listIndex=viewModel.itemlist.value?.indexOf(currentItem)
+            viewModel.removeItemAt(listIndex!!)
+            prefs.setRecorList(viewModel.itemlist.value!!)
+            Log.d("reMoveTag", "${viewModel.itemlist.value!!}: ")
+            callback.onAdapterItemClicked()
         }
 
         return view
     }
-
-    override fun add(item: String?) {
-        //=======================================================================================//
-        if (item != null) {
-            if (count >= MAX_ITEMS) {
-                remove(getItem(count - 1))
-            }
-            super.insert(item, 0)
-        }
-        //=======================================================================================//
+    interface AdapterCallback{
+        fun onAdapterItemClicked()
     }
+
+
+//    override fun add(item: String?) {
+//        //=======================================================================================//
+//        if (item != null) {
+//            if (count >= MAX_ITEMS) {
+//                remove(getItem(count - 1))
+//            }
+//            super.insert(item, 0)
+//        }
+//        //=======================================================================================//
+//    }
 
 }
 

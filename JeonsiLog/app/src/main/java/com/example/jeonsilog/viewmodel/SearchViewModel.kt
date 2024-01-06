@@ -22,12 +22,18 @@ class SearchViewModel  : ViewModel() {
     private val itemListLiveData = MutableLiveData<List<String>>()
     // ViewModel 밖에서는 LiveData로만 접근 가능하도록 노출
     val itemlist: LiveData<List<String>> get() = itemListLiveData
-
-
-    // 리스트 업데이트하는 메서드
-    fun updateItemList(newItemList: List<String>) {
-        itemListLiveData.value = newItemList
+    fun setItemlist(newItemList:ArrayList<String>){
+        itemListLiveData.value=newItemList.toList()
     }
+
+    // 리스트에 검색어 추가
+    fun addItem(newItem :String) {
+        val currentList=itemListLiveData.value.orEmpty().toMutableList()
+        currentList.add(newItem)
+        //
+        itemListLiveData.value = currentList
+    }
+    //리스트에 요소 삭제
     fun removeItemAt(index: Int) {
         val currentList = itemListLiveData.value.orEmpty().toMutableList()
 

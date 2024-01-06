@@ -22,7 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
 class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
-    lateinit var itemList: ArrayList<String>
+
     var  bottomNavigationView: BottomNavigationView?=null
     var ediytextstr=str
     var initialTabPosition=0
@@ -30,7 +30,6 @@ class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBindi
 
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        onBackPressedDispatcher()
         loadSearchList()
         setbottomNavigation()
         setLayoutView()
@@ -43,7 +42,7 @@ class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBindi
     }
 
     fun loadSearchList(){
-        itemList= prefs.getRecorList()
+        viewModel.setItemlist(prefs.getRecorList())
     }
     fun setbottomNavigation(){
         val mActivity = context as MainActivity
@@ -78,9 +77,6 @@ class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBindi
                     initialTabPosition=it.position
                     binding.vpResult.currentItem = it.position
                     // 첫 번째 탭이 선택되었을 때
-
-
-
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -105,7 +101,6 @@ class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBindi
 
                 updateClearButtonVisibility(charSequence?.isNotEmpty() == true)
 
-                // 여기에 텍스트가 변경될 때 수행할 동작을 추가
             }
 
             override fun afterTextChanged(editable: Editable?) {
@@ -126,11 +121,7 @@ class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBindi
                     Toast.makeText(context, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
                 }else{
                     //=======================================================================================//
-                    if (itemList.size>=4){
-                        itemList.removeAt(3)
-                    }
-                    itemList.prepend(enteredText)
-                    prefs.setRecorList(itemList)
+                    addItem(enteredText)
 
                     // 현재 선택된 탭의 위치를 기반으로 프래그먼트 생성
                     val currentTabPosition = binding.tlResult.selectedTabPosition
@@ -149,15 +140,37 @@ class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBindi
         }
 
     }
-    fun onBackPressedDispatcher(){
-        Log.d("onBackPressedDispatcher", "onBackPressedDispatcher: ")
-        //메인의 moveOtherUserProfile 호출 후 replaceFragment호출
+    private fun addItem(searchData: String) {
+        //=======================================================================================//
+        val itemListValue = viewModel.itemlist.value
 
-        //뒤로가기 버튼 처리
+        Log.d("내부테스트", "추가전 리스트: $itemListValue")
+        val index = getIndexIfExists(itemListValue, searchData)
+        if (index != -1) {
+            Log.d("내부테스트", "기존 검색기록에 존재O")
+            viewModel.removeItemAt(index)
+        }else{
+            Log.d("내부테스트", "기존 검색기록에 존재X")
+        }
+        //검색 개수제한
+        Log.d("addBefore", "${viewModel.itemlist.value}: ")
+        if (viewModel.itemlist.value?.size!! >=5){
+            viewModel.removeItemAt(0)
 
+        }
+        //뷰모델 추가
+        viewModel.addItem(searchData)
+        Log.d("addAfter", "${viewModel.itemlist.value}: ")
 
+        prefs.setRecorList(viewModel.itemlist.value!!)
+        Log.d("내부테스트", "추가후 리스트: ${viewModel.itemlist.value}")
 
+        //=======================================================================================//
     }
+    fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
+        return itemListValue?.indexOf(searchData) ?: -1
+    }
+
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocus = activity.currentFocus
@@ -167,9 +180,9 @@ class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBindi
         }
     }
 
-    fun <T> MutableList<T>.prepend(element: T) {
-        add(0, element)
-    }
+//    fun <T> MutableList<T>.prepend(element: T) {
+//        add(0, element)
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
