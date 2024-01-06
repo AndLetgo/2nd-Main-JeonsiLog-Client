@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.otheruser
 
+import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
@@ -16,6 +17,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
     private val viewModel: OtherUserViewModel by viewModels()
 
     override fun init() {
+
         (activity as MainActivity).setStateBn(false)
 
         GlobalApplication.isRefresh.observe(this){

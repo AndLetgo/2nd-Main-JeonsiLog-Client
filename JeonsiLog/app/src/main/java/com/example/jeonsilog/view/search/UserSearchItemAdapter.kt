@@ -57,6 +57,7 @@ class UserSearchItemAdapter(
         GlideApp.with(context)
             .load(unsplashUrl)
             .centerCrop()
+            .circleCrop()
             .into(holder.itemView.findViewById(R.id.iv_user_profile))
         holder.usernameTextView.text = item.nickname
         holder.itemView.setOnClickListener {

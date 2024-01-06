@@ -2,37 +2,27 @@ package com.example.jeonsilog.view.search
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.core.view.isGone
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.databinding.FragmentSearchRecordBinding
 import com.example.jeonsilog.databinding.FragmentSearchResultBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 
-class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
-    lateinit var itemList: ArrayList<String>
+class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
+
     var  bottomNavigationView: BottomNavigationView?=null
     var ediytextstr=str
     var initialTabPosition=0
@@ -40,7 +30,6 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
 
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        onBackPressedDispatcher()
         loadSearchList()
         setbottomNavigation()
         setLayoutView()
@@ -53,11 +42,11 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
     }
 
     fun loadSearchList(){
-        itemList= prefs.getRecorList()
+        viewModel.setItemlist(prefs.getRecorList())
     }
     fun setbottomNavigation(){
-        bottomNavigationView = requireActivity().findViewById(R.id.bnv_main)
-        bottomNavigationView?.visibility = View.GONE
+        val mActivity = context as MainActivity
+        mActivity.setStateBn(false)
     }
     fun setLayoutView(){
         //뷰페이저설정(검색어)
@@ -88,9 +77,6 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
                     initialTabPosition=it.position
                     binding.vpResult.currentItem = it.position
                     // 첫 번째 탭이 선택되었을 때
-
-
-
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -115,7 +101,6 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
 
                 updateClearButtonVisibility(charSequence?.isNotEmpty() == true)
 
-                // 여기에 텍스트가 변경될 때 수행할 동작을 추가
             }
 
             override fun afterTextChanged(editable: Editable?) {
@@ -135,11 +120,8 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
                 if(enteredText.isBlank()) {
                     Toast.makeText(context, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
                 }else{
-                    if (itemList.size>=4){
-                        itemList.removeAt(3)
-                    }
-                    itemList.prepend(enteredText)
-                    prefs.setRecorList(itemList)
+                    //=======================================================================================//
+                    addItem(enteredText)
 
                     // 현재 선택된 탭의 위치를 기반으로 프래그먼트 생성
                     val currentTabPosition = binding.tlResult.selectedTabPosition
@@ -150,24 +132,45 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
 
                     binding.vpResult.currentItem = currentTabPosition
                     hideSoftKeyboard(requireActivity())
+                    //=======================================================================================//
                 }
-
-
                 return@setOnEditorActionListener true
             }
             false
         }
 
     }
-    fun onBackPressedDispatcher(){
-        Log.d("onBackPressedDispatcher", "onBackPressedDispatcher: ")
-        //메인의 moveOtherUserProfile 호출 후 replaceFragment호출
+    private fun addItem(searchData: String) {
+        //=======================================================================================//
+        val itemListValue = viewModel.itemlist.value
 
-        //뒤로가기 버튼 처리
+        Log.d("내부테스트", "추가전 리스트: $itemListValue")
+        val index = getIndexIfExists(itemListValue, searchData)
+        if (index != -1) {
+            Log.d("내부테스트", "기존 검색기록에 존재O")
+            viewModel.removeItemAt(index)
+        }else{
+            Log.d("내부테스트", "기존 검색기록에 존재X")
+        }
+        //검색 개수제한
+        Log.d("addBefore", "${viewModel.itemlist.value}: ")
+        if (viewModel.itemlist.value?.size!! >=5){
+            viewModel.removeItemAt(0)
 
+        }
+        //뷰모델 추가
+        viewModel.addItem(searchData)
+        Log.d("addAfter", "${viewModel.itemlist.value}: ")
 
+        prefs.setRecorList(viewModel.itemlist.value!!)
+        Log.d("내부테스트", "추가후 리스트: ${viewModel.itemlist.value}")
 
+        //=======================================================================================//
     }
+    fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
+        return itemListValue?.indexOf(searchData) ?: -1
+    }
+
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocus = activity.currentFocus
@@ -177,9 +180,9 @@ class SearchResultFrament(str :String) : BaseFragment<FragmentSearchResultBindin
         }
     }
 
-    fun <T> MutableList<T>.prepend(element: T) {
-        add(0, element)
-    }
+//    fun <T> MutableList<T>.prepend(element: T) {
+//        add(0, element)
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

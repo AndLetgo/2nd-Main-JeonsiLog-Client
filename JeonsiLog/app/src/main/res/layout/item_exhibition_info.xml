@@ -35,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/M_medium"
-                android:text="tittitletitletitetitletitletetitletitle"
                 android:textColor="@color/basic_black" />
 
             <TextView
@@ -43,7 +42,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/S_regular"
-                android:text="addressaddressaddressaddressaddr"
                 android:textColor="@color/gray_medium"
                 android:layout_marginTop="@dimen/margin_4" />
 
@@ -52,7 +50,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/S_regular"
-                android:text="placeplacaceplaceplaceplaceplace"
                 android:textColor="@color/gray_medium" />
 
             <LinearLayout
@@ -75,7 +72,8 @@
                     android:textColor="@color/basic_point"
                     android:gravity="center"
                     android:layout_marginStart="@dimen/margin_2"
-                    android:layout_marginBottom="@dimen/margin_2" />
+                    android:layout_marginVertical="@dimen/margin_2"
+                    android:spotShadowAlpha="0" />
 
                 <TextView
                     android:id="@+id/tv_keyword_operating_ing"
@@ -88,7 +86,8 @@
                     android:textColor="@color/basic_point"
                     android:gravity="center"
                     android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginBottom="@dimen/margin_2" />
+                    android:layout_marginVertical="@dimen/margin_2"
+                    android:spotShadowAlpha="0" />
                 <TextView
                     android:id="@+id/tv_keyword_price_free"
                     android:layout_width="@dimen/item_74"
@@ -100,8 +99,11 @@
                     android:textColor="@color/basic_point"
                     android:gravity="center"
                     android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginBottom="@dimen/margin_2" />
+                    android:layout_marginVertical="@dimen/margin_2"
+                    android:spotShadowAlpha="0"/>
+
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

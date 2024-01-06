@@ -33,15 +33,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.fragment_search_record) {
+class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.fragment_search_record) ,
+    RecordItemAdapter.AdapterCallback {
     private lateinit var adapter: RecordItemAdapter
-    lateinit var itemList: ArrayList<String>
     lateinit var viewModel: SearchViewModel
     override fun init() {
-        //@@
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         binding.searchData=viewModel
         binding.lifecycleOwner = this
+        val mActivity = context as MainActivity
+        mActivity.setStateBn(true)
         setEditBoxDeleteBt()
         loadSearchList()
         loadRandomList()
@@ -60,13 +61,40 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
     }
 
     private fun addItem(searchData: String) {
-        adapter.add(searchData)
-        viewModel.updateItemList(itemList)
+        //=======================================================================================//
+        val itemListValue = viewModel.itemlist.value
 
+        Log.d("내부테스트", "추가전 리스트: $itemListValue")
+        val index = getIndexIfExists(itemListValue, searchData)
+        if (index != -1) {
+            Log.d("내부테스트", "기존 검색기록에 존재O")
+            viewModel.removeItemAt(index)
+        }else{
+            Log.d("내부테스트", "기존 검색기록에 존재X")
+        }
+        //검색 개수제한
+        Log.d("addBefore", "${viewModel.itemlist.value}: ")
+        if (viewModel.itemlist.value?.size!! >=5){
+            viewModel.removeItemAt(0)
+
+        }
+        //뷰모델 추가
+        viewModel.addItem(searchData)
+        Log.d("addAfter", "${viewModel.itemlist.value}: ")
+        //리스트뷰 어댑터 연결
+        setSearchList()
+        //저장
+        prefs.setRecorList(viewModel.itemlist.value!!)
+        Log.d("내부테스트", "추가후 리스트: ${viewModel.itemlist.value}")
+
+        //=======================================================================================//
+    }
+    fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
+        return itemListValue?.indexOf(searchData) ?: -1
     }
     fun loadRandomList(){
         viewModel.randomExhibitionList.clear()
-        viewModel.setRandomList()
+
         val radiusDp = 8f
         val radiusPx =
             TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, radiusDp, context?.resources?.displayMetrics).toInt()
@@ -78,9 +106,11 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                 viewModel.randomExhibitionList.add(
                     ExhibitionRandom(randomPosterResponse?.informationEntity?.getOrNull(0)?.imageUrl,
                         randomPosterResponse?.informationEntity?.getOrNull(0)?.exhibitionName))
+
                 viewModel.randomExhibitionList.add(
                     ExhibitionRandom(randomPosterResponse?.informationEntity?.getOrNull(1)?.imageUrl,
                         randomPosterResponse?.informationEntity?.getOrNull(1)?.exhibitionName))
+
                 withContext(Dispatchers.Main) {
                     // Glide 호출 부분
                     GlideApp.with(requireContext())
@@ -88,11 +118,23 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                         .transform(CenterCrop(), RoundedCorners(radiusPx))
                         .into(binding.ivRandom01)
                     binding.tvRandom01.text=viewModel.randomExhibitionList[0].exhibitionName
+                    val fristRandomPosterId=randomPosterResponse?.informationEntity?.getOrNull(0)?.exhibitionId
+                    binding.clRandomPoster01.setOnClickListener {
+                        if (fristRandomPosterId!=null){
+                            (context as MainActivity).loadExtraActivity(0,fristRandomPosterId!!)
+                        }
+                    }
                     GlideApp.with(requireContext())
                         .load(viewModel.randomExhibitionList[1].exhibitionImg)
                         .transform(CenterCrop(), RoundedCorners(radiusPx))
                         .into(binding.ivRandom02)
                     binding.tvRandom02.text=viewModel.randomExhibitionList[1].exhibitionName
+                    val secondRandomPosterId=randomPosterResponse?.informationEntity?.getOrNull(1)?.exhibitionId
+                    binding.clRandomPoster02.setOnClickListener {
+                        if (fristRandomPosterId!=null){
+                            (context as MainActivity).loadExtraActivity(0,secondRandomPosterId!!)
+                        }
+                    }
                 }
             } else {
                 //예외처리
@@ -100,11 +142,19 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
 
             }
             //클릭 처리
+
+
+
+
+
+
         }
 
     }
     fun loadSearchList(){
-        itemList=prefs.getRecorList()
+        //=======================================================================================//
+        viewModel.setItemlist(prefs.getRecorList())
+        //MutableLiveData<List<String>>()
 
         viewModel.itemlist.observe(this, Observer { itemList ->
             if(itemList.size==0){
@@ -113,17 +163,20 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                 viewModel.updateText("최근검색어")
             }
         })
-        if(itemList.size==0){
+        if(viewModel.itemlist.value?.size==0){
             viewModel.updateText("")
         }else{
             viewModel.updateText("최근검색어")
         }
+        //=======================================================================================//
     }
     fun setSearchList(){
+        //=======================================================================================//
         //최근검색어 리스트뷰의 아이템을 클릭시 SearchFragment의 replaceFragment()을 실행하기위해 frag 어댑터에 전달
-        var frag=(parentFragment as? SearchFragment)
-        adapter = RecordItemAdapter(requireContext(), R.layout.item_search_record, itemList,frag,viewModel)
+        var recordList=viewModel.itemlist.value!!.reversed()
+        adapter = RecordItemAdapter(requireContext(), R.layout.item_search_record, recordList,viewModel,this)
         binding.lvSearch.adapter=adapter
+        //=======================================================================================//
     }
     fun setOnEditorActionListener(){
         //키보드 완료 버튼 눌럿을시 실행
@@ -136,10 +189,12 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                 if(enteredText.isBlank()){
                     Toast.makeText(context,"검색어를 입력하세요",Toast.LENGTH_SHORT).show()
                 }else{
+
                     addItem(enteredText)
-                    prefs.setRecorList(itemList)
+                    prefs.setRecorList(viewModel.itemlist.value!!)
                     //프래그먼트 전환 코드
                     (context as MainActivity).moveSearchResultFrament(enteredText)
+
                     hideSoftKeyboard(requireActivity())
                     return@setOnEditorActionListener true
                 }
@@ -178,5 +233,10 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
         super.onPause()
         binding.etSearchRecord.setText("")
     }
+
+    override fun onAdapterItemClicked() {
+        setSearchList()
+    }
+
 
 }
