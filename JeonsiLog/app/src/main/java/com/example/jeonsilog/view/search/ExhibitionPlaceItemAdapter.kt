@@ -16,6 +16,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -59,6 +60,8 @@ class ExhibitionPlaceItemAdapter(private val context: Context,private val editte
         holder.nameTextView.text = item.placeName
         holder.itemView.setOnClickListener {
             //전시장 id
+
+            //(context as MainActivity).loadExtraActivity(0, item.exhibitionId)
         }
 
     }

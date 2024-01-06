@@ -47,7 +47,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="@dimen/margin_28"
-            android:layout_marginBottom="@dimen/margin_88"
+            android:layout_marginBottom="@dimen/margin_32"
             android:elevation="@dimen/shadow_12"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

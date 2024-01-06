@@ -39,6 +39,9 @@ class ExhibitionInfoFragment(private val edittext:String): BaseFragment<Fragment
         binding.tvEmpty02.isGone=false
     }
     fun setLayoutView(){
+        //binding.ibFabTopExihibitionInfo.setOnClickListener {
+        //    binding.rvExhibitioninfo.scrollToPosition(0)
+        //}
         //리사이클러뷰 제어
         binding.rvExhibitioninfo.layoutManager = LinearLayoutManager(requireContext())
         var adapter: ExhibitionInfoItemAdapter?

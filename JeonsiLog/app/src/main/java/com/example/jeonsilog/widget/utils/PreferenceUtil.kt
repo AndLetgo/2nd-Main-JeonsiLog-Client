@@ -70,7 +70,7 @@ class PreferenceUtil(context: Context) {
         return resultArr
     }
 
-    fun setRecorList(resultArr: ArrayList<String>) {
+    fun setRecorList(resultArr: List<String>) {
         var jsonArr = JSONArray()
         for(i in resultArr){
             jsonArr.put(i)

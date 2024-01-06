@@ -9,4 +9,5 @@
     <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/shape_bn_round</item>
     </style>
+
 </resources>

@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.otheruser
 
+import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
@@ -8,14 +9,23 @@ import com.example.jeonsilog.databinding.FragmentOtherUserBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.OtherUserViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.google.android.material.tabs.TabLayoutMediator
 
-class OtherUserFragment(private val otherUserId: Int): BaseFragment<FragmentOtherUserBinding>(R.layout.fragment_other_user) {
+class OtherUserFragment(private val otherUserId: Int, private val otherUserNick: String): BaseFragment<FragmentOtherUserBinding>(R.layout.fragment_other_user) {
+
     private val viewModel: OtherUserViewModel by viewModels()
 
     override fun init() {
-        val mActivity = activity as MainActivity
-        mActivity.setStateBn(false)
+
+        (activity as MainActivity).setStateBn(false)
+
+        GlobalApplication.isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(OtherUserFragment(otherUserId, otherUserNick))
+                GlobalApplication.isRefresh.value = false
+            }
+        }
 
         viewModel.getOtherUserInfo(otherUserId)
 
@@ -55,20 +65,24 @@ class OtherUserFragment(private val otherUserId: Int): BaseFragment<FragmentOthe
 
         binding.tvOtherUserFollow.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, OtherUserListFragment(0, otherUserId))
+            transaction.replace(R.id.fl_main, OtherUserListFragment(0, otherUserId, otherUserNick))
+
             transaction.addToBackStack(null)
             transaction.commit()
         }
 
         binding.tvOtherUserFollowing.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, OtherUserListFragment(1, otherUserId))
+
+            transaction.replace(R.id.fl_main, OtherUserListFragment(1, otherUserId, otherUserNick))
+
             transaction.addToBackStack(null)
             transaction.commit()
         }
     }
 
     private fun loadImage(){
+        //(context as MainActivity).
         GlideApp.with(this)
             .load(viewModel.profileImg.value)
             .optionalCircleCrop()

@@ -51,9 +51,9 @@
 
     <string name="dialog_nick_modify_title">닉네임 수정</string>
     <string name="dialog_nick_modify_hint">2~10글자, 특수문자, 공백 사용 불가</string>
-    <string name="dialog_nick_duplicate">중복된 닉네임이에요.</string>
+    <string name="dialog_nick_duplicate">중복된 닉네임이에요</string>
     <string name="dialog_nick_prohibited_words_check">부적절한 단어가 포함되어 있어요.</string>
-    <string name="dialog_failure_internet">인터넷에 연결할 수 없어요. \n 새로고침을 하거나 \n 네트워크 설정을 확인해주세요.</string>
+    <string name="dialog_failure_internet">인터넷에 연결할 수 없어요 \n새로고침을 하거나 \n네트워크 설정을 확인해주세요</string>
 
     <!-- Login -->
     <string name="login_nick_placeholder">닉네임을 입력하세요.</string>
@@ -81,7 +81,7 @@
     <string name="exhibition_writing_review">감상평 작성하기</string>
     <string name="exhibition_writing_review_hint">여기에 감상평을 입력하세요!</string>
     <string name="exhibition_reply_hint">댓글을 남겨 보세요!</string>
-    <string name="exhibition_writing_review_count">(%d/1000)</string>
+    <string name="exhibition_writing_review_count">(%1$s/1000)</string>
 
     <!-- Search -->
     <string name="search_edit_hint">검색어를 입력하세요</string>
