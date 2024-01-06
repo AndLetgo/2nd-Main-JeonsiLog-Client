@@ -17,19 +17,25 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentSearchResultBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
-class SearchResultFragment(str :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
+class SearchResultFragment(private var ediytextstr :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
 
     var  bottomNavigationView: BottomNavigationView?=null
-    var ediytextstr=str
     var initialTabPosition=0
     lateinit var viewModel: SearchViewModel
 
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+        isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(SearchResultFragment(ediytextstr))
+                isRefresh.value = false
+            }
+        }
         loadSearchList()
         setbottomNavigation()
         setLayoutView()

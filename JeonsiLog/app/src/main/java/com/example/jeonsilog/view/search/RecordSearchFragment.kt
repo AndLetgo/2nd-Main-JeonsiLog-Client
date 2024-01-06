@@ -23,9 +23,11 @@ import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.databinding.FragmentSearchRecordBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +45,12 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
         binding.lifecycleOwner = this
         val mActivity = context as MainActivity
         mActivity.setStateBn(true)
+        isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(RecordSearchFragment())
+                isRefresh.value = false
+            }
+        }
         setEditBoxDeleteBt()
         loadSearchList()
         loadRandomList()
