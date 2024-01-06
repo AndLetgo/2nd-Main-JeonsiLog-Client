@@ -1,7 +1,6 @@
 package com.example.jeonsilog.view.otheruser
 
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -9,6 +8,7 @@ import com.example.jeonsilog.databinding.FragmentOtherUserBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.OtherUserViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.google.android.material.tabs.TabLayoutMediator
 
 class OtherUserFragment(private val otherUserId: Int, private val otherUserNick: String): BaseFragment<FragmentOtherUserBinding>(R.layout.fragment_other_user) {
@@ -16,8 +16,14 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
     private val viewModel: OtherUserViewModel by viewModels()
 
     override fun init() {
-        val mActivity = activity as MainActivity
-        mActivity.setStateBn(false)
+        (activity as MainActivity).setStateBn(false)
+
+        GlobalApplication.isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(OtherUserFragment(otherUserId, otherUserNick))
+                GlobalApplication.isRefresh.value = false
+            }
+        }
 
         viewModel.getOtherUserInfo(otherUserId)
 

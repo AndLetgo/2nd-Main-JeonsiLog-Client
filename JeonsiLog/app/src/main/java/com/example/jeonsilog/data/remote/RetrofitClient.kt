@@ -24,6 +24,7 @@ object RetrofitClient {
     private val client = OkHttpClient().newBuilder()
         .addNetworkInterceptor(loggingInterceptor())
         .authenticator(TokenRefreshInterceptor())
+        .addInterceptor(NetworkInterceptor())
         .build()
 
     fun getRetrofit(): Retrofit? {
