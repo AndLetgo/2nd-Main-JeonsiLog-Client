@@ -46,6 +46,9 @@ class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<Fragme
         binding.tvEmpty02.isGone=false
     }
     fun setLayoutView(){
+        //binding.ibFabTopExihibitionPlace.setOnClickListener {
+        //    binding.rvExhibitionplace.scrollToPosition(0)
+        //}
         //리사이클러뷰 제어
         binding.rvExhibitionplace.layoutManager = LinearLayoutManager(requireContext())
         var adapter: ExhibitionPlaceItemAdapter?

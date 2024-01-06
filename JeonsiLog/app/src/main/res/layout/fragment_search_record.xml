@@ -141,7 +141,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:id="@+id/cl_random_poster01"
+                >
 
                 <ImageView
                     android:id="@+id/iv_random_01"
@@ -177,7 +179,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:id="@+id/cl_random_poster02"
+                >
 
                 <ImageView
                     android:id="@+id/iv_random_02"
