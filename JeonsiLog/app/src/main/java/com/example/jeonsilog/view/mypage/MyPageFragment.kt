@@ -18,6 +18,7 @@ import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.MyPageViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.testDefalutImg
 import com.example.jeonsilog.widget.utils.ImageUtil
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -41,8 +42,14 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         binding.vm = viewModel
         binding.lifecycleOwner = requireActivity()
 
-        val mainActivity = activity as MainActivity
-        mainActivity.setStateBn(true)
+        (activity as MainActivity).setStateBn(true)
+
+        isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(MyPageFragment())
+                isRefresh.value = false
+            }
+        }
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         _bsBinding = BottomSheetMypageProfileEditBinding.inflate(layoutInflater)
@@ -69,7 +76,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         binding.ibMypageProfileEdit.setOnClickListener {
             bottomSheetDialog.show()
         }
-
 
         bsBinding!!.btnBottomSheetMypageLoadImage.setOnClickListener {
             val mActivity = activity as MainActivity
