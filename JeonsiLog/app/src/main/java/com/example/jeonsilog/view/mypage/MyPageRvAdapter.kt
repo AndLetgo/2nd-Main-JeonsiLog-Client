@@ -3,9 +3,11 @@ package com.example.jeonsilog.view.mypage
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.interest.GetInterestInformationEntity
 import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
@@ -60,7 +62,8 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
                 .into(binding.ivMypageInterestExhibitionImg)
 
             binding.tvMypageInterestTitle.text = data.exhibitionName
-            binding.tvMypageInterestAddress.text = data.placeName
+
+            binding.tvMypageInterestAddress.text = placeName(data.placeName)
 
             when(data.operatingKeyword){
                 "ON_DISPLAY" -> binding.tvMypageInterestKeywordOn.visibility = View.VISIBLE
@@ -76,14 +79,25 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
                 else -> binding.tvMypageInterestKeywordFree.visibility = View.GONE
             }
 
-            binding.ibMypageInterest.setOnClickListener {
-                list.removeAt(adapterPosition)
-                notifyItemRemoved(adapterPosition)
+            var state = true
+            binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_active)
 
-                // 서버에 즐겨찾기 해제 요청
-                CoroutineScope(Dispatchers.IO).launch{
-                    InterestRepositoryImpl().deleteInterest(encryptedPrefs.getAT(), data.exhibitionId)
+            binding.ibMypageInterest.setOnClickListener {
+//                list.removeAt(adapterPosition)
+//                notifyItemRemoved(adapterPosition)
+                if(state){
+                    binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_inactive)
+                    CoroutineScope(Dispatchers.IO).launch{
+                        InterestRepositoryImpl().deleteInterest(encryptedPrefs.getAT(), data.exhibitionId)
+                    }
+                } else {
+                    binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_active)
+                    CoroutineScope(Dispatchers.IO).launch{
+                        InterestRepositoryImpl().postInterest(encryptedPrefs.getAT(), data.exhibitionId)
+                    }
                 }
+
+                state = !state
             }
 
             // 클릭리스너 - 해당 전시회 상세 페이지
@@ -151,5 +165,18 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
 
     override fun getItemViewType(position: Int): Int {
         return type
+    }
+
+    private fun placeName(input: String?): String {
+        return if(input.isNullOrEmpty()){
+            ""
+        } else {
+            val index = input.indexOf('(')
+            if (index != -1) {
+                input.substring(0, index)
+            } else {
+                input
+            }
+        }
     }
 }

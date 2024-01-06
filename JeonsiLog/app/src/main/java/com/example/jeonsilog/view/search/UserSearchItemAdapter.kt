@@ -21,7 +21,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 
-class UserSearchItemAdapter(private val context: Context,private val edittext:String, private val list:MutableList <SearchUserInformationEntity>) : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
+class UserSearchItemAdapter(
+    private val context: Context,private val edittext:String, private val list:MutableList <SearchUserInformationEntity>)
+    : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
     var itemPage=0
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val usernameTextView: TextView = view.findViewById(R.id.tv_user_name)
@@ -42,7 +44,10 @@ class UserSearchItemAdapter(private val context: Context,private val edittext:St
             if (list.size - 4 == position) {
                 itemPage += 1
                 runBlocking(Dispatchers.IO) {
-                    val response = UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), edittext)
+
+                    val response =
+                        UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), edittext)
+
                     if (response.isSuccessful && response.body()!!.check) {
                         val searchUserResponse = response.body()
                         list.addAll(searchUserResponse?.informationEntity!!.toMutableList())
@@ -54,6 +59,7 @@ class UserSearchItemAdapter(private val context: Context,private val edittext:St
         GlideApp.with(context)
             .load(unsplashUrl)
             .centerCrop()
+            .circleCrop()
             .into(holder.itemView.findViewById(R.id.iv_user_profile))
         holder.usernameTextView.text = item.nickname
         holder.itemView.setOnClickListener {
@@ -66,7 +72,6 @@ class UserSearchItemAdapter(private val context: Context,private val edittext:St
 
         }
     }
-
     override fun getItemCount(): Int {
         return list.size
     }

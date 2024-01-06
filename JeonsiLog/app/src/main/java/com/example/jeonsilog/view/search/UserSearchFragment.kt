@@ -36,6 +36,9 @@ class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUse
         binding.tvEmpty02.isGone=false
     }
     fun setLayoutView(){
+        //binding.ibFabTopUser.setOnClickListener {
+        //    binding.rvUserinfo.scrollToPosition(0)
+        //}
         //리사이클러뷰 제어
         binding.rvUserinfo.layoutManager = LinearLayoutManager(requireContext())
         var adapter: UserSearchItemAdapter?

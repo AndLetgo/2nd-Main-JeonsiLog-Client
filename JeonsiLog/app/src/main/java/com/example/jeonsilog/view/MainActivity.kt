@@ -11,7 +11,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
@@ -24,14 +27,21 @@ import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.view.otheruser.OtherUserFragment
+import com.example.jeonsilog.view.search.RecordSearchFragment
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
-import com.example.jeonsilog.view.search.SearchFragment
+
+import com.example.jeonsilog.view.search.SearchResultFragment
+import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
     private val tag = this.javaClass.simpleName
+    private var networkDialog: NetworkDialog? = null
+    private var backPressedTime: Long = 0L
+
     private val REQUIRED_PERMISSONS = if(Build.VERSION.SDK_INT < 33){
         arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -43,8 +53,36 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         )
     }
 
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if(supportFragmentManager.backStackEntryCount != 0){
+                supportFragmentManager.popBackStack()
+            } else {
+                if (System.currentTimeMillis() - backPressedTime <= 2000) {
+                    finish()
+                } else {
+                    backPressedTime = System.currentTimeMillis()
+                    Toast.makeText(applicationContext, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
     override fun init() {
-//        Log.d(TAG, "init: ")
+        this.onBackPressedDispatcher.addCallback(this, callback)
+
+        networkState.observe(this) {
+            if(!it) {
+                networkDialog = if(networkDialog != null) {
+                    null
+                } else {
+                    NetworkDialog()
+                }
+
+                networkDialog?.show(supportFragmentManager, "NetworkDialog")
+            }
+        }
+
         supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
 
         binding.bnvMain.setOnItemSelectedListener {
@@ -54,8 +92,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 }
                 R.id.item_search->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,
-                        SearchFragment()
-                    ).setReorderingAllowed(true).commitAllowingStateLoss()
+                        RecordSearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_photoCalendar->{
 
@@ -170,5 +207,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 .addToBackStack(null)
                 .commit()
         }
+    }
+    fun moveSearchResultFrament(str :String){
+        val fragment = SearchResultFragment(str)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    fun refreshFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .commit()
     }
 }

@@ -180,11 +180,4 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
         return type
     }
 
-    private fun moveOtherUserProfile(otherUserId: Int){
-        val fragment = OtherUserFragment(otherUserId,"")
-        (context as MainActivity).supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_main, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
 }
