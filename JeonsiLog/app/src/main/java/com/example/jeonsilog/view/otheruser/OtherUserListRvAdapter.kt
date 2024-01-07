@@ -82,7 +82,6 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
             }
 
             binding.ivOtherUserListFollowProfile.setOnClickListener{
-
                 (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
             }
 
@@ -144,24 +143,46 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                 }
                 isFollowingUpdate.value = true
             }
+
+            binding.ivOtherUserListFollowProfile.setOnClickListener{
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+            }
+
+            binding.tvOtherUserListFollowNick.setOnClickListener {
+                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+
+            }
         }
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return TypeFollowViewHolder(
-            ItemOtherUserListFollowBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+        return when(type){
+            0 -> {
+                TypeFollowViewHolder(
+                    ItemOtherUserListFollowBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
+                )
+            }
+            1 -> TypeFollowingViewHolder(
+                ItemOtherUserListFollowBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
             )
-        )
+            else -> throw IllegalArgumentException("알 수 없는 뷰 홀더 유형")
+        }
+
     }
 
     override fun getItemCount(): Int = list.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (this.type) {
+        when (type) {
             0 -> {
                 val followerData = list[position] as GetOtherFollowerInformation
                 holder as OtherUserListRvAdapter<*>.TypeFollowViewHolder
