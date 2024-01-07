@@ -62,7 +62,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         })
 
         binding.ibMenu.setOnClickListener {
-            (activity as ExtraActivity).setMenuButton(it, parentFragmentManager)
+            if(reviewInfo.userId == GlobalApplication.encryptedPrefs.getUI()){
+                (activity as ExtraActivity).setMenuButton(it, parentFragmentManager, 0, "감상평", reviewInfo.reviewId, 1, -1)
+            }else{
+                (activity as ExtraActivity).setMenuButton(it, parentFragmentManager, 1, "감상평", reviewInfo.reviewId, 1, -1)
+            }
         }
 
         binding.btnEnterReply.setOnClickListener{
@@ -80,10 +84,9 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         setReplyRvByPage(0)
 
         exhibitionReplyRvAdapter.setOnItemClickListener(object : ExhibitionReplyRvAdapter.OnItemClickListener{
-            override fun onMenuBtnClick(btn: View) {
-                ExtraActivity().setMenuButton(btn, parentFragmentManager)
+            override fun onMenuBtnClick(btn: View, user:Int, contentId: Int, position: Int) {
+                (activity as ExtraActivity).setMenuButton(btn, parentFragmentManager, user, "댓글", contentId,-1, position)
             }
-
         })
     }
 
@@ -100,5 +103,9 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         val startPosition = totalCount + 1
         exhibitionReplyRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
         replyPage++
+    }
+
+    fun reloadAdapter(position: Int){
+        exhibitionReplyRvAdapter.notifyItemRemoved(position)
     }
 }

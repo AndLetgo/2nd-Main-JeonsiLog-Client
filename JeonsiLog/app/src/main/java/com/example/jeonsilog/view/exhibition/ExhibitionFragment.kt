@@ -17,6 +17,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,14 +32,16 @@ import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.viewmodel.ReviewViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
-class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition) {
+class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition){
     private lateinit var exhibitionRvAdapter: ExhibitionReviewRvAdapter
     private var exhibitionInfoData: ExhibitionInfo? = null
     private var thisExhibitionId = 0
@@ -46,6 +49,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private val reviewViewModel: ReviewViewModel by activityViewModels()
 
     override fun init() {
+        //현재 bottomSheet Id
         val bundle = arguments
         bundle?. let {
             //place에서 넘어온 경우
@@ -54,25 +58,13 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }?:run{
             thisExhibitionId = exhibitionId
         }
-        //페이지 세팅
-        getExhibitionInfo()
 
-        //디바이스 높이값 가져오기
-        val displayMetrics = DisplayMetrics()
-        val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val screenHeight = displayMetrics.heightPixels
+        getExhibitionInfo() //페이지 세팅
+        setBottomSheet() //바텀시트 세팅
 
-        //바텀시트 세팅
-        BottomSheetBehavior.from(binding.nsvBottomSheet).apply {
-            peekHeight = (screenHeight * 0.52).toInt()
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-
-        //RecyclerView
+        //감상평 - RecyclerView
+        Log.d("dialog", "init: getReviewInfo")
         getReviewInfo()
-
-//        binding.tbInterest.isChecked = true
 
         //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
@@ -132,6 +124,20 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
     }
 
+    private fun setBottomSheet(){
+        //디바이스 높이값 가져오기
+        val displayMetrics = DisplayMetrics()
+        val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val screenHeight = displayMetrics.heightPixels
+
+        //바텀시트 세팅
+        BottomSheetBehavior.from(binding.nsvBottomSheet).apply {
+            peekHeight = (screenHeight * 0.52).toInt()
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
     private fun getExhibitionInfo(){
         exhibitionInfoData = runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(), thisExhibitionId)
@@ -165,9 +171,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         Log.d("information", "getExhibitionInfo: ${exhibitionInfoData?.information}")
         if(exhibitionInfoData?.information!=null){
             Log.d("information", "getExhibitionInfo: not null")
-//            binding.tvInformation.text = exhibitionInfoData?.information
-            binding.tvInformation.text ="많은 화제가 되고 있는 류지안 작가의 신작과 MOONLIGHT 시리즈, HERITAGE 시리즈, THE MOON 작품을 비롯하여, 김종언 작가님의 밤새… 시리즈를 만나보실 수 있습니다. 더불어 김동우 작가님의 조각상도 함께 만나보세요."
-            Log.d("information", "getExhibitionInfo: lineHeight: ${binding.tvInformation.height}")
+            binding.tvInformation.text = exhibitionInfoData?.information
+//            binding.tvInformation.text ="많은 화제가 되고 있는 류지안 작가의 신작과 MOONLIGHT 시리즈, HERITAGE 시리즈, THE MOON 작품을 비롯하여, 김종언 작가님의 밤새… 시리즈를 만나보실 수 있습니다. 더불어 김동우 작가님의 조각상도 함께 만나보세요."
+//            Log.d("information", "getExhibitionInfo: lineHeight: ${binding.tvInformation.height}")
             if(binding.tvInformation.height>=3){
                 binding.tvReadMoreInfo.visibility = View.VISIBLE
             }else{
@@ -180,7 +186,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             binding.tvReadMoreInfo.visibility = View.GONE
         }
 
-        //별점 조회
+        //평균 별점
         binding.tvRatingRate.text = exhibitionInfoData?.rate.toString()
         //별점 등록
         binding.ratingBar.setOnRatingChangeListener { _, rating, _ ->
@@ -237,11 +243,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private fun getReviewInfo(){
         reviewList = mutableListOf()
 
-        reviewList.add(
-            GetReviewsExhibitionInformationEntity(
-                0,0,"https://url.kr/f4p861","sample","sample contents",3.5,3)
-        )
-
         runBlocking(Dispatchers.IO) {
             val response = ReviewRepositoryImpl().getReviews(encryptedPrefs.getAT(), thisExhibitionId)
             if(response.isSuccessful && response.body()!!.check){
@@ -252,7 +253,8 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
         exhibitionRvAdapter = ExhibitionReviewRvAdapter(reviewList, requireContext())
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
-        binding.rvExhibitionReview.layoutManager = LinearLayoutManager(this.context)
+        binding.rvExhibitionReview.layoutManager = LinearLayoutManager(context)
+
 
         exhibitionRvAdapter.setOnItemClickListener(object: ExhibitionReviewRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int) {
@@ -260,9 +262,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 reviewViewModel.setReviewInfo(data)
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
             }
-            override fun onMenuBtnClick(btn: View) {
-                ExtraActivity().setMenuButton(btn, parentFragmentManager)
+
+            override fun onMenuBtnClick(btn: View, user: Int, contentId: Int, position: Int) {
+                (activity as ExtraActivity).setMenuButton(btn, parentFragmentManager, user, "감상평", contentId, 0, position)
             }
         })
     }
+
 }

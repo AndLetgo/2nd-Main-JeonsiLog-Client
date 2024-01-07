@@ -13,4 +13,14 @@ class ReviewViewModel: ViewModel() {
     fun setReviewInfo(data:GetReviewsExhibitionInformationEntity){
         _reviewInfo.value = data
     }
+
+    private var _reviewList = MutableLiveData<MutableList<GetReviewsExhibitionInformationEntity>>()
+    val reviewList: LiveData<MutableList<GetReviewsExhibitionInformationEntity>>
+        get() = _reviewList
+    fun deleteReviewListItem(position:Int){
+        _reviewList.value?.removeAt(position)
+    }
+    fun setReviewList(reviewList:MutableList<GetReviewsExhibitionInformationEntity>){
+        _reviewList.value = reviewList
+    }
 }

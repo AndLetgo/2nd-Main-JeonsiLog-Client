@@ -9,15 +9,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import com.example.jeonsilog.R
 import com.example.jeonsilog.databinding.DialogWithIllusBinding
+import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
+import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.view.home.HomeRvAdapter
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.kakao.sdk.common.KakaoSdk.type
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
-class DialogWithIllus(private val type:String): DialogFragment(){
+class DialogWithIllus(
+    private val type:String, private val contentId:Int, private val reviewSide:Int, private val position: Int):
+    DialogFragment(){
+
     private var _binding: DialogWithIllusBinding? = null
     private val binding get() = _binding!!
     val TAG = "Dialog"
@@ -42,13 +55,11 @@ class DialogWithIllus(private val type:String): DialogFragment(){
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         isCancelable = false
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_with_illus, container, false)
-//        binding.lifecycleOwner = this
 
         when(type){
             "신고_감상평" -> {
@@ -76,11 +87,6 @@ class DialogWithIllus(private val type:String): DialogFragment(){
                 binding.ivDialogIllus.isVisible = false
                 binding.tvDialogMessage.text = getString(R.string.dialog_close_review)
                 binding.btnConfirm.text = getString(R.string.btn_wrting_review_close)
-                binding.btnConfirm.setOnClickListener {
-                    Log.d(TAG, "onCreateView: btn clicked")
-                    dismiss()
-                    Navigation.findNavController(it).popBackStack()
-                }
             }
         }
 
@@ -98,10 +104,16 @@ class DialogWithIllus(private val type:String): DialogFragment(){
 
                 }
                 "삭제_감상평" -> {
-
+                    deleteReview()
+                    Log.d(TAG, "onCreateView: deleted")
+                    if(reviewSide == 1){
+                        parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
+                    }else{
+                        (activity as ExtraActivity).reloadExhibitionFragment()
+                    }
                 }
                 "삭제_댓글" -> {
-
+                    deleteReply(contentId)
                 }
                 "감상평" -> {
                     parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
@@ -112,6 +124,30 @@ class DialogWithIllus(private val type:String): DialogFragment(){
 
         return binding.root
     }
+
+    private fun reportReview(){
+//        runBlocking(Dispatchers.IO){
+////            val body: PostReportRequest("REVIEW",)
+////            val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), )
+//            if(response.isSuccessful && response.body()!!.check){
+//                Log.d("interest", "init: 등록 성공")
+//            }
+//        }
+    }
+    private fun deleteReview(){
+        runBlocking(Dispatchers.IO) {
+            ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), contentId)
+        }
+        Toast.makeText(context, "감상평이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+    }
+    private fun deleteReply(replyId: Int){
+        runBlocking(Dispatchers.IO){
+            ReplyRepositoryImpl().deleteReply(encryptedPrefs.getAT(), replyId)
+        }
+        Toast.makeText(context, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        (parentFragmentManager as ReviewFragment).reloadAdapter(position)
+    }
+
 
     override fun onDestroyView() {
         _binding = null

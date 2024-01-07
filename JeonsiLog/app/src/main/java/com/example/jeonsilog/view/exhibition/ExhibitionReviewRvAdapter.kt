@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 
 class ExhibitionReviewRvAdapter(
     private val reviewList:List<GetReviewsExhibitionInformationEntity>,
@@ -21,8 +22,9 @@ class ExhibitionReviewRvAdapter(
     private var listener: OnItemClickListener? = null
     inner class RecycleViewHolder(private val binding: ItemExhibitionReviewBinding):
         RecyclerView.ViewHolder(binding.root){
-        fun bind(item: GetReviewsExhibitionInformationEntity){
-            Log.d("review", "bind: adapter nickname: ${item.nickname}")
+        fun bind(position: Int){
+            val item = reviewList[position]
+
             binding.tvUserName.text = item.nickname
             binding.tvReviewContent.text = item.contents
             binding.brbExhibitionReviewRating.rating = item.rate.toFloat()
@@ -34,7 +36,11 @@ class ExhibitionReviewRvAdapter(
                 .into(binding.ivProfile)
 
             binding.ibMenu.setOnClickListener{
-                listener?.onMenuBtnClick(it)
+                if(item.userId == encryptedPrefs.getUI()){
+                    listener?.onMenuBtnClick(it, 0, item.reviewId, position)
+                }else{
+                    listener?.onMenuBtnClick(it, 1, item.reviewId, position)
+                }
             }
         }
     }
@@ -51,7 +57,7 @@ class ExhibitionReviewRvAdapter(
     override fun getItemCount(): Int = reviewList.size
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
-        holder.bind(reviewList[position])
+        holder.bind(position)
 
         if(position != RecyclerView.NO_POSITION){
             holder.itemView.setOnClickListener {
@@ -62,7 +68,7 @@ class ExhibitionReviewRvAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int)
-        fun onMenuBtnClick(btn:View)
+        fun onMenuBtnClick(btn:View, user:Int, contentId: Int, position: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){

@@ -32,7 +32,7 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
         thisExhibitionId = requireArguments().getInt("exhibitionId")
         
         binding.btnCancel.setOnClickListener {
-            ExtraActivity().showCustomDialog(parentFragmentManager, "감상평")
+            ExtraActivity().showCustomDialog(parentFragmentManager, "감상평", -1, -1, -1)
         }
 
         binding.vm = viewModel
