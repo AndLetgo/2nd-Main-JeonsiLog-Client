@@ -73,55 +73,17 @@ class DialogWithIllus(
                 binding.btnConfirm.text = getString(R.string.btn_report)
             }
             "삭제_감상평" -> {
-                binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_delete) })
-                binding.tvDialogMessage.text = getString(R.string.dialog_delete, "감상평")
-                binding.btnConfirm.text = getString(R.string.btn_delete_dialog)
+                setDeleteReview()
             }
             "삭제_댓글" -> {
-                binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_delete) })
-                binding.tvDialogMessage.text = getString(R.string.dialog_delete, "댓글")
-                binding.btnConfirm.text = getString(R.string.btn_delete_dialog)
+                setDeleteReply()
             }
             "감상평" -> {
-                Log.d(TAG, "onCreateView: 감상평")
-                binding.ivDialogIllus.isVisible = false
-                binding.tvDialogMessage.text = getString(R.string.dialog_close_review)
-                binding.btnConfirm.text = getString(R.string.btn_wrting_review_close)
+                setCancelReview()
             }
         }
 
-        binding.btnCancel.setOnClickListener {
-            dismiss()
-        }
-
-        //확인 버튼 클릭 시
-        binding.btnConfirm.setOnClickListener {
-            when(type){
-                "신고_감상평" -> {
-
-                }
-                "신고_댓글" -> {
-
-                }
-                "삭제_감상평" -> {
-                    deleteReview()
-                    Log.d(TAG, "onCreateView: deleted")
-                    if(reviewSide == 1){
-                        parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
-                    }else{
-                        (activity as ExtraActivity).reloadExhibitionFragment()
-                    }
-                }
-                "삭제_댓글" -> {
-                    deleteReply(contentId)
-                }
-                "감상평" -> {
-                    parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
-                }
-            }
-            dismiss()
-        }
-
+        binding.btnCancel.setOnClickListener { dismiss() }
         return binding.root
     }
 
@@ -134,21 +96,53 @@ class DialogWithIllus(
 //            }
 //        }
     }
+    private fun setDeleteReview(){
+        binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_delete) })
+        binding.tvDialogMessage.text = getString(R.string.dialog_delete, "감상평")
+        binding.btnConfirm.text = getString(R.string.btn_delete_dialog)
+        binding.btnConfirm.setOnClickListener{
+            deleteReview()
+            Log.d(TAG, "onCreateView: deleted")
+            if(reviewSide == 1){
+                parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
+            }else{
+                (activity as ExtraActivity).reloadFragment()
+            }
+            dismiss()
+        }
+    }
     private fun deleteReview(){
         runBlocking(Dispatchers.IO) {
             ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), contentId)
         }
         Toast.makeText(context, "감상평이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
     }
-    private fun deleteReply(replyId: Int){
+    private fun setDeleteReply(){
+        binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_delete) })
+        binding.tvDialogMessage.text = getString(R.string.dialog_delete, "댓글")
+        binding.btnConfirm.text = getString(R.string.btn_delete_dialog)
+        binding.btnConfirm.setOnClickListener{
+            deleteReply()
+            (activity as ExtraActivity).reloadFragment()
+            dismiss()
+        }
+    }
+    private fun deleteReply(){
         runBlocking(Dispatchers.IO){
-            ReplyRepositoryImpl().deleteReply(encryptedPrefs.getAT(), replyId)
+            ReplyRepositoryImpl().deleteReply(encryptedPrefs.getAT(), contentId)
         }
         Toast.makeText(context, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-        (parentFragmentManager as ReviewFragment).reloadAdapter(position)
     }
-
-
+    private fun setCancelReview(){
+        Log.d(TAG, "onCreateView: 감상평")
+        binding.ivDialogIllus.isVisible = false
+        binding.tvDialogMessage.text = getString(R.string.dialog_close_review)
+        binding.btnConfirm.text = getString(R.string.btn_wrting_review_close)
+        binding.btnConfirm.setOnClickListener{
+            parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
+            dismiss()
+        }
+    }
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()

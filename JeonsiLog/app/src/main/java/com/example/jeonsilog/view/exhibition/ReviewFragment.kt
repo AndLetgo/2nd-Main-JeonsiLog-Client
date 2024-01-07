@@ -17,6 +17,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyInformation
+import com.example.jeonsilog.data.remote.dto.reply.PostReplyRequest
+import com.example.jeonsilog.data.remote.dto.reply.UserEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentReviewBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
@@ -24,8 +26,12 @@ import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ReviewViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import okhttp3.internal.notify
+import java.time.LocalDateTime
+import java.util.Date
 
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_review) {
     private lateinit var exhibitionReplyRvAdapter: ExhibitionReplyRvAdapter
@@ -70,7 +76,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         }
 
         binding.btnEnterReply.setOnClickListener{
-            //댓글 입력 등록 버튼 처리
+            postReply() //댓글 입력 등록 버튼 처리
         }
     }
 
@@ -94,7 +100,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         Log.d("reply", "setReplyRvByPage: called")
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
-            val response = ReplyRepositoryImpl().getReply(GlobalApplication.encryptedPrefs.getAT(),reviewInfo.reviewId,replyPage)
+            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(),reviewInfo.reviewId,replyPage)
             if(response.isSuccessful && response.body()!!.check){
                 replyList.addAll(response.body()!!.information)
                 addItemCount = response.body()!!.information.size
@@ -105,7 +111,19 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         replyPage++
     }
 
-    fun reloadAdapter(position: Int){
-        exhibitionReplyRvAdapter.notifyItemRemoved(position)
+    private fun postReply(){
+        var replyContent =""
+        runBlocking(Dispatchers.IO) {
+            replyContent = binding.etWritingReply.text.toString()
+            val body = PostReplyRequest(reviewInfo.reviewId, replyContent)
+            ReplyRepositoryImpl().postReply(encryptedPrefs.getAT(), body)
+        }
+        val createdDate = LocalDateTime.now()
+        val newReply = GetReplyInformation(replyList.size, replyContent, createdDate.toString(), UserEntity(
+            encryptedPrefs.getUI(), encryptedPrefs.getNN()!!, encryptedPrefs.getURL()!!
+        ))
+        replyList.add(newReply)
+        binding.rvExhibitionReviewReply.adapter?.notifyItemInserted(replyList.size)
+        binding.etWritingReply.setText("")
     }
 }

@@ -66,7 +66,7 @@ class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.
         val customDialogFragment = DialogWithIllus(tag, contentId , reviewSide, position)
         customDialogFragment.show(fragment, tag)
     }
-    fun reloadExhibitionFragment(){
+    fun reloadFragment(){
         val currentDestinationId = Navigation.findNavController(binding.fcvNavFrame).currentDestination?.id
         currentDestinationId?.let { findNavController(R.id.fcv_nav_frame).navigate(it) }
     }
