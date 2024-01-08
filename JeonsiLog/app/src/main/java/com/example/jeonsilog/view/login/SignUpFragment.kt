@@ -53,7 +53,6 @@ class SignUpFragment: BaseFragment<FragmentSignupBinding>(R.layout.fragment_sign
                 Log.e(tag, "사용자 정보 요청 실패 $error")
             } else if (user != null) {
                 Log.d(tag, "사용자 정보 요청 성공 : $user")
-                viewModel.setProfileUrl(GlobalApplication.testDefalutImg)
             }
         }
 
@@ -84,10 +83,6 @@ class SignUpFragment: BaseFragment<FragmentSignupBinding>(R.layout.fragment_sign
                     else if (checker.hasSpecialCharacter(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_special_char))
                     }
-                    // API 제작 대기중
-//                    else if (){
-//                        viewModel.setComment(getString(R.string.login_nick_check_prohibited_words))
-//                    }
                     else if(checker.isNotPair(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_is_pair))
                     }
@@ -107,7 +102,7 @@ class SignUpFragment: BaseFragment<FragmentSignupBinding>(R.layout.fragment_sign
 
         binding.btnLoginDuplicate.setOnClickListener {
             if(viewModel.checkableFlag.value == true){
-                viewModel.duplicateCheck(binding.etNick.text.toString(), getString(R.string.login_nick_check_duplicate))
+                viewModel.nickAvailableCheck(binding.etNick.text.toString(), requireContext())
             }
         }
 
@@ -167,7 +162,7 @@ class SignUpFragment: BaseFragment<FragmentSignupBinding>(R.layout.fragment_sign
                             providerId = user.id.toString(),
                             nickname = binding.etNick.text.toString(),
                             email = user.kakaoAccount!!.email.toString(),
-                            profileImgUrl = GlobalApplication.testDefalutImg
+                            profileImgUrl = null
                         )
                         continuation.resume(data)
                     } else {

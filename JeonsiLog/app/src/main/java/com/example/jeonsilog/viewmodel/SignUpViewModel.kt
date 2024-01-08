@@ -1,10 +1,12 @@
 package com.example.jeonsilog.viewmodel
 
+import android.content.Context
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.jeonsilog.R
 import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,14 +44,22 @@ class SignUpViewModel: ViewModel(){
         _btnFlag.value = state
     }
 
-    fun duplicateCheck(nick: String, comment: String){
-        viewModelScope.launch(Dispatchers.IO){
-            launch(Dispatchers.Main) {
-                if(AuthRepositoryImpl().getIsAvailable(nick)){
-                    onBtnFlagChange(true)
-                } else {
-                    setComment(comment)
+    fun nickAvailableCheck(nick: String, context: Context){
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = AuthRepositoryImpl().getIsAvailable(nick)
+            if (response.isSuccessful && response.body()!!.check) {
+                val result = response.body()!!.information
+
+                launch(Dispatchers.Main) {
+                    if (!result.isDuplicate && !result.isForbidden) {
+                        onBtnFlagChange(true)
+                    } else if (result.isDuplicate) {
+                        setComment(context.getString(R.string.login_nick_check_duplicate))
+                    } else {
+                        setComment(context.getString(R.string.login_nick_check_forbidden))
+                    }
                 }
+
             }
         }
     }

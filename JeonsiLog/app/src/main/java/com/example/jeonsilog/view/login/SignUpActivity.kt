@@ -21,9 +21,7 @@ import androidx.core.content.ContextCompat
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivitySignupBinding
-import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SignUpViewModel
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 
 class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBinding.inflate(it)}) {
     private val viewModel: SignUpViewModel by viewModels()
@@ -43,11 +41,11 @@ class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBindin
     }
 
     override fun init() {
-        if(prefs.getSignUpFinished()){
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            startActivity(intent)
-        }
+//        if(prefs.getSignUpFinished()){
+//            val intent = Intent(this, MainActivity::class.java)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+//            startActivity(intent)
+//        }
 
         this.onBackPressedDispatcher.addCallback(this, callback)
 
@@ -82,7 +80,6 @@ class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBindin
         }
 
         if (shouldShowRequestPermissionRationale(permission[0])) {
-            Log.d(tag, "in True")
             if(viewModel.firstRequest.value!! > 2){
                 showPermissionRationale("거부된 권한이 있습니다")
                 viewModel.changeFirstRequest(0)
