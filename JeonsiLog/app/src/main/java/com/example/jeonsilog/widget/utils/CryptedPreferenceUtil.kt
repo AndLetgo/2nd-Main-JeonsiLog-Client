@@ -54,8 +54,12 @@ class CryptedPreferenceUtil(context: Context) {
         encryptedPrefs.edit().putInt("ui", p).apply()
     }
 
-    fun setURL(p: String){
-        encryptedPrefs.edit().putString("profileImgUrl", p).apply()
+    fun setURL(p: String?){
+        if(p.isNullOrEmpty()){
+            encryptedPrefs.edit().putString("profileImgUrl", "").apply()
+        } else {
+            encryptedPrefs.edit().putString("profileImgUrl", p).apply()
+        }
     }
 
     fun setNumFollowing(p: Int){

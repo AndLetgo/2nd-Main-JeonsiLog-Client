@@ -123,7 +123,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
                             providerId = user.id.toString(),
                             email = user.kakaoAccount!!.email.toString(),
                         )
-//                        val data = SignInRequest(testEmail, testId)
                         continuation.resume(data)
                     } else {
                         continuation.resume(SignInRequest("", ""))
