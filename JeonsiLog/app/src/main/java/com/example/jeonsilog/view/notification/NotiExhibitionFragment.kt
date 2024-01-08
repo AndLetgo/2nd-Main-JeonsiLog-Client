@@ -29,6 +29,7 @@ class NotiExhibitionFragment : BaseFragment<FragmentNotiExhibitionBinding>(R.lay
                 while (data.hasNext()){
                     notiList.add(data.next())
                 }
+                notiList.reverse()
             }
         }
     }

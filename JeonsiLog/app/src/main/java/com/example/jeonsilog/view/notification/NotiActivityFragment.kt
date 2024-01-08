@@ -29,6 +29,7 @@ class NotiActivityFragment : BaseFragment<FragmentNotiActivityBinding>(R.layout.
                 while (data.hasNext()){
                     notiList.add(data.next())
                 }
+                notiList.reverse()
             }
         }
     }
