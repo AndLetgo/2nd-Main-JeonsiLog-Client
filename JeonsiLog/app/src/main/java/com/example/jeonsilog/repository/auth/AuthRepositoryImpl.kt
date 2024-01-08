@@ -3,11 +3,13 @@ package com.example.jeonsilog.repository.auth
 import android.util.Log
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.AuthApi
+import com.example.jeonsilog.data.remote.dto.auth.IsAvailableResponse
 import com.example.jeonsilog.data.remote.dto.auth.SignInRequest
 import com.example.jeonsilog.data.remote.dto.auth.SignUpRequest
 import com.example.jeonsilog.data.remote.dto.auth.TokenRefreshRequest
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
+import retrofit2.Response
 
 class AuthRepositoryImpl: AuthRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(AuthApi::class.java)
@@ -26,15 +28,13 @@ class AuthRepositoryImpl: AuthRepository {
         }
     }
 
-    override suspend fun getIsAvailable(nick: String): Boolean {
+    override suspend fun getIsAvailable(nick: String): Response<IsAvailableResponse> {
         val response = service.getIsAvailable(nick)
 
         return if(response.isSuccessful && response.body()?.check == true){
-            Log.d(tag, response.body().toString())
-            response.body()!!.information.isAvailable
+            response
         } else {
-            Log.e(tag, "이미 존재하는 닉네임")
-            false
+            response
         }
     }
 
