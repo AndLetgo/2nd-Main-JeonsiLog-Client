@@ -60,7 +60,7 @@
     <string name="login_nick_hint">2~10글자, 특수문자, 공백 사용 불가</string>
     <string name="login_nick_check_success">사용 가능한 닉네임이에요.</string>
     <string name="login_nick_check_duplicate">중복된 닉네임이에요.</string>
-    <string name="login_nick_check_prohibited_words">부적절한 단어가 포함되어 있어요.</string>
+    <string name="login_nick_check_forbidden">부적절한 단어가 포함되어 있어요.</string>
     <string name="login_nick_check_special_char">특수문자 및 공백은 사용할 수 없어요.</string>
     <string name="login_nick_check_is_pair">자음 또는 모음을 홀로 사용할 수 없어요.</string>
 
