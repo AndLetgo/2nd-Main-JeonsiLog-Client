@@ -19,36 +19,24 @@ class OtherUserCalendarFragment(private val otherUserId: Int): BaseFragment<Frag
         binding.vm = viewModel
         binding.lifecycleOwner = requireActivity()
         viewModel.setSelectedDate(LocalDate.now())
-        setView()
+        viewModel.getIsOpen(otherUserId)
 
-        binding.rvOtherUserCalendar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = binding.rvOtherUserCalendar.height / 7
-                adapter.setLength(width)
-                adapter.notifyDataSetChanged()
-                binding.clOtherUserCalendar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+        setMonthView()
+
+        viewModel.isOpen.observe(this) {
+            if (it) {
+                binding.ivOtherUserCalendarEmptyImg.visibility = View.GONE
+                binding.tvOtherUserCalendarEmptyTitle.visibility = View.GONE
+                binding.tbOtherUserCalendar.visibility = View.VISIBLE
+                binding.rvOtherUserCalendar.visibility = View.VISIBLE
+                binding.llOtherUserCalendar.visibility = View.VISIBLE
+            } else {
+                binding.ivOtherUserCalendarEmptyImg.visibility = View.VISIBLE
+                binding.tvOtherUserCalendarEmptyTitle.visibility = View.VISIBLE
+                binding.tbOtherUserCalendar.visibility = View.GONE
+                binding.rvOtherUserCalendar.visibility = View.GONE
+                binding.llOtherUserCalendar.visibility = View.GONE
             }
-        })
-
-        viewModel.selectedDate.observe(this){
-            viewModel.getImageList(otherUserId)
-            daysInMonthArray(LocalDate.of(viewModel.selectedDate.value!!.slice(0..3).toInt(), viewModel.selectedDate.value!!.slice(6..7).toInt(), 1))
-        }
-
-        viewModel.imageList.observe(this){
-            adapter.notifyDataSetChanged()
-        }
-
-        binding.tvOtherUserYearMonth.setOnClickListener {
-            val pickYearMonthDialog = OtherUserCalendarBottomSheetDialog(viewModel)
-            pickYearMonthDialog.show(parentFragmentManager, "pickYearMonthDialog")
-        }
-
-        binding.ibOtherUserNextMonth.setOnClickListener {
-            viewModel.nextMonth()
-        }
-        binding.ibOtherUserPrevMonth.setOnClickListener {
-            viewModel.prevMonth()
         }
     }
 
@@ -58,6 +46,38 @@ class OtherUserCalendarFragment(private val otherUserId: Int): BaseFragment<Frag
         val manager = GridLayoutManager(requireContext(), 7)
         binding.rvOtherUserCalendar.layoutManager = manager
         binding.rvOtherUserCalendar.adapter = adapter
+
+        if(viewModel.isOpen.value!!){
+            binding.rvOtherUserCalendar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    val width = binding.rvOtherUserCalendar.height / 7
+                    adapter.setLength(width)
+                    adapter.notifyDataSetChanged()
+                    binding.clOtherUserCalendar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            })
+
+            viewModel.selectedDate.observe(this){
+                viewModel.getImageList(otherUserId)
+                daysInMonthArray(LocalDate.of(viewModel.selectedDate.value!!.slice(0..3).toInt(), viewModel.selectedDate.value!!.slice(6..7).toInt(), 1))
+            }
+
+            viewModel.imageList.observe(this){
+                adapter.notifyDataSetChanged()
+            }
+
+            binding.tvOtherUserYearMonth.setOnClickListener {
+                val pickYearMonthDialog = OtherUserCalendarBottomSheetDialog(viewModel)
+                pickYearMonthDialog.show(parentFragmentManager, "pickYearMonthDialog")
+            }
+
+            binding.ibOtherUserNextMonth.setOnClickListener {
+                viewModel.nextMonth()
+            }
+            binding.ibOtherUserPrevMonth.setOnClickListener {
+                viewModel.prevMonth()
+            }
+        }
     }
 
     private fun daysInMonthArray(date: LocalDate) {
@@ -76,23 +96,5 @@ class OtherUserCalendarFragment(private val otherUserId: Int): BaseFragment<Frag
         }
 
         viewModel.setDayList(dayList)
-    }
-
-    private fun setView(){
-        if (!viewModel.isPublic.value!!) {
-            binding.ivOtherUserCalendarEmptyImg.visibility = View.VISIBLE
-            binding.tvOtherUserCalendarEmptyTitle.visibility = View.VISIBLE
-            binding.tbOtherUserCalendar.visibility = View.GONE
-            binding.rvOtherUserCalendar.visibility = View.GONE
-            binding.llOtherUserCalendar.visibility = View.GONE
-        } else {
-            binding.ivOtherUserCalendarEmptyImg.visibility = View.GONE
-            binding.tvOtherUserCalendarEmptyTitle.visibility = View.GONE
-            binding.tbOtherUserCalendar.visibility = View.VISIBLE
-            binding.rvOtherUserCalendar.visibility = View.VISIBLE
-            binding.llOtherUserCalendar.visibility = View.VISIBLE
-
-            setMonthView()
-        }
     }
 }
