@@ -18,8 +18,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.databinding.DialogWithIllusBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
+import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.home.HomeRvAdapter
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -62,39 +64,44 @@ class DialogWithIllus(
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_with_illus, container, false)
 
         when(type){
-            "신고_감상평" -> {
-                binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_report) })
-                binding.tvDialogMessage.text = getString(R.string.dialog_report, "감상평")
-                binding.btnConfirm.text = getString(R.string.btn_report)
-            }
-            "신고_댓글" -> {
-                binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_report) })
-                binding.tvDialogMessage.text = getString(R.string.dialog_report, "댓글")
-                binding.btnConfirm.text = getString(R.string.btn_report)
-            }
-            "삭제_감상평" -> {
-                setDeleteReview()
-            }
-            "삭제_댓글" -> {
-                setDeleteReply()
-            }
-            "감상평" -> {
-                setCancelReview()
-            }
+            "신고_감상평" -> { setReportReview() }
+            "신고_댓글" -> { setReportReply() }
+            "삭제_감상평" -> { setDeleteReview() }
+            "삭제_댓글" -> { setDeleteReply() }
+            "감상평" -> { setCancelReview() }
         }
 
         binding.btnCancel.setOnClickListener { dismiss() }
         return binding.root
     }
 
-    private fun reportReview(){
-//        runBlocking(Dispatchers.IO){
-////            val body: PostReportRequest("REVIEW",)
-////            val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), )
-//            if(response.isSuccessful && response.body()!!.check){
-//                Log.d("interest", "init: 등록 성공")
-//            }
-//        }
+    private fun setReportReview(){
+        binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_report) })
+        binding.tvDialogMessage.text = getString(R.string.dialog_report, "감상평")
+        binding.btnConfirm.text = getString(R.string.btn_report)
+        binding.btnConfirm.setOnClickListener{
+            reportReview("REVIEW")
+            dismiss()
+        }
+    }
+    private fun setReportReply(){
+        binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_report) })
+        binding.tvDialogMessage.text = getString(R.string.dialog_report, "댓글")
+        binding.btnConfirm.text = getString(R.string.btn_report)
+        binding.btnConfirm.setOnClickListener{
+            reportReview("REPLY")
+            dismiss()
+        }
+    }
+    private fun reportReview(reportType:String){
+        runBlocking(Dispatchers.IO){
+            val body = PostReportRequest(reportType, contentId)
+            val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
+            if(response.isSuccessful && response.body()!!.check){
+                Log.d("interest", "init: 등록 성공")
+            }
+        }
+        Toast.makeText(context, "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
     }
     private fun setDeleteReview(){
         binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_delete) })

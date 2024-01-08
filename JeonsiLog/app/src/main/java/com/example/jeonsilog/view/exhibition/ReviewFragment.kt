@@ -41,6 +41,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private var replyPage = 0
 
     override fun init() {
+        Log.d("TAG", "init: start reviewFragment")
         reviewInfo = reviewViewModel.reviewInfo.value!!
         binding.tvUserName.text = reviewInfo.nickname
         binding.brbExhibitionReview.rating = reviewInfo.rate.toFloat()
