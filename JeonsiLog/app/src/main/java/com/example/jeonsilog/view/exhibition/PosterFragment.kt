@@ -1,6 +1,9 @@
 package com.example.jeonsilog.view.exhibition
 
+import android.Manifest
+import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -9,6 +12,8 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +36,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -40,13 +46,18 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
     private val exhibitionPosterViewModel:ExhibitionPosterViewModel by viewModels()
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private lateinit var viewPager: ViewPager
+    private val TAG = "download"
+
+    val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 500
+//    val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 4
+
     override fun init() {
         viewPager = binding.vpPoster
 
         posterList = mutableListOf()
 
         runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().getPoster(encryptedPrefs.getAT(), exhibitionId)
+            val response = ExhibitionRepositoryImpl().getPoster(encryptedPrefs.getAT(), exhibitionViewModel.currentExhibitionId.value!!)
             if(response.isSuccessful && response.body()!!.check){
                 posterList?.add(response.body()!!.information.imageUrl)
                 binding.llPosterEmptyState.visibility = View.GONE
@@ -77,20 +88,14 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
         }
 
         //이미지 다운로드
-//        binding.ibDownload.setOnClickListener {
-//            val image = this.posterList!![viewPager.currentItem]
-//            Log.d("download", "init: imageurl: $image")
-//            lifecycleScope.launch(Dispatchers.IO) {
-//                val bitmap = downloadImageToBitmap(image)
-//                if(bitmap != null){
-//                    downloadImage(bitmap)
-//                }
-//            }
-//        }
+        binding.ibDownload.setOnClickListener {
+            Log.d(TAG, "init: click button")
+            checkStoragePermission()
+        }
     }
 
     //이미지 다운로드
-    private fun downloadImageToBitmap(imageUrl:String):Bitmap?{
+    private fun imageUrlToBitmap(imageUrl:String):Bitmap?{
         try{
             val url = URL(imageUrl)
             val connection = url.openConnection() as HttpURLConnection
@@ -98,45 +103,86 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
             connection.connect()
             val input = connection.inputStream
             val bitmap = BitmapFactory.decodeStream(input)
-            Log.d("download", "downloadImageToBitmap: bitmap: $bitmap")
+
             return bitmap
         }catch (e:IOException){
-            Log.e("download", "downloadImageToBitmap: $e", )
+            Log.e("poster", "imageUrlToBitmap: $e", )
         }
         return null
     }
     private fun checkStoragePermission() {
-
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                // 권한이 없는 경우 권한 요청 다이얼로그를 표시
+                Log.d(TAG, "checkStoragePermission: 권한 없음")
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                )
+            } else {
+                // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
+                Log.d(TAG, "checkStoragePermission: 권한 있음")
+                var bitmap:Bitmap?
+                lifecycleScope.launch(Dispatchers.IO){
+                    bitmap = imageUrlToBitmap(posterList!![0])
+                    downloadImage(bitmap!!)
+                }
+            }
+        } else{
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                // 권한이 없는 경우 권한 요청 다이얼로그를 표시
+                Log.d(TAG, "checkStoragePermission: 33이하, 권한 없음")
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                )
+            } else {
+                // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
+                Log.d(TAG, "checkStoragePermission: 33이하, 권한 있음")
+                var bitmap:Bitmap?
+                lifecycleScope.launch(Dispatchers.IO){
+                    bitmap = imageUrlToBitmap(posterList!![0])
+                    downloadImage(bitmap!!)
+                }
+            }
+        }
     }
     private fun downloadImage(bitmap: Bitmap) {
+        Log.d(TAG, "downloadImage: 실행됨")
+        val fileName = System.currentTimeMillis().toString()+".png"
 
-        val fileOutputStream: OutputStream
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val resolver = requireContext().contentResolver
-            val contentValues = ContentValues().apply {
-                put(MediaStore.Images.Media.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
-                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-            }
-            val imageUri =
-                resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-            fileOutputStream = imageUri?.let { resolver.openOutputStream(it) } ?: return
-        } else {
-            val imagesDir =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            val image = File(imagesDir, "image_${System.currentTimeMillis()}.jpg")
-            fileOutputStream = FileOutputStream(image)
+        val contentValues = ContentValues()
+        contentValues.apply {
+            put(MediaStore.Images.Media.RELATIVE_PATH, "DCIM/ImageSave")
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.IS_PENDING, 1)
         }
 
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
-        fileOutputStream.close()
+        val directory = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "DownloadedImages")
+        if(!directory.exists()){
+            directory.mkdirs()
+        }
+        val file = File(directory, fileName)
+        var fileOutputStream: FileOutputStream? = null
+        try {
+            fileOutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+            Toast.makeText(requireContext(), "포스터를 저장했습니다.", Toast.LENGTH_SHORT).show()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }finally {
+            try {
+                fileOutputStream?.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
 
-        Toast.makeText(requireContext(), "이미지가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+
     }
-
-    //접근 권한
-    private fun requestPermission(){
-
-    }
-
 }

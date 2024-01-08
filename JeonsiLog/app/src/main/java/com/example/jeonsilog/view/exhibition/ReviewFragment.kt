@@ -1,14 +1,8 @@
 package com.example.jeonsilog.view.exhibition
 
-import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,10 +15,8 @@ import com.example.jeonsilog.data.remote.dto.reply.PostReplyRequest
 import com.example.jeonsilog.data.remote.dto.reply.UserEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentReviewBinding
-import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
-import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
-import com.example.jeonsilog.viewmodel.ReviewViewModel
+import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
@@ -36,13 +28,13 @@ import java.util.Date
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_review) {
     private lateinit var exhibitionReplyRvAdapter: ExhibitionReplyRvAdapter
     private lateinit var replyList: MutableList<GetReplyInformation>
-    private val reviewViewModel: ReviewViewModel by activityViewModels()
+    private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
 
     override fun init() {
         Log.d("TAG", "init: start reviewFragment")
-        reviewInfo = reviewViewModel.reviewInfo.value!!
+        reviewInfo = exhibitionViewModel.reviewInfo.value!!
         binding.tvUserName.text = reviewInfo.nickname
         binding.brbExhibitionReview.rating = reviewInfo.rate.toFloat()
         binding.tvReviewContent.text = reviewInfo.contents
