@@ -2,6 +2,7 @@ package com.example.jeonsilog.view.notification
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.data.remote.dto.alarm.AlarmInformation
@@ -16,6 +17,12 @@ import java.time.temporal.ChronoUnit
 class NotificationRvAdapter(private val notiList: List<AlarmInformation>, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class TypeActivityViewHolder(private val binding: ItemNotiActivityBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: AlarmInformation){
+            if (data.isChecked) {
+                itemView.alpha = 0.4f
+            } else {
+                itemView.alpha = 1.0f
+            }
+
             GlideApp.with(binding.ivNotiProfile)
                 .load(data.imgUrl)
                 .circleCrop()
@@ -29,6 +36,10 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
 
             // 클릭리스너 - 해당 유저 프로필로 이동
             itemView.setOnClickListener {
+                if(!data.isChecked){
+                    patchChecked(itemView, data.alarmId)
+                }
+
                 when(data.alarmType){
                     "REVIEW" -> {
                         // 해당 전시회 댓글 페이지로 이동
@@ -50,6 +61,12 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
 
     inner class TypeExhibitionViewHolder(private val binding: ItemNotiExhibitionBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: AlarmInformation){
+            if (data.isChecked) {
+                itemView.alpha = 0.4f
+            } else {
+                itemView.alpha = 1.0f
+            }
+
             GlideApp.with(binding.ivNotiExhibition)
                 .load(data.imgUrl)
                 .circleCrop()
@@ -62,6 +79,9 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
             binding.tvNotiTime.text = formatElapsedTime(data.dateTime)
 
             itemView.setOnClickListener {
+                if(!data.isChecked){
+                    patchChecked(itemView, data.alarmId)
+                }
 //                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data)
                 // 전시회 아이디 필요 -> 검색을 통해? or Response에 값 추가
             }
@@ -164,5 +184,19 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
         val contents = input.substring(spaceIndex + 1).trim()
 
         return nick to contents
+    }
+
+    private fun patchChecked(itemView: View, alarmId: Int){
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val response = AlarmRepositoryImpl().patchAlramChecked(encryptedPrefs.getAT(), alarmId)
+//            if(response.isSuccessful && response.body()!!.check){
+//                launch(Dispatchers.Main){
+//                    itemView.alpha = 0.4f
+//                }
+//            }
+//        }
+
+        // 테스트용 코드
+        itemView.alpha = 0.4f
     }
 }
