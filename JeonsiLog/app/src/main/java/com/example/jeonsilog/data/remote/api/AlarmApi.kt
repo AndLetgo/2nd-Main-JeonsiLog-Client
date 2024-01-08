@@ -1,9 +1,12 @@
 package com.example.jeonsilog.data.remote.api
 
+import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.alarm.GetAlarmResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
+import retrofit2.http.Path
 
 interface AlarmApi {
     @GET("/api/alarms/activity")
@@ -16,9 +19,9 @@ interface AlarmApi {
         @Header("Authorization") token: String
     ): Response<GetAlarmResponse>
 
-// 아직 배포 안됨
-//    @PATCH("/api/alarms/check/")
-//    suspend fun patchAlarmChecked(
-//        @Header("Authorization") token: String
-//    )
+    @PATCH("/api/alarms/check/{alarmId}")
+    suspend fun patchAlarmChecked(
+        @Header("Authorization") token: String,
+        @Path("alarmId") alarmId: Int
+    ): Response<OnlyMsgResponse>
 }
