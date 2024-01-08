@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
@@ -69,10 +70,18 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
                 }
             }
 
-            Glide.with(context)
-                .load(item.imageUrl)
-                .transform(CenterCrop(), RoundedCorners(16))
-                .into(binding.ivPoster)
+            if(item.imageUrl != null){
+                Glide.with(context)
+                    .load(item.imageUrl)
+                    .transform(CenterCrop(), RoundedCorners(16))
+                    .into(binding.ivPoster)
+            }else{
+                Glide.with(context)
+                    .load(R.drawable.illus_empty_poster)
+                    .transform(CenterInside(), RoundedCorners(16))
+                    .into(binding.ivPoster)
+            }
+
         }
     }
 
