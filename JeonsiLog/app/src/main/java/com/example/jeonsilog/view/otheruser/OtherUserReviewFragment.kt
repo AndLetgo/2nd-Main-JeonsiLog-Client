@@ -46,7 +46,7 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val ot
             binding.ivOtherUserReviewEmptyImg.visibility = View.VISIBLE
             binding.tvOtherUserReviewEmptyTitle.visibility = View.VISIBLE
         } else {
-            val adapter = OtherUserRvAdapter<GetReviewsDataEntity>(list, 1)
+            val adapter = OtherUserRvAdapter<GetReviewsDataEntity>(list, 1, requireContext())
             binding.rvOtherUserReview.adapter = adapter
             binding.rvOtherUserReview.layoutManager = LinearLayoutManager(requireContext())
             binding.rvOtherUserReview.addItemDecoration(

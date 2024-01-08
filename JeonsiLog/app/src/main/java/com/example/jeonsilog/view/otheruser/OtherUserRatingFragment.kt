@@ -43,7 +43,7 @@ class OtherUserRatingFragment(private val vm: OtherUserViewModel, private val ot
             binding.ivOtherUserRatingEmptyImg.visibility = View.VISIBLE
             binding.tvOtherUserRatingEmptyTitle.visibility = View.VISIBLE
         } else {
-            val adapter = OtherUserRvAdapter<GetMyRatingsDataEntity>(list, 0)
+            val adapter = OtherUserRvAdapter<GetMyRatingsDataEntity>(list, 0, requireContext())
             binding.rvOtherUserRating.adapter = adapter
             binding.rvOtherUserRating.layoutManager = LinearLayoutManager(requireContext())
             binding.rvOtherUserRating.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
