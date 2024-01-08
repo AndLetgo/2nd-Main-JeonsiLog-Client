@@ -8,8 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.data.remote.dto.alarm.AlarmInformation
 import com.example.jeonsilog.databinding.ItemNotiActivityBinding
 import com.example.jeonsilog.databinding.ItemNotiExhibitionBinding
+import com.example.jeonsilog.repository.alarm.AlarmRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -48,7 +53,7 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
                         // 해당 전시회 댓글 페이지로 이동
                     }
                     "RATING" -> {
-                        // 해당 전시회 상세 정보 페이지
+                        (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.clickId)
                     }
                     "FOLLOW" -> {
                         // 해당 유저 프로필 페이지
@@ -82,8 +87,7 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
                 if(!data.isChecked){
                     patchChecked(itemView, data.alarmId)
                 }
-//                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data)
-                // 전시회 아이디 필요 -> 검색을 통해? or Response에 값 추가
+                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.clickId)
             }
         }
     }
@@ -142,14 +146,16 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
     private fun extractTitleAndContents(input: String): Pair<String, String> {
         val startIndex = input.indexOf('[')
         val endIndex = input.indexOf(']')
+        val title: String
+        val contents: String
 
         if (startIndex == -1 || endIndex == -1 || startIndex >= endIndex) {
-            // '['나 ']'가 없거나 올바르지 않은 위치에 있을 경우 예외 처리
-            throw IllegalArgumentException("Invalid input format")
+            title = "알 수 없음"
+            contents = input
+        } else {
+            title = input.substring(startIndex + 1, endIndex).trim()
+            contents = input.substring(endIndex + 1).trim()
         }
-
-        val title = input.substring(startIndex + 1, endIndex).trim()
-        val contents = input.substring(endIndex + 1).trim()
 
         return title to contents
     }
@@ -159,12 +165,14 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
         val pastDateTime = LocalDateTime.parse(dateTimeString, formatter)
         val currentDateTime = LocalDateTime.now()
 
+        val elapsedSecond = ChronoUnit.SECONDS.between(pastDateTime, currentDateTime)
         val elapsedMinutes = ChronoUnit.MINUTES.between(pastDateTime, currentDateTime)
         val elapsedHours = ChronoUnit.HOURS.between(pastDateTime, currentDateTime)
         val elapsedDays = ChronoUnit.DAYS.between(pastDateTime, currentDateTime)
 
         return when {
-            elapsedMinutes < 60 -> "지금"
+            elapsedSecond < 60 -> "지금"
+            elapsedMinutes < 60 -> "${elapsedMinutes}분 전"
             elapsedHours < 24 -> "${elapsedHours}시간 전"
             elapsedHours < 48 -> "어제"
             elapsedDays < 7 -> "${elapsedDays}일 전"
@@ -174,29 +182,28 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
 
     private fun extractNickAndContents(input: String): Pair<String, String> {
         val spaceIndex = input.indexOf(' ')
+        val nick: String
+        val contents: String
 
         if (spaceIndex == -1) {
-            // 공백이 없는 경우 예외 처리
-            throw IllegalArgumentException("Invalid input format")
+            nick = "알 수 없음"
+            contents = input
+        } else {
+            nick = input.substring(0, spaceIndex).trim()
+            contents = input.substring(spaceIndex + 1).trim()
         }
-
-        val nick = input.substring(0, spaceIndex).trim()
-        val contents = input.substring(spaceIndex + 1).trim()
 
         return nick to contents
     }
 
     private fun patchChecked(itemView: View, alarmId: Int){
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val response = AlarmRepositoryImpl().patchAlramChecked(encryptedPrefs.getAT(), alarmId)
-//            if(response.isSuccessful && response.body()!!.check){
-//                launch(Dispatchers.Main){
-//                    itemView.alpha = 0.4f
-//                }
-//            }
-//        }
-
-        // 테스트용 코드
-        itemView.alpha = 0.4f
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = AlarmRepositoryImpl().patchAlarmChecked(encryptedPrefs.getAT(), alarmId)
+            if(response.isSuccessful && response.body()!!.check){
+                launch(Dispatchers.Main){
+                    itemView.alpha = 0.4f
+                }
+            }
+        }
     }
 }
