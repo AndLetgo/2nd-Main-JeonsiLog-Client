@@ -10,8 +10,9 @@ class NotiVpAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter(fr
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> NotiFollowingFragment()
-            else -> NotiMyActivityFragment()
+            0 -> NotiActivityFragment()
+            1 -> NotiExhibitionFragment()
+            else -> throw IllegalArgumentException("알 수 없는 프래그먼트 타입")
         }
     }
 }
