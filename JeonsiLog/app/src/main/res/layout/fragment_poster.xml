@@ -21,70 +21,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1.33"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/ib_back"
-            android:layout_width="@dimen/item_24"
-            android:layout_height="@dimen/item_24"
-            android:layout_marginTop="@dimen/margin_28"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_arrow_back"
-            app:layout_constraintEnd_toStartOf="@id/ll_counts"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vp_poster" />
-
-        <LinearLayout
-            android:id="@+id/ll_counts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_28"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@id/ib_next"
-            app:layout_constraintStart_toEndOf="@id/ib_back"
-            app:layout_constraintTop_toBottomOf="@id/vp_poster"
-            android:layout_marginHorizontal="@dimen/margin_16">
-
-            <TextView
-                android:id="@+id/tv_count_poster"
-                style="@style/M_bold"
-                android:layout_width="@dimen/item_24"
-                android:layout_height="wrap_content"
-                android:text="@{vm.count}"
-                android:textColor="@color/basic_black"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/tv_divider"
-                style="@style/M_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="/"
-                android:textColor="@color/basic_black"
-                android:layout_marginHorizontal="@dimen/margin_12"/>
-
-            <TextView
-                android:id="@+id/tv_max_count_poster"
-                style="@style/M_bold"
-                android:layout_width="@dimen/item_24"
-                android:layout_height="wrap_content"
-                android:text="@{vm.maxCount}"
-                android:textColor="@color/basic_black" />
-        </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/ib_next"
-            android:layout_width="@dimen/item_24"
-            android:layout_height="@dimen/item_24"
-            android:layout_marginTop="@dimen/margin_28"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_arrow_next"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ll_counts"
-            app:layout_constraintTop_toBottomOf="@id/vp_poster" />
-
         <ImageButton
             android:id="@+id/ib_download"
             android:layout_width="@dimen/item_24"
@@ -95,5 +31,45 @@
             android:background="@color/transparent"
             android:layout_marginTop="@dimen/margin_28"
             android:layout_marginEnd="@dimen/margin_24"/>
+
+        <LinearLayout
+            android:id="@+id/ll_poster_empty_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/illus_empty_poster"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_poster_title"
+                style="@style/M_bold"
+                android:textColor="@color/gray_medium"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_4"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_poster_description"
+                style="@style/M_regular"
+                android:textColor="@color/gray_medium"/>
+            <Button
+                android:id="@+id/btn_report_poster_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_report_poster"
+                style="@style/S_regular"
+                android:textColor="@color/gray_medium"
+                android:background="@drawable/shape_rounded_poster_iv"
+                android:paddingHorizontal="@dimen/margin_16"
+                android:layout_marginTop="@dimen/margin_80"/>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -30,10 +30,17 @@ class ExhibitionReviewRvAdapter(
             binding.brbExhibitionReviewRating.rating = item.rate.toFloat()
             binding.tvReplyCount.text = "${context.getString(R.string.exhibition_reply)} ${item.numReply}"
 //            binding.tvReviewDate.text = item.
-            Glide.with(context)
-                .load(item.imgUrl)
-                .transform(CenterCrop(), RoundedCorners(80))
-                .into(binding.ivProfile)
+            if(binding.ivProfile!=null){
+                Glide.with(context)
+                    .load(item.imgUrl)
+                    .transform(CenterCrop(), RoundedCorners(80))
+                    .into(binding.ivProfile)
+            }else{
+                Glide.with(context)
+                    .load(R.drawable.illus_empty_poster)
+                    .transform(CenterCrop(), RoundedCorners(80))
+                    .into(binding.ivProfile)
+            }
 
             binding.ibMenu.setOnClickListener{
                 if(item.userId == encryptedPrefs.getUI()){

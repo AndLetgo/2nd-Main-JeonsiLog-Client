@@ -7,15 +7,20 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.databinding.FragmentPosterBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel
+import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
@@ -32,7 +37,8 @@ import java.net.URL
 class PosterFragment : BaseFragment<FragmentPosterBinding>(
     R.layout.fragment_poster) {
     private var posterList:MutableList<String>? = null
-    private val viewModel:ExhibitionPosterViewModel by viewModels()
+    private val exhibitionPosterViewModel:ExhibitionPosterViewModel by viewModels()
+    private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private lateinit var viewPager: ViewPager
     override fun init() {
         viewPager = binding.vpPoster
@@ -42,39 +48,31 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
         runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getPoster(encryptedPrefs.getAT(), exhibitionId)
             if(response.isSuccessful && response.body()!!.check){
-                Log.d("poster", "init: response.body()!!.information.imageUrl: ${response.body()!!.information.imageUrl}")
                 posterList?.add(response.body()!!.information.imageUrl)
-                Log.d("poster", "init: posterlist size: ${posterList?.size}")
+                binding.llPosterEmptyState.visibility = View.GONE
             }else{
+                binding.llPosterEmptyState.visibility = View.VISIBLE
+                binding.vpPoster.visibility = View.GONE
+                binding.ibDownload.visibility = View.GONE
                 null
             }
         }
         Log.d("poster", "init: posterlist size: ${posterList?.size}")
-        viewModel.setMaxCount(posterList?.size.toString())
+        exhibitionPosterViewModel.setMaxCount(posterList?.size.toString())
         val adapter = posterList?.let { PosterVpAdapter(it, requireContext()) }
         adapter?.setCountListener(object : PosterVpAdapter.CountListener{
             override fun setCount(position: Int) {
-                viewModel.setCount((position+1).toString())
+                exhibitionPosterViewModel.setCount((position+1).toString())
             }
         })
         adapter?.setOnPageChangeListener(viewPager)
         binding.vpPoster.adapter = adapter
 
-        binding.vm = viewModel
-        viewModel.count.observe(this){
-            binding.tvCountPoster.text = it
-        }
-
-        binding.ibBack.setOnClickListener{
-            val currentIndex = viewPager.currentItem
-            if(currentIndex > 0 ){
-                viewPager.setCurrentItem(currentIndex-1,true)
-            }
-        }
-        binding.ibNext.setOnClickListener{
-            val currentIndex = viewPager.currentItem
-            if(currentIndex < posterList!!.size){
-                viewPager.setCurrentItem(currentIndex+1,true)
+        //empty poster 신고
+        binding.btnReportPosterEmpty.setOnClickListener {
+            runBlocking(Dispatchers.IO){
+                val body = PostReportRequest("POSTER", exhibitionViewModel.currentExhibitionId.value!!)
+                ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
             }
         }
 

@@ -1,11 +1,15 @@
 package com.example.jeonsilog.view.exhibition
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyInformation
 import com.example.jeonsilog.databinding.ItemReviewReplyBinding
@@ -16,7 +20,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
-class ExhibitionReplyRvAdapter(private val replyList: List<GetReplyInformation>) :
+class ExhibitionReplyRvAdapter(private val replyList: List<GetReplyInformation>, private val context: Context) :
     RecyclerView.Adapter<ExhibitionReplyRvAdapter.RecycleViewHolder>(){
     private var listener: OnItemClickListener? = null
     inner class RecycleViewHolder(private val binding: ItemReviewReplyBinding):
@@ -38,6 +42,10 @@ class ExhibitionReplyRvAdapter(private val replyList: List<GetReplyInformation>)
                     listener?.onMenuBtnClick(it, 1, item.replyId, position)
                 }
             }
+            Glide.with(context)
+                .load(item.user.profileImgUrl)
+                .transform(CenterCrop(), RoundedCorners(80))
+                .into(binding.ivUserProfile)
         }
     }
 

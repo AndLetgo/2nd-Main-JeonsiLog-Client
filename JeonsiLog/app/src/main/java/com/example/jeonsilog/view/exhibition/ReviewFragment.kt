@@ -84,7 +84,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private fun getReplyList(){
         replyList = mutableListOf()
 
-        exhibitionReplyRvAdapter = ExhibitionReplyRvAdapter(replyList)
+        exhibitionReplyRvAdapter = ExhibitionReplyRvAdapter(replyList, requireContext())
         binding.rvExhibitionReviewReply.adapter = exhibitionReplyRvAdapter
         binding.rvExhibitionReviewReply.layoutManager = LinearLayoutManager(this.context)
 

@@ -10,17 +10,10 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.os.bundleOf
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -30,46 +23,45 @@ import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.rating.PostRatingRequest
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
-import com.example.jeonsilog.generated.callback.OnFocusChangeListener
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
-import com.example.jeonsilog.viewmodel.ReviewViewModel
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import okhttp3.internal.http2.Http2Connection
 
 class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition){
     private lateinit var exhibitionRvAdapter: ExhibitionReviewRvAdapter
     private var exhibitionInfoData: ExhibitionInfo? = null
     private var thisExhibitionId = 0
     private lateinit var reviewList: MutableList<GetReviewsExhibitionInformationEntity>
-    private val reviewViewModel: ReviewViewModel by activityViewModels()
+    private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private var check = true
     private lateinit var preDrawListener: OnPreDrawListener
 
     override fun init() {
         //현재 bottomSheet Id
-        val bundle = arguments
-        bundle?. let {
-            //place에서 넘어온 경우
-            val newExhibition = requireArguments().getInt("exhibitionId")
-            thisExhibitionId = newExhibition
-        }?:run{
-            thisExhibitionId = exhibitionId
+//        val bundle = arguments
+//        bundle?. let {
+//            //place에서 넘어온 경우
+//            val newExhibition = requireArguments().getInt("exhibitionId")
+//            exhibitionViewModel.setCurrentExhibitionId(newExhibition)
+//        }?:run{
+//            exhibitionViewModel.setCurrentExhibitionId(exhibitionId)
+//        }
+        if(exhibitionViewModel.currentExhibitionId == null){
+            exhibitionViewModel.setCurrentExhibitionId(exhibitionId)
         }
+        thisExhibitionId = exhibitionViewModel.currentExhibitionId.value!!
 
         getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
 
         //감상평 - RecyclerView
-        Log.d("dialog", "init: getReviewInfo")
         getReviewInfo()
 
         //감상평 작성하기
@@ -94,6 +86,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
 
         //Interest
+        if(exhibitionInfoData!!.checkInterest){
+            binding.tbInterest.isChecked = true
+        }
         binding.tbInterest.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked){
                 true -> {
@@ -289,7 +284,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         exhibitionRvAdapter.setOnItemClickListener(object: ExhibitionReviewRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int) {
                 //감상평 페이지로 이동
-                reviewViewModel.setReviewInfo(data)
+                exhibitionViewModel.setReviewInfo(data)
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
             }
 
