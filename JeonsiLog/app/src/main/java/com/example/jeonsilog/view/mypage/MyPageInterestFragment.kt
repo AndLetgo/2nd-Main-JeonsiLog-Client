@@ -31,7 +31,7 @@ class MyPageInterestFragment:BaseFragment<FragmentMyPageInterestBinding>(R.layou
             binding.tvMypageInterestEmptyTitle.visibility = View.VISIBLE
             binding.tvMypageReviewEmptyDescription.visibility = View.VISIBLE
         } else {
-            val adapter = MyPageRvAdapter<GetInterestInformationEntity>(list, 2)
+            val adapter = MyPageRvAdapter<GetInterestInformationEntity>(list, 2, requireContext())
             binding.rvMypageInterest.adapter = adapter
             binding.rvMypageInterest.layoutManager = LinearLayoutManager(requireContext())
         }
