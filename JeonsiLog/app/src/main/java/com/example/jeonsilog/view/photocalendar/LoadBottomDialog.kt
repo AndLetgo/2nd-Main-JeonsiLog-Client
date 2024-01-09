@@ -178,6 +178,14 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
                         arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
                         MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES
                     )
+
+
+
+
+
+
+
+
                 } else {
                     // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
                     accessGallery()
@@ -191,6 +199,15 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
                         arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
                     )
+
+
+
+
+
+
+
+
+
                 } else {
                     // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
                     accessGallery()
