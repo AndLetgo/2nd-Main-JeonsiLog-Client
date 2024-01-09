@@ -17,6 +17,9 @@ import kotlinx.coroutines.runBlocking
 class MyPageListFollowerFragment: BaseFragment<FragmentMyPageListFollowerBinding>(R.layout.fragment_my_page_list_follower) {
     private val list = mutableListOf<GetOtherFollowingInformation>()
     private lateinit var adapter: MyPageListRvAdapter<GetOtherFollowingInformation>
+    private var newItemCount = 0
+    private var isFinished = false
+    private var page = 0
 
     override fun init() {
         adapter = MyPageListRvAdapter(list, 0, requireContext())
@@ -29,9 +32,15 @@ class MyPageListFollowerFragment: BaseFragment<FragmentMyPageListFollowerBinding
         isFollowingUpdate.observe(this){
             if(it){
                 Log.d(tag, it.toString())
+                list.clear()
+                page = 0
+                isFinished = false
+
                 updateList()
                 isFollowerUpdate.value = false
                 emptyView()
+
+                adapter.notifyDataSetChanged()
             }
         }
 
@@ -44,16 +53,18 @@ class MyPageListFollowerFragment: BaseFragment<FragmentMyPageListFollowerBinding
 
     private fun updateList(){
         runBlocking(Dispatchers.IO){
-            list.clear()
-            val response = FollowRepositoryImpl().getMyFollower(encryptedPrefs.getAT())
+            val response = FollowRepositoryImpl().getMyFollower(encryptedPrefs.getAT(), page)
             if(response.isSuccessful && response.body()!!.check){
+                newItemCount = response.body()!!.information.size
                 val data = response.body()!!.information.listIterator()
                 while (data.hasNext()){
                     list.add(data.next())
                 }
+            } else {
+                isFinished = true
             }
+            page ++
         }
-        adapter.notifyDataSetChanged()
     }
 
     private fun emptyView(){
