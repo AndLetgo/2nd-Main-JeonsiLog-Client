@@ -10,28 +10,33 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface FollowApi {
     @GET("/api/follows/follower")
     suspend fun getMyFollower(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("page") page: Int
     ): Response<GetOtherFollowingResponse>
 
     @GET("/api/follows/follower/{userId}")
     suspend fun getOtherFollower(
         @Header("Authorization") token: String,
-        @Path("userId") userId: Int
+        @Path("userId") userId: Int,
+        @Query("page") page: Int
     ): Response<GetOtherFollowerResponse>
 
     @GET("/api/follows/following")
     suspend fun getMyFollowing(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("page") page: Int
     ): Response<GetMyFollowingResponse>
 
     @GET("/api/follows/following/{userId}")
     suspend fun getOtherFollowing(
         @Header("Authorization") token: String,
-        @Path("userId") userId: Int
+        @Path("userId") userId: Int,
+        @Query("page") page: Int
     ): Response<GetOtherFollowingResponse>
 
     @POST("/api/follows/{userId}")
