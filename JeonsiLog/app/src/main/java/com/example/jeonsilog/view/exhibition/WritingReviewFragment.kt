@@ -25,17 +25,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
-    R.layout.fragment_writing_review) {
+    R.layout.fragment_writing_review), DialogWithIllusInterface {
     private lateinit var dialogWithIllus: DialogWithIllus
     private val viewModel: ExhibitionWritingViewModel by viewModels()
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private var thisExhibitionId = 0
     val TAG = "writing"
     override fun init() {
-        thisExhibitionId = exhibitionViewModel.currentExhibitionId.value!!
+        thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.currentExhibitionIds.value!!.size-1]
         
         binding.btnCancel.setOnClickListener {
-            ExtraActivity().showCustomDialog(parentFragmentManager, "감상평", -1, -1, -1)
+            showCustomDialog( "감상평", -1, -1)
         }
 
         binding.vm = viewModel
@@ -70,4 +70,11 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
                 getString(R.string.exhibition_writing_review_count, it)
         }
     }
+
+    private fun showCustomDialog(type:String, contentId:Int, position:Int) {
+        val customDialogFragment = DialogWithIllus(type, contentId, 0, position, this)
+        customDialogFragment.show(parentFragmentManager, tag)
+    }
+
+    override fun confirmButtonClick(position: Int) {}
 }

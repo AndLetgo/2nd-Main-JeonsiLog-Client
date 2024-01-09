@@ -147,7 +147,7 @@ class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBindin
         }
     }
 
-    private fun showPermissionRationale(msg: String) {
+    fun showPermissionRationale(msg: String) {
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.setMessage(msg)
         alertDialog.setPositiveButton("확인") { _, _ ->

@@ -2,6 +2,7 @@ package com.example.jeonsilog.view.exhibition
 
 import android.util.Log
 import android.view.View
+import android.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformat
 import com.example.jeonsilog.databinding.FragmentReviewBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +27,7 @@ import okhttp3.internal.notify
 import java.time.LocalDateTime
 import java.util.Date
 
-class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_review) {
+class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_review), DialogWithIllusInterface {
     private lateinit var exhibitionReplyRvAdapter: ExhibitionReplyRvAdapter
     private lateinit var replyList: MutableList<GetReplyInformation>
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
@@ -33,7 +35,6 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private var replyPage = 0
 
     override fun init() {
-        Log.d("TAG", "init: start reviewFragment")
         reviewInfo = exhibitionViewModel.reviewInfo.value!!
         binding.tvUserName.text = reviewInfo.nickname
         binding.brbExhibitionReview.rating = reviewInfo.rate.toFloat()
@@ -61,11 +62,21 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         })
 
         binding.ibMenu.setOnClickListener {
+            val popupMenu: PopupMenu
             if(reviewInfo.userId == GlobalApplication.encryptedPrefs.getUI()){
-                (activity as ExtraActivity).setMenuButton(it, parentFragmentManager, 0, "감상평", reviewInfo.reviewId, 1, -1)
+                popupMenu = DialogUtil().setMenuButton(it, 0)
+                popupMenu.setOnMenuItemClickListener{
+                    showCustomDialog("삭제_감상평", reviewInfo.reviewId,-1, 1)
+                    false
+                }
             }else{
-                (activity as ExtraActivity).setMenuButton(it, parentFragmentManager, 1, "감상평", reviewInfo.reviewId, 1, -1)
+                popupMenu = DialogUtil().setMenuButton(it, 1)
+                popupMenu.setOnMenuItemClickListener{
+                    showCustomDialog("신고_감상평", reviewInfo.reviewId,-1, 1)
+                    false
+                }
             }
+            popupMenu.show()
         }
 
         binding.btnEnterReply.setOnClickListener{
@@ -84,7 +95,19 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         exhibitionReplyRvAdapter.setOnItemClickListener(object : ExhibitionReplyRvAdapter.OnItemClickListener{
             override fun onMenuBtnClick(btn: View, user:Int, contentId: Int, position: Int) {
-                (activity as ExtraActivity).setMenuButton(btn, parentFragmentManager, user, "댓글", contentId,-1, position)
+                val popupMenu = DialogUtil().setMenuButton(btn, user)
+                popupMenu.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.menu_delete -> {
+                            showCustomDialog("삭제_댓글", contentId,position, -1)
+                        }
+                        else -> {
+                            showCustomDialog("신고_댓글", contentId,position, -1)
+                        }
+                    }
+                    false
+                }
+                popupMenu.show()
             }
         })
     }
@@ -119,4 +142,15 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.rvExhibitionReviewReply.adapter?.notifyItemInserted(replyList.size)
         binding.etWritingReply.setText("")
     }
+
+    fun showCustomDialog(type:String, contentId:Int,position:Int, reviewSide:Int) {
+        val customDialogFragment = DialogWithIllus(type, contentId, reviewSide, position, this)
+        customDialogFragment.show(parentFragmentManager, tag)
+    }
+
+    override fun confirmButtonClick(position: Int) {
+        exhibitionReplyRvAdapter.removeItem(position)
+        binding.rvExhibitionReviewReply.adapter = exhibitionReplyRvAdapter
+    }
+
 }

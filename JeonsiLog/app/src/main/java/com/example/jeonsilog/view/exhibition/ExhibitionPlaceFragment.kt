@@ -42,7 +42,8 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 //                val navController = findNavController(ExtraActivity(),R.id.fcv_nav_frame)
 //                val bundle = Bundle()
 //                bundle.putInt("exhibitionId",data.exhibitionId)
-                exhibitionViewModel.setCurrentExhibitionId(data.exhibitionId)
+                exhibitionViewModel.addCurrentExhibitionId(data.exhibitionId)
+                Log.d("TAG", "place -> exhibition: ${exhibitionViewModel.currentExhibitionIds}")
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionPlaceFragment_to_exhibitionFragment)
 //                navController.navigate(R.id.exhibitionFragment)
             }

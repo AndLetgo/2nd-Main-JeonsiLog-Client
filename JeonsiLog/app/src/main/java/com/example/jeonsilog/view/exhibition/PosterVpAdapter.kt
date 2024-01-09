@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
+import android.icu.text.ListFormatter.Width
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel
 
 class PosterVpAdapter(private val posterList: List<String>,private val  context: Context):PagerAdapter() {

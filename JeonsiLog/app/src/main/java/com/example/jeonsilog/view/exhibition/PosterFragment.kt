@@ -1,14 +1,18 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -18,12 +22,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.databinding.FragmentPosterBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.report.ReportRepositoryImpl
+import com.example.jeonsilog.view.login.SignUpActivity
 import com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -45,44 +54,52 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
     private var posterList:MutableList<String>? = null
     private val exhibitionPosterViewModel:ExhibitionPosterViewModel by viewModels()
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
-    private lateinit var viewPager: ViewPager
     private val TAG = "download"
+    private var thisExhibitionId = 0
 
     val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 500
 //    val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 4
 
     override fun init() {
-        viewPager = binding.vpPoster
-
+        thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.currentExhibitionIds.value!!.size-1]
         posterList = mutableListOf()
 
+        var imageUrl = ""
         runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().getPoster(encryptedPrefs.getAT(), exhibitionViewModel.currentExhibitionId.value!!)
+            val response = ExhibitionRepositoryImpl().getPoster(encryptedPrefs.getAT(), thisExhibitionId)
             if(response.isSuccessful && response.body()!!.check){
-                posterList?.add(response.body()!!.information.imageUrl)
-                binding.llPosterEmptyState.visibility = View.GONE
+                imageUrl =response.body()!!.information.imageUrl
             }else{
-                binding.llPosterEmptyState.visibility = View.VISIBLE
-                binding.vpPoster.visibility = View.GONE
-                binding.ibDownload.visibility = View.GONE
                 null
             }
         }
+        if(imageUrl != ""){
+            Glide.with(requireContext())
+                .load(imageUrl)
+                .transform(CenterInside())
+                .into(binding.ivPoster)
+            binding.llPosterEmptyState.visibility = View.GONE
+        }else{
+            binding.llPosterEmptyState.visibility = View.VISIBLE
+            binding.ivPoster.visibility = View.GONE
+            binding.ibDownload.visibility = View.GONE
+        }
+
         Log.d("poster", "init: posterlist size: ${posterList?.size}")
         exhibitionPosterViewModel.setMaxCount(posterList?.size.toString())
-        val adapter = posterList?.let { PosterVpAdapter(it, requireContext()) }
-        adapter?.setCountListener(object : PosterVpAdapter.CountListener{
-            override fun setCount(position: Int) {
-                exhibitionPosterViewModel.setCount((position+1).toString())
-            }
-        })
-        adapter?.setOnPageChangeListener(viewPager)
-        binding.vpPoster.adapter = adapter
+//        val adapter = posterList?.let { PosterVpAdapter(it, requireContext()) }
+//        adapter?.setCountListener(object : PosterVpAdapter.CountListener{
+//            override fun setCount(position: Int) {
+//                exhibitionPosterViewModel.setCount((position+1).toString())
+//            }
+//        })
+//        adapter?.setOnPageChangeListener(viewPager)
+//        binding.vpPoster.adapter = adapter
 
         //empty poster 신고
         binding.btnReportPosterEmpty.setOnClickListener {
             runBlocking(Dispatchers.IO){
-                val body = PostReportRequest("POSTER", exhibitionViewModel.currentExhibitionId.value!!)
+                val body = PostReportRequest("POSTER", thisExhibitionId)
                 ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
             }
         }
@@ -112,15 +129,16 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
     }
     private fun checkStoragePermission() {
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
                 != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없는 경우 권한 요청 다이얼로그를 표시
                 Log.d(TAG, "checkStoragePermission: 권한 없음")
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
-                )
+//                ActivityCompat.requestPermissions(
+//                    requireActivity(),
+//                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+//                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+//                )
+                showPermissionRationale("사진 권한을 요청합니다.")
             } else {
                 // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
                 Log.d(TAG, "checkStoragePermission: 권한 있음")
@@ -184,5 +202,21 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
         }
 
 
+    }
+    fun showPermissionRationale(msg: String) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setMessage(msg)
+        alertDialog.setPositiveButton("확인") { _, _ ->
+
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", requireActivity().packageName, null)
+            intent.data = uri
+            startActivity(intent)
+        }
+        alertDialog.setNegativeButton("취소") { _, _ ->
+//            viewModel.setUpdateFlag(true)
+        }
+
+        alertDialog.show()
     }
 }

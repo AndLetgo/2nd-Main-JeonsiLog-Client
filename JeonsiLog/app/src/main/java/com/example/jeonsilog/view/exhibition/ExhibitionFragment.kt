@@ -12,7 +12,11 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,13 +32,14 @@ import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
-class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition){
+class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition), DialogWithIllusInterface{
     private lateinit var exhibitionRvAdapter: ExhibitionReviewRvAdapter
     private var exhibitionInfoData: ExhibitionInfo? = null
     private var thisExhibitionId = 0
@@ -53,10 +58,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 //        }?:run{
 //            exhibitionViewModel.setCurrentExhibitionId(exhibitionId)
 //        }
-        if(exhibitionViewModel.currentExhibitionId == null){
-            exhibitionViewModel.setCurrentExhibitionId(exhibitionId)
+        if(exhibitionViewModel.currentExhibitionIds.value == null || exhibitionViewModel.getCurrentExhibitionsSize()<=0){
+            thisExhibitionId = exhibitionId
+        }else{
+            thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.getCurrentExhibitionsSize()-1]
         }
-        thisExhibitionId = exhibitionViewModel.currentExhibitionId.value!!
 
         getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
@@ -133,15 +139,12 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         }
         binding.tvInformation.setOnClickListener {
-            if(!check){
+            if (!check) {
                 binding.tvInformation.maxLines = 3
                 binding.tvReadMoreInfo.visibility = View.VISIBLE
                 check = !check
             }
         }
-
-
-
     }
 
     private fun setBottomSheet(){
@@ -289,7 +292,19 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
 
             override fun onMenuBtnClick(btn: View, user: Int, contentId: Int, position: Int) {
-                (activity as ExtraActivity).setMenuButton(btn, parentFragmentManager, user, "감상평", contentId, 0, position)
+                val popupMenu = DialogUtil().setMenuButton(btn, user)
+                popupMenu.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.menu_delete -> {
+                            showCustomDialog("삭제_감상평", contentId,position)
+                        }
+                        else -> {
+                            showCustomDialog("신고_감상평", contentId,position)
+                        }
+                    }
+                    false
+                }
+                popupMenu.show()
             }
         })
     }
@@ -297,5 +312,30 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d("TAG", "onDestroyView: ")
+    }
+
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("tag", "onAttach Back")
+                view?.let { exhibitionViewModel.removeLastExhibitionId() }
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+    //삭제하기
+    override fun confirmButtonClick(position: Int) {
+        exhibitionRvAdapter.removeItem(position)
+        binding.rvExhibitionReview.adapter = exhibitionRvAdapter
+    }
+
+    fun showCustomDialog(type:String, contentId:Int,position:Int) {
+        val customDialogFragment = DialogWithIllus(type, contentId, 0, position, this)
+        customDialogFragment.show(parentFragmentManager, tag)
     }
 }

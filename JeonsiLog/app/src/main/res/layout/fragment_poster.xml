@@ -14,18 +14,18 @@
         android:layout_height="match_parent"
         tools:context=".view.exhibition.PosterFragment">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/vp_poster"
+        <ImageView
+            android:id="@+id/iv_poster"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_0"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1.33"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:adjustViewBounds="true"/>
         <ImageButton
             android:id="@+id/ib_download"
             android:layout_width="@dimen/item_24"
             android:layout_height="@dimen/item_24"
-            app:layout_constraintTop_toBottomOf="@id/vp_poster"
+            app:layout_constraintTop_toBottomOf="@id/iv_poster"
             app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/ic_download"
             android:background="@color/transparent"

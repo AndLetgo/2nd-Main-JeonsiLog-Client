@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
-class ExhibitionReplyRvAdapter(private val replyList: List<GetReplyInformation>, private val context: Context) :
+class ExhibitionReplyRvAdapter(private val replyList: MutableList<GetReplyInformation>, private val context: Context) :
     RecyclerView.Adapter<ExhibitionReplyRvAdapter.RecycleViewHolder>(){
     private var listener: OnItemClickListener? = null
     inner class RecycleViewHolder(private val binding: ItemReviewReplyBinding):
@@ -99,6 +99,10 @@ class ExhibitionReplyRvAdapter(private val replyList: List<GetReplyInformation>,
             return "${diffDays}일 전"
         }
         return SimpleDateFormat("MM.dd").format(createdDate)
+    }
 
+    fun removeItem(position: Int){
+        replyList.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

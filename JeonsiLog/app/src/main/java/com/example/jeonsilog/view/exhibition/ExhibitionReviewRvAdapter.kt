@@ -15,7 +15,7 @@ import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 
 class ExhibitionReviewRvAdapter(
-    private val reviewList:List<GetReviewsExhibitionInformationEntity>,
+    private val reviewList:MutableList<GetReviewsExhibitionInformationEntity>,
     private val context: Context):
     RecyclerView.Adapter<ExhibitionReviewRvAdapter.RecycleViewHolder>()  {
 
@@ -80,5 +80,10 @@ class ExhibitionReviewRvAdapter(
 
     fun setOnItemClickListener(listener: OnItemClickListener){
         this.listener = listener
+    }
+
+    fun removeItem(position: Int){
+        reviewList.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

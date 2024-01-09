@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.exhibition
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -30,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class DialogWithIllus(
-    private val type:String, private val contentId:Int, private val reviewSide:Int, private val position: Int):
+    private val type:String, private val contentId:Int, private val reviewSide:Int, private val position: Int, private val dialogWithIllusInterface: DialogWithIllusInterface):
     DialogFragment(){
 
     private var _binding: DialogWithIllusBinding? = null
@@ -109,11 +110,10 @@ class DialogWithIllus(
         binding.btnConfirm.text = getString(R.string.btn_delete_dialog)
         binding.btnConfirm.setOnClickListener{
             deleteReview()
-            Log.d(TAG, "onCreateView: deleted")
             if(reviewSide == 1){
                 parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
             }else{
-                (activity as ExtraActivity).reloadFragment()
+                dialogWithIllusInterface.confirmButtonClick(position)
             }
             dismiss()
         }
@@ -130,7 +130,7 @@ class DialogWithIllus(
         binding.btnConfirm.text = getString(R.string.btn_delete_dialog)
         binding.btnConfirm.setOnClickListener{
             deleteReply()
-            (activity as ExtraActivity).reloadFragment()
+            dialogWithIllusInterface.confirmButtonClick(position)
             dismiss()
         }
     }
@@ -154,4 +154,9 @@ class DialogWithIllus(
         _binding = null
         super.onDestroyView()
     }
+
+}
+
+interface DialogWithIllusInterface{
+    fun confirmButtonClick(position: Int)
 }
