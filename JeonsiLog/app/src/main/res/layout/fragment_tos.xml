@@ -70,6 +70,8 @@
             android:layout_marginStart="@dimen/margin_28"
             android:layout_marginBottom="52dp"
             android:checked="@{vm.tosIsCheckedPermissionPhoto ? true : false}"
+            android:background="@drawable/custom_check_box"
+            android:button="@color/transparent"
             />
 
         <TextView
@@ -92,7 +94,9 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/margin_28"
             android:layout_marginBottom="@dimen/margin_28"
-            android:checked="@{vm.tosIsCheckedTos ? true : false}"/>
+            android:checked="@{vm.tosIsCheckedTos ? true : false}"
+            android:background="@drawable/custom_check_box"
+            android:button="@color/transparent"/>
 
         <TextView
             android:id="@+id/tv_tos_tos"
@@ -137,6 +141,8 @@
             android:layout_marginStart="@dimen/margin_28"
             android:layout_marginBottom="@dimen/margin_28"
             android:checked="@{vm.tosIsCheckedAll ? true : false}"
+            android:background="@drawable/custom_check_box"
+            android:button="@color/transparent"
             />
 
         <TextView

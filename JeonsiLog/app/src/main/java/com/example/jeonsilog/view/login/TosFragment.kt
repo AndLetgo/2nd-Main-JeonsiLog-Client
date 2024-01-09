@@ -7,6 +7,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentTosBinding
 import com.example.jeonsilog.viewmodel.SignUpViewModel
+import kotlinx.coroutines.runBlocking
 
 class TosFragment: BaseFragment<FragmentTosBinding>(R.layout.fragment_tos) {
     private val viewModel: SignUpViewModel by activityViewModels()
@@ -15,16 +16,17 @@ class TosFragment: BaseFragment<FragmentTosBinding>(R.layout.fragment_tos) {
         binding.vm = viewModel
         binding.lifecycleOwner = requireActivity()
 
-        (requireContext() as SignUpActivity).checkPermission()
-        viewModel.updateFlag.observe(this){
-            if(it){
-                (requireContext() as SignUpActivity).checkPermission()
-                viewModel.setUpdateFlag(false)
-            }
-        }
+        viewModel.changeTosPhoto((requireContext() as SignUpActivity).checkPermission())
 
         binding.cbTosAll.setOnClickListener {
-            viewModel.changeAll(!viewModel.tosIsCheckedAll.value!!)
+            val temp = viewModel.tosIsCheckedAll.value!!
+            runBlocking {
+                (requireContext() as SignUpActivity).requestPermission()
+            }
+
+            viewModel.changeAll(viewModel.tosIsCheckedPermissionPhoto.value!!)
+            viewModel.changeTosTos(!temp)
+
         }
 
         binding.cbTosTos.setOnClickListener {
