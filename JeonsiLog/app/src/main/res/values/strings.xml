@@ -178,4 +178,8 @@
     <string name="tos_tos">개인정보 처리방침 (필수)</string>
     <string name="tos_permission_photo">사진 접근 권한 동의 (선택)</string>
     <string name="tos_next">다음</string>
+
+    <!-- 권한 요청 라이팅 -->
+    <string name="permission_modify">해제를 원하시면 설정에서 해당 권한을 직접 거부하셔야 합니다.</string>
+    <string name="permission_denied">사진 접근 권한이 거부되었습니다.\n사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다.</string>
 </resources>
