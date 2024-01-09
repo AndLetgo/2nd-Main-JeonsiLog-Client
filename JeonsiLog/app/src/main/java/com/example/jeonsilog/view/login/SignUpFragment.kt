@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
@@ -96,7 +95,7 @@ class SignUpFragment: BaseFragment<FragmentSignupBinding>(R.layout.fragment_sign
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 launcher.launch(intent)
             } else {
-                Toast.makeText(requireContext(), "갤러리 접근 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+                (requireContext() as SignUpActivity).requestPermission()
             }
         }
 

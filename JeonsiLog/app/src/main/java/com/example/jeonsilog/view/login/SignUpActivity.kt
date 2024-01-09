@@ -78,7 +78,7 @@ class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBindin
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
         } else {
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
         if (shouldShowRequestPermissionRationale(permission[0])) {

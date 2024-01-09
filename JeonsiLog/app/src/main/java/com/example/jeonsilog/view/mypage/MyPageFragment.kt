@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -83,12 +82,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
         bsBinding!!.btnBottomSheetMypageLoadImage.setOnClickListener {
             val mActivity = activity as MainActivity
-            if(mActivity.checkPermissions(requireContext())){
+            if(mActivity.checkPermission()){
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 launcher.launch(intent)
                 bottomSheetDialog.dismiss()
             } else {
-                Toast.makeText(requireContext(), "갤러리 접근 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+                mActivity.requestPermission()
             }
         }
 
