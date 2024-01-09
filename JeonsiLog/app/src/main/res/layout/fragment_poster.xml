@@ -4,9 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="vm"
-            type="com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
