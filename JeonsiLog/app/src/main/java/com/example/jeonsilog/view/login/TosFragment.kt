@@ -18,10 +18,6 @@ class TosFragment: BaseFragment<FragmentTosBinding>(R.layout.fragment_tos) {
 
         viewModel.changeTosPhoto((requireContext() as SignUpActivity).checkPermission())
 
-//        viewModel.updateFlag.observe(this){
-//            viewModel.changeTosPhoto((requireContext() as SignUpActivity).checkPermission())
-//        }
-
         binding.cbTosAll.setOnClickListener {
             val temp = viewModel.tosIsCheckedAll.value!!
             runBlocking {
