@@ -27,6 +27,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
     var  bottomNavigationView: BottomNavigationView?=null
     var initialTabPosition=0
     lateinit var viewModel: SearchViewModel
+    val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
 
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
@@ -57,7 +58,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
     fun setLayoutView(){
         //뷰페이저설정(검색어)
 
-        val pagerAdapter = SearchResultAdapter(childFragmentManager, lifecycle,ediytextstr,initialTabPosition,viewModel)
+        val pagerAdapter = SearchResultAdapter(childFragmentManager, lifecycle,ediytextstr)
         binding.vpResult.adapter=pagerAdapter
         binding.vpResult.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -125,6 +126,8 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
                 var enteredText = binding.etSearchResult.text.toString()
                 if(enteredText.isBlank()) {
                     Toast.makeText(context, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
+                }else if(regexPattern.containsMatchIn(enteredText)&&enteredText.length<=2){
+                    Toast.makeText(context, "해당 검색어는 검색할수 없어요", Toast.LENGTH_SHORT).show()
                 }else{
                     //=======================================================================================//
                     addItem(enteredText)
@@ -133,7 +136,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
                     val currentTabPosition = binding.tlResult.selectedTabPosition
 
                     // 검색 결과를 반영하여 해당 탭의 자식 프래그먼트를 갱신
-                    val pagerAdapter = SearchResultAdapter(childFragmentManager, lifecycle, enteredText, currentTabPosition,viewModel)
+                    val pagerAdapter = SearchResultAdapter(childFragmentManager, lifecycle, enteredText)
                     binding.vpResult.adapter = pagerAdapter
 
                     binding.vpResult.currentItem = currentTabPosition
