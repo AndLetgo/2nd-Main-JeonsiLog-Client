@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
@@ -12,6 +13,8 @@ import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -25,9 +28,8 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 
     override fun init() {
         placePage = 0
-        placeId = requireArguments().getInt("placeId")
-        Log.d("place", "init: placeId: $placeId")
-        binding.tvToolBarTitle.text = requireArguments().getString("placeName")
+        placeId = newPlaceId
+        binding.tvToolBarTitle.text = newPlaceName
         placeList = mutableListOf()
 
         exhibitionPlaceRvAdapter = ExhibitionPlaceRvAdapter(placeList, requireContext())
@@ -39,6 +41,7 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 //                val navController = findNavController(ExtraActivity(),R.id.fcv_nav_frame)
                 val bundle = Bundle()
                 bundle.putInt("exhibitionId",data.exhibitionId)
+                Log.d("TAG", "onItemClick: data exhibitionID: ${data.exhibitionId}")
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionPlaceFragment_to_exhibitionFragment, bundle)
 //                navController.navigate(R.id.exhibitionFragment)
             }

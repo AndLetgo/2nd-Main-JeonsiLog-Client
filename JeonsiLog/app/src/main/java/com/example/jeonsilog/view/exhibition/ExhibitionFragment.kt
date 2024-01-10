@@ -32,8 +32,12 @@ import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ReviewViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -46,6 +50,10 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private val reviewViewModel: ReviewViewModel by activityViewModels()
 
     override fun init() {
+        if(extraActivityReference==2){
+            Navigation.findNavController(binding.llExhibitionPlace).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
+        }
+
         val bundle = arguments
         bundle?. let {
             //place에서 넘어온 경우
@@ -89,10 +97,12 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         //전시장 상세정보
         binding.llExhibitionPlace.setOnClickListener {
 //            val bundle = bundleOf("placeId" to (data?.place?.placeId ?: ""))
-            val bundle = Bundle()
-            bundle.putInt("placeId", exhibitionInfoData!!.place.placeId)
-            bundle.putString("placeName", exhibitionInfoData!!.place.placeName)
-            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment,bundle)
+//            val bundle = Bundle()
+//            bundle.putInt("placeId", exhibitionInfoData!!.place.placeId)
+//            bundle.putString("placeName", exhibitionInfoData!!.place.placeName)
+            newPlaceId = exhibitionInfoData!!.place.placeId
+            newPlaceName = exhibitionInfoData!!.place.placeName
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
         }
 
         //Interest

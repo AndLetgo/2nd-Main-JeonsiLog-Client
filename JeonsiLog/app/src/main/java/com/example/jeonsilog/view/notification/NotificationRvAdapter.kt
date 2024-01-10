@@ -10,6 +10,7 @@ import com.example.jeonsilog.databinding.ItemNotiActivityBinding
 import com.example.jeonsilog.databinding.ItemNotiExhibitionBinding
 import com.example.jeonsilog.repository.alarm.AlarmRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +38,7 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
 
             binding.tvNotiTitle.text = nick
             binding.tvNotiContent.text = contents
-            binding.tvNotiTime.text = formatElapsedTime(data.dateTime)
+            binding.tvNotiTime.text = DateUtil().formatElapsedTime(data.dateTime)
 
             // 클릭리스너 - 해당 유저 프로필로 이동
             itemView.setOnClickListener {
@@ -81,7 +82,7 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
 
             binding.tvNotiTitle.text = title
             binding.tvNotiContent.text = contents
-            binding.tvNotiTime.text = formatElapsedTime(data.dateTime)
+            binding.tvNotiTime.text = DateUtil().formatElapsedTime(data.dateTime)
 
             itemView.setOnClickListener {
                 if(!data.isChecked){
@@ -160,25 +161,25 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
         return title to contents
     }
 
-    private fun formatElapsedTime(dateTimeString: String): String {
-        val formatter = DateTimeFormatter.ISO_DATE_TIME
-        val pastDateTime = LocalDateTime.parse(dateTimeString, formatter)
-        val currentDateTime = LocalDateTime.now()
-
-        val elapsedSecond = ChronoUnit.SECONDS.between(pastDateTime, currentDateTime)
-        val elapsedMinutes = ChronoUnit.MINUTES.between(pastDateTime, currentDateTime)
-        val elapsedHours = ChronoUnit.HOURS.between(pastDateTime, currentDateTime)
-        val elapsedDays = ChronoUnit.DAYS.between(pastDateTime, currentDateTime)
-
-        return when {
-            elapsedSecond < 60 -> "지금"
-            elapsedMinutes < 60 -> "${elapsedMinutes}분 전"
-            elapsedHours < 24 -> "${elapsedHours}시간 전"
-            elapsedHours < 48 -> "어제"
-            elapsedDays < 7 -> "${elapsedDays}일 전"
-            else -> LocalDateTime.parse(dateTimeString).format(DateTimeFormatter.ofPattern("MM.dd"))
-        }
-    }
+//    private fun formatElapsedTime(dateTimeString: String): String {
+//        val formatter = DateTimeFormatter.ISO_DATE_TIME
+//        val pastDateTime = LocalDateTime.parse(dateTimeString, formatter)
+//        val currentDateTime = LocalDateTime.now()
+//
+//        val elapsedSecond = ChronoUnit.SECONDS.between(pastDateTime, currentDateTime)
+//        val elapsedMinutes = ChronoUnit.MINUTES.between(pastDateTime, currentDateTime)
+//        val elapsedHours = ChronoUnit.HOURS.between(pastDateTime, currentDateTime)
+//        val elapsedDays = ChronoUnit.DAYS.between(pastDateTime, currentDateTime)
+//
+//        return when {
+//            elapsedSecond < 60 -> "지금"
+//            elapsedMinutes < 60 -> "${elapsedMinutes}분 전"
+//            elapsedHours < 24 -> "${elapsedHours}시간 전"
+//            elapsedHours < 48 -> "어제"
+//            elapsedDays < 7 -> "${elapsedDays}일 전"
+//            else -> LocalDateTime.parse(dateTimeString).format(DateTimeFormatter.ofPattern("MM.dd"))
+//        }
+//    }
 
     private fun extractNickAndContents(input: String): Pair<String, String> {
         val spaceIndex = input.indexOf(' ')

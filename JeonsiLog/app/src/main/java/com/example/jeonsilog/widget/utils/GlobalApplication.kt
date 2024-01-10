@@ -21,6 +21,8 @@ class GlobalApplication: Application() {
         var isRefresh = MutableLiveData(false)
 
         var exhibitionId: Int = 0
+        var newPlaceId: Int = 0
+        var newPlaceName: String = ""
         var extraActivityReference: Int = 0
     }
 

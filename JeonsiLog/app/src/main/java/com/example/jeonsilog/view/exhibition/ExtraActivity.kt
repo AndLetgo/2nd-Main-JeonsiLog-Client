@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityExtraBinding
@@ -18,6 +20,9 @@ class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.
     override fun init() {
         when(extraActivityReference){
             0 -> {
+                binding.fcvNavFrame.isVisible
+            }
+            2 -> {
                 binding.fcvNavFrame.isVisible
             }
         }

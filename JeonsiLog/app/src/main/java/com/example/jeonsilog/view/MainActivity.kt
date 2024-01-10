@@ -161,7 +161,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         exhibitionId = newExhibitionId
         val intent = Intent(this, ExtraActivity::class.java)
         startActivity(intent)
-
     }
 
     fun checkPermission(): Boolean{
