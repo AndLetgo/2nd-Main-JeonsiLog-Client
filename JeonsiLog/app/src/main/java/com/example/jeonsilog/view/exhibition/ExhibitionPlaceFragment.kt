@@ -3,6 +3,7 @@ package com.example.jeonsilog.view.exhibition
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
+import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
@@ -22,6 +24,7 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
     R.layout.fragment_exhibition_place) {
     private lateinit var placeList: MutableList<GetPlacesInformationEntity>
     private lateinit var exhibitionPlaceRvAdapter: ExhibitionPlaceRvAdapter
+    private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
 
     private var placePage = 0
     private var placeId = 0
@@ -38,12 +41,9 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 
         exhibitionPlaceRvAdapter.setOnItemClickListener(object :ExhibitionPlaceRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: GetPlacesInformationEntity, position: Int) {
-//                val navController = findNavController(ExtraActivity(),R.id.fcv_nav_frame)
-                val bundle = Bundle()
-                bundle.putInt("exhibitionId",data.exhibitionId)
-                Log.d("TAG", "onItemClick: data exhibitionID: ${data.exhibitionId}")
-                Navigation.findNavController(v).navigate(R.id.action_exhibitionPlaceFragment_to_exhibitionFragment, bundle)
-//                navController.navigate(R.id.exhibitionFragment)
+                exhibitionViewModel.addCurrentExhibitionId(data.exhibitionId)
+                Log.d("TAG", "place -> exhibition: ${exhibitionViewModel.currentExhibitionIds}")
+                Navigation.findNavController(v).navigate(R.id.action_exhibitionPlaceFragment_to_exhibitionFragment)
             }
 
         })

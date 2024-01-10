@@ -1,16 +1,13 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.fragment.app.viewModels
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel
 
 class PosterVpAdapter(private val posterList: List<String>,private val  context: Context):PagerAdapter() {
     private var listener: CountListener? = null

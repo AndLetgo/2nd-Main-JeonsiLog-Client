@@ -1,39 +1,38 @@
 package com.example.jeonsilog.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 
-class ExhibitionViewModel:ViewModel() {
-    private var _exhibitionName = MutableLiveData<String>()
-    val exhibitionName:LiveData<String>
-        get() = _exhibitionName
+class ExhibitionViewModel: ViewModel() {
+    private var _reviewInfo = MutableLiveData<GetReviewsExhibitionInformationEntity>()
+    val reviewInfo : LiveData<GetReviewsExhibitionInformationEntity>
+        get() = _reviewInfo
 
-    private var _placeName = MutableLiveData<String>()
-    val placeName:LiveData<String>
-        get() = _placeName
+    fun setReviewInfo(data:GetReviewsExhibitionInformationEntity){
+        _reviewInfo.value = data
+    }
 
-    private var _placeAddress = MutableLiveData<String>()
-    val placeAddress:LiveData<String>
-        get() = _placeAddress
-
-    private var _exhibitionDate = MutableLiveData<String>()
-    val exhibitionDate:LiveData<String>
-        get() = _exhibitionDate
-
-    private var _operatingKeyword = MutableLiveData<String>()
-    val operatingKeyword:LiveData<String>
-        get() = _operatingKeyword
-
-    private var _priceKeyword = MutableLiveData<String>()
-    val priceKeyword:LiveData<String>
-        get() = _priceKeyword
-
-    private var _exhibitionDescription = MutableLiveData<String>()
-    val exhibitionDescription:LiveData<String>
-        get() = _exhibitionDescription
-
-    private var _exhibitionRating = MutableLiveData<String>()
-    val exhibitionRating:LiveData<String>
-        get() = _exhibitionRating
+    private var _currentExhibitionIds = MutableLiveData<MutableList<Int>>()
+    val currentExhibitionIds: LiveData<MutableList<Int>>
+        get() = _currentExhibitionIds
+    fun setCurrentExhibitionIds(exhibitionId:Int){
+        _currentExhibitionIds.value = mutableListOf(exhibitionId)
+    }
+    fun addCurrentExhibitionId(exhibitionId:Int){
+        _currentExhibitionIds.value?.add(exhibitionId)
+        Log.d("TAG", "addCurrentExhibitionId: ${_currentExhibitionIds.value}")
+        Log.d("TAG", "addCurrentExhibitionId: size: ${getCurrentExhibitionsSize()}")
+    }
+    fun getCurrentExhibitionsSize():Int{
+        return _currentExhibitionIds.value!!.size
+    }
+    fun removeLastExhibitionId(){
+        if(getCurrentExhibitionsSize()>0){
+            _currentExhibitionIds.value?.removeAt(getCurrentExhibitionsSize()-1)
+            Log.d("TAG", "removeLastExhibitionId: size: ${getCurrentExhibitionsSize()}")
+        }
+    }
 }
