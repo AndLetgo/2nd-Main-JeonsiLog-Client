@@ -20,7 +20,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.databinding.ViewLoadPageDialogBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
@@ -30,6 +32,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import java.time.LocalDate
 
 
@@ -48,7 +51,6 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
             if(it){
                 (activity as MainActivity).refreshFragment(LoadPageDialog(selectedDate,listener,myEditText))
                 isRefresh.value = false
-
             }
         }
         return binding.root
@@ -69,7 +71,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setLayoutView(myEditText)
+
 
         // 다이얼로그의 배경을 투명하게 설정
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
@@ -155,17 +157,31 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
             //리사이클러뷰 제어
             binding.rvLoadPage.layoutManager = LinearLayoutManager(requireContext())
             var adapter: LoadPageRvAdapter?
-            var list: List<SearchInformationEntity>?
+            var list: MutableList<SearchInformationEntity> = mutableListOf()
             runBlocking(Dispatchers.IO) {
-                val response = ExhibitionRepositoryImpl().searchExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,0)
+                var response: Response<GetCalendarExhibitionResponse> = ExhibitionRepositoryImpl().searchCalendarExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,0)
                 if(response.isSuccessful && response.body()!!.check){
                     val searchExhibitionResponse = response.body()
-                    list=searchExhibitionResponse?.informationEntity
-                }
-                else{
-                    val searchExhibitionResponse = response.body()
-                    list=searchExhibitionResponse?.informationEntity
+                    val temp = searchExhibitionResponse!!.information.listIterator()
+                    while (temp.hasNext()){
+                        val response02=ExhibitionRepositoryImpl().getExhibition(GlobalApplication.encryptedPrefs.getAT(),temp.next().exhibitionId)
+                        if(response02.isSuccessful && response02.body()!!.check){
+                            val data = response02.body()!!.information
+                            list.add(SearchInformationEntity(
+                                exhibitionId = data.exhibitionId,
+                                exhibitionName = data.exhibitionName,
+                                priceKeyword = data.priceKeyword,
+                                operatingKeyword = data.operatingKeyword,
+                                imageUrl = data.imageUrl,
+                                place = SearchPlaceEntity(
+                                    placeId = data.place.placeId,
+                                    placeName = data.place.placeName ?: "",
+                                    placeAddress = data.place.address ?: ""
+                                )
+                            ))
 
+                        }
+                    }
                 }
             }
             if (!list.isNullOrEmpty()){
@@ -173,7 +189,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
                 checkEmptyListFalse()
             }
             else{
-                adapter =LoadPageRvAdapter(requireContext(),edittext,list?.toMutableList() ?: mutableListOf(),selectedDate,listener,this)
+                adapter =LoadPageRvAdapter(requireContext(),edittext,list!!.toMutableList() ?: mutableListOf(),selectedDate,listener,this)
                 checkEmptyListTrue()
             }
             binding.rvLoadPage.adapter = adapter

@@ -6,6 +6,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.GetPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetRandomPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -52,4 +53,12 @@ interface ExhibitionRepository {
         @Header("Authorization") token: String,
         @Body body: PatchExhibitionRequest
     ): Response<OnlyMsgResponse>
+
+    @GET("/api/exhibitions/search/name/{searchWord}")
+    suspend fun searchCalendarExhibition(
+        @Header("Authorization") token: String,
+        @Path("searchWord") searchWord: String,
+        @Query("page") page: Int
+    ): Response<GetCalendarExhibitionResponse>
+
 }

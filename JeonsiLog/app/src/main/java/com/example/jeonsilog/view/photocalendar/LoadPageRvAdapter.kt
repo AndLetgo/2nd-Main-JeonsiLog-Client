@@ -15,6 +15,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromPosterRequest
 
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlideApp
@@ -55,10 +56,33 @@ class LoadPageRvAdapter(private val context: Context, private val edittext:Strin
                 if (list.size-4==position){
                     itemPage+=1
                     runBlocking(Dispatchers.IO) {
-                        val response = ExhibitionRepositoryImpl().searchExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,itemPage)
+                        var listSize=list.size
+                        //searchCalendarExhibition
+                        val response = ExhibitionRepositoryImpl().searchCalendarExhibition(encryptedPrefs.getAT(),edittext,itemPage)
                         if(response.isSuccessful && response.body()!!.check){
                             val searchExhibitionResponse = response.body()
-                            list.addAll(searchExhibitionResponse?.informationEntity!!.toMutableList())
+                            val temp = searchExhibitionResponse!!.information.listIterator()
+                            while (temp.hasNext()){
+                                val response02=ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(),temp.next().exhibitionId)
+                                if(response02.isSuccessful && response02.body()!!.check){
+                                    val data = response02.body()!!.information
+                                    list.add(SearchInformationEntity(
+                                        exhibitionId = data.exhibitionId,
+                                        exhibitionName = data.exhibitionName,
+                                        priceKeyword = data.priceKeyword,
+                                        operatingKeyword = data.operatingKeyword,
+                                        imageUrl = data.imageUrl,
+                                        place = SearchPlaceEntity(
+                                            placeId = data.place.placeId,
+                                            placeName = data.place.placeName ?: "",
+                                            placeAddress = data.place.address ?: ""
+                                        )
+                                    ))
+                                }
+                            }
+                            CoroutineScope(Dispatchers.Main).launch {
+                                notifyItemRangeInserted(listSize,searchExhibitionResponse.information.size)
+                            }
                         }
                     }
                 }
@@ -122,6 +146,7 @@ class LoadPageRvAdapter(private val context: Context, private val edittext:Strin
                 dialog?.dismiss()
             }
         }
+
     }
 
 

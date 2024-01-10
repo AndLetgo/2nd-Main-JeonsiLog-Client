@@ -10,62 +10,82 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".view.photocalendar.CalendarBottomDialog">
-
-        <TextView
-            android:id="@+id/tvDateDialog"
-            style="@style/XL_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_20"
-            android:text="2023년 11월"
-            android:textColor="@color/basic_black"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_dimming_zone"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_dialog_dimming_zone"
+            app:layout_constraintBottom_toTopOf="@+id/ConstraintLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvMove"
-            style="@style/XL_bold"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ConstraintLayout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_20"
-            android:layout_marginEnd="@dimen/margin_20"
-            android:text="이동"
-            android:textColor="@color/basic_point"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <NumberPicker
-            android:id="@+id/np_year"
-            style="@style/M_regular"
-            android:layout_width="@dimen/item_76"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_32"
-            android:layout_marginEnd="@dimen/margin_28"
-            android:layout_marginBottom="@dimen/margin_48"
-            android:theme="@style/ThemeOverlay.NumberPicker"
+            android:background="@drawable/layer_rounded_dialog"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/np_month"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDateDialog" />
+            tools:context=".view.photocalendar.CalendarBottomDialog">
 
-        <NumberPicker
-            android:id="@+id/np_month"
-            android:layout_width="@dimen/item_76"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_32"
-            android:layout_marginBottom="@dimen/margin_48"
-            android:theme="@style/ThemeOverlay.NumberPicker"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/np_year"
-            app:layout_constraintTop_toBottomOf="@+id/tvDateDialog" />
+            <TextView
+                android:id="@+id/tvDateDialog"
+                style="@style/XL_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_20"
+                android:text="2023년 11월"
+                android:textColor="@color/basic_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvMove"
+                style="@style/XL_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:text="이동"
+                android:textColor="@color/basic_point"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <NumberPicker
+                android:id="@+id/np_year"
+                style="@style/M_regular"
+                android:layout_width="@dimen/item_76"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_32"
+                android:layout_marginEnd="@dimen/margin_28"
+                android:layout_marginBottom="@dimen/margin_48"
+                android:theme="@style/ThemeOverlay.NumberPicker"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/np_month"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDateDialog" />
+
+            <NumberPicker
+                android:id="@+id/np_month"
+                android:layout_width="@dimen/item_76"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_32"
+                android:layout_marginBottom="@dimen/margin_48"
+                android:theme="@style/ThemeOverlay.NumberPicker"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/np_year"
+                app:layout_constraintTop_toBottomOf="@+id/tvDateDialog" />
 
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>
