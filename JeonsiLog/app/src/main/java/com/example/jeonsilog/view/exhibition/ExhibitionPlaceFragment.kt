@@ -25,6 +25,7 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 
     private var placePage = 0
     private var placeId = 0
+    private var hasNextPage = true
 
     override fun init() {
         placePage = 0
@@ -54,7 +55,7 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
                 super.onScrolled(recyclerView, dx, dy)
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                 val totalCount = recyclerView.adapter?.itemCount?.minus(2)
-                if(rvPosition == totalCount){
+                if(rvPosition == totalCount && hasNextPage){
                     setExhibitionRvByPage(totalCount)
                 }
             }
@@ -66,8 +67,9 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
         runBlocking(Dispatchers.IO) {
             val response = PlaceRepositoryImpl().getPlaces(encryptedPrefs.getAT(),placeId,placePage)
             if(response.isSuccessful && response.body()!!.check){
-                placeList.addAll(response.body()!!.informationEntity)
-                addItemCount = response.body()!!.informationEntity.size
+                placeList.addAll(response.body()!!.informationEntity.data)
+                addItemCount = response.body()!!.informationEntity.data.size
+                hasNextPage = response.body()!!.informationEntity.hasNextPage
             }
         }
         val startPosition = totalCount + 1
