@@ -1,8 +1,11 @@
 package com.example.jeonsilog.view.exhibition
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +26,7 @@ import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -32,24 +36,24 @@ import java.util.Date
 
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_review), DialogWithIllusInterface {
     private lateinit var exhibitionReplyRvAdapter: ExhibitionReplyRvAdapter
-    private lateinit var replyList: MutableList<GetReplyInformation>
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
+    private lateinit var replyList: MutableList<GetReplyInformation>
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
     private var hasNextPage = true
 
     override fun init() {
-        reviewInfo = exhibitionViewModel.reviewInfo.value!!
-        binding.tvUserName.text = reviewInfo.nickname
-        binding.brbExhibitionReview.rating = reviewInfo.rate.toFloat()
-        binding.tvReviewContent.text = reviewInfo.contents
-        binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${reviewInfo.numReply}"
-        binding.tvReviewDate.text = DateUtil().formatElapsedTime(reviewInfo.createdDate)
-
-        Glide.with(requireContext())
-            .load(reviewInfo.imgUrl)
-            .transform(CenterCrop(), RoundedCorners(80))
-            .into(binding.ivProfile)
+        binding.vm = exhibitionViewModel
+        if(getReviewInfo(newReviewId)!=null){
+            reviewInfo = getReviewInfo(newReviewId)!!
+            setReviewUi(reviewInfo)
+        }else{
+            //알림에서 넘어왔는데 해당 감상평 삭제 됐을 때
+            if(extraActivityReference==1){
+                Toast.makeText(requireContext(), "해당하는 감상평이 없습니다.", Toast.LENGTH_SHORT).show()
+                activity?.finish()
+            }
+        }
 
         //댓글 RecyclerView
         getReplyList()
@@ -86,11 +90,37 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.btnEnterReply.setOnClickListener{
             postReply() //댓글 입력 등록 버튼 처리
         }
+        Glide.with(requireContext())
+            .load(encryptedPrefs.getURL())
+            .transform(CenterCrop(), RoundedCorners(80))
+            .into(binding.ivInputProfile)
+
+        exhibitionViewModel.replyCount.observe(this){
+            binding.tvReplyCount.text = getString(R.string.exhibition_reply_count, exhibitionViewModel.replyCount.value)
+        }
     }
-    private fun getReviewInfo(reviewId: Int){
-//        runBlocking(Dispatchers.IO) {
-//
-//        }
+    private fun getReviewInfo(reviewId: Int): GetReviewsExhibitionInformationEntity?{
+        var newReview:GetReviewsExhibitionInformationEntity? =null
+        runBlocking(Dispatchers.IO) {
+            val response = ReviewRepositoryImpl().getReview(encryptedPrefs.getAT(), reviewId)
+            if(response.isSuccessful && response.body()!!.check){
+                newReview = response.body()!!.information
+            }
+        }
+        return newReview
+    }
+    private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
+        binding.tvUserName.text = review.nickname
+        binding.brbExhibitionReview.rating = review.rate.toFloat()
+        binding.tvReviewContent.text = review.contents
+        binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${review.numReply}"
+        exhibitionViewModel.setReplyCount(review.numReply)
+        binding.tvReviewDate.text = DateUtil().formatElapsedTime(review.createdDate)
+
+        Glide.with(requireContext())
+            .load(review.imgUrl)
+            .transform(CenterCrop(), RoundedCorners(80))
+            .into(binding.ivProfile)
     }
     private fun getReplyList(){
         replyList = mutableListOf()
@@ -150,6 +180,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         replyList.add(newReply)
         binding.rvExhibitionReviewReply.adapter?.notifyItemInserted(replyList.size)
         binding.etWritingReply.setText("")
+
+        exhibitionViewModel.setReplyCount(exhibitionViewModel.replyCount.value!!+1)
+        val review = exhibitionViewModel.reviewItem.value
+        review!!.item.numReply++
+        exhibitionViewModel.setReviewItem(review)
     }
 
     fun showCustomDialog(type:String, contentId:Int,position:Int, reviewSide:Int) {
@@ -162,4 +197,21 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.rvExhibitionReviewReply.adapter = exhibitionReplyRvAdapter
     }
 
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("TAG", "handleOnBackPressed: extraActivityReference: $extraActivityReference ")
+                if(extraActivityReference == 1){
+                    activity?.finish()
+                }else{
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 }

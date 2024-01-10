@@ -7,14 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 
 class ExhibitionViewModel: ViewModel() {
-    private var _reviewInfo = MutableLiveData<GetReviewsExhibitionInformationEntity>()
-    val reviewInfo : LiveData<GetReviewsExhibitionInformationEntity>
-        get() = _reviewInfo
-
-    fun setReviewInfo(data:GetReviewsExhibitionInformationEntity){
-        _reviewInfo.value = data
-    }
-
     private var _currentExhibitionIds = MutableLiveData<MutableList<Int>>()
     val currentExhibitionIds: LiveData<MutableList<Int>>
         get() = _currentExhibitionIds
@@ -23,8 +15,6 @@ class ExhibitionViewModel: ViewModel() {
     }
     fun addCurrentExhibitionId(exhibitionId:Int){
         _currentExhibitionIds.value?.add(exhibitionId)
-        Log.d("TAG", "addCurrentExhibitionId: ${_currentExhibitionIds.value}")
-        Log.d("TAG", "addCurrentExhibitionId: size: ${getCurrentExhibitionsSize()}")
     }
     fun getCurrentExhibitionsSize():Int{
         return _currentExhibitionIds.value!!.size
@@ -32,7 +22,6 @@ class ExhibitionViewModel: ViewModel() {
     fun removeLastExhibitionId(){
         if(getCurrentExhibitionsSize()>0){
             _currentExhibitionIds.value?.removeAt(getCurrentExhibitionsSize()-1)
-            Log.d("TAG", "removeLastExhibitionId: size: ${getCurrentExhibitionsSize()}")
         }
     }
 
@@ -42,4 +31,22 @@ class ExhibitionViewModel: ViewModel() {
     fun setUserReview(review: String){
         _userReview.value = review
     }
+
+    private var _replyCount = MutableLiveData(0)
+    val replyCount: LiveData<Int>
+        get() = _replyCount
+    fun setReplyCount(count: Int){
+        _replyCount.value = count
+    }
+
+    private var _reviewItem = MutableLiveData<UpdateReviewItem>()
+    val reviewItem: LiveData<UpdateReviewItem>
+        get() = _reviewItem
+    fun setReviewItem(review:UpdateReviewItem){
+        _reviewItem.value = review
+    }
 }
+data class UpdateReviewItem(
+    val item:GetReviewsExhibitionInformationEntity,
+    val position: Int
+)

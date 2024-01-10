@@ -3,6 +3,7 @@ package com.example.jeonsilog.repository.review
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.ReviewApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.review.GetReviewResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsResponse
 import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
@@ -38,6 +39,19 @@ class ReviewRepositoryImpl: ReviewRepository {
         page: Int
     ): Response<GetReviewsExhibitionResponse> {
         val response = service.getReviews("Bearer $token", exhibitionId, page)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun getReview(
+        token: String,
+        reviewId: Int
+    ): Response<GetReviewResponse> {
+        val response = service.getReview("Bearer $token", reviewId)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

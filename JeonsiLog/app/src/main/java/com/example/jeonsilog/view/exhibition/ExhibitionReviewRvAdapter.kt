@@ -87,4 +87,9 @@ class ExhibitionReviewRvAdapter(
         reviewList.removeAt(position)
         notifyItemRemoved(position)
     }
+
+    fun replaceItem(review: GetReviewsExhibitionInformationEntity, position: Int){
+        reviewList[position] = review
+        notifyItemChanged(position)
+    }
 }

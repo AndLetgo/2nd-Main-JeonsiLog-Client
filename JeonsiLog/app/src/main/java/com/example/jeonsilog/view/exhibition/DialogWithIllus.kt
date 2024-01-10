@@ -26,6 +26,7 @@ import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.home.HomeRvAdapter
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.kakao.sdk.common.KakaoSdk.type
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -110,10 +111,14 @@ class DialogWithIllus(
         binding.btnConfirm.text = getString(R.string.btn_delete_dialog)
         binding.btnConfirm.setOnClickListener{
             deleteReview()
-            if(reviewSide == 1){
-                parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
+            if(extraActivityReference==1){
+                activity?.finish()
             }else{
-                dialogWithIllusInterface.confirmButtonClick(position)
+                if(reviewSide == 1){
+                    parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
+                }else{
+                    dialogWithIllusInterface.confirmButtonClick(position)
+                }
             }
             dismiss()
         }
