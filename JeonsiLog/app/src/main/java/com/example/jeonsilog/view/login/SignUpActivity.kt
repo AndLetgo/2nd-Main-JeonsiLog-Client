@@ -9,12 +9,12 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,8 +27,8 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 
 class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBinding.inflate(it)}) {
     private val viewModel: SignUpViewModel by viewModels()
-    private val tag = this.javaClass.simpleName
     private var backPressedTime: Long = 0L
+    private var alertDialog: AlertDialog.Builder? = null
 
 
     private val callback = object : OnBackPressedCallback(true) {
@@ -76,24 +76,17 @@ class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBindin
 
     fun requestPermission() {
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
         } else {
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
         if (shouldShowRequestPermissionRationale(permission[0])) {
-            Log.d(tag, "in True")
-            if(viewModel.firstRequest.value!! > 2){
-                showPermissionRationale("거부된 권한이 있습니다")
-                viewModel.changeFirstRequest(0)
-            } else {
-                viewModel.changeFirstRequest(viewModel.firstRequest.value!! + 1)
-            }
+                showPermissionRationale(getString(R.string.permission_denied))
         } else {
             ActivityCompat.requestPermissions(this, permission, 112)
+            viewModel.changeTosPhoto(checkPermission())
         }
-
-        viewModel.setUpdateFlag(true)
     }
 
     override fun onRequestPermissionsResult(
@@ -103,64 +96,40 @@ class SignUpActivity: BaseActivity<ActivitySignupBinding>({ ActivitySignupBindin
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        Log.d(tag, "거부")
-
-        if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            if(viewModel.tosIsCheckedPermissionPhoto.value!!){
-                showPermissionRationale("권한을 수정하려면 설정으로 이동해야 합니다")
-            }
-        } else {
-            if(viewModel.firstRequest.value!! > 2){
-                showPermissionRationale("거부된 권한이 있습니다.")
-                viewModel.changeFirstRequest(0)
-            } else {
-                viewModel.changeFirstRequest(viewModel.firstRequest.value!! + 1)
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (viewModel.tosIsCheckedPermissionPhoto.value!!) {
+                showPermissionRationale(getString(R.string.permission_modify))
             }
         }
-
-        viewModel.setUpdateFlag(true)
     }
 
     fun checkPermission(): Boolean{
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return if(ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_MEDIA_IMAGES
-                ) == PackageManager.PERMISSION_GRANTED){
-                viewModel.changeTosPhoto(true)
-                true
-            } else {
-                requestPermission()
-                false
-            }
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
         } else {
-            return if(ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED){
-                viewModel.changeTosPhoto(true)
-                true
-            } else {
-                requestPermission()
-                false
-            }
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
         }
     }
 
-    fun showPermissionRationale(msg: String) {
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setMessage(msg)
-        alertDialog.setPositiveButton("확인") { _, _ ->
-
+    private fun showPermissionRationale(msg: String) {
+        alertDialog = AlertDialog.Builder(this)
+        alertDialog?.setMessage(msg)
+        alertDialog?.setPositiveButton("확인") { _, _ ->
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             val uri = Uri.fromParts("package", packageName, null)
             intent.data = uri
-            startActivity(intent)
+            resultLauncher.launch(intent)
         }
-        alertDialog.setNegativeButton("취소") { _, _ ->
-            viewModel.setUpdateFlag(true)
+        alertDialog?.setNegativeButton("취소") { _, _ ->
+            viewModel.changeTosPhoto(viewModel.tosIsCheckedPermissionPhoto.value!!)
         }
 
-        alertDialog.show()
+        alertDialog?.show()
+
+    }
+
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        viewModel.changeTosPhoto(checkPermission())
     }
 }

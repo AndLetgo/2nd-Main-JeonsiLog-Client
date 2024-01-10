@@ -1,18 +1,22 @@
 package com.example.jeonsilog.view
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
 import android.util.Log
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.jeonsilog.R
@@ -41,17 +45,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private val tag = this.javaClass.simpleName
     private var networkDialog: NetworkDialog? = null
     private var backPressedTime: Long = 0L
+    private var alertDialog: AlertDialog.Builder? = null
 
-    private val REQUIRED_PERMISSONS = if(Build.VERSION.SDK_INT < 33){
-        arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-    } else {
-        arrayOf(
-            Manifest.permission.READ_MEDIA_IMAGES
-        )
-    }
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -169,26 +164,44 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
     }
 
-    fun checkPermissions(context: Context): Boolean{
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-            if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED){
-                requestPermissions(REQUIRED_PERMISSONS, 100)
-            }
+    fun checkPermission(): Boolean{
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
         } else {
-            if(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                requestPermissions(REQUIRED_PERMISSONS, 101)
-            }
-        }
-
-        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED
-        } else {
-            !(ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
         }
     }
 
+    fun requestPermission() {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+        } else {
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        if (shouldShowRequestPermissionRationale(permission[0])) {
+            showPermissionRationale(getString(R.string.permission_denied))
+        } else {
+            ActivityCompat.requestPermissions(this, permission, 100)
+        }
+    }
+
+    private fun showPermissionRationale(msg: String) {
+        alertDialog = AlertDialog.Builder(this)
+        alertDialog?.setMessage(msg)
+        alertDialog?.setPositiveButton("확인") { _, _ ->
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri = Uri.fromParts("package", packageName, null)
+            intent.data = uri
+            startActivity(intent)
+        }
+        alertDialog?.setNegativeButton("취소") { _, _ ->
+        }
+
+        alertDialog?.show()
+
+    }
 
     // 타 유저 프로필로 이동(해당 유저 아이디 필요)
     fun moveOtherUserProfile(otherUserId: Int, otherUserNick: String){

@@ -28,8 +28,6 @@ import kotlin.coroutines.suspendCoroutine
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBinding.inflate(it)})) {
     private val tag = this.javaClass.simpleName
-    private val testEmail = "android111@gmail.com"
-    private val testId = "android111"
 
     override fun init() {
         isFinish.observe(this){
@@ -121,11 +119,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
                     continuation.resume(SignInRequest("", ""))
                 } else {
                     if (user != null) {
-//                        val data = SignInRequest(
-//                            providerId = user.id.toString(),
-//                            email = user.kakaoAccount!!.email.toString(),
-//                        )
-                        val data = SignInRequest(testEmail, testId)
+
+                        val data = SignInRequest(
+                            providerId = user.id.toString(),
+                            email = user.kakaoAccount!!.email.toString(),
+                        )
                         continuation.resume(data)
                     } else {
                         continuation.resume(SignInRequest("", ""))

@@ -47,7 +47,7 @@
                 android:id="@+id/iv_mypage_profile"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/shape_round_iv"
+                android:background="@drawable/illus_default_profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

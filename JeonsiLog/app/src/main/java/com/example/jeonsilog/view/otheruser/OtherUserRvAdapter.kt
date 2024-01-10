@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.otheruser
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,18 +8,21 @@ import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
 import com.example.jeonsilog.databinding.ItemOtherUserRatingBinding
 import com.example.jeonsilog.databinding.ItemOtherUserReviewBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.SpannableStringUtil
 import kotlin.IllegalArgumentException
 
-class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeRatingViewHolder(private val binding: ItemOtherUserRatingBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: GetMyRatingsDataEntity){
             binding.tvOtherUserRatingItemTitle.text = data.exhibitionName
             binding.rbOtherUserRatingItemRating.rating = data.rate.toFloat()
 
-            // 클릭리스너 - 해당 전시회 상세 페이지로 이동
+            itemView.setOnClickListener {
+                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
+            }
         }
     }
 
@@ -31,7 +35,9 @@ class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: 
 
             binding.tvOtherUserReviewContent.text = SpannableStringUtil().boldTextBetweenBrackets(data.contents)
 
-            // 클릭리스너 - 해당 전시회 상세 페이지
+            itemView.setOnClickListener {
+                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
+            }
         }
     }
 

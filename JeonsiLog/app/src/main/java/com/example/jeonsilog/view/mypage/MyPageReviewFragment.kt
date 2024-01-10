@@ -45,7 +45,7 @@ class MyPageReviewFragment: BaseFragment<FragmentMyPageReviewBinding>(R.layout.f
             binding.tvMypageReviewEmptyTitle.visibility = View.VISIBLE
             binding.tvMypageReviewEmptyDescription.visibility = View.VISIBLE
         } else {
-            val adapter = MyPageRvAdapter<GetReviewsDataEntity>(list, 1)
+            val adapter = MyPageRvAdapter<GetReviewsDataEntity>(list, 1, requireContext())
             binding.rvMypageReview.adapter = adapter
             binding.rvMypageReview.layoutManager = LinearLayoutManager(requireContext())
             binding.rvMypageReview.addItemDecoration(

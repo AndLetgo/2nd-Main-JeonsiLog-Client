@@ -6,10 +6,12 @@ data class IsAvailableResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: InformationEntity
+    val information: IsAvailableInformation
 )
 
-data class InformationEntity(
-    @SerializedName("isAvailable")
-    val isAvailable: Boolean
+data class IsAvailableInformation(
+    @SerializedName("isDuplicate")
+    var isDuplicate: Boolean,
+    @SerializedName("isForbidden")
+    var isForbidden: Boolean
 )

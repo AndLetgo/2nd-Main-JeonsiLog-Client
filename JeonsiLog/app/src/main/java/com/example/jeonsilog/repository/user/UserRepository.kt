@@ -2,6 +2,7 @@ package com.example.jeonsilog.repository.user
 
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
+import com.example.jeonsilog.data.remote.dto.user.GetIsOpenResponse
 import com.example.jeonsilog.data.remote.dto.user.MyInfoResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmActiveResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmFollowingResponse
@@ -64,4 +65,10 @@ interface UserRepository {
         @Header("Authorization") token: String,
         @Part img: MultipartBody.Part,
     ): Response<OnlyMsgResponse>
+
+    @GET("/api/users/calendar/{userId}")
+    suspend fun getIsOpen(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Int
+    ): Response<GetIsOpenResponse>
 }
