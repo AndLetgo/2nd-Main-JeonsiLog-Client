@@ -10,8 +10,8 @@ import retrofit2.Response
 class RatingRepositoryImpl: RatingRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(RatingApi::class.java)
 
-    override suspend fun getMyRatings(token: String): Response<GetRatingsResponse> {
-        val response = service.getMyRatings("Bearer $token")
+    override suspend fun getMyRatings(token: String, page: Int): Response<GetRatingsResponse> {
+        val response = service.getMyRatings("Bearer $token", page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
@@ -20,8 +20,8 @@ class RatingRepositoryImpl: RatingRepository {
         }
     }
 
-    override suspend fun getOtherRatings(token: String, userId: Int): Response<GetRatingsResponse> {
-        val response = service.getOtherRatings("Bearer $token", userId)
+    override suspend fun getOtherRatings(token: String, userId: Int, page: Int): Response<GetRatingsResponse> {
+        val response = service.getOtherRatings("Bearer $token", userId, page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

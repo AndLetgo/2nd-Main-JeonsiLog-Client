@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.mypage
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.example.jeonsilog.databinding.ItemMyPageInterestBinding
 import com.example.jeonsilog.databinding.ItemMyPageRatingBinding
 import com.example.jeonsilog.databinding.ItemMyPageReviewBinding
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.CoroutineScope
@@ -22,18 +24,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
-class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeRatingViewHolder(private val binding: ItemMyPageRatingBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: GetMyRatingsDataEntity){
             binding.tvMypageRatingItemTitle.text = data.exhibitionName
             binding.rbMypageRatingItemRating.rating = data.rate.toFloat()
 
-            // 클릭리스너 - 해당 전시회 상세 페이지로 이동
             itemView.setOnClickListener {
+                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
 
             }
-
         }
     }
 
@@ -47,9 +48,8 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.tvMypageReviewTitle.text = data.exhibitionName
             binding.tvMypageReviewContent.text = data.contents
 
-            // 클릭리스너 - 해당 전시회 상세 페이지로 이동로 이동
             itemView.setOnClickListener {
-
+                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
             }
         }
     }
@@ -83,8 +83,6 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_active)
 
             binding.ibMypageInterest.setOnClickListener {
-//                list.removeAt(adapterPosition)
-//                notifyItemRemoved(adapterPosition)
                 if(state){
                     binding.ibMypageInterest.background = AppCompatResources.getDrawable(itemView.context, R.drawable.ic_interest_inactive)
                     CoroutineScope(Dispatchers.IO).launch{
@@ -100,9 +98,8 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
                 state = !state
             }
 
-            // 클릭리스너 - 해당 전시회 상세 페이지
             itemView.setOnClickListener {
-
+                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
             }
         }
     }

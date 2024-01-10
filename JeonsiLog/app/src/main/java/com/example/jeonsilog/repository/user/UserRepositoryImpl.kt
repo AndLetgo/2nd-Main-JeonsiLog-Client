@@ -5,6 +5,7 @@ import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.UserApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
+import com.example.jeonsilog.data.remote.dto.user.GetIsOpenResponse
 import com.example.jeonsilog.data.remote.dto.user.MyInfoResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmActiveResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmFollowingResponse
@@ -120,6 +121,16 @@ class UserRepositoryImpl: UserRepository {
         img: MultipartBody.Part
     ): Response<OnlyMsgResponse> {
         val response = service.uploadProfileImg("Bearer $token", img)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun getIsOpen(token: String, userId: Int): Response<GetIsOpenResponse> {
+        val response = service.getIsOpen("Bearer $token", userId)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

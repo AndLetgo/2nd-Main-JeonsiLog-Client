@@ -18,6 +18,8 @@ data class GetOtherFollowingInformation(
     val nickname: String,
     @SerializedName("profileImgUrl")
     val profileImgUrl: String,
+    @SerializedName("followMe")
+    val followMe: Boolean,
     @SerializedName("ifollow")
     val ifollow: Boolean
 )

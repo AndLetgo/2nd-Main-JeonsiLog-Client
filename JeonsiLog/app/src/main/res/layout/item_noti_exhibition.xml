@@ -16,6 +16,7 @@
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:background="@drawable/shape_round_iv"
+            android:backgroundTint="@color/gray_light_medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,8 +50,6 @@
                 android:textColor="@color/basic_black"
                 android:singleLine="false"
                 android:ellipsize="end" />
-
-
 
             <TextView
                 android:id="@+id/tv_noti_time"

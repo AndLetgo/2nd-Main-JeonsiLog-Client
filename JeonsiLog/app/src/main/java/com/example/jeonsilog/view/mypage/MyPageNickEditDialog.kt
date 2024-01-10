@@ -81,10 +81,6 @@ class MyPageNickEditDialog(private val parentVm: MyPageViewModel): DialogFragmen
                     else if (checker.hasSpecialCharacter(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_special_char))
                     }
-                    // 서버 API 대기중
-//                    else if (){
-//                        viewModel.setComment(getString(R.string.login_nick_check_prohibited_words))
-//                    }
                     else if(checker.isNotPair(inputText)){
                         viewModel.setComment(getString(R.string.login_nick_check_is_pair))
                     }
@@ -103,22 +99,26 @@ class MyPageNickEditDialog(private val parentVm: MyPageViewModel): DialogFragmen
             }
             btnDialogNickEditModify.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val flag = AuthRepositoryImpl().getIsAvailable(binding.etDialogNickEdit.text.toString())
+                    val response = AuthRepositoryImpl().getIsAvailable(binding.etDialogNickEdit.text.toString())
+                    if(response.isSuccessful && response.body()!!.check){
+                        val result = response.body()!!.information
+                        if(!result.isDuplicate && !result.isForbidden){
+                            val flag = UserRepositoryImpl().patchNick(encryptedPrefs.getAT(), EditNickRequest(binding.etDialogNickEdit.text.toString()))
 
-                    launch(Dispatchers.Main){
-                        if(flag){
-                            launch(Dispatchers.IO) {
-                                val flag2 = UserRepositoryImpl().patchNick(encryptedPrefs.getAT(), EditNickRequest(binding.etDialogNickEdit.text.toString()))
-
-                                launch(Dispatchers.Main) {
-                                    if(flag2){
-                                        parentVm.setNick(encryptedPrefs.getNN()!!)
-                                        dismiss()
-                                    }
+                            launch(Dispatchers.Main) {
+                                if(flag){
+                                    parentVm.setNick(encryptedPrefs.getNN()!!)
+                                    dismiss()
                                 }
                             }
+                        } else if (result.isDuplicate){
+                            launch(Dispatchers.Main){
+                                viewModel.setComment(getString(R.string.login_nick_check_duplicate))
+                            }
                         } else {
-                            viewModel.setComment(getString(R.string.login_nick_check_duplicate))
+                            launch(Dispatchers.Main){
+                                viewModel.setComment(getString(R.string.login_nick_check_forbidden))
+                            }
                         }
                     }
                 }

@@ -2,12 +2,14 @@ package com.example.jeonsilog.view.mypage
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -19,7 +21,6 @@ import com.example.jeonsilog.viewmodel.MyPageViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.testDefalutImg
 import com.example.jeonsilog.widget.utils.ImageUtil
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,7 +31,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.OutputStream
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val viewModel: MyPageViewModel by viewModels()
@@ -57,7 +60,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
         viewModel.profileImg.observe(this){
             it?.let {
-                loadProfileImage(it)
+                loadProfileImage(it, null)
             }
         }
 
@@ -79,17 +82,18 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
         bsBinding!!.btnBottomSheetMypageLoadImage.setOnClickListener {
             val mActivity = activity as MainActivity
-            if(mActivity.checkPermissions(requireContext())){
+            if(mActivity.checkPermission()){
                 val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 launcher.launch(intent)
                 bottomSheetDialog.dismiss()
             } else {
-                Toast.makeText(requireContext(), "갤러리 접근 권한이 없습니다.", Toast.LENGTH_SHORT).show()
+                mActivity.requestPermission()
             }
         }
 
         bsBinding!!.btnBottomSheetMypageLoadDefalut.setOnClickListener {
-            viewModel.setProfileImg(testDefalutImg)
+            setDefalutImage()
+            loadProfileImage(null, R.drawable.illus_default_profile)
             bottomSheetDialog.dismiss()
         }
 
@@ -142,7 +146,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
         CoroutineScope(Dispatchers.IO).launch{
             val response = UserRepositoryImpl().uploadProfileImg(encryptedPrefs.getAT(), filePart)
-            Log.d(tag, filePart.body.toString())
+
             if(response.isSuccessful && response.body()!!.check){
                 Log.d("Upload", "Image uploaded successfully")
             } else {
@@ -151,12 +155,37 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         }
     }
 
-    private fun loadProfileImage(path: String){
-        GlideApp
-            .with(this)
-            .load(path)
-            .optionalCircleCrop()
-            .into(binding.ivMypageProfile)
+    private fun setDefalutImage() {
+        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.illus_default_profile)
+        val bitmap = (drawable as BitmapDrawable).bitmap
+
+        val file = File(requireContext().cacheDir, "default.png")
+        val outputStream: OutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
+        outputStream.close()
+
+        val uri = Uri.fromFile(file)
+
+        patchMyProfileImg(uri)
+    }
+
+
+    private fun loadProfileImage(path: String?, id: Int?){
+
+        if(path.isNullOrEmpty()){
+            GlideApp
+                .with(this)
+                .load(id)
+                .optionalCircleCrop()
+                .into(binding.ivMypageProfile)
+        } else {
+            GlideApp
+                .with(this)
+                .load(path)
+                .optionalCircleCrop()
+                .into(binding.ivMypageProfile)
+        }
     }
 
     override fun onDestroyView() {
