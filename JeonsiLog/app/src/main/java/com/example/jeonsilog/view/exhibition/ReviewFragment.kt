@@ -33,6 +33,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
+    private var hasNextPage = true
 
     override fun init() {
         reviewInfo = exhibitionViewModel.reviewInfo.value!!
@@ -55,7 +56,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
                 super.onScrolled(recyclerView, dx, dy)
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                 val totalCount = recyclerView.adapter?.itemCount?.minus(2)
-                if(rvPosition == totalCount){
+                if(rvPosition == totalCount && hasNextPage){
                     setReplyRvByPage(totalCount)
                 }
             }
@@ -118,8 +119,9 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         runBlocking(Dispatchers.IO) {
             val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(),reviewInfo.reviewId,replyPage)
             if(response.isSuccessful && response.body()!!.check){
-                replyList.addAll(response.body()!!.information)
-                addItemCount = response.body()!!.information.size
+                replyList.addAll(response.body()!!.information.data)
+                addItemCount = response.body()!!.information.data.size
+                hasNextPage = response.body()!!.information.hasNextPage
             }
         }
         val startPosition = totalCount + 1
