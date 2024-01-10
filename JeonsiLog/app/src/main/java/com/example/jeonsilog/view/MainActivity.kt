@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -39,6 +40,8 @@ import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -113,6 +116,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             Log.d(tag, "isFinish: $it")
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
         }
+        askNotificationPermission()
+        getToken()
     }
 
     fun setStateBn(isVisible:Boolean){
@@ -234,4 +239,53 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             .replace(R.id.fl_main, fragment)
             .commit()
     }
+    fun getToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                //Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d("11111", msg)
+            //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
+    }
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // 권한이 승인된 경우
+
+        } else {
+            // 권한이 거부된 경우
+        }
+    }
+    //알림 권한 확인 함수
+    private fun askNotificationPermission() {
+        // Android API level이 TIRAMISU (33) 이상인 경우에만 실행
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // 이미 권한이 부여된 경우
+
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // 사용자에게 이미 거부한 이력이 있는 경우
+
+            } else {
+                // 권한을 요청하는 경우
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }else{
+
+        }
+    }
+
+
+
 }
