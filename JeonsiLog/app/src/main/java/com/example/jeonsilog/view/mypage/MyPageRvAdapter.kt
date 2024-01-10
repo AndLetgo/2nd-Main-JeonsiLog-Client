@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.interest.GetInterestInformationEntity
-import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
-import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
+import com.example.jeonsilog.data.remote.dto.interest.GetInterestEntity
+import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsEntity
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsEntity
 import com.example.jeonsilog.databinding.ItemMyPageInterestBinding
 import com.example.jeonsilog.databinding.ItemMyPageRatingBinding
 import com.example.jeonsilog.databinding.ItemMyPageReviewBinding
@@ -27,7 +27,7 @@ import java.lang.IllegalArgumentException
 class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeRatingViewHolder(private val binding: ItemMyPageRatingBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetMyRatingsDataEntity){
+        fun bind(data: GetMyRatingsEntity){
             binding.tvMypageRatingItemTitle.text = data.exhibitionName
             binding.rbMypageRatingItemRating.rating = data.rate.toFloat()
 
@@ -39,7 +39,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
     }
 
     inner class TypeReviewViewHolder(private val binding: ItemMyPageReviewBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetReviewsDataEntity) {
+        fun bind(data: GetReviewsEntity) {
             GlideApp.with(binding.ivMypageReviewExhibitionImg)
                 .load(data.exhibitionImgUrl)
                 .centerCrop()
@@ -55,7 +55,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
     }
 
     inner class TypeInterestViewHolder(private val binding: ItemMyPageInterestBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetInterestInformationEntity) {
+        fun bind(data: GetInterestEntity) {
             GlideApp.with(binding.ivMypageInterestExhibitionImg)
                 .load(data.imageUrl)
                 .transform(CenterCrop(), RoundedCorners(16))
@@ -142,17 +142,17 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (this.type) {
             0 -> {
-                val ratingData = list[position] as GetMyRatingsDataEntity
+                val ratingData = list[position] as GetMyRatingsEntity
                 holder as MyPageRvAdapter<*>.TypeRatingViewHolder
                 holder.bind(ratingData)
             }
             1 -> {
-                val reviewData = list[position] as GetReviewsDataEntity
+                val reviewData = list[position] as GetReviewsEntity
                 holder as MyPageRvAdapter<*>.TypeReviewViewHolder
                 holder.bind(reviewData)
             }
             2 -> {
-                val interestData = list[position] as GetInterestInformationEntity
+                val interestData = list[position] as GetInterestEntity
                 holder as MyPageRvAdapter<*>.TypeInterestViewHolder
                 holder.bind(interestData)
             }

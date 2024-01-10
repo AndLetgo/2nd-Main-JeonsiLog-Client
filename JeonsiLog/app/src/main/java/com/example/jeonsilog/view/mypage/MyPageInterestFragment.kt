@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.interest.GetInterestInformationEntity
+import com.example.jeonsilog.data.remote.dto.interest.GetInterestEntity
 import com.example.jeonsilog.databinding.FragmentMyPageInterestBinding
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -13,10 +13,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class MyPageInterestFragment:BaseFragment<FragmentMyPageInterestBinding>(R.layout.fragment_my_page_interest) {
-    var list = mutableListOf<GetInterestInformationEntity>()
+    var list = mutableListOf<GetInterestEntity>()
     private var page = 0
     private var isFinished = false
-    private lateinit var adapter: MyPageRvAdapter<GetInterestInformationEntity>
+    private lateinit var adapter: MyPageRvAdapter<GetInterestEntity>
     private var newItemCount = 0
 
     override fun init() {
@@ -28,7 +28,7 @@ class MyPageInterestFragment:BaseFragment<FragmentMyPageInterestBinding>(R.layou
             binding.tvMypageInterestEmptyTitle.visibility = View.VISIBLE
             binding.tvMypageReviewEmptyDescription.visibility = View.VISIBLE
         } else {
-            adapter = MyPageRvAdapter<GetInterestInformationEntity>(list, 2, requireContext())
+            adapter = MyPageRvAdapter<GetInterestEntity>(list, 2, requireContext())
             binding.rvMypageInterest.adapter = adapter
             binding.rvMypageInterest.layoutManager = LinearLayoutManager(requireContext())
 
@@ -58,8 +58,8 @@ class MyPageInterestFragment:BaseFragment<FragmentMyPageInterestBinding>(R.layou
         runBlocking(Dispatchers.IO){
             val response = InterestRepositoryImpl().getInterest(GlobalApplication.encryptedPrefs.getAT(), page)
             if(response.isSuccessful && response.body()!!.check){
-                newItemCount = response.body()!!.information.size
-                val data = response.body()!!.information.listIterator()
+                newItemCount = response.body()!!.information.data.size
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()){
                     list.add(data.next())
                 }

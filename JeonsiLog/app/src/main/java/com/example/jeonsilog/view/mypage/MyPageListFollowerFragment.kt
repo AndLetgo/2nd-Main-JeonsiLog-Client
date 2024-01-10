@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowerInformation
+import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowerEntity
 import com.example.jeonsilog.databinding.FragmentMyPageListFollowerBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -16,8 +16,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class MyPageListFollowerFragment: BaseFragment<FragmentMyPageListFollowerBinding>(R.layout.fragment_my_page_list_follower) {
-    private val list = mutableListOf<GetMyFollowerInformation>()
-    private lateinit var adapter: MyPageListRvAdapter<GetMyFollowerInformation>
+    private val list = mutableListOf<GetMyFollowerEntity>()
+    private lateinit var adapter: MyPageListRvAdapter<GetMyFollowerEntity>
     private var newItemCount = 0
     private var isFinished = false
     private var page = 0

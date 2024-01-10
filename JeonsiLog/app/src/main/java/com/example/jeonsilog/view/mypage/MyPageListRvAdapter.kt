@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowerInformation
-import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingInformation
+import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowerEntity
+import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingEntity
 import com.example.jeonsilog.databinding.ItemMyPageListFollowBinding
 import com.example.jeonsilog.databinding.ItemMyPageListFollowingBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
@@ -25,7 +25,7 @@ import java.lang.IllegalArgumentException
 class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeFollowViewHolder(private val binding: ItemMyPageListFollowBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetMyFollowerInformation){
+        fun bind(data: GetMyFollowerEntity){
             GlideApp.with(binding.ivMypageListFollowProfile)
                 .load(data.profileImgUrl)
                 .optionalCircleCrop()
@@ -55,7 +55,7 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
 
             binding.btnMypageListFollowing.setOnClickListener {
                 if(data.ifollow){
-                    list[adapterPosition] = GetMyFollowerInformation(
+                    list[adapterPosition] = GetMyFollowerEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
@@ -67,7 +67,7 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
                     notifyItemChanged(adapterPosition)
 
                 } else {
-                    list[adapterPosition] = GetMyFollowerInformation(
+                    list[adapterPosition] = GetMyFollowerEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
@@ -93,7 +93,7 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
 
 
     inner class TypeFollowingViewHolder(private val binding: ItemMyPageListFollowingBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetMyFollowingInformation) {
+        fun bind(data: GetMyFollowingEntity) {
             GlideApp.with(binding.ivMypageListFollowingProfile)
                 .load(data.profileImgUrl)
                 .optionalCircleCrop()
@@ -151,12 +151,12 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (this.type) {
             0 -> {
-                val followerData = list[position] as GetMyFollowerInformation
+                val followerData = list[position] as GetMyFollowerEntity
                 holder as MyPageListRvAdapter<*>.TypeFollowViewHolder
                 holder.bind(followerData)
             }
             1 -> {
-                val followingData = list[position] as GetMyFollowingInformation
+                val followingData = list[position] as GetMyFollowingEntity
                 holder as MyPageListRvAdapter<*>.TypeFollowingViewHolder
                 holder.bind(followingData)
             }

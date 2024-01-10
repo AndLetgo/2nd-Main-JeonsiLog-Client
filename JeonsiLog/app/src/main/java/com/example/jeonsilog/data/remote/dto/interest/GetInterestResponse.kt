@@ -6,10 +6,17 @@ data class GetInterestResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: List<GetInterestInformationEntity>
+    val information: GetInterestInformation
 )
 
-data class GetInterestInformationEntity(
+data class GetInterestInformation(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<GetInterestEntity>
+)
+
+data class GetInterestEntity(
     @SerializedName("interestId")
     val interestId: Int,
     @SerializedName("userId")
