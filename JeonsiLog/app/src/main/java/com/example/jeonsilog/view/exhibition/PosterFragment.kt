@@ -90,7 +90,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
                 useDownloadManager(thisPosterUrl)
             }
         } else{
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없는 경우 권한 요청 다이얼로그를 표시
                 Log.d(TAG, "checkStoragePermission: 33이하, 권한 없음")
