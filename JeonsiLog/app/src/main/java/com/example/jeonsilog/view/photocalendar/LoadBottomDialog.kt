@@ -1,14 +1,21 @@
 package com.example.jeonsilog.view.photocalendar
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Log
+import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.fragment.app.DialogFragment
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.calendar.DeletePhotoRequest
 import com.example.jeonsilog.data.remote.dto.calendar.GetPhotoInformation
@@ -25,10 +33,10 @@ import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromGalleryReques
 import com.example.jeonsilog.data.remote.dto.calendar.UploadImageReqEntity
 import com.example.jeonsilog.databinding.ViewLoadDialogBinding
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
-import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.ImageUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -46,26 +54,69 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class LoadBottomDialog(private var selectedDate: LocalDate, private val listener: CommunicationListener) : BottomSheetDialogFragment() {
+class LoadBottomDialog(private var selectedDate: LocalDate, private val listener: CommunicationListener) : DialogFragment() {
     val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
     val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 2
+
+
     private var _binding: ViewLoadDialogBinding? = null
     private val binding get() = _binding!!
+
     var imageUri: Uri? = null
+
     private var dismissListener: OnDismissListener? = null
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = ViewLoadDialogBinding.inflate(inflater, container, false)
 
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialog)
+
+        setDimClick()
         SetDeleteImage()
         setBtLoadPoster()
         setBtLoadImage()
 
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setView()
+
+    }
+    fun setView(){
+        // 다이얼로그의 배경을 투명하게 설정
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        // 다이얼로그의 외부 터치 이벤트 처리 (다이얼로그가 닫히지 않도록 함)
+        dialog?.setCanceledOnTouchOutside(false)
+        dialog?.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                // 뒤로가기 버튼이 눌렸을 때 수행할 동작
+                dismiss()
+                true
+            } else {
+                false
+            }
+        }
+
+        // 전체 화면으로 다이얼로그 표시 (다이얼로그 내용물의 크기를 외부까지 확장)
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+        val height = ViewGroup.LayoutParams.MATCH_PARENT
+        dialog?.window?.setLayout(width, height)
+        // 다이얼로그의 내용물이 차지하는 레이아웃의 크기를 조정
+        val params = binding.root.layoutParams
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT
+        binding.root.layoutParams = params
+    }
+    fun setDimClick(){
+        binding.ivDimmingZone.setOnClickListener {
+            dismiss()
+        }
+    }
+
     private fun yearMonthFromDate(date: LocalDate): String{
         var formatter = DateTimeFormatter.ofPattern("yyyyMM")
         // 받아온 날짜를 해당 포맷으로 변경
@@ -79,7 +130,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
             if(response.isSuccessful && response.body()!!.check){
                 list= response.body()!!.information
             } else {
-                list= listOf()
+                list= response.body()!!.information
             }
         }
         if (!list.isNullOrEmpty()){
@@ -114,64 +165,89 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
             // 기존 다이얼로그 닫기
             dismiss()
             // 새로운 다이얼로그 열기
-            val loadPageDialog = LoadPageDialog(selectedDate,listener,null)
+            val loadPageDialog = LoadPageDialog(selectedDate,listener,"")
             loadPageDialog.show(parentFragmentManager, "LoadPageDialogTag")
         }
     }
-    fun setBtLoadImage(){
+    fun setBtLoadImage() {
         binding.btLoadImage.setOnClickListener {
-            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.TIRAMISU) {
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
-                    != PackageManager.PERMISSION_GRANTED) {
-                    // 권한이 없는 경우 권한 요청 다이얼로그를 표시
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
-                        MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES
-                    )
-                } else {
-                    // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
-                    accessGallery()
-                }
-            } else{
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                    // 권한이 없는 경우 권한 요청 다이얼로그를 표시
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE
-                    )
-                } else {
-                    // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
-                    accessGallery()
-                }
-            }
+            checkPermissionAndOpenGallery()
         }
     }
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE,
-            MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 권한이 부여된 경우 갤러리에 접근할 수 있는 로직을 수행
-                    accessGallery()
-                } else {
-                    // 권한이 거부된 경우 사용자에게 설명이나 다시 요청하는 등의 처리를 수행
-                    // 예: Toast 메시지를 통해 사용자에게 알림
-                    Toast.makeText(
-                        context,
-                        "갤러리 접근 권한이 없습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+    private fun checkPermissionAndOpenGallery() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // 권한이 없는 경우 권한 요청 다이얼로그를 표시
+                requestStoragePermission()
+                Log.d("TAG01", "checkPermissionAndOpenGallery: ")
+            } else {
+                // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
+                accessGallery()
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // 권한이 없는 경우 권한 요청 다이얼로그를 표시
+                requestStoragePermission()
+
+            } else {
+                // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
+                accessGallery()
             }
         }
+
     }
+    fun requestStoragePermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    requireActivity(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                )
+            ) {
+                // 권한을 이전에 거부한 경우
+                showPermissionRationaleDialog()
+            } else {
+                // 권한 요청
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                    MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES
+                )
+            }
+        }else{
+
+        }
+    }
+    private fun showPermissionRationaleDialog() {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.permission_denied))
+            .setPositiveButton("이동") { _, _ ->
+                openAppSettings()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        dialog.show()
+    }
+
+    private fun openAppSettings() {
+        Log.d("openAppSettings", "openAppSettings: ")
+        val intent = Intent()
+        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        intent.data = android.net.Uri.parse("package:" +requireContext() .packageName)
+        startActivity(intent)
+    }
+
+
     fun accessGallery(){
         // 갤러리 열기 Intent 생성
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -226,7 +302,4 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
     interface OnDismissListener {
         fun onDismiss()
     }
-
-
-
 }
