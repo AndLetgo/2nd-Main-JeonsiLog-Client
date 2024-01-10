@@ -105,6 +105,10 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                 binding.btnOtherUserListFollowing.text = getString(context, R.string.btn_following)
                 binding.btnOtherUserListFollowing.background = getDrawable(context, R.drawable.shape_corner_round_follower_btn)
                 binding.btnOtherUserListFollowing.setTextColor(getColor(context, R.color.gray_medium))
+            } else if (data.followMe){
+                binding.btnOtherUserListFollowing.text = getString(context, R.string.btn_f4f)
+                binding.btnOtherUserListFollowing.background = getDrawable(context, R.drawable.shape_corner_round_follower_btn_activate)
+                binding.btnOtherUserListFollowing.setTextColor(getColor(context, R.color.basic_white))
             } else {
                 binding.btnOtherUserListFollowing.text = getString(context, R.string.btn_follow)
                 binding.btnOtherUserListFollowing.background = getDrawable(context, R.drawable.shape_corner_round_follower_btn_activate)
@@ -123,7 +127,8 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
-                        ifollow = false) as T
+                        ifollow = false,
+                        followMe = data.followMe) as T
 
                     runBlocking(Dispatchers.IO){
                         FollowRepositoryImpl().deleteFollow(encryptedPrefs.getAT(), data.followUserId)
@@ -135,7 +140,9 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
-                        ifollow = true) as T
+                        ifollow = true,
+                        followMe = data.followMe) as T
+
                     runBlocking(Dispatchers.IO){
                         FollowRepositoryImpl().postFollow(encryptedPrefs.getAT(), data.followUserId)
                     }

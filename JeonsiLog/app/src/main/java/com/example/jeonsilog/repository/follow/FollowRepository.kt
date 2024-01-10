@@ -1,6 +1,7 @@
 package com.example.jeonsilog.repository.follow
 
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowerResponse
 import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingResponse
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerResponse
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingResponse
@@ -17,7 +18,7 @@ interface FollowRepository {
     suspend fun getMyFollower(
         @Header("Authorization") token: String,
         @Query("page") page: Int
-    ): Response<GetOtherFollowingResponse>
+    ): Response<GetMyFollowerResponse>
 
     @GET("/api/follows/follower/{userId}")
     suspend fun getOtherFollower(
