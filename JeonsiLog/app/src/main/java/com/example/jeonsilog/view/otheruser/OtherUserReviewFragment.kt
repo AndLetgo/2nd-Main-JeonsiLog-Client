@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsEntity
 import com.example.jeonsilog.databinding.FragmentOtherUserReviewBinding
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.OtherUserViewModel
@@ -18,11 +18,11 @@ import kotlinx.coroutines.runBlocking
 
 class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val otherUserId: Int): BaseFragment<FragmentOtherUserReviewBinding>(R.layout.fragment_other_user_review) {
     private var numReview = 0
-    private val list = mutableListOf<GetReviewsDataEntity>()
+    private val list = mutableListOf<GetReviewsEntity>()
     private var page = 0
     private var isFinished = false
     private var newItemCount = 0
-    private lateinit var adapter: OtherUserRvAdapter<GetReviewsDataEntity>
+    private lateinit var adapter: OtherUserRvAdapter<GetReviewsEntity>
 
     override fun init() {
         getItems()
@@ -33,7 +33,7 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val ot
             binding.ivOtherUserReviewEmptyImg.visibility = View.VISIBLE
             binding.tvOtherUserReviewEmptyTitle.visibility = View.VISIBLE
         } else {
-            adapter = OtherUserRvAdapter<GetReviewsDataEntity>(list, 1, requireContext())
+            adapter = OtherUserRvAdapter<GetReviewsEntity>(list, 1, requireContext())
             binding.rvOtherUserReview.adapter = adapter
             binding.rvOtherUserReview.layoutManager = LinearLayoutManager(requireContext())
             binding.rvOtherUserReview.addItemDecoration(
@@ -89,13 +89,13 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val ot
         runBlocking(Dispatchers.IO){
             val response = ReviewRepositoryImpl().getOtherReviews(GlobalApplication.encryptedPrefs.getAT(), otherUserId, page)
             if(response.isSuccessful && response.body()!!.check){
-                newItemCount = response.body()!!.information.dataEntity.size
+                newItemCount = response.body()!!.information.data.size
                 numReview = response.body()!!.information.numReview
-                val data = response.body()!!.information.dataEntity.listIterator()
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()){
                     val temp = data.next()
                     list.add(
-                        GetReviewsDataEntity(
+                        GetReviewsEntity(
                             reviewId = temp.reviewId,
                             exhibitionId = temp.exhibitionId,
                             exhibitionName = "[${temp.exhibitionName}]",

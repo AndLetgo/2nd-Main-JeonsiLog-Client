@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingEntity
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingInformation
 import com.example.jeonsilog.databinding.FragmentOtherUserListFollowingBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
@@ -16,8 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class OtherUserListFollowingFragment(private val otherUserId: Int): BaseFragment<FragmentOtherUserListFollowingBinding>(R.layout.fragment_other_user_list_following) {
-    private val list = mutableListOf<GetOtherFollowingInformation>()
-    private lateinit var adapter: OtherUserListRvAdapter<GetOtherFollowingInformation>
+    private val list = mutableListOf<GetOtherFollowingEntity>()
+    private lateinit var adapter: OtherUserListRvAdapter<GetOtherFollowingEntity>
     private var page = 0
     private var isFinished = false
     private var newItemCount = 0
@@ -56,8 +57,8 @@ class OtherUserListFollowingFragment(private val otherUserId: Int): BaseFragment
         runBlocking(Dispatchers.IO){
             val response = FollowRepositoryImpl().getOtherFollowing(GlobalApplication.encryptedPrefs.getAT(), otherUserId, page)
             if(response.isSuccessful && response.body()!!.check){
-                newItemCount = response.body()!!.information.size
-                val data = response.body()!!.information.listIterator()
+                newItemCount = response.body()!!.information.data.size
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()){
                     list.add(data.next())
                 }

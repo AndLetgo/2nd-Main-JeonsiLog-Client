@@ -4,8 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
-import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
+import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsEntity
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsEntity
 import com.example.jeonsilog.databinding.ItemOtherUserRatingBinding
 import com.example.jeonsilog.databinding.ItemOtherUserReviewBinding
 import com.example.jeonsilog.view.MainActivity
@@ -16,7 +16,7 @@ import kotlin.IllegalArgumentException
 class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeRatingViewHolder(private val binding: ItemOtherUserRatingBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetMyRatingsDataEntity){
+        fun bind(data: GetMyRatingsEntity){
             binding.tvOtherUserRatingItemTitle.text = data.exhibitionName
             binding.rbOtherUserRatingItemRating.rating = data.rate.toFloat()
 
@@ -27,7 +27,7 @@ class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: 
     }
 
     inner class TypeReviewViewHolder(private val binding: ItemOtherUserReviewBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetReviewsDataEntity) {
+        fun bind(data: GetReviewsEntity) {
             GlideApp.with(binding.ivOtherUserReviewExhibitionImg)
                 .load(data.exhibitionImgUrl)
                 .centerCrop()
@@ -70,12 +70,12 @@ class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (this.type) {
             0 -> {
-                val ratingData = list[position] as GetMyRatingsDataEntity
+                val ratingData = list[position] as GetMyRatingsEntity
                 holder as OtherUserRvAdapter<*>.TypeRatingViewHolder
                 holder.bind(ratingData)
             }
             1 -> {
-                val reviewData = list[position] as GetReviewsDataEntity
+                val reviewData = list[position] as GetReviewsEntity
                 holder as OtherUserRvAdapter<*>.TypeReviewViewHolder
                 holder.bind(reviewData)
             }

@@ -70,7 +70,7 @@ class OtherUserViewModel: ViewModel() {
                 while(true){
                     val response2 = FollowRepositoryImpl().getMyFollowing(encryptedPrefs.getAT(), page)
                     if (response2.isSuccessful && response2.body()!!.check) {
-                        val userList = response2.body()!!.information.listIterator()
+                        val userList = response2.body()!!.information.data.listIterator()
                         while (userList.hasNext()) {
                             if (userList.next().followUserId == otherUserId) {
                                 viewModelScope.launch(Dispatchers.Main) {
