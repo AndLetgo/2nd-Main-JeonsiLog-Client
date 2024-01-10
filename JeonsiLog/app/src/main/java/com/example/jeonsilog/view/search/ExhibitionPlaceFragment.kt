@@ -1,29 +1,25 @@
 package com.example.jeonsilog.view.search
 
-import android.os.Bundle
-import android.view.LayoutInflater
+import android.content.Intent
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isGone
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.ExhibitionInfoItem
-import com.example.jeonsilog.data.remote.dto.ExhibitionPlaceItem
+import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
 
-import com.example.jeonsilog.data.remote.dto.Test_Data
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
-import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
-import com.example.jeonsilog.databinding.FragmentExihibitionInfoBinding
 import com.example.jeonsilog.databinding.FragmentSearchExhibitionPlaceBinding
-import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
+import com.example.jeonsilog.view.exhibition.ExhibitionPlaceRvAdapter
+import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -66,6 +62,15 @@ class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<Fragme
         }
         if (!list.isNullOrEmpty()){
             adapter = context?.let { ExhibitionPlaceItemAdapter(it,edittext,list!!.toMutableList()) }
+            adapter?.setOnItemClickListener(object : ExhibitionPlaceItemAdapter.OnItemClickListener{
+                override fun onItemClick(type: Int, placeItem: SearchPlacesInformationEntity) {
+                    extraActivityReference = type
+                    newPlaceId = placeItem.placeId
+                    newPlaceName = placeItem.placeName
+                    val intent = Intent(requireContext(), ExtraActivity::class.java)
+                    startActivity(intent)
+                }
+            })
             binding.rvExhibitionplace.adapter = adapter
             checkEmptyListTrue()
         }

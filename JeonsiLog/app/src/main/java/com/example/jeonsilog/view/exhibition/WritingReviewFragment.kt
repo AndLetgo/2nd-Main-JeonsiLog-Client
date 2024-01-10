@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
 import com.example.jeonsilog.databinding.FragmentWritingReviewBinding
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
@@ -16,6 +17,7 @@ import com.example.jeonsilog.viewmodel.ExhibitionWritingViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
 
 class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
     R.layout.fragment_writing_review), DialogWithIllusInterface {
@@ -54,6 +56,7 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
                     null
                 }
             }
+            exhibitionViewModel.setUserReview(binding.etWritingReview.text.toString())
             Navigation.findNavController(it).popBackStack()
         }
 

@@ -12,11 +12,9 @@ import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
-import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
-import androidx.fragment.app.FragmentManager
+import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,9 +30,15 @@ import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.viewmodel.UpdateReviewItem
+import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -51,15 +55,16 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private lateinit var preDrawListener: OnPreDrawListener
 
     override fun init() {
-        //현재 bottomSheet Id
-//        val bundle = arguments
-//        bundle?. let {
-//            //place에서 넘어온 경우
-//            val newExhibition = requireArguments().getInt("exhibitionId")
-//            exhibitionViewModel.setCurrentExhibitionId(newExhibition)
-//        }?:run{
-//            exhibitionViewModel.setCurrentExhibitionId(exhibitionId)
-//        }
+        val navController = Navigation.findNavController(binding.llExhibitionPlace)
+        when(extraActivityReference){
+            1 -> {
+                navController.navigate(R.id.action_exhibitionFragment_to_reviewFragment)
+            }
+            2 -> {
+                navController.navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
+                extraActivityReference = 3
+            }
+        }
         if(exhibitionViewModel.currentExhibitionIds.value == null || exhibitionViewModel.getCurrentExhibitionsSize()<=0){
             thisExhibitionId = exhibitionId
         }else{
@@ -70,14 +75,23 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
 
+        //감상평 작성하고 돌아왔을 때, 댓글 입력 시 UI 다시 그리기
+        if(exhibitionViewModel.userReview.value!=""){
+            (activity as ExtraActivity).refreshFragment(R.id.exhibitionFragment)
+            exhibitionViewModel.setUserReview("")
+        }
         //감상평 - RecyclerView
         getReviewInfo()
-
         //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
-            val bundle = Bundle()
-            bundle.putInt("exhibitionId", thisExhibitionId)
-            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment, bundle)
+//            if()
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment)
+        }
+        //댓글 입력하고 돌아왔을 때
+        if(exhibitionViewModel.reviewItem.value!=null){
+            val item = exhibitionViewModel.reviewItem.value!!
+            exhibitionRvAdapter.replaceItem(item.item, item.position)
+            binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         }
 
         //포스터
@@ -87,16 +101,16 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         //전시장 상세정보
         binding.llExhibitionPlace.setOnClickListener {
-//            val bundle = bundleOf("placeId" to (data?.place?.placeId ?: ""))
-            val bundle = Bundle()
-            bundle.putInt("placeId", exhibitionInfoData!!.place.placeId)
-            bundle.putString("placeName", exhibitionInfoData!!.place.placeName)
-            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment,bundle)
+            newPlaceId = exhibitionInfoData!!.place.placeId
+            newPlaceName = exhibitionInfoData!!.place.placeName
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
         }
 
         //Interest
-        if(exhibitionInfoData!!.checkInterest){
-            binding.tbInterest.isChecked = true
+        if(exhibitionInfoData?.checkInterest !=null){
+            if(exhibitionInfoData!!.checkInterest){
+                binding.tbInterest.isChecked = true
+            }
         }
         binding.tbInterest.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked){
@@ -121,16 +135,24 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         //Call
         binding.ibCall.setOnClickListener {
             //null 처리 필요
-            val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.tel)
-            clipboardManager.setPrimaryClip(clipData)
-            Toast.makeText(requireContext(), "copy success", Toast.LENGTH_SHORT).show()
+            if(exhibitionInfoData?.place?.tel !=null){
+                val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.tel)
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(requireContext(), "copy success", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), "등록된 전화번호가 없어요.", Toast.LENGTH_SHORT).show()   
+            }
         }
         //Link
         binding.ibGoWeb.setOnClickListener {
             //null 처리 필요
-            var intent = Intent(Intent.ACTION_VIEW, Uri.parse(exhibitionInfoData?.place?.homePage))
-            startActivity(intent)
+            if(exhibitionInfoData?.place?.homePage != null){
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(exhibitionInfoData?.place?.homePage))
+                startActivity(intent)    
+            }else{
+                Toast.makeText(requireContext(), "등록된 링크가 없어요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //전시회 정보 더보기 버튼 처리
@@ -191,19 +213,15 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         var date = ""
         if(exhibitionInfoData?.startDate!=null){
-            date = subStringDate(exhibitionInfoData!!.startDate) + " ~ " + subStringDate(exhibitionInfoData!!.endDate)
+            date = DateUtil().editStringDate(exhibitionInfoData!!.startDate) + " ~ " + DateUtil().editStringDate(exhibitionInfoData!!.endDate)
         }
         binding.tvDate.text = date
+
+        setKeywords()
 
         //전시회 정보
         setExhibitionInformation(exhibitionInfoData?.information)
         setRatings()
-    }
-
-    private fun subStringDate(date:String):String{
-        var newDate = ""
-        newDate = date.substring(0,4) +"."+date.substring(4,6)+ "."+date.substring(6)
-        return newDate
     }
 
     private fun setExhibitionInformation(information: String?){
@@ -231,7 +249,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         //평균 별점
         binding.tvRatingRate.text = "%.1f".format(exhibitionInfoData?.rate)
         //유저 별점
-        binding.ratingBar.rating = exhibitionInfoData?.myRating!!
+        if(exhibitionInfoData?.myRating!=null){
+            binding.ratingBar.rating = exhibitionInfoData?.myRating!!
+        }
         //별점 등록
         binding.ratingBar.setOnRatingChangeListener { _, rating, _ ->
             if(rating <= 0.5){
@@ -272,7 +292,32 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
         binding.tvRatingRate.text = "%.1f".format(exhibitionInfoData?.rate)
     }
+    private fun setKeywords(){
+        var operatingKeyword = ""
+        when(exhibitionInfoData?.operatingKeyword){
+            "ON_DISPLAY" -> operatingKeyword = requireContext().getString(R.string.keyword_state_on)
+            "BEFORE_DISPLAY" -> operatingKeyword = requireContext().getString(R.string.keyword_state_before)
+        }
+        var priceKeyword = ""
+        when(exhibitionInfoData?.priceKeyword){
+            "FREE" -> priceKeyword = requireContext().getString(R.string.keyword_free)
+            else -> binding.tvKeywordSecond.isGone = true
+        }
+
+        if(operatingKeyword!=""){
+            binding.tvKeywordFirst.text = operatingKeyword
+            binding.tvKeywordSecond.text = priceKeyword
+        }else{
+            if(priceKeyword!=""){
+                binding.tvKeywordSecond.isGone = true
+                binding.tvKeywordFirst.text = priceKeyword
+            }else {
+                binding.tvKeywordFirst.isGone = true
+            }
+        }
+    }
     private fun getReviewInfo(){
+        Log.d("TAG", "getReviewInfo: 실행 $reviewPage")
         exhibitionRvAdapter = ExhibitionReviewRvAdapter(reviewList, requireContext())
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         binding.rvExhibitionReview.layoutManager = LinearLayoutManager(context)
@@ -282,7 +327,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         exhibitionRvAdapter.setOnItemClickListener(object: ExhibitionReviewRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int) {
                 //감상평 페이지로 이동
-                exhibitionViewModel.setReviewInfo(data)
+                val item = UpdateReviewItem(data, position)
+                exhibitionViewModel.setReviewItem(item)
+                newReviewId = data.reviewId
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
             }
 
@@ -315,8 +362,8 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 null
             }
         }
-        val startPosition = totalCount + 1
-        exhibitionRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
+//        val startPosition = totalCount
+        exhibitionRvAdapter.notifyItemRangeInserted(totalCount, addItemCount)
         reviewPage++
     }
 
@@ -349,4 +396,5 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         val customDialogFragment = DialogWithIllus(type, contentId, 0, position, this)
         customDialogFragment.show(parentFragmentManager, tag)
     }
+
 }
