@@ -11,17 +11,20 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ReviewRepository {
     @GET("/api/reviews")
     suspend fun getMyReviews(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("page") page: Int
     ): Response<GetReviewsResponse>
 
     @GET("/api/reviews/{userId}")
     suspend fun getOtherReviews(
         @Header("Authorization") token: String,
-        @Path("userId") userId: Int
+        @Path("userId") userId: Int,
+        @Query("page") page: Int
     ): Response<GetReviewsResponse>
 
     @GET("api/reviews/exhibition/{exhibitionId}")

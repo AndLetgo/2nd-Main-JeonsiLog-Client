@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
@@ -18,27 +19,13 @@ import kotlinx.coroutines.runBlocking
 class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val otherUserId: Int): BaseFragment<FragmentOtherUserReviewBinding>(R.layout.fragment_other_user_review) {
     private var numReview = 0
     private val list = mutableListOf<GetReviewsDataEntity>()
+    private var page = 0
+    private var isFinished = false
+    private var newItemCount = 0
+    private lateinit var adapter: OtherUserRvAdapter<GetReviewsDataEntity>
 
     override fun init() {
-        runBlocking(Dispatchers.IO){
-            val response = ReviewRepositoryImpl().getOtherReviews(GlobalApplication.encryptedPrefs.getAT(), otherUserId)
-            if(response.isSuccessful && response.body()!!.check){
-                numReview = response.body()!!.information.numReview
-                val data = response.body()!!.information.dataEntity.listIterator()
-                while (data.hasNext()){
-                    val temp = data.next()
-                    list.add(
-                        GetReviewsDataEntity(
-                            reviewId = temp.reviewId,
-                            exhibitionId = temp.exhibitionId,
-                            exhibitionName = "[${temp.exhibitionName}]",
-                            contents = temp.contents,
-                            exhibitionImgUrl = temp.exhibitionImgUrl
-                        )
-                    )
-                }
-            }
-        }
+        getItems()
 
         if (list.isEmpty()) {
             binding.rvOtherUserReview.visibility = View.GONE
@@ -46,7 +33,7 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val ot
             binding.ivOtherUserReviewEmptyImg.visibility = View.VISIBLE
             binding.tvOtherUserReviewEmptyTitle.visibility = View.VISIBLE
         } else {
-            val adapter = OtherUserRvAdapter<GetReviewsDataEntity>(list, 1, requireContext())
+            adapter = OtherUserRvAdapter<GetReviewsDataEntity>(list, 1, requireContext())
             binding.rvOtherUserReview.adapter = adapter
             binding.rvOtherUserReview.layoutManager = LinearLayoutManager(requireContext())
             binding.rvOtherUserReview.addItemDecoration(
@@ -75,6 +62,54 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val ot
                     requireContext()
                 )
             }
+
+            binding.rvOtherUserReview.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                    if(totalCount == rvPosition){
+                        if(!isFinished){
+                            getItems()
+
+                            recyclerView.post {
+                                adapter.notifyItemRangeInserted(totalCount+1, newItemCount)
+                                newItemCount = 0
+                            }
+                        }
+                    }
+                }
+            })
         }
+    }
+
+    private fun getItems(){
+        runBlocking(Dispatchers.IO){
+            val response = ReviewRepositoryImpl().getOtherReviews(GlobalApplication.encryptedPrefs.getAT(), otherUserId, page)
+            if(response.isSuccessful && response.body()!!.check){
+                newItemCount = response.body()!!.information.dataEntity.size
+                numReview = response.body()!!.information.numReview
+                val data = response.body()!!.information.dataEntity.listIterator()
+                while (data.hasNext()){
+                    val temp = data.next()
+                    list.add(
+                        GetReviewsDataEntity(
+                            reviewId = temp.reviewId,
+                            exhibitionId = temp.exhibitionId,
+                            exhibitionName = "[${temp.exhibitionName}]",
+                            contents = temp.contents,
+                            exhibitionImgUrl = temp.exhibitionImgUrl
+                        )
+                    )
+                }
+            } else {
+                isFinished = true
+            }
+
+            page++
+        }
+
     }
 }
