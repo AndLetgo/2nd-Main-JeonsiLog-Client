@@ -7,7 +7,13 @@ data class GetPlacesResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val informationEntity: List<GetPlacesInformationEntity>
+    val informationEntity: PlacesData
+)
+data class PlacesData(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<GetPlacesInformationEntity>
 )
 
 data class GetPlacesInformationEntity(
