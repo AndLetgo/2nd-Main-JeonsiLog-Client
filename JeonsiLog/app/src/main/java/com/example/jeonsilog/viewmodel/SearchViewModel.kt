@@ -1,19 +1,11 @@
 package com.example.jeonsilog.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.ExhibitionInfoItem
-import com.example.jeonsilog.data.remote.dto.ExhibitionPlaceItem
 import com.example.jeonsilog.data.remote.dto.ExhibitionRandom
-import com.example.jeonsilog.data.remote.dto.UserSearchItem
 
 class SearchViewModel  : ViewModel() {
 

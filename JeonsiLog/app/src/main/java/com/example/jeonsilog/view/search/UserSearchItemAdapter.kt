@@ -1,20 +1,15 @@
 package com.example.jeonsilog.view.search
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.UserSearchItem
-import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
 import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
-import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlideApp
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.CoroutineScope
