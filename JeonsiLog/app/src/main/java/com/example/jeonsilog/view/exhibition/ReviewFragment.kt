@@ -118,8 +118,8 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         runBlocking(Dispatchers.IO) {
             val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(),reviewInfo.reviewId,replyPage)
             if(response.isSuccessful && response.body()!!.check){
-                replyList.addAll(response.body()!!.information)
-                addItemCount = response.body()!!.information.size
+                replyList.addAll(response.body()!!.information.data)
+                addItemCount = response.body()!!.information.data.size
             }
         }
         val startPosition = totalCount + 1
