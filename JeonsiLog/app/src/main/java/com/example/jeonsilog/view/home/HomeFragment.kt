@@ -26,7 +26,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
         homeRvAdapter.setOnItemClickListener(object : HomeRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
-                (activity as MainActivity).loadExtraActivity(0, position)
+                (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
             }
         })
 
@@ -45,7 +45,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         })
 
         binding.ibFabTop.setOnClickListener {
-            binding.rvHomeExhibition.scrollToPosition(0)
+            binding.rvHomeExhibition.smoothScrollToPosition(0)
+        }
+        binding.toolbar.setOnClickListener {
+            binding.rvHomeExhibition.smoothScrollToPosition(0)
         }
     }
 
