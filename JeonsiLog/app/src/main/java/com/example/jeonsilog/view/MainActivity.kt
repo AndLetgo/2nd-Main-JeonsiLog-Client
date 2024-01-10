@@ -155,7 +155,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         return super.dispatchTouchEvent(event)
     }
 
-
     fun loadExtraActivity(type:Int, newExhibitionId:Int){
         extraActivityReference = type
         exhibitionId = newExhibitionId

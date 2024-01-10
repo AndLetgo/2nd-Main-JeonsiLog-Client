@@ -18,6 +18,7 @@ import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformat
 import com.example.jeonsilog.databinding.FragmentReviewBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -40,7 +41,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.brbExhibitionReview.rating = reviewInfo.rate.toFloat()
         binding.tvReviewContent.text = reviewInfo.contents
         binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${reviewInfo.numReply}"
-//        binding.tvReviewDate.text = reviewInfo.
+        binding.tvReviewDate.text = DateUtil().formatElapsedTime(reviewInfo.createdDate)
 
         Glide.with(requireContext())
             .load(reviewInfo.imgUrl)

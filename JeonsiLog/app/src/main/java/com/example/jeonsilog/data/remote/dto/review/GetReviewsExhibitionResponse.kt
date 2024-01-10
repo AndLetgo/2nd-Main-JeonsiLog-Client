@@ -24,5 +24,7 @@ data class GetReviewsExhibitionInformationEntity(
     @SerializedName("rate")
     val rate: Double,
     @SerializedName("numReply")
-    val numReply: Int
+    val numReply: Int,
+    @SerializedName("createdDate")
+    val createdDate: String
 )
