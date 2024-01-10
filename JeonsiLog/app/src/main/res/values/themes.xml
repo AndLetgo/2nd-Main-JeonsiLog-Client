@@ -1,9 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.JeonsiLog" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:ambientShadowAlpha">0.2</item>
         <item name="android:spotShadowAlpha">0</item>
-        <!-- Customize your light theme here. -->
     </style>
 
     <style name="Theme.JeonsiLog" parent="Base.Theme.JeonsiLog" >
@@ -17,9 +15,8 @@
         <item name="android:background">@drawable/shape_bn_round</item>
     </style>
     <style name="ThemeOverlay.NumberPicker" parent="Base.Theme.JeonsiLog">
-        <!-- NumberPicker divider color -->
         <item name="colorControlNormal">@color/basic_point</item>
         <item name="android:fontFamily">@font/noto_sans_kr_regular</item>
         <item name="android:textSize">16sp</item>
-    </style>
+    </style>z
 </resources>
