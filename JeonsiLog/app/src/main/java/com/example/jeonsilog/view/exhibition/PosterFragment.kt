@@ -13,7 +13,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
@@ -83,18 +82,18 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
                 != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없는 경우 권한 요청 다이얼로그를 표시
                 Log.d(TAG, "checkStoragePermission: 권한 없음")
-                showPermissionRationale("사진 권한을 요청합니다.")
+                showPermissionRationale(getString(R.string.permission_denied))
             } else {
                 // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
                 Log.d(TAG, "checkStoragePermission: 권한 있음")
                 useDownloadManager(thisPosterUrl)
             }
         } else{
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없는 경우 권한 요청 다이얼로그를 표시
                 Log.d(TAG, "checkStoragePermission: 33이하, 권한 없음")
-                showPermissionRationale("사진 권한을 요청합니다.")
+                showPermissionRationale(getString(R.string.permission_denied))
             } else {
                 // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
                 Log.d(TAG, "checkStoragePermission: 33이하, 권한 있음")
