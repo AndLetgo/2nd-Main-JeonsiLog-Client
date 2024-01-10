@@ -64,8 +64,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 extraActivityReference = 3
             }
         }
-
-
         if(exhibitionViewModel.currentExhibitionIds.value == null || exhibitionViewModel.getCurrentExhibitionsSize()<=0){
             thisExhibitionId = exhibitionId
         }else{
@@ -76,14 +74,18 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
 
+        //감상평 작성하고 돌아왔을 때 새 감상평 추가
+        if(exhibitionViewModel.userReview.value!=""){
+            (activity as ExtraActivity).refreshFragment(R.id.exhibitionFragment)
+            exhibitionViewModel.setUserReview("")
+        }
         //감상평 - RecyclerView
         getReviewInfo()
 
         //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
-            val bundle = Bundle()
-            bundle.putInt("exhibitionId", thisExhibitionId)
-            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment, bundle)
+//            if()
+            Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment)
         }
 
         //포스터
@@ -309,6 +311,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
     }
     private fun getReviewInfo(){
+        Log.d("TAG", "getReviewInfo: 실행 $reviewPage")
         exhibitionRvAdapter = ExhibitionReviewRvAdapter(reviewList, requireContext())
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         binding.rvExhibitionReview.layoutManager = LinearLayoutManager(context)
@@ -352,8 +355,8 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 null
             }
         }
-        val startPosition = totalCount + 1
-        exhibitionRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
+//        val startPosition = totalCount
+        exhibitionRvAdapter.notifyItemRangeInserted(totalCount, addItemCount)
         reviewPage++
     }
 
@@ -386,4 +389,5 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         val customDialogFragment = DialogWithIllus(type, contentId, 0, position, this)
         customDialogFragment.show(parentFragmentManager, tag)
     }
+
 }

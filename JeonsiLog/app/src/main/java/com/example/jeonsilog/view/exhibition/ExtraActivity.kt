@@ -2,6 +2,9 @@ package com.example.jeonsilog.view.exhibition
 
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
+import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityExtraBinding
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
@@ -22,5 +25,9 @@ class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.
             }
         }
 
+    }
+    fun refreshFragment(fragmentId: Int) {
+        val navController = findNavController(binding.fcvNavFrame)
+        navController.navigate(fragmentId)
     }
 }

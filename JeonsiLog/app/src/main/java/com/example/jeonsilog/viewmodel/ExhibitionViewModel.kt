@@ -35,4 +35,11 @@ class ExhibitionViewModel: ViewModel() {
             Log.d("TAG", "removeLastExhibitionId: size: ${getCurrentExhibitionsSize()}")
         }
     }
+
+    private var _userReview = MutableLiveData("")
+    val userReview: LiveData<String>
+        get() = _userReview
+    fun setUserReview(review: String){
+        _userReview.value = review
+    }
 }
