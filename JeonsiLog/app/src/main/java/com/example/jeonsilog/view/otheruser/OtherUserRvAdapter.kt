@@ -21,7 +21,7 @@ class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: 
             binding.rbOtherUserRatingItemRating.rating = data.rate.toFloat()
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
+                (context as MainActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
             }
         }
     }
@@ -36,7 +36,7 @@ class OtherUserRvAdapter<T>(private val list: MutableList<T>, private val type: 
             binding.tvOtherUserReviewContent.text = SpannableStringUtil().boldTextBetweenBrackets(data.contents)
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
+                (context as MainActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
             }
         }
     }

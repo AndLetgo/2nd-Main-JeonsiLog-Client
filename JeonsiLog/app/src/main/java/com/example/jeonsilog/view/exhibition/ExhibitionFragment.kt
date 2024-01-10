@@ -37,6 +37,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibition
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -51,10 +52,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private lateinit var preDrawListener: OnPreDrawListener
 
     override fun init() {
-        if(extraActivityReference==2){
-            Navigation.findNavController(binding.llExhibitionPlace).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
-            extraActivityReference = 0
+        val navController = Navigation.findNavController(binding.llExhibitionPlace)
+        when(extraActivityReference){
+            1 -> {
+                navController.navigate(R.id.action_exhibitionFragment_to_reviewFragment)
+            }
+            2 -> {
+                navController.navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
+                extraActivityReference = 3
+            }
         }
+
 
         if(exhibitionViewModel.currentExhibitionIds.value == null || exhibitionViewModel.getCurrentExhibitionsSize()<=0){
             thisExhibitionId = exhibitionId
@@ -89,8 +97,10 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
 
         //Interest
-        if(exhibitionInfoData!!.checkInterest){
-            binding.tbInterest.isChecked = true
+        if(exhibitionInfoData?.checkInterest !=null){
+            if(exhibitionInfoData!!.checkInterest){
+                binding.tbInterest.isChecked = true
+            }
         }
         binding.tbInterest.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked){
@@ -307,6 +317,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             override fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int) {
                 //감상평 페이지로 이동
                 exhibitionViewModel.setReviewInfo(data)
+                newReviewId = data.reviewId
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionFragment_to_reviewFragment)
             }
 

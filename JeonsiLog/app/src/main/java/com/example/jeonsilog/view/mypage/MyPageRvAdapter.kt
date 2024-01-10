@@ -32,7 +32,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.rbMypageRatingItemRating.rating = data.rate.toFloat()
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
+                (context as MainActivity).loadExtraActivity(0, data.exhibitionId)
 
             }
         }
@@ -49,7 +49,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.tvMypageReviewContent.text = data.contents
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
+                (context as MainActivity).loadExtraActivity( 0, data.exhibitionId)
             }
         }
     }
@@ -99,7 +99,7 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             }
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity(type = 0, newExhibitionId = data.exhibitionId)
+                (context as MainActivity).loadExtraActivity(0, data.exhibitionId)
             }
         }
     }

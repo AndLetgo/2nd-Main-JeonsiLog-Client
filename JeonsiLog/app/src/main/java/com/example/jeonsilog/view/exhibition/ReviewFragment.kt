@@ -17,11 +17,13 @@ import com.example.jeonsilog.data.remote.dto.reply.UserEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentReviewBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
+import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import okhttp3.internal.notify
@@ -84,7 +86,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             postReply() //댓글 입력 등록 버튼 처리
         }
     }
-
+    private fun getReviewInfo(reviewId: Int){
+//        runBlocking(Dispatchers.IO) {
+//
+//        }
+    }
     private fun getReplyList(){
         replyList = mutableListOf()
 
@@ -117,7 +123,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         Log.d("reply", "setReplyRvByPage: called")
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
-            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(),reviewInfo.reviewId,replyPage)
+            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), newReviewId,replyPage)
             if(response.isSuccessful && response.body()!!.check){
                 replyList.addAll(response.body()!!.information)
                 addItemCount = response.body()!!.information.size
