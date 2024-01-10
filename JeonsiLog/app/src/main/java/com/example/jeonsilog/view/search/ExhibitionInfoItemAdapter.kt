@@ -23,6 +23,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
 import com.example.jeonsilog.databinding.ItemExhibitionInfoBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -32,7 +33,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.jsoup.Jsoup
 
 class ExhibitionInfoItemAdapter(private val context: Context,private val edittext:String, private val list:MutableList <SearchInformationEntity>) : RecyclerView.Adapter<ExhibitionInfoItemAdapter.ViewHolder>() {
     var itemPage=0
@@ -61,14 +61,19 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
             if (list.size-4==position){
                 itemPage+=1
                 runBlocking(Dispatchers.IO) {
+                    var listSize=list.size
                     val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,itemPage)
                     if(response.isSuccessful && response.body()!!.check){
                         val searchExhibitionResponse = response.body()
                         list.addAll(searchExhibitionResponse?.informationEntity!!.toMutableList())
+                        CoroutineScope(Dispatchers.Main).launch {
+                            notifyItemRangeInserted(listSize,searchExhibitionResponse?.informationEntity.size)
+                        }
                     }
                 }
             }
         }
+
         val unsplashUrl = item.imageUrl
         val radiusDp = 4f
         val radiusPx = TypedValue.applyDimension(
@@ -79,9 +84,7 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
             .into(holder.posterImageView)
 
 
-        //특수문자 처리
-        val decodedString = Jsoup.parse(item.exhibitionName).text()
-        holder.exhibitionnameTextView.text =decodedString
+        holder.exhibitionnameTextView.text =item.exhibitionName
 
 
         if (item.place.placeAddress!=null){

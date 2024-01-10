@@ -44,7 +44,7 @@ class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUse
         var adapter: UserSearchItemAdapter?
         var list: List<SearchUserInformationEntity>?
         runBlocking(Dispatchers.IO) {
-            val response = UserRepositoryImpl().searchUserInfo(GlobalApplication.encryptedPrefs.getAT(),edittext)
+            val response = UserRepositoryImpl().searchUserInfo(GlobalApplication.encryptedPrefs.getAT(),edittext,0)
             if(response.isSuccessful && response.body()!!.check){
                 val searchUserInfoResponse = response.body()
                 list=searchUserInfoResponse?.informationEntity
