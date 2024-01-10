@@ -56,6 +56,7 @@ class LoadPageRvAdapter(private val context: Context, private val edittext:Strin
                 if (list.size-4==position){
                     itemPage+=1
                     runBlocking(Dispatchers.IO) {
+                        var listSize=list.size
                         //searchCalendarExhibition
                         val response = ExhibitionRepositoryImpl().searchCalendarExhibition(encryptedPrefs.getAT(),edittext,itemPage)
                         if(response.isSuccessful && response.body()!!.check){
@@ -77,10 +78,11 @@ class LoadPageRvAdapter(private val context: Context, private val edittext:Strin
                                             placeAddress = data.place.address ?: ""
                                         )
                                     ))
-
                                 }
                             }
-
+                            CoroutineScope(Dispatchers.Main).launch {
+                                notifyItemRangeInserted(listSize,searchExhibitionResponse.information.size)
+                            }
                         }
                     }
                 }
