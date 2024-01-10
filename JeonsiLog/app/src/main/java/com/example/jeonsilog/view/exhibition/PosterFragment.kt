@@ -3,16 +3,12 @@ package com.example.jeonsilog.view.exhibition
 import android.Manifest
 import android.app.AlertDialog
 import android.app.DownloadManager
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.View
@@ -20,7 +16,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.example.jeonsilog.R
@@ -32,14 +27,7 @@ import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.lang.Exception
-import java.net.HttpURLConnection
-import java.net.URL
 
 class PosterFragment : BaseFragment<FragmentPosterBinding>(
     R.layout.fragment_poster) {
@@ -48,9 +36,6 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
     private val TAG = "download"
     private var thisExhibitionId = 0
     private var thisPosterUrl = ""
-
-    private val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 500
-//    val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 4
 
     override fun init() {
         thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.currentExhibitionIds.value!!.size-1]
@@ -109,11 +94,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
                 != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없는 경우 권한 요청 다이얼로그를 표시
                 Log.d(TAG, "checkStoragePermission: 33이하, 권한 없음")
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
-                )
+                showPermissionRationale("사진 권한을 요청합니다.")
             } else {
                 // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
                 Log.d(TAG, "checkStoragePermission: 33이하, 권한 있음")
@@ -143,6 +124,6 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         val downloadManager = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         downloadManager.enqueue(request)
-        Toast.makeText(requireContext(), "포스터를 저장했어요.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "저장 성공!", Toast.LENGTH_SHORT).show()
     }
 }

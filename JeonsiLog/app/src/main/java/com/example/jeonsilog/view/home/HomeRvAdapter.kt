@@ -116,7 +116,7 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
 
                 if(position != RecyclerView.NO_POSITION){
                     holder.itemView.setOnClickListener {
-                        listener?.onItemClick(holder.itemView, homeRvList[position], position)
+                        listener?.onItemClick(holder.itemView, homeRvList[position-1], position)
                     }
                 }
             }

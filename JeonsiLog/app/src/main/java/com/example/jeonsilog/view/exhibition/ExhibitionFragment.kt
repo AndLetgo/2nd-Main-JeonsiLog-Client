@@ -63,6 +63,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }else{
             thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.getCurrentExhibitionsSize()-1]
         }
+        Log.d("exhibitionID", "init: exhibitionID: ${thisExhibitionId}")
 
         getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
