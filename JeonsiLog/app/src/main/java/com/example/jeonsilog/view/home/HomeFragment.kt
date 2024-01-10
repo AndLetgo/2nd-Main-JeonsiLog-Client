@@ -60,8 +60,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),exhibitionPage)
             if(response.isSuccessful && response.body()!!.check){
-                homeRvList.addAll(response.body()!!.informationEntity)
-                addItemCount = response.body()!!.informationEntity.size
+                homeRvList.addAll(response.body()!!.information.data)
+                addItemCount = response.body()!!.information.data.size
             }
         }
         val startPosition = totalCount + 1

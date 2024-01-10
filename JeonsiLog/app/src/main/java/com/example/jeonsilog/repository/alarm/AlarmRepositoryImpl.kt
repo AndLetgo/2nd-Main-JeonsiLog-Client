@@ -9,8 +9,8 @@ import retrofit2.Response
 class AlarmRepositoryImpl: AlarmRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(AlarmApi::class.java)
 
-    override suspend fun getActivityAlarm(token: String): Response<GetAlarmResponse> {
-        val response = service.getActivityAlarm("Bearer $token")
+    override suspend fun getActivityAlarm(token: String, page: Int): Response<GetAlarmResponse> {
+        val response = service.getActivityAlarm("Bearer $token", page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
@@ -19,8 +19,8 @@ class AlarmRepositoryImpl: AlarmRepository {
         }
     }
 
-    override suspend fun getExhibitionAlarm(token: String): Response<GetAlarmResponse> {
-        val response = service.getExhibitionAlarm("Bearer $token")
+    override suspend fun getExhibitionAlarm(token: String, page: Int): Response<GetAlarmResponse> {
+        val response = service.getExhibitionAlarm("Bearer $token", page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

@@ -3,11 +3,16 @@ package com.example.jeonsilog.data.remote.dto.exhibition
 import com.google.gson.annotations.SerializedName
 
 data class GetExhibitionsResponse(
-
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val informationEntity: List<ExhibitionsInfo>
+    val information: ExhibitionData
+)
+data class ExhibitionData(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<ExhibitionsInfo>
 )
 
 data class ExhibitionsInfo(
