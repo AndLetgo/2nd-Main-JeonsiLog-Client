@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.example.jeonsilog.R
@@ -16,6 +17,7 @@ import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
 import com.example.jeonsilog.databinding.FragmentWritingReviewBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.viewmodel.ExhibitionWritingViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -23,16 +25,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
-    R.layout.fragment_writing_review) {
+    R.layout.fragment_writing_review), DialogWithIllusInterface {
     private lateinit var dialogWithIllus: DialogWithIllus
     private val viewModel: ExhibitionWritingViewModel by viewModels()
+    private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private var thisExhibitionId = 0
     val TAG = "writing"
     override fun init() {
-        thisExhibitionId = requireArguments().getInt("exhibitionId")
+        thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.currentExhibitionIds.value!!.size-1]
         
         binding.btnCancel.setOnClickListener {
-            ExtraActivity().showCustomDialog(parentFragmentManager, "감상평")
+            showCustomDialog( "감상평", -1, -1)
         }
 
         binding.vm = viewModel
@@ -67,4 +70,11 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
                 getString(R.string.exhibition_writing_review_count, it)
         }
     }
+
+    private fun showCustomDialog(type:String, contentId:Int, position:Int) {
+        val customDialogFragment = DialogWithIllus(type, contentId, 0, position, this)
+        customDialogFragment.show(parentFragmentManager, tag)
+    }
+
+    override fun confirmButtonClick(position: Int) {}
 }

@@ -29,6 +29,10 @@ data class ExhibitionInfo(
     val rate: Float,
     @SerializedName("imageUrl")
     val imageUrl: String,
+    @SerializedName("checkInterest")
+    val checkInterest: Boolean,
+    @SerializedName("myRating")
+    val myRating: Float,
     @SerializedName("place")
     val place: ExhibitionPlaceEntity
 )

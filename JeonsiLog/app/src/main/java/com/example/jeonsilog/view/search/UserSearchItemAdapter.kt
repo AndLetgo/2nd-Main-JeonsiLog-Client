@@ -44,8 +44,10 @@ class UserSearchItemAdapter(
             if (list.size - 4 == position) {
                 itemPage += 1
                 runBlocking(Dispatchers.IO) {
+
                     val response =
                         UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), edittext)
+
                     if (response.isSuccessful && response.body()!!.check) {
                         val searchUserResponse = response.body()
                         list.addAll(searchUserResponse?.informationEntity!!.toMutableList())
