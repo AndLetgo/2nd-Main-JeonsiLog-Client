@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.user.PatchCalendarOpenResponse
 import com.example.jeonsilog.databinding.FragmentPhotoCalendarBinding
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
@@ -23,9 +24,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import kotlin.math.log
 
 class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
     R.layout.fragment_photo_calendar) {
@@ -57,7 +60,6 @@ class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
         binding.vpPhotoCalendar.offscreenPageLimit = 1
 
         binding.vpPhotoCalendar.setCurrentItem(currentItem, false)
-        checkPathCalendarOpen()
         binding.vpPhotoCalendar.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 //// Handle page selection if needed
@@ -73,8 +75,9 @@ class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
                 binding.tvYearMonth.text=monthYearFromDate(selectedDate)
             }
         })
+        checkPathCalendarOpen()
         binding.tbPublicPrivate.setOnClickListener {
-            checkPathCalendarOpen()
+            clickCalendarOpen()
         }
         binding.tvYearMonth.setOnClickListener {
             val bottomSheetDialogFragment = CalendarBottomDialog(selectedDate,viewModel)
@@ -82,21 +85,30 @@ class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
             bottomSheetDialogFragment.show(childFragmentManager, bottomSheetDialogFragment.tag)
 
         }
+
     }
     private fun checkPathCalendarOpen(){
         runBlocking(Dispatchers.IO) {
-            val response = UserRepositoryImpl().patchCalendarOpen(encryptedPrefs.getAT())
+            val myId=encryptedPrefs.getUI()
+            val response = UserRepositoryImpl().getIsOpen(encryptedPrefs.getAT(),myId)
             if(response.isSuccessful && response.body()!!.check){
-                CoroutineScope(Dispatchers.Main).launch{
-                    binding.tbPublicPrivate.isChecked=response.body()!!.information.open
-                    if (binding.tbPublicPrivate.isChecked){
-                        binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.basic_point))
-                    }else{
-                        binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.gray_medium))
-                    }
+                if (response.body()!!.information.isOpen){
+                    //포토캘린더 공개 설정
+                    binding.tbPublicPrivate.isChecked=true
+                    binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.basic_point))
+                }else{
+                    //포토캘린더 비공개 설정
+                    binding.tbPublicPrivate.isChecked=false
+                    binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.gray_medium))
                 }
             }
         }
+    }
+    private fun clickCalendarOpen(){
+        runBlocking(Dispatchers.IO) {
+            val response01 = UserRepositoryImpl().patchCalendarOpen(encryptedPrefs.getAT())
+        }
+        checkPathCalendarOpen()
     }
     private fun monthYearFromDate(date: LocalDate): String{
 

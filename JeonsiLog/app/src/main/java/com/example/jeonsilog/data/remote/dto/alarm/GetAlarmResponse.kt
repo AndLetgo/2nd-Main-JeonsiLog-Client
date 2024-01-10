@@ -6,10 +6,17 @@ data class GetAlarmResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: List<AlarmInformation>
+    val information: AlarmInformation
 )
 
 data class AlarmInformation(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<AlarmEntity>
+)
+
+data class AlarmEntity(
     @SerializedName("alarmId")
     var alarmId: Int,
     @SerializedName("alarmType")
@@ -26,5 +33,4 @@ data class AlarmInformation(
     val dateTime: String,
     @SerializedName("isChecked")
     val isChecked: Boolean
-
 )

@@ -17,7 +17,9 @@ import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
@@ -44,13 +46,16 @@ class UserSearchItemAdapter(
             if (list.size - 4 == position) {
                 itemPage += 1
                 runBlocking(Dispatchers.IO) {
-
+                    var listSize=list.size
                     val response =
-                        UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), edittext)
+                        UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), edittext,itemPage)
 
                     if (response.isSuccessful && response.body()!!.check) {
                         val searchUserResponse = response.body()
                         list.addAll(searchUserResponse?.informationEntity!!.toMutableList())
+                        CoroutineScope(Dispatchers.Main).launch {
+                            notifyItemRangeInserted(listSize,searchUserResponse?.informationEntity.size)
+                        }
                     }
                 }
             }

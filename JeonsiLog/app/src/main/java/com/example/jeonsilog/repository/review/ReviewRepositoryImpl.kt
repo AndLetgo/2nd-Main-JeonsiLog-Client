@@ -11,8 +11,8 @@ import retrofit2.Response
 class ReviewRepositoryImpl: ReviewRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(ReviewApi::class.java)
 
-    override suspend fun getMyReviews(token: String): Response<GetReviewsResponse> {
-        val response = service.getMyReviews("Bearer $token")
+    override suspend fun getMyReviews(token: String, page: Int): Response<GetReviewsResponse> {
+        val response = service.getMyReviews("Bearer $token", page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
@@ -21,8 +21,8 @@ class ReviewRepositoryImpl: ReviewRepository {
         }
     }
 
-    override suspend fun getOtherReviews(token: String, userId: Int): Response<GetReviewsResponse> {
-        val response = service.getOtherReviews("Bearer $token", userId)
+    override suspend fun getOtherReviews(token: String, userId: Int, page: Int): Response<GetReviewsResponse> {
+        val response = service.getOtherReviews("Bearer $token", userId, page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

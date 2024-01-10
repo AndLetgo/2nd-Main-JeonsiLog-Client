@@ -1,11 +1,16 @@
 package com.example.jeonsilog.view.photocalendar
 
 
+import android.animation.ObjectAnimator
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.fragment.app.DialogFragment
 import com.example.jeonsilog.databinding.ViewCalendarDialogBinding
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -13,7 +18,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewModel) : BottomSheetDialogFragment() {
+class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewModel) : DialogFragment() {
     private var _binding: ViewCalendarDialogBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -23,7 +28,8 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
         _binding = ViewCalendarDialogBinding.inflate(inflater, container, false)
         setDateDialog(date)
         setDate()
-        dialog?.getWindow()?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        setDimClick()
+        //dialog?.getWindow()?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
 
         //이동버튼
         binding.tvMove.setOnClickListener {
@@ -47,6 +53,41 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
             setDateDialog(date)
         }
         return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setView()
+
+    }
+    fun setView(){
+        // 다이얼로그의 배경을 투명하게 설정
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        // 다이얼로그의 외부 터치 이벤트 처리 (다이얼로그가 닫히지 않도록 함)
+        dialog?.setCanceledOnTouchOutside(false)
+        dialog?.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                // 뒤로가기 버튼이 눌렸을 때 수행할 동작
+                dismiss()
+                true
+            } else {
+                false
+            }
+        }
+
+        // 전체 화면으로 다이얼로그 표시 (다이얼로그 내용물의 크기를 외부까지 확장)
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+        val height = ViewGroup.LayoutParams.MATCH_PARENT
+        dialog?.window?.setLayout(width, height)
+        // 다이얼로그의 내용물이 차지하는 레이아웃의 크기를 조정
+        val params = binding.root.layoutParams
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT
+        binding.root.layoutParams = params
+    }
+    fun setDimClick(){
+        binding.ivDimmingZone.setOnClickListener {
+            dismiss()
+        }
     }
     fun setDateDialog(Date:LocalDate){
         //받아온 날짜 텍스트 반영

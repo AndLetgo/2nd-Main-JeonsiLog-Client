@@ -3,8 +3,10 @@ package com.example.jeonsilog.view.otheruser
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerEntity
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerInformation
 import com.example.jeonsilog.databinding.FragmentOtherUserListFollowerBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
@@ -15,8 +17,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class OtherUserListFollowerFragment(private val otherUserId: Int): BaseFragment<FragmentOtherUserListFollowerBinding>(R.layout.fragment_other_user_list_follower) {
-    private val list = mutableListOf<GetOtherFollowerInformation>()
-    private lateinit var adapter: OtherUserListRvAdapter<GetOtherFollowerInformation>
+    private val list = mutableListOf<GetOtherFollowerEntity>()
+    private lateinit var adapter: OtherUserListRvAdapter<GetOtherFollowerEntity>
+    private var page = 0
+    private var isFinished = false
+    private var newItemCount = 0
 
     override fun init() {
         adapter = OtherUserListRvAdapter(list, 0, requireContext())
@@ -29,9 +34,15 @@ class OtherUserListFollowerFragment(private val otherUserId: Int): BaseFragment<
         isFollowingUpdate.observe(this){
             if(it){
                 Log.d(tag, it.toString())
+                list.clear()
+                page = 0
+                isFinished = false
+
                 updateList()
-                isFollowerUpdate.value = false
+                isFollowingUpdate.value = false
                 emptyView()
+
+                adapter.notifyDataSetChanged()
             }
         }
 
@@ -44,16 +55,19 @@ class OtherUserListFollowerFragment(private val otherUserId: Int): BaseFragment<
 
     private fun updateList(){
         runBlocking(Dispatchers.IO){
-            list.clear()
-            val response = FollowRepositoryImpl().getOtherFollower(encryptedPrefs.getAT(), otherUserId)
+            val response = FollowRepositoryImpl().getOtherFollower(encryptedPrefs.getAT(), otherUserId, page)
             if(response.isSuccessful && response.body()!!.check){
-                val data = response.body()!!.information.listIterator()
+                newItemCount = response.body()!!.information.data.size
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()){
                     list.add(data.next())
                 }
+            } else {
+                isFinished = true
             }
+
+            page++
         }
-        adapter.notifyDataSetChanged()
     }
 
     private fun emptyView(){
@@ -65,6 +79,26 @@ class OtherUserListFollowerFragment(private val otherUserId: Int): BaseFragment<
             binding.rvOtherUserFollower.visibility = View.VISIBLE
             binding.ivOtherUserListFollowerEmptyImg.visibility = View.GONE
             binding.tvOtherUserListFollowerEmptyTitle.visibility = View.GONE
+
+            binding.rvOtherUserFollower.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                    if(totalCount == rvPosition){
+                        if(!isFinished){
+                            updateList()
+
+                            recyclerView.post {
+                                adapter.notifyItemRangeInserted(totalCount+1, newItemCount)
+                                newItemCount = 0
+                            }
+                        }
+                    }
+                }
+            })
         }
     }
 }

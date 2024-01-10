@@ -19,6 +19,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface UserApi {
     @GET("/api/users")
@@ -42,7 +43,8 @@ interface UserApi {
     @GET("/api/users/search/{searchWord}")
     suspend fun searchUserInfo(
         @Header("Authorization") token: String,
-        @Path("searchWord") searchWord: String
+        @Path("searchWord") searchWord: String,
+        @Query("page") page:Int
     ): Response<SearchUserResponse>
 
     @PATCH("/api/users/calendar")

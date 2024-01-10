@@ -1,6 +1,7 @@
 package com.example.jeonsilog.data.remote.dto.calendar
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
 
 data class PostPhotoFromGalleryRequest (
 

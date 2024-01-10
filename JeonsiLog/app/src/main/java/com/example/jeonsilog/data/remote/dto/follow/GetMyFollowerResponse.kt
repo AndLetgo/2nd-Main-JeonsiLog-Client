@@ -2,22 +2,21 @@ package com.example.jeonsilog.data.remote.dto.follow
 
 import com.google.gson.annotations.SerializedName
 
-data class GetOtherFollowerResponse(
+data class GetMyFollowerResponse(
 
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: GetOtherFollowerInformation
+    val information: MyFollowerInformation
 )
-
-data class GetOtherFollowerInformation(
+data class MyFollowerInformation(
     @SerializedName("hasNextPage")
     val hasNextPage: Boolean,
     @SerializedName("data")
-    val data: List<GetOtherFollowerEntity>
+    val data: List<GetMyFollowerEntity>
 )
 
-data class GetOtherFollowerEntity(
+data class GetMyFollowerEntity(
 
     @SerializedName("followUserId")
     val followUserId: Int,
@@ -25,8 +24,6 @@ data class GetOtherFollowerEntity(
     val nickname: String,
     @SerializedName("profileImgUrl")
     val profileImgUrl: String,
-    @SerializedName("followMe")
-    val followMe: Boolean,
     @SerializedName("ifollow")
     val ifollow: Boolean
 )

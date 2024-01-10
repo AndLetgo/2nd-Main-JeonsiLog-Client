@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/margin_24"
@@ -19,93 +20,140 @@
             android:layout_width="@dimen/item_100"
             android:layout_height="@dimen/item_132"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/illus_empty_poster"/>
+            android:src="@drawable/illus_empty_poster"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="@dimen/item_0"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_12"
-            android:orientation="vertical"
             android:layout_gravity="center_vertical"
             android:layout_marginVertical="@dimen/margin_8"
-            android:background="@color/basic_white">
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/basic_white"
+            android:orientation="vertical"
+            android:weightSum="4"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_poster"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_poster"
+            app:layout_constraintTop_toTopOf="@+id/iv_poster">
 
             <TextView
                 android:id="@+id/tv_title"
+                style="@style/M_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/M_medium"
-                android:textColor="@color/basic_black" />
+                android:layout_weight="1"
+                android:text=" "
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="@color/basic_black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_address"
+                style="@style/S_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/S_regular"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                android:text=" "
                 android:textColor="@color/gray_medium"
-                android:layout_marginTop="@dimen/margin_4" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
             <TextView
                 android:id="@+id/tv_place"
+                style="@style/S_regular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/S_regular"
-                android:textColor="@color/gray_medium" />
+                android:layout_weight="1"
+                android:text=" "
+                android:textColor="@color/gray_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
             <LinearLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="12dp"
+                android:layout_weight="1"
                 android:background="@color/basic_white"
-                android:spotShadowAlpha="0"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="@dimen/margin_2"
-                android:layout_marginTop="@dimen/margin_12">
+                android:spotShadowAlpha="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_place"
+                app:layout_constraintVertical_bias="1.0">
+
                 <TextView
                     android:id="@+id/tv_keyword_operating_before"
+                    style="@style/S_bold"
                     android:layout_width="@dimen/item_74"
                     android:layout_height="@dimen/item_32"
+                    android:layout_marginVertical="@dimen/margin_2"
+                    android:layout_marginStart="@dimen/margin_2"
                     android:background="@drawable/shape_corner_round_full"
                     android:elevation="@dimen/shadow_2"
-                    android:text="시작전"
-                    style="@style/S_bold"
-                    android:textColor="@color/basic_point"
                     android:gravity="center"
-                    android:layout_marginStart="@dimen/margin_2"
-                    android:layout_marginVertical="@dimen/margin_2"
-                    android:spotShadowAlpha="0" />
+                    android:spotShadowAlpha="0"
+                    android:text="시작전"
+                    android:textColor="@color/basic_point" />
+
+                <Space
+                    android:id="@+id/s_margin_first"
+                    android:layout_width="@dimen/margin_8"
+                    android:layout_height="match_parent" />
 
                 <TextView
                     android:id="@+id/tv_keyword_operating_ing"
+                    style="@style/S_bold"
                     android:layout_width="@dimen/item_74"
                     android:layout_height="@dimen/item_32"
+                    android:layout_marginVertical="@dimen/margin_2"
                     android:background="@drawable/shape_corner_round_full"
                     android:elevation="@dimen/shadow_2"
-                    android:text="전시중"
-                    style="@style/S_bold"
-                    android:textColor="@color/basic_point"
                     android:gravity="center"
-                    android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginVertical="@dimen/margin_2"
-                    android:spotShadowAlpha="0" />
+                    android:spotShadowAlpha="0"
+                    android:text="전시중"
+                    android:textColor="@color/basic_point" />
+
+                <Space
+                    android:id="@+id/s_margin_second"
+                    android:layout_width="@dimen/margin_8"
+                    android:layout_height="match_parent" />
+
                 <TextView
                     android:id="@+id/tv_keyword_price_free"
+                    style="@style/S_bold"
                     android:layout_width="@dimen/item_74"
                     android:layout_height="@dimen/item_32"
+                    android:layout_marginVertical="@dimen/margin_2"
+
                     android:background="@drawable/shape_corner_round_full"
                     android:elevation="@dimen/shadow_2"
-                    android:text="무료"
-                    style="@style/S_bold"
-                    android:textColor="@color/basic_point"
                     android:gravity="center"
-                    android:layout_marginStart="@dimen/margin_8"
-                    android:layout_marginVertical="@dimen/margin_2"
-                    android:spotShadowAlpha="0"/>
+                    android:spotShadowAlpha="0"
+                    android:text="무료"
+                    android:textColor="@color/basic_point" />
 
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

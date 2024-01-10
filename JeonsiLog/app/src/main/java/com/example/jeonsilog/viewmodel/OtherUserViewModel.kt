@@ -65,19 +65,28 @@ class OtherUserViewModel: ViewModel() {
             }
 
             runBlocking(Dispatchers.IO) {
-                val response2 = FollowRepositoryImpl().getMyFollowing(encryptedPrefs.getAT())
-                if (response2.isSuccessful && response2.body()!!.check) {
-                    val userList = response2.body()!!.information.listIterator()
-                    while (userList.hasNext()) {
-                        if (userList.next().followUserId == otherUserId) {
+                var page = 0
 
-                            viewModelScope.launch(Dispatchers.Main) {
-                                _flag.value = true
+                while(true){
+                    val response2 = FollowRepositoryImpl().getMyFollowing(encryptedPrefs.getAT(), page)
+                    if (response2.isSuccessful && response2.body()!!.check) {
+                        val userList = response2.body()!!.information.data.listIterator()
+                        while (userList.hasNext()) {
+                            if (userList.next().followUserId == otherUserId) {
+                                viewModelScope.launch(Dispatchers.Main) {
+                                    _flag.value = true
+                                }
                             }
                         }
+                    } else {
+                        break
                     }
+
+                    page++
                 }
+
             }
+
 
             viewModelScope.launch(Dispatchers.Main){
                 _userId.value = userData.userId

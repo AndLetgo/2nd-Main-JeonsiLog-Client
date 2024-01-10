@@ -15,7 +15,9 @@ import com.example.jeonsilog.view.exhibition.ExhibitionPlaceRvAdapter
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
@@ -40,14 +42,19 @@ class ExhibitionPlaceItemAdapter(private val context: Context,private val editte
             if (list.size-4==position){
                 itemPage+=1
                 runBlocking(Dispatchers.IO) {
+                    var listSize=list.size
                     val response = PlaceRepositoryImpl().searchPlaces(encryptedPrefs.getAT(),edittext,itemPage)
                     if(response.isSuccessful && response.body()!!.check){
                         val searchPlaceResponse = response.body()
                         list.addAll(searchPlaceResponse?.informationEntity!!.toMutableList())
+                        CoroutineScope(Dispatchers.Main).launch {
+                            notifyItemRangeInserted(listSize,searchPlaceResponse?.informationEntity.size)
+                        }
                     }
                 }
             }
         }
+
         GlideApp.with(context)
             .load("")
             .centerCrop()

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jeonsilog.data.remote.dto.alarm.AlarmInformation
+import com.example.jeonsilog.data.remote.dto.alarm.AlarmEntity
 import com.example.jeonsilog.databinding.ItemNotiActivityBinding
 import com.example.jeonsilog.databinding.ItemNotiExhibitionBinding
 import com.example.jeonsilog.repository.alarm.AlarmRepositoryImpl
@@ -20,9 +20,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-class NotificationRvAdapter(private val notiList: List<AlarmInformation>, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NotificationRvAdapter(private val notiList: List<AlarmEntity>, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class TypeActivityViewHolder(private val binding: ItemNotiActivityBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: AlarmInformation){
+        fun bind(data: AlarmEntity){
             if (data.isChecked) {
                 itemView.alpha = 0.4f
             } else {
@@ -68,7 +68,7 @@ class NotificationRvAdapter(private val notiList: List<AlarmInformation>, privat
     }
 
     inner class TypeExhibitionViewHolder(private val binding: ItemNotiExhibitionBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: AlarmInformation){
+        fun bind(data: AlarmEntity){
             if (data.isChecked) {
                 itemView.alpha = 0.4f
             } else {

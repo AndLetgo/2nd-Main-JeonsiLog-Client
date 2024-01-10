@@ -11,17 +11,20 @@ import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface RatingApi {
     @GET("/api/ratings")
     suspend fun getMyRatings(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("page") page: Int
     ): Response<GetRatingsResponse>
 
     @GET("/api/ratings/{userId}")
     suspend fun getOtherRatings(
         @Header("Authorization") token: String,
-        @Path("userId") userId: Int
+        @Path("userId") userId: Int,
+        @Query("page") page: Int
     ): Response<GetRatingsResponse>
 
     @POST("/api/ratings")
