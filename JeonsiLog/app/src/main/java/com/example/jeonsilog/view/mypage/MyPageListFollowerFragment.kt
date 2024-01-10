@@ -56,8 +56,8 @@ class MyPageListFollowerFragment: BaseFragment<FragmentMyPageListFollowerBinding
         runBlocking(Dispatchers.IO){
             val response = FollowRepositoryImpl().getMyFollower(encryptedPrefs.getAT(), page)
             if(response.isSuccessful && response.body()!!.check){
-                newItemCount = response.body()!!.information.size
-                val data = response.body()!!.information.listIterator()
+                newItemCount = response.body()!!.information.data.size
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()){
                     list.add(data.next())
                 }

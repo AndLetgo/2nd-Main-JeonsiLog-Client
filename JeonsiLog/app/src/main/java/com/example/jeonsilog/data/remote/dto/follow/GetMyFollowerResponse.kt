@@ -7,7 +7,13 @@ data class GetMyFollowerResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: List<GetMyFollowerInformation>
+    val information: MyFollowerData
+)
+data class MyFollowerData(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<GetMyFollowerInformation>
 )
 
 data class GetMyFollowerInformation(

@@ -39,6 +39,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +49,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.time.LocalDate
@@ -275,17 +278,17 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         val imageRequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         val filePart = MultipartBody.Part.createFormData("img", file.name, imageRequestBody)
 
-        val uploadImageReq=UploadImageReqEntity(monthYearFromDate(selectedDate))
-        val upImageReq=PostPhotoFromGalleryRequest(uploadImageReq,file.name)
-        val requestJson= Gson().toJson(upImageReq)
-        val requestBody=RequestBody.create("application/json".toMediaTypeOrNull(),requestJson)
+        val uploadImageReq = UploadImageReqEntity(monthYearFromDate(selectedDate))
+        val requestJson = Gson().toJson(uploadImageReq)
+        val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(),requestJson)
+
         runBlocking(Dispatchers.IO) {
-            val response = CalendarRepositoryImpl().postPhotoFromGallery(encryptedPrefs.getAT(),requestBody, filePart)
+            val response = CalendarRepositoryImpl().postPhotoFromGallery(encryptedPrefs.getAT(), requestBody, filePart)
             if(response.isSuccessful && response.body()!!.check){
                 CoroutineScope(Dispatchers.Main).launch {
                     listener.onDialogButtonClick("Data to pass")
                 }
-            } else {
+                Log.d("gallery", "patchMyPhotoCalendarImg: ${response.body()!!.informationEntity.message}")
             }
             dismiss()
             dismissListener?.onDismiss()
