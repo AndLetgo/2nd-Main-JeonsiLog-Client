@@ -19,6 +19,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private lateinit var homeRvAdapter: HomeRvAdapter
     private var homeRvList = mutableListOf<ExhibitionsInfo>()
     private var exhibitionPage = 0
+    private var hasNextPage = true
 
     override fun init() {
         homeRvAdapter = HomeRvAdapter(homeRvList, requireContext())
@@ -40,7 +41,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 super.onScrolled(recyclerView, dx, dy)
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                 val totalCount = recyclerView.adapter?.itemCount?.minus(2)
-                if(rvPosition == totalCount){
+                if(rvPosition == totalCount && hasNextPage){
                     setExhibitionRvByPage(totalCount)
                 }
             }
@@ -59,9 +60,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),exhibitionPage)
-            if(response.isSuccessful && response.body()!!.check){
+            if(response.isSuccessful && response.body()!!.check ){
                 homeRvList.addAll(response.body()!!.information.data)
                 addItemCount = response.body()!!.information.data.size
+                hasNextPage = response.body()!!.information.hasNextPage
             }
         }
         val startPosition = totalCount + 1
