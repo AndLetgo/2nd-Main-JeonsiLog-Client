@@ -39,6 +39,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
     RecordItemAdapter.AdapterCallback {
     private lateinit var adapter: RecordItemAdapter
     lateinit var viewModel: SearchViewModel
+    val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         binding.searchData=viewModel
@@ -196,8 +197,10 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                 val enteredText = binding.etSearchRecord.text.toString()
                 if(enteredText.isBlank()){
                     Toast.makeText(context,"검색어를 입력하세요",Toast.LENGTH_SHORT).show()
-                }else{
-
+                }else if(regexPattern.containsMatchIn(enteredText)&&enteredText.length<=2){
+                    Toast.makeText(context, "해당 검색어는 검색할수 없어요", Toast.LENGTH_SHORT).show()
+                }
+                else{
                     addItem(enteredText)
                     prefs.setRecorList(viewModel.itemlist.value!!)
                     //프래그먼트 전환 코드

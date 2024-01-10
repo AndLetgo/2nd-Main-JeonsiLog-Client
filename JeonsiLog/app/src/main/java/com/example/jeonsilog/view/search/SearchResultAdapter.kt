@@ -13,7 +13,7 @@ import com.example.jeonsilog.data.remote.dto.UserSearchItem
 import com.example.jeonsilog.viewmodel.SearchViewModel
 
 
-class SearchResultAdapter(fm: FragmentManager, lifecycle: Lifecycle, itemstr:String,initialTabPosition: Int,private var viewModel: SearchViewModel) : FragmentStateAdapter(fm, lifecycle) {
+class SearchResultAdapter(fm: FragmentManager, lifecycle: Lifecycle, itemstr:String) : FragmentStateAdapter(fm, lifecycle) {
     var edittext=itemstr
 
     override fun getItemCount(): Int = 3 // 탭의 개수
