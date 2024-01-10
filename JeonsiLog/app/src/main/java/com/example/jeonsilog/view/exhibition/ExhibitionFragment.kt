@@ -125,16 +125,24 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         //Call
         binding.ibCall.setOnClickListener {
             //null 처리 필요
-            val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.tel)
-            clipboardManager.setPrimaryClip(clipData)
-            Toast.makeText(requireContext(), "copy success", Toast.LENGTH_SHORT).show()
+            if(exhibitionInfoData?.place?.tel !=null){
+                val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.tel)
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(requireContext(), "copy success", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), "등록된 전화번호가 없어요.", Toast.LENGTH_SHORT).show()   
+            }
         }
         //Link
         binding.ibGoWeb.setOnClickListener {
             //null 처리 필요
-            var intent = Intent(Intent.ACTION_VIEW, Uri.parse(exhibitionInfoData?.place?.homePage))
-            startActivity(intent)
+            if(exhibitionInfoData?.place?.homePage != null){
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(exhibitionInfoData?.place?.homePage))
+                startActivity(intent)    
+            }else{
+                Toast.makeText(requireContext(), "등록된 링크가 없어요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         //전시회 정보 더보기 버튼 처리
