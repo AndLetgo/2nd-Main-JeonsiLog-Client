@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
+import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsEntity
 import com.example.jeonsilog.databinding.FragmentOtherUserRatingBinding
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.viewmodel.OtherUserViewModel
@@ -18,11 +18,11 @@ import kotlinx.coroutines.runBlocking
 
 class OtherUserRatingFragment(private val vm: OtherUserViewModel, private val otherUserId: Int): BaseFragment<FragmentOtherUserRatingBinding>(R.layout.fragment_other_user_rating) {
     private var numRating = 0
-    private var list = mutableListOf<GetMyRatingsDataEntity>()
+    private var list = mutableListOf<GetMyRatingsEntity>()
     private var page = 0
     private var isFinished = false
     private var newItemCount = 0
-    private lateinit var adapter: OtherUserRvAdapter<GetMyRatingsDataEntity>
+    private lateinit var adapter: OtherUserRvAdapter<GetMyRatingsEntity>
 
     override fun init() {
         getItems()
@@ -33,7 +33,7 @@ class OtherUserRatingFragment(private val vm: OtherUserViewModel, private val ot
             binding.ivOtherUserRatingEmptyImg.visibility = View.VISIBLE
             binding.tvOtherUserRatingEmptyTitle.visibility = View.VISIBLE
         } else {
-            adapter = OtherUserRvAdapter<GetMyRatingsDataEntity>(list, 0, requireContext())
+            adapter = OtherUserRvAdapter<GetMyRatingsEntity>(list, 0, requireContext())
             binding.rvOtherUserRating.adapter = adapter
             binding.rvOtherUserRating.layoutManager = LinearLayoutManager(requireContext())
             binding.rvOtherUserRating.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
@@ -70,12 +70,12 @@ class OtherUserRatingFragment(private val vm: OtherUserViewModel, private val ot
         runBlocking(Dispatchers.IO){
             val response = RatingRepositoryImpl().getOtherRatings(encryptedPrefs.getAT(), otherUserId, page)
             if(response.isSuccessful && response.body()!!.check){
-                newItemCount = response.body()!!.information.dataEntity.size
+                newItemCount = response.body()!!.information.data.size
                 numRating = response.body()!!.information.numRating
-                val data = response.body()!!.information.dataEntity.listIterator()
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()){
                     val temp = data.next()
-                    list.add(GetMyRatingsDataEntity(
+                    list.add(GetMyRatingsEntity(
                         ratingId = temp.ratingId,
                         exhibitionId = temp.exhibitionId,
                         exhibitionName = "[${temp.exhibitionName}]",

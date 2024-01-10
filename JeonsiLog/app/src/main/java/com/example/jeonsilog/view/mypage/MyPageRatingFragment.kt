@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsDataEntity
+import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsEntity
 import com.example.jeonsilog.databinding.FragmentMyPageRatingBinding
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -17,11 +17,11 @@ import kotlinx.coroutines.runBlocking
 
 class MyPageRatingFragment:BaseFragment<FragmentMyPageRatingBinding>(R.layout.fragment_my_page_rating) {
     private var numRating = 0
-    private var list = mutableListOf<GetMyRatingsDataEntity>()
+    private var list = mutableListOf<GetMyRatingsEntity>()
     private var page = 0
     private var isFinished = false
     private var newItemCount = 0
-    private lateinit var adapter: MyPageRvAdapter<GetMyRatingsDataEntity>
+    private lateinit var adapter: MyPageRvAdapter<GetMyRatingsEntity>
 
     override fun init() {
         getItems()
@@ -34,7 +34,7 @@ class MyPageRatingFragment:BaseFragment<FragmentMyPageRatingBinding>(R.layout.fr
             binding.tvMypageRatingEmptyDescription.visibility =View.VISIBLE
         } else {
 
-            adapter = MyPageRvAdapter<GetMyRatingsDataEntity>(list, 0, requireContext())
+            adapter = MyPageRvAdapter<GetMyRatingsEntity>(list, 0, requireContext())
             binding.rvMypageRating.adapter = adapter
             binding.rvMypageRating.layoutManager = LinearLayoutManager(requireContext())
             binding.rvMypageRating.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
@@ -66,13 +66,13 @@ class MyPageRatingFragment:BaseFragment<FragmentMyPageRatingBinding>(R.layout.fr
         runBlocking(Dispatchers.IO) {
             val response = RatingRepositoryImpl().getMyRatings(encryptedPrefs.getAT(), page)
             if (response.isSuccessful && response.body()!!.check) {
-                newItemCount = response.body()!!.information.dataEntity.size
+                newItemCount = response.body()!!.information.data.size
                 numRating = response.body()!!.information.numRating
-                val data = response.body()!!.information.dataEntity.listIterator()
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()) {
                     val temp = data.next()
                     list.add(
-                        GetMyRatingsDataEntity(
+                        GetMyRatingsEntity(
                             ratingId = temp.ratingId,
                             exhibitionId = temp.exhibitionId,
                             exhibitionName = "[${temp.exhibitionName}]",

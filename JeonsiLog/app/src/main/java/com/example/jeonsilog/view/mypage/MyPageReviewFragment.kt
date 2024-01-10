@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.review.GetReviewsDataEntity
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsEntity
 import com.example.jeonsilog.databinding.FragmentMyPageReviewBinding
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -16,12 +16,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class MyPageReviewFragment: BaseFragment<FragmentMyPageReviewBinding>(R.layout.fragment_my_page_review) {
+    private lateinit var adapter: MyPageRvAdapter<GetReviewsEntity>
     private var numReview = 0
-    private var list = mutableListOf<GetReviewsDataEntity>()
+    private var list = mutableListOf<GetReviewsEntity>()
     private var page = 0
     private var isFinished = false
     private var newItemCount = 0
-    private lateinit var adapter: MyPageRvAdapter<GetReviewsDataEntity>
 
     override fun init() {
         getItems()
@@ -33,7 +33,7 @@ class MyPageReviewFragment: BaseFragment<FragmentMyPageReviewBinding>(R.layout.f
             binding.tvMypageReviewEmptyTitle.visibility = View.VISIBLE
             binding.tvMypageReviewEmptyDescription.visibility = View.VISIBLE
         } else {
-            adapter = MyPageRvAdapter<GetReviewsDataEntity>(list, 1, requireContext())
+            adapter = MyPageRvAdapter<GetReviewsEntity>(list, 1, requireContext())
             binding.rvMypageReview.adapter = adapter
             binding.rvMypageReview.layoutManager = LinearLayoutManager(requireContext())
             binding.rvMypageReview.addItemDecoration(
@@ -77,13 +77,13 @@ class MyPageReviewFragment: BaseFragment<FragmentMyPageReviewBinding>(R.layout.f
         runBlocking(Dispatchers.IO){
             val response = ReviewRepositoryImpl().getMyReviews(GlobalApplication.encryptedPrefs.getAT(), page)
             if(response.isSuccessful && response.body()!!.check){
-                newItemCount = response.body()!!.information.dataEntity.size
+                newItemCount = response.body()!!.information.data.size
                 numReview = response.body()!!.information.numReview
-                val data = response.body()!!.information.dataEntity.listIterator()
+                val data = response.body()!!.information.data.listIterator()
                 while (data.hasNext()){
                     val temp = data.next()
                     list.add(
-                        GetReviewsDataEntity(
+                        GetReviewsEntity(
                             reviewId = temp.reviewId,
                             exhibitionId = temp.exhibitionId,
                             exhibitionName = "[${temp.exhibitionName}]",

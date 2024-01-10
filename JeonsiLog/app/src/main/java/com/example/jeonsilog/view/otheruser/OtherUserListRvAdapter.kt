@@ -9,7 +9,9 @@ import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerEntity
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerInformation
+import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingEntity
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingInformation
 import com.example.jeonsilog.databinding.ItemOtherUserListFollowBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
@@ -25,7 +27,7 @@ import java.lang.IllegalArgumentException
 class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeFollowViewHolder(private val binding: ItemOtherUserListFollowBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetOtherFollowerInformation){
+        fun bind(data: GetOtherFollowerEntity){
             GlideApp.with(binding.ivOtherUserListFollowProfile)
                 .load(data.profileImgUrl)
                 .optionalCircleCrop()
@@ -54,7 +56,7 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
 
             binding.btnOtherUserListFollowing.setOnClickListener {
                 if(data.ifollow){
-                    list[adapterPosition] = GetOtherFollowerInformation(
+                    list[adapterPosition] = GetOtherFollowerEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
@@ -67,7 +69,7 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                     notifyItemChanged(adapterPosition)
 
                 } else {
-                    list[adapterPosition] = GetOtherFollowerInformation(
+                    list[adapterPosition] = GetOtherFollowerEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
@@ -94,7 +96,7 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
 
 
     inner class TypeFollowingViewHolder(private val binding: ItemOtherUserListFollowBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetOtherFollowingInformation) {
+        fun bind(data: GetOtherFollowingEntity) {
             GlideApp.with(binding.ivOtherUserListFollowProfile)
                 .load(data.profileImgUrl)
                 .optionalCircleCrop()
@@ -123,7 +125,7 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
 
             binding.btnOtherUserListFollowing.setOnClickListener {
                 if(data.ifollow){
-                    list[adapterPosition] = GetOtherFollowingInformation(
+                    list[adapterPosition] = GetOtherFollowingEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
@@ -136,7 +138,7 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                     notifyItemChanged(adapterPosition)
 
                 } else {
-                    list[adapterPosition] = GetOtherFollowingInformation(
+                    list[adapterPosition] = GetOtherFollowingEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
@@ -191,12 +193,12 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (type) {
             0 -> {
-                val followerData = list[position] as GetOtherFollowerInformation
+                val followerData = list[position] as GetOtherFollowerEntity
                 holder as OtherUserListRvAdapter<*>.TypeFollowViewHolder
                 holder.bind(followerData)
             }
             1 -> {
-                val followingData = list[position] as GetOtherFollowingInformation
+                val followingData = list[position] as GetOtherFollowingEntity
                 holder as OtherUserListRvAdapter<*>.TypeFollowingViewHolder
                 holder.bind(followingData)
             }
