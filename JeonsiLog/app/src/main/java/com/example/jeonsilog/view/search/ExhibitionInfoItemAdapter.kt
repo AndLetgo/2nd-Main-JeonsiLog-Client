@@ -33,11 +33,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlin.math.log
 
-class ExhibitionInfoItemAdapter(private val context: Context,private val edittext:String, private val list:MutableList <SearchInformationEntity>) : RecyclerView.Adapter<ExhibitionInfoItemAdapter.ViewHolder>() {
-    var itemPage=0
-
-    class ViewHolder(private val binding: ItemExhibitionInfoBinding) : RecyclerView.ViewHolder(binding.root) {
+class ExhibitionInfoItemAdapter(private val context: Context,private val list:List<SearchInformationEntity>) : RecyclerView.Adapter<ExhibitionInfoItemAdapter.ViewHolder>() {
+    class ViewHolder(binding: ItemExhibitionInfoBinding) : RecyclerView.ViewHolder(binding.root) {
         val exhibitionnameTextView: TextView = binding.tvTitle
         val exhibitionlocationTextView: TextView = binding.tvAddress
         val exhibitionplaceTextView: TextView = binding.tvPlace
@@ -54,27 +53,8 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
-        //list.size가 position 보다 커야함
-        //list의 마지막요소가 아닌 마지막 전요소에서 비교
-        if (list.size>5){
-            if (list.size-4==position){
-                itemPage+=1
-                runBlocking(Dispatchers.IO) {
-                    var listSize=list.size
-                    val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,itemPage)
-                    if(response.isSuccessful && response.body()!!.check){
-                        val searchExhibitionResponse = response.body()
-                        list.addAll(searchExhibitionResponse?.informationEntity!!.toMutableList())
-                        CoroutineScope(Dispatchers.Main).launch {
-                            notifyItemRangeInserted(listSize,searchExhibitionResponse?.informationEntity.size)
-                        }
-                    }
-                }
-            }
-        }
 
-        val unsplashUrl = item.imageUrl
+        val unsplashUrl = list[position].imageUrl
         val radiusDp = 4f
         val radiusPx = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, radiusDp, context.resources.displayMetrics).toInt()
@@ -83,12 +63,10 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
             .transform(CenterCrop(), RoundedCorners(radiusPx))
             .into(holder.posterImageView)
 
+        holder.exhibitionnameTextView.text =list[position].exhibitionName
 
-        holder.exhibitionnameTextView.text =item.exhibitionName
-
-
-        if (item.place.placeAddress!=null){
-            val words = item.place.placeAddress.split(" ")
+        if (list[position].place.placeAddress!=null){
+            val words = list[position].place.placeAddress!!.split(" ")
             // 앞의 2개의 단어 추출
             if (words.size >= 2) {
                 val firstWord = words[0]
@@ -100,8 +78,8 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
             holder.exhibitionlocationTextView.text=""
             //holder.exhibitionlocationTextView.isVisible=false
         }
-        if (item.place.placeName!=null){
-            holder.exhibitionplaceTextView.text = item.place.placeName
+        if (list[position].place.placeName!=null){
+            holder.exhibitionplaceTextView.text = list[position].place.placeName
         }
         else{
             holder.exhibitionplaceTextView.text=""
@@ -110,12 +88,12 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
 
 
 
-        if (item.operatingKeyword=="AFTER_DISPLAY"){
+        if (list[position].operatingKeyword=="AFTER_DISPLAY"){
             //
             holder.exhibitiondateTextViewBefore.isGone=true //시작전 키워드 없음
             holder.exhibitiondateTextViewIng.isGone=true //전시중 키워드 없음
             holder.marginFirst.isGone=true//시작전 키워드와 전시중 키워드 사이 마진 제거
-        }else if (item.operatingKeyword=="ON_DISPLAY"){
+        }else if (list[position].operatingKeyword=="ON_DISPLAY"){
             //시작전
             holder.exhibitiondateTextViewBefore.isGone=false //시작전 키워드 있음
             holder.exhibitiondateTextViewIng.isGone=true //전시중 키워드 없음
@@ -127,7 +105,7 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
             holder.exhibitiondateTextViewIng.isGone=false //전시중 키워드 있음 => 마진값 변경
             holder.marginFirst.isGone=false//시작전 키워드와 전시중 키워드 사이 마진
         }
-        if (item.priceKeyword=="PAY") {
+        if (list[position].priceKeyword=="PAY") {
             holder.marginSecond.isGone=false
             holder.exhibitionpriceTextViewFree.isGone = true
         }else{
@@ -137,7 +115,7 @@ class ExhibitionInfoItemAdapter(private val context: Context,private val edittex
         holder.itemView.setOnClickListener {
             //@@클릭처리
             //전시회 id
-            (context as MainActivity).loadExtraActivity(0, item.exhibitionId)
+            (context as MainActivity).loadExtraActivity(0, list[position].exhibitionId)
         }
 
 

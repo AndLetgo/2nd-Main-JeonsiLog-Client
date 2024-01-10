@@ -6,9 +6,14 @@ data class SearchResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val informationEntity: List<SearchInformationEntity>
+    val information: SearchInformation
 )
-
+data class SearchInformation(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<SearchInformationEntity>
+)
 data class SearchInformationEntity(
     @SerializedName("exhibitionId")
     val exhibitionId: Int,
@@ -33,3 +38,4 @@ data class SearchPlaceEntity(
     @SerializedName("placeAddress")
     val placeAddress: String?
 )
+

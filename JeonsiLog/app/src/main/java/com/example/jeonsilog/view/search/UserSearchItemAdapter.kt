@@ -24,7 +24,7 @@ import kotlinx.coroutines.runBlocking
 
 
 class UserSearchItemAdapter(
-    private val context: Context,private val edittext:String, private val list:MutableList <SearchUserInformationEntity>)
+    private val context: Context,private val list:List<SearchUserInformationEntity>)
     : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
     var itemPage=0
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,39 +39,19 @@ class UserSearchItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = list[position]
-        //list.size가 position 보다 커야함
-        //list의 마지막요소가 아닌 마지막 전요소에서 비교
-        if (list.size > 5) {
-            if (list.size - 4 == position) {
-                itemPage += 1
-                runBlocking(Dispatchers.IO) {
-                    var listSize=list.size
-                    val response =
-                        UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), edittext,itemPage)
 
-                    if (response.isSuccessful && response.body()!!.check) {
-                        val searchUserResponse = response.body()
-                        list.addAll(searchUserResponse?.informationEntity!!.toMutableList())
-                        CoroutineScope(Dispatchers.Main).launch {
-                            notifyItemRangeInserted(listSize,searchUserResponse?.informationEntity.size)
-                        }
-                    }
-                }
-            }
-        }
-        val unsplashUrl = item.profileImgUrl
+        val unsplashUrl = list[position].profileImgUrl
         GlideApp.with(context)
             .load(unsplashUrl)
             .centerCrop()
             .circleCrop()
             .into(holder.itemView.findViewById(R.id.iv_user_profile))
-        holder.usernameTextView.text = item.nickname
+        holder.usernameTextView.text = list[position].nickname
         holder.itemView.setOnClickListener {
             //유저 id
 
             holder.itemView.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(item.userId, item.nickname)
+                (context as MainActivity).moveOtherUserProfile(list[position].userId, list[position].nickname)
 
             }
 
