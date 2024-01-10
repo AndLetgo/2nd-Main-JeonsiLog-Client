@@ -85,4 +85,7 @@ dependencies {
 
     //read more
     implementation 'kr.co.prnd:readmore-textview:1.0.0'
+
+    //html 특수 문자
+    implementation 'org.jsoup:jsoup:1.14.3'
 }

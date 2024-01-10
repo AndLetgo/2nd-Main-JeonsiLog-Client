@@ -74,9 +74,10 @@ class UserRepositoryImpl: UserRepository {
 
     override suspend fun searchUserInfo(
         token: String,
-        searchWord: String
+        searchWord: String,
+        page:Int
     ): Response<SearchUserResponse> {
-        val response = service.searchUserInfo("Bearer $token", searchWord)
+        val response = service.searchUserInfo("Bearer $token", searchWord,page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
