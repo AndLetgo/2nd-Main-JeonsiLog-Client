@@ -24,4 +24,10 @@ class DateUtil {
             else -> LocalDateTime.parse(dateTimeString).format(DateTimeFormatter.ofPattern("MM.dd"))
         }
     }
+
+    fun editStringDate(date:String):String{
+        var newDate = ""
+        newDate = date.substring(0,4) +"."+date.substring(4,6)+ "."+date.substring(6)
+        return newDate
+    }
 }

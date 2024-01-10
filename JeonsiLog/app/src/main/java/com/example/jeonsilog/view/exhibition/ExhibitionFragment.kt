@@ -14,6 +14,7 @@ import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +30,7 @@ import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
@@ -51,6 +53,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     override fun init() {
         if(extraActivityReference==2){
             Navigation.findNavController(binding.llExhibitionPlace).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
+            extraActivityReference = 0
         }
 
         if(exhibitionViewModel.currentExhibitionIds.value == null || exhibitionViewModel.getCurrentExhibitionsSize()<=0){
@@ -182,19 +185,15 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         var date = ""
         if(exhibitionInfoData?.startDate!=null){
-            date = subStringDate(exhibitionInfoData!!.startDate) + " ~ " + subStringDate(exhibitionInfoData!!.endDate)
+            date = DateUtil().editStringDate(exhibitionInfoData!!.startDate) + " ~ " + DateUtil().editStringDate(exhibitionInfoData!!.endDate)
         }
         binding.tvDate.text = date
+
+        setKeywords()
 
         //전시회 정보
         setExhibitionInformation(exhibitionInfoData?.information)
         setRatings()
-    }
-
-    private fun subStringDate(date:String):String{
-        var newDate = ""
-        newDate = date.substring(0,4) +"."+date.substring(4,6)+ "."+date.substring(6)
-        return newDate
     }
 
     private fun setExhibitionInformation(information: String?){
@@ -222,7 +221,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         //평균 별점
         binding.tvRatingRate.text = "%.1f".format(exhibitionInfoData?.rate)
         //유저 별점
-        binding.ratingBar.rating = exhibitionInfoData?.myRating!!
+        if(exhibitionInfoData?.myRating!=null){
+            binding.ratingBar.rating = exhibitionInfoData?.myRating!!
+        }
         //별점 등록
         binding.ratingBar.setOnRatingChangeListener { _, rating, _ ->
             if(rating <= 0.5){
@@ -262,6 +263,30 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         }
         binding.tvRatingRate.text = "%.1f".format(exhibitionInfoData?.rate)
+    }
+    private fun setKeywords(){
+        var operatingKeyword = ""
+        when(exhibitionInfoData?.operatingKeyword){
+            "ON_DISPLAY" -> operatingKeyword = requireContext().getString(R.string.keyword_state_on)
+            "BEFORE_DISPLAY" -> operatingKeyword = requireContext().getString(R.string.keyword_state_before)
+        }
+        var priceKeyword = ""
+        when(exhibitionInfoData?.priceKeyword){
+            "FREE" -> priceKeyword = requireContext().getString(R.string.keyword_free)
+            else -> binding.tvKeywordSecond.isGone = true
+        }
+
+        if(operatingKeyword!=""){
+            binding.tvKeywordFirst.text = operatingKeyword
+            binding.tvKeywordSecond.text = priceKeyword
+        }else{
+            if(priceKeyword!=""){
+                binding.tvKeywordSecond.isGone = true
+                binding.tvKeywordFirst.text = priceKeyword
+            }else {
+                binding.tvKeywordFirst.isGone = true
+            }
+        }
     }
     private fun getReviewInfo(){
         reviewList = mutableListOf()

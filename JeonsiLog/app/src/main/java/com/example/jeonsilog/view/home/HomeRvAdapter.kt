@@ -66,7 +66,7 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
                     binding.tvKeywordSecond.isGone = true
                     binding.tvKeywordFirst.text = priceKeyword
                 }else {
-                    binding.tvKeywordFirst.isGone
+                    binding.tvKeywordFirst.isGone = true
                 }
             }
 

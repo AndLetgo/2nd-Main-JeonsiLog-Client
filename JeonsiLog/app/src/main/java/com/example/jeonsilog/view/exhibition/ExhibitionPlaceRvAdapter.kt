@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionPlaceBinding
+import com.example.jeonsilog.widget.utils.DateUtil
 
 class ExhibitionPlaceRvAdapter(private val placeList: List<GetPlacesInformationEntity>, private val context: Context) :
     RecyclerView.Adapter<ExhibitionPlaceRvAdapter.RecycleViewHolder>() {
@@ -21,6 +22,8 @@ class ExhibitionPlaceRvAdapter(private val placeList: List<GetPlacesInformationE
         RecyclerView.ViewHolder(binding.root){
         fun bind(item: GetPlacesInformationEntity){
             binding.tvExhibitionName.text = item.exhibitionName
+            val date = DateUtil().editStringDate(item!!.startDate) + " ~ " + DateUtil().editStringDate(item!!.endDate)
+            binding.tvExhibitionDate.text = date
 
             var operatingKeyword = ""
             when(item.operatingKeyword){
@@ -41,7 +44,7 @@ class ExhibitionPlaceRvAdapter(private val placeList: List<GetPlacesInformationE
                     binding.tvKeywordSecond.isGone = true
                     binding.tvKeywordFirst.text = priceKeyword
                 }else {
-                    binding.tvKeywordFirst.isGone
+                    binding.tvKeywordFirst.isGone = true
                 }
             }
 
