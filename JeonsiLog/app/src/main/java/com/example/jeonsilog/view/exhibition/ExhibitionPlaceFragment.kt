@@ -41,7 +41,13 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 
         exhibitionPlaceRvAdapter.setOnItemClickListener(object :ExhibitionPlaceRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: GetPlacesInformationEntity, position: Int) {
-                exhibitionViewModel.addCurrentExhibitionId(data.exhibitionId)
+                if(exhibitionViewModel.currentExhibitionIds.value==null){
+                    exhibitionViewModel.setCurrentExhibitionIds(data.exhibitionId)
+                    Log.d("TAG", "onItemClick: current exhibiton null")
+                }else{
+                    exhibitionViewModel.addCurrentExhibitionId(data.exhibitionId)
+                    Log.d("TAG", "onItemClick: add current exhibiton")
+                }
                 Log.d("TAG", "place -> exhibition: ${exhibitionViewModel.currentExhibitionIds}")
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionPlaceFragment_to_exhibitionFragment)
             }

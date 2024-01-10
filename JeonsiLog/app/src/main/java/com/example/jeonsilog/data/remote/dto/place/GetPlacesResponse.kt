@@ -20,5 +20,9 @@ data class GetPlacesInformationEntity(
     @SerializedName("priceKeyword")
     val priceKeyword: String,
     @SerializedName("imageUrl")
-    val imageUrl: String
+    val imageUrl: String,
+    @SerializedName("startDate")
+    val startDate: String,
+    @SerializedName("endDate")
+    val endDate: String
 )
