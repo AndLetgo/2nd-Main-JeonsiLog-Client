@@ -1,8 +1,10 @@
 package com.example.jeonsilog.view.exhibition
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
@@ -15,6 +17,7 @@ import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
 import kotlinx.coroutines.Dispatchers
@@ -81,5 +84,23 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
         val startPosition = totalCount + 1
         exhibitionPlaceRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
         placePage++
+    }
+
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("TAG", "handleOnBackPressed: extraActivityReference: $extraActivityReference ")
+                if(extraActivityReference ==3 && exhibitionViewModel.currentExhibitionIds.value?.size!! <1){
+                    activity?.finish()
+                }else{
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 }
