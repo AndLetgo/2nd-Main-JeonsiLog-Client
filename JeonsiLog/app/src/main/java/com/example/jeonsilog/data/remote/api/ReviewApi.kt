@@ -30,7 +30,8 @@ interface ReviewApi {
     @GET("api/reviews/exhibition/{exhibitionId}")
     suspend fun getReviews(
         @Header("Authorization") token: String,
-        @Path("exhibitionId") exhibitionId: Int
+        @Path("exhibitionId") exhibitionId: Int,
+        @Query("page") page: Int
     ): Response<GetReviewsExhibitionResponse>
 
     @POST("/api/reviews")

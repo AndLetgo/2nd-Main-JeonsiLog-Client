@@ -43,9 +43,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private lateinit var exhibitionRvAdapter: ExhibitionReviewRvAdapter
     private var exhibitionInfoData: ExhibitionInfo? = null
     private var thisExhibitionId = 0
-    private lateinit var reviewList: MutableList<GetReviewsExhibitionInformationEntity>
+    private var reviewPage = 0
+    private var reviewList = mutableListOf<GetReviewsExhibitionInformationEntity>()
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private var check = true
+    private var hasNextPage = true
     private lateinit var preDrawListener: OnPreDrawListener
 
     override fun init() {
@@ -271,19 +273,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         binding.tvRatingRate.text = "%.1f".format(exhibitionInfoData?.rate)
     }
     private fun getReviewInfo(){
-        reviewList = mutableListOf()
-
-        runBlocking(Dispatchers.IO) {
-            val response = ReviewRepositoryImpl().getReviews(encryptedPrefs.getAT(), thisExhibitionId)
-            if(response.isSuccessful && response.body()!!.check){
-                reviewList.addAll(response.body()!!.informationEntity)
-            }else{
-                null
-            }
-        }
         exhibitionRvAdapter = ExhibitionReviewRvAdapter(reviewList, requireContext())
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         binding.rvExhibitionReview.layoutManager = LinearLayoutManager(context)
+
+        setReviewRvByPage(0)
 
         exhibitionRvAdapter.setOnItemClickListener(object: ExhibitionReviewRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int) {
@@ -308,6 +302,22 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 popupMenu.show()
             }
         })
+    }
+    private fun setReviewRvByPage(totalCount:Int){
+        var addItemCount = 0
+        runBlocking(Dispatchers.IO) {
+            val response = ReviewRepositoryImpl().getReviews(encryptedPrefs.getAT(), thisExhibitionId, reviewPage)
+            if(response.isSuccessful && response.body()!!.check){
+                reviewList.addAll(response.body()!!.informationEntity.data)
+                addItemCount = response.body()!!.informationEntity.data.size
+                hasNextPage = response.body()!!.informationEntity.hasNextPage
+            }else{
+                null
+            }
+        }
+        val startPosition = totalCount + 1
+        exhibitionRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
+        reviewPage++
     }
 
     override fun onDestroyView() {

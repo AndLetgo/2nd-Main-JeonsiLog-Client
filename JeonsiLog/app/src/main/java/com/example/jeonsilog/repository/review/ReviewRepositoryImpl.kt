@@ -7,6 +7,7 @@ import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsResponse
 import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
 import retrofit2.Response
+import retrofit2.http.Query
 
 class ReviewRepositoryImpl: ReviewRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(ReviewApi::class.java)
@@ -33,9 +34,10 @@ class ReviewRepositoryImpl: ReviewRepository {
 
     override suspend fun getReviews(
         token: String,
-        exhibitionId: Int
+        exhibitionId: Int,
+        page: Int
     ): Response<GetReviewsExhibitionResponse> {
-        val response = service.getReviews("Bearer $token", exhibitionId)
+        val response = service.getReviews("Bearer $token", exhibitionId, page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
