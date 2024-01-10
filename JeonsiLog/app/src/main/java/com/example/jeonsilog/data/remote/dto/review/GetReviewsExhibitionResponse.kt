@@ -7,7 +7,13 @@ data class GetReviewsExhibitionResponse (
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val informationEntity: List<GetReviewsExhibitionInformationEntity>
+    val informationEntity: ReviewsExhibitionData
+)
+data class ReviewsExhibitionData(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<GetReviewsExhibitionInformationEntity>
 )
 
 data class GetReviewsExhibitionInformationEntity(
@@ -24,5 +30,7 @@ data class GetReviewsExhibitionInformationEntity(
     @SerializedName("rate")
     val rate: Double,
     @SerializedName("numReply")
-    val numReply: Int
+    var numReply: Int,
+    @SerializedName("createdDate")
+    val createdDate: String
 )

@@ -78,6 +78,7 @@
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>
     <string name="exhibition_reply">댓글</string>
+    <string name="exhibition_reply_count">댓글 %1$d</string>
     <string name="exhibition_writing_review">감상평 작성하기</string>
     <string name="exhibition_writing_review_hint">여기에 감상평을 입력하세요!</string>
     <string name="exhibition_reply_hint">댓글을 남겨 보세요!</string>

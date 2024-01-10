@@ -1,12 +1,9 @@
 package com.example.jeonsilog.view.exhibition
 
-import android.view.View
-import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
+import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityExtraBinding
@@ -23,7 +20,14 @@ class ExtraActivity : BaseActivity<ActivityExtraBinding>({ ActivityExtraBinding.
                 binding.fcvNavFrame.isVisible
                 exhibitionViewModel.setCurrentExhibitionIds(exhibitionId)
             }
+            2 -> {
+                binding.fcvNavFrame.isVisible
+            }
         }
 
+    }
+    fun refreshFragment(fragmentId: Int) {
+        val navController = findNavController(binding.fcvNavFrame)
+        navController.navigate(fragmentId)
     }
 }

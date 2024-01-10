@@ -1,6 +1,8 @@
 package com.example.jeonsilog.data.remote.api
 
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.review.GetReviewResponse
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsResponse
 import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
@@ -30,8 +32,15 @@ interface ReviewApi {
     @GET("api/reviews/exhibition/{exhibitionId}")
     suspend fun getReviews(
         @Header("Authorization") token: String,
-        @Path("exhibitionId") exhibitionId: Int
+        @Path("exhibitionId") exhibitionId: Int,
+        @Query("page") page: Int
     ): Response<GetReviewsExhibitionResponse>
+
+    @GET("api/reviews/review/{reviewId}")
+    suspend fun getReview(
+        @Header("Authorization") token: String,
+        @Path("reviewId") reviewId: Int
+    ): Response<GetReviewResponse>
 
     @POST("/api/reviews")
     suspend fun postReview(

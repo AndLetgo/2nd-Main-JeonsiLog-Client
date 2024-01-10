@@ -1,22 +1,15 @@
 package com.example.jeonsilog.view.search
 
-import android.util.Log
 import androidx.core.view.isGone
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.UserSearchItem
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
-import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
 import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
 import com.example.jeonsilog.databinding.FragmentUserSearchBinding
-import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
-import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.viewmodel.SearchViewModel
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking

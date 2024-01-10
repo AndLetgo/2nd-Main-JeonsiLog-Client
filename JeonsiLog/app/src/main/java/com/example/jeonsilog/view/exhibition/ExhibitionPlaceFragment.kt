@@ -1,10 +1,13 @@
 package com.example.jeonsilog.view.exhibition
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
@@ -14,6 +17,9 @@ import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -25,12 +31,12 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 
     private var placePage = 0
     private var placeId = 0
+    private var hasNextPage = true
 
     override fun init() {
         placePage = 0
-        placeId = requireArguments().getInt("placeId")
-        Log.d("place", "init: placeId: $placeId")
-        binding.tvToolBarTitle.text = requireArguments().getString("placeName")
+        placeId = newPlaceId
+        binding.tvToolBarTitle.text = newPlaceName
         placeList = mutableListOf()
 
         exhibitionPlaceRvAdapter = ExhibitionPlaceRvAdapter(placeList, requireContext())
@@ -39,7 +45,13 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
 
         exhibitionPlaceRvAdapter.setOnItemClickListener(object :ExhibitionPlaceRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: GetPlacesInformationEntity, position: Int) {
-                exhibitionViewModel.addCurrentExhibitionId(data.exhibitionId)
+                if(exhibitionViewModel.currentExhibitionIds.value==null){
+                    exhibitionViewModel.setCurrentExhibitionIds(data.exhibitionId)
+                    Log.d("TAG", "onItemClick: current exhibiton null")
+                }else{
+                    exhibitionViewModel.addCurrentExhibitionId(data.exhibitionId)
+                    Log.d("TAG", "onItemClick: add current exhibiton")
+                }
                 Log.d("TAG", "place -> exhibition: ${exhibitionViewModel.currentExhibitionIds}")
                 Navigation.findNavController(v).navigate(R.id.action_exhibitionPlaceFragment_to_exhibitionFragment)
             }
@@ -54,7 +66,7 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
                 super.onScrolled(recyclerView, dx, dy)
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                 val totalCount = recyclerView.adapter?.itemCount?.minus(2)
-                if(rvPosition == totalCount){
+                if(rvPosition == totalCount && hasNextPage){
                     setExhibitionRvByPage(totalCount)
                 }
             }
@@ -66,12 +78,31 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
         runBlocking(Dispatchers.IO) {
             val response = PlaceRepositoryImpl().getPlaces(encryptedPrefs.getAT(),placeId,placePage)
             if(response.isSuccessful && response.body()!!.check){
-                placeList.addAll(response.body()!!.informationEntity)
-                addItemCount = response.body()!!.informationEntity.size
+                placeList.addAll(response.body()!!.informationEntity.data)
+                addItemCount = response.body()!!.informationEntity.data.size
+                hasNextPage = response.body()!!.informationEntity.hasNextPage
             }
         }
         val startPosition = totalCount + 1
         exhibitionPlaceRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
         placePage++
+    }
+
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("TAG", "handleOnBackPressed: extraActivityReference: $extraActivityReference ")
+                if(extraActivityReference ==3 && exhibitionViewModel.currentExhibitionIds.value?.size!! <1){
+                    activity?.finish()
+                }else{
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 }

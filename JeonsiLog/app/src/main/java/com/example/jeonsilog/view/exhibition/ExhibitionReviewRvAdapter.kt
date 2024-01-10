@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
+import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 
 class ExhibitionReviewRvAdapter(
@@ -29,7 +30,7 @@ class ExhibitionReviewRvAdapter(
             binding.tvReviewContent.text = item.contents
             binding.brbExhibitionReviewRating.rating = item.rate.toFloat()
             binding.tvReplyCount.text = "${context.getString(R.string.exhibition_reply)} ${item.numReply}"
-//            binding.tvReviewDate.text = item.
+            binding.tvReviewDate.text = DateUtil().formatElapsedTime(item.createdDate)
             if(binding.ivProfile!=null){
                 Glide.with(context)
                     .load(item.imgUrl)
@@ -85,5 +86,10 @@ class ExhibitionReviewRvAdapter(
     fun removeItem(position: Int){
         reviewList.removeAt(position)
         notifyItemRemoved(position)
+    }
+
+    fun replaceItem(review: GetReviewsExhibitionInformationEntity, position: Int){
+        reviewList[position] = review
+        notifyItemChanged(position)
     }
 }

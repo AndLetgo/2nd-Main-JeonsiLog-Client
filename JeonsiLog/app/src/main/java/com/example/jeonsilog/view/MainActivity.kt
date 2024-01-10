@@ -39,6 +39,7 @@ import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -155,13 +156,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         return super.dispatchTouchEvent(event)
     }
 
-
-    fun loadExtraActivity(type:Int, newExhibitionId:Int){
+    fun loadExtraActivity(type:Int, newTargetId:Int){
         extraActivityReference = type
-        exhibitionId = newExhibitionId
+        when(type){
+            0 -> exhibitionId = newTargetId
+            1 -> newReviewId = newTargetId
+        }
         val intent = Intent(this, ExtraActivity::class.java)
         startActivity(intent)
-
     }
 
     fun checkPermission(): Boolean{

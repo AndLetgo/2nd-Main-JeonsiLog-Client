@@ -25,6 +25,7 @@
         app:elevation="@dimen/shadow_2"
         app:labelVisibilityMode="unlabeled"
         app:itemBackground="@null"
+        app:itemIconSize="@dimen/item_48"
         app:itemIconTint="@drawable/selector_bn_color"
         app:menu="@menu/menu_bn_main"
 
