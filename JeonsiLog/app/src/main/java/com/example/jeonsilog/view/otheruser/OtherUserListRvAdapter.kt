@@ -16,12 +16,15 @@ import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingInformation
 import com.example.jeonsilog.databinding.ItemOtherUserListFollowBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.view.exhibition.ExtraActivity
+import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowerUpdate
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowingUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import java.lang.ClassCastException
 import java.lang.IllegalArgumentException
 
 class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -84,12 +87,20 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
             }
 
             binding.ivOtherUserListFollowProfile.setOnClickListener{
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
+
             }
 
             binding.tvOtherUserListFollowNick.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
-
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
         }
     }
@@ -154,12 +165,19 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
             }
 
             binding.ivOtherUserListFollowProfile.setOnClickListener{
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
 
             binding.tvOtherUserListFollowNick.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
-
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
         }
     }

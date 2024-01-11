@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.mypage
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -17,6 +18,7 @@ import com.example.jeonsilog.databinding.BottomSheetMypageProfileEditBinding
 import com.example.jeonsilog.databinding.FragmentMyPageBinding
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.view.otheruser.OtherUserListFragment
 import com.example.jeonsilog.viewmodel.MyPageViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -39,13 +41,21 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     private val viewModel: MyPageViewModel by viewModels()
     private var _bsBinding: BottomSheetMypageProfileEditBinding? = null
     private val bsBinding get() = _bsBinding
-
+    private lateinit var nowActivityName :String
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        nowActivityName=context.javaClass.simpleName
+    }
     override fun init() {
+        try{
+            (activity as MainActivity).setStateBn(true)
+        }catch (e:ClassCastException){
+
+        }
         viewModel.getMyInfo()
         binding.vm = viewModel
         binding.lifecycleOwner = requireActivity()
 
-        (activity as MainActivity).setStateBn(true)
 
         isRefresh.observe(this){
             if(it){
@@ -98,24 +108,56 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         }
 
         binding.ibMypageSetting.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, MyPageSettingFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
+            if(nowActivityName == "MainActivity"){
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fl_main, MyPageSettingFragment())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+            if(nowActivityName == "ExtraActivity"){
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fcv_nav_frame, MyPageSettingFragment())
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         }
 
         binding.tvMypageFollow.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, MyPageListFragment(0))
-            transaction.addToBackStack(null)
-            transaction.commit()
+            if(nowActivityName == "MainActivity"){
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+
+                transaction.replace(R.id.fl_main, MyPageListFragment(0))
+
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+            if(nowActivityName == "ExtraActivity"){
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+
+                transaction.replace(R.id.fcv_nav_frame, MyPageListFragment(0))
+
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         }
 
         binding.tvMypageFollowing.setOnClickListener {
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_main, MyPageListFragment(1))
-            transaction.addToBackStack(null)
-            transaction.commit()
+            if(nowActivityName == "MainActivity"){
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+
+                transaction.replace(R.id.fl_main, MyPageListFragment(1))
+
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+            if(nowActivityName == "ExtraActivity"){
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+
+                transaction.replace(R.id.fcv_nav_frame, MyPageListFragment(1))
+
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         }
     }
     private fun showCustomDialog() {

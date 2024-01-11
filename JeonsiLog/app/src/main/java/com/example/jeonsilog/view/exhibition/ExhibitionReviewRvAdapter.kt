@@ -89,7 +89,9 @@ class ExhibitionReviewRvAdapter(
     }
 
     fun replaceItem(review: GetReviewsExhibitionInformationEntity, position: Int){
-        reviewList[position] = review
-        notifyItemChanged(position)
+        if(reviewList.size>0){
+            reviewList[position] = review
+            notifyItemChanged(position)
+        }
     }
 }

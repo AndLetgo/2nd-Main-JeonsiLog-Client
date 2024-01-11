@@ -21,8 +21,11 @@ import kotlinx.coroutines.runBlocking
 
 class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout.fragment_my_page_setting) {
     override fun init() {
-        val mainActivity = activity as MainActivity
-        mainActivity.setStateBn(false)
+        try{
+            (activity as MainActivity).setStateBn(false)
+        }catch (e:ClassCastException){
+
+        }
 
         binding.switchMypageSettingFollowing.isChecked = encryptedPrefs.getIsRecvFollowing()
         binding.switchMypageSettingActivity.isChecked = encryptedPrefs.getIsRecvActive()

@@ -191,7 +191,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                 val totalCount = recyclerView.adapter?.itemCount?.minus(1)
                 if(rvPosition == totalCount && hasNextPage){
-                    Log.d("review ", "onScrolled: ")
                     setReviewRvByPage(totalCount)
                 }
             }

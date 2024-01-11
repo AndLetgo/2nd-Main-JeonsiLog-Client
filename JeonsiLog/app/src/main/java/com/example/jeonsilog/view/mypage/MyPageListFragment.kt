@@ -11,7 +11,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 class MyPageListFragment(private val startTab: Int): BaseFragment<FragmentMyPageListBinding>(R.layout.fragment_my_page_list) {
 
     override fun init() {
-        (activity as MainActivity).setStateBn(false)
+        try{
+            (activity as MainActivity).setStateBn(false)
+        }catch (e:ClassCastException){
+
+        }
 
         isRefresh.observe(this){
             if(it){

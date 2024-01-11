@@ -17,6 +17,7 @@ import com.example.jeonsilog.databinding.ItemMyPageRatingBinding
 import com.example.jeonsilog.databinding.ItemMyPageReviewBinding
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.CoroutineScope
@@ -32,8 +33,11 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.rbMypageRatingItemRating.rating = data.rate.toFloat()
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity(0, data.exhibitionId)
-
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
+                }
             }
         }
     }
@@ -49,7 +53,11 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             binding.tvMypageReviewContent.text = data.contents
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity( 0, data.exhibitionId)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
+                }
             }
         }
     }
@@ -99,7 +107,11 @@ class MyPageRvAdapter<T>(private val list: MutableList<T>, private val type: Int
             }
 
             itemView.setOnClickListener {
-                (context as MainActivity).loadExtraActivity(0, data.exhibitionId)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).loadExtraActivity(type = 0, newTargetId = data.exhibitionId)
+                }
             }
         }
     }
