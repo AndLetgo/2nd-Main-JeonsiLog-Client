@@ -9,6 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/ll_user_profile_area"
             android:layout_width="wrap_content"
@@ -36,8 +37,6 @@
                 android:gravity="center_vertical" />
         </LinearLayout>
 
-
-
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
@@ -47,8 +46,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/ll_user_profile_area"
             android:layout_marginTop="17dp"
-            android:layout_marginStart="@dimen/margin_12"
-            android:text="@string/date_day" />
+            android:layout_marginStart="@dimen/margin_12"/>
 
         <ImageButton
             android:id="@+id/ib_menu"
@@ -65,7 +63,6 @@
             android:id="@+id/tv_reply_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="content"
             style="@style/M_regular"
             android:textColor="@color/gray_dark"
             app:layout_constraintTop_toBottomOf="@id/ll_user_profile_area"

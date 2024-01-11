@@ -16,6 +16,7 @@ import com.example.jeonsilog.data.remote.dto.place.GetPlacesInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionPlaceBinding
 import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
@@ -34,6 +35,13 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
     private var hasNextPage = true
 
     override fun init() {
+        GlobalApplication.isRefresh.observe(this){
+            if(it){
+                (activity as ExtraActivity).refreshFragment(R.id.exhibitionFragment)
+                GlobalApplication.isRefresh.value = false
+            }
+        }
+
         placePage = 0
         placeId = newPlaceId
         binding.tvToolBarTitle.text = newPlaceName

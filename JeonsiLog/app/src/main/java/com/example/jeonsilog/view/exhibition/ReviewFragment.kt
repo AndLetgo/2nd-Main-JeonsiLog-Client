@@ -29,6 +29,7 @@ import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -45,6 +46,13 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private var hasNextPage = true
 
     override fun init() {
+        isRefresh.observe(this){
+            if(it){
+                (activity as ExtraActivity).refreshFragment(R.id.reviewFragment)
+                isRefresh.value = false
+            }
+        }
+
         binding.vm = exhibitionViewModel
         if(getReviewInfo(newReviewId)!=null){
             reviewInfo = getReviewInfo(newReviewId)!!
@@ -52,7 +60,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         }else{
             //알림에서 넘어왔는데 해당 감상평 삭제 됐을 때
             if(extraActivityReference==1){
-                Toast.makeText(requireContext(), "해당하는 감상평이 없습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_notification_go_review_exception), Toast.LENGTH_SHORT).show()
                 activity?.finish()
             }
         }

@@ -34,6 +34,7 @@
             android:paddingTop="@dimen/margin_16"
             android:layout_marginHorizontal="@dimen/margin_24"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
+
             <LinearLayout
                 android:id="@+id/ll_user_profile_area"
                 android:layout_width="@dimen/item_0"
@@ -94,7 +95,6 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/ll_user_profile_area"
                 android:layout_marginTop="@dimen/margin_12"
-                android:text="특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작품이 인상 깊었습니다. 특이한 작품도 많았고 보는 내내 즐"
                 style="@style/M_regular"
                 android:textColor="@color/gray_dark"/>
             <TextView

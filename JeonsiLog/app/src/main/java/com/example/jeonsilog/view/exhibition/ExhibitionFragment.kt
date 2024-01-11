@@ -30,13 +30,17 @@ import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newPlaceName
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
@@ -55,7 +59,15 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private var hasNextPage = true
     private lateinit var preDrawListener: OnPreDrawListener
 
+
     override fun init() {
+        isRefresh.observe(this){
+            if(it){
+                (activity as ExtraActivity).refreshFragment(R.id.exhibitionFragment)
+                isRefresh.value = false
+            }
+        }
+
         val navController = Navigation.findNavController(binding.llExhibitionPlace)
         when(extraActivityReference){
             1 -> {
@@ -171,6 +183,8 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 check = !check
             }
         }
+
+        //recyclerView 페이징 처리
         binding.rvExhibitionReview.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -363,6 +377,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     }
     private fun setReviewRvByPage(totalCount:Int){
         var addItemCount = 0
+        Log.d("review", "setReviewRvByPage: review Page: $reviewPage")
         runBlocking(Dispatchers.IO) {
             val response = ReviewRepositoryImpl().getReviews(encryptedPrefs.getAT(), thisExhibitionId, reviewPage)
             if(response.isSuccessful && response.body()!!.check){
@@ -373,7 +388,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 null
             }
         }
-//        val startPosition = totalCount
         exhibitionRvAdapter.notifyItemRangeInserted(totalCount, addItemCount)
         reviewPage++
     }
