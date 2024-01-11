@@ -47,17 +47,21 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
         })
 
         binding.btnConfirm.setOnClickListener {
+            var isSuccess = false
             runBlocking(Dispatchers.IO) {
                 val body = PostReviewRequest(thisExhibitionId, binding.etWritingReview.text.toString())
                 val response = ReviewRepositoryImpl().postReview(encryptedPrefs.getAT(), body)
                 if(response.isSuccessful && response.body()!!.check){
                     Log.d(TAG, "init: post successful")
+                    isSuccess = true
                 }else{
                     null
                 }
             }
-            exhibitionViewModel.setUserReview(binding.etWritingReview.text.toString())
-            Navigation.findNavController(it).popBackStack()
+            if(isSuccess){
+                exhibitionViewModel.setUserReview(binding.etWritingReview.text.toString())
+                Navigation.findNavController(it).popBackStack()
+            }
         }
 
         viewModel.writingCount.observe(this){

@@ -62,9 +62,18 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
 
         //empty poster 신고
         binding.btnReportPosterEmpty.setOnClickListener {
+            var isSuccess = false
             runBlocking(Dispatchers.IO){
                 val body = PostReportRequest("POSTER", thisExhibitionId)
-                ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
+                val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
+                if(response.isSuccessful && response.body()!!.check){
+                    isSuccess = true
+                }
+            }
+            if(isSuccess){
+                Toast.makeText(requireContext(), getString(R.string.toast_poster_report_success), Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), getString(R.string.toast_poster_report_failure), Toast.LENGTH_SHORT).show()
             }
         }
 

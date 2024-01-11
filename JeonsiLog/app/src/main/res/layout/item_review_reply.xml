@@ -14,7 +14,7 @@
             android:id="@+id/iv_user_profile"
             android:layout_width="@dimen/item_24"
             android:layout_height="@dimen/item_24"
-            android:src="@drawable/shape_round_iv"
+            android:src="@drawable/illus_default_profile"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="@dimen/margin_16"
@@ -25,7 +25,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/M_regular"
-            android:text="UserName"
             android:textColor="@color/gray_dark"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_user_profile"
@@ -42,8 +41,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_user_name"
             android:layout_marginTop="17dp"
-            android:layout_marginStart="@dimen/margin_12"
-            android:text="@string/date_day" />
+            android:layout_marginStart="@dimen/margin_12"/>
 
         <ImageButton
             android:id="@+id/ib_menu"
@@ -60,7 +58,6 @@
             android:id="@+id/tv_reply_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="content"
             style="@style/M_regular"
             android:textColor="@color/gray_dark"
             app:layout_constraintTop_toBottomOf="@id/iv_user_profile"
