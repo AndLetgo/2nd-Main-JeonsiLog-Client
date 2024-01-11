@@ -10,7 +10,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class OtherUserListFragment(private val startTab: Int, private val otherUserId: Int, private val otherUserNick: String): BaseFragment<FragmentOtherUserListBinding>(R.layout.fragment_other_user_list) {
     override fun init() {
-        (activity as MainActivity).setStateBn(false)
+        try{
+            (activity as MainActivity).setStateBn(false)
+        }catch (e:ClassCastException){
+
+        }
+
 
         GlobalApplication.isRefresh.observe(this){
             if(it){

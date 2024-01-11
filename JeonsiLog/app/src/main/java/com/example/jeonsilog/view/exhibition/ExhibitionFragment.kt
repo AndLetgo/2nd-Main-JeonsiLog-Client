@@ -18,6 +18,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -170,6 +171,16 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 check = !check
             }
         }
+        binding.rvExhibitionReview.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+                if(rvPosition == totalCount && hasNextPage){
+                    setReviewRvByPage(totalCount)
+                }
+            }
+        })
     }
 
     private fun setBottomSheet(){

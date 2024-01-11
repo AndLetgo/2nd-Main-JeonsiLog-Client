@@ -95,7 +95,7 @@ class ExhibitionPlaceFragment : BaseFragment<FragmentExhibitionPlaceBinding>(
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 Log.d("TAG", "handleOnBackPressed: extraActivityReference: $extraActivityReference ")
-                if(extraActivityReference ==3 && exhibitionViewModel.currentExhibitionIds.value?.size!! <1){
+                if(extraActivityReference ==3 && (exhibitionViewModel.currentExhibitionIds.value == null || exhibitionViewModel.currentExhibitionIds.value?.size!! <1)){
                     activity?.finish()
                 }else{
                     isEnabled = false

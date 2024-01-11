@@ -21,6 +21,8 @@ import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformat
 import com.example.jeonsilog.databinding.FragmentReviewBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.view.mypage.MyPageFragment
+import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
@@ -98,6 +100,25 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         exhibitionViewModel.replyCount.observe(this){
             binding.tvReplyCount.text = getString(R.string.exhibition_reply_count, exhibitionViewModel.replyCount.value)
         }
+        binding.llUserProfileArea.setOnClickListener {
+            if(reviewInfo.userId == encryptedPrefs.getUI()){
+
+                val fragment = MyPageFragment()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fcv_nav_frame, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                val fragment = OtherUserFragment(reviewInfo.userId, reviewInfo.nickname)
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fcv_nav_frame, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+        }
+
+
     }
     private fun getReviewInfo(reviewId: Int): GetReviewsExhibitionInformationEntity?{
         var newReview:GetReviewsExhibitionInformationEntity? =null

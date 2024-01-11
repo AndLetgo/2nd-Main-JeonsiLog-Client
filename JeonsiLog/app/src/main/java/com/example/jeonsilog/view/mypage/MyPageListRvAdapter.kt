@@ -14,6 +14,7 @@ import com.example.jeonsilog.databinding.ItemMyPageListFollowBinding
 import com.example.jeonsilog.databinding.ItemMyPageListFollowingBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowerUpdate
@@ -82,11 +83,19 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowProfile.setOnClickListener{
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
         }
     }
@@ -113,11 +122,19 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowingProfile.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
         }
     }

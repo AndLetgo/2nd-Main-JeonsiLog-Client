@@ -34,25 +34,34 @@
             android:paddingTop="@dimen/margin_16"
             android:layout_marginHorizontal="@dimen/margin_24"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
-            <ImageView
-                android:id="@+id/iv_profile"
-                android:layout_width="@dimen/item_24"
-                android:layout_height="@dimen/item_24"
-                android:src="@drawable/shape_round_iv"
+            <LinearLayout
+                android:id="@+id/ll_user_profile_area"
+                android:layout_width="@dimen/item_0"
+                android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="@dimen/margin_2"/>
-            <TextView
-                android:id="@+id/tv_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="User"
-                style="@style/M_regular"
-                android:textColor="@color/gray_dark"
-                android:layout_marginStart="@dimen/margin_8"
                 android:layout_marginTop="@dimen/margin_2"
-                app:layout_constraintStart_toEndOf="@id/iv_profile"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@id/brb_exhibition_review"
+                >
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="@dimen/item_24"
+                    android:layout_height="@dimen/item_24"
+                    android:src="@drawable/shape_round_iv"
+                    />
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가가가가나다가나가난"
+                    style="@style/M_regular"
+                    android:textColor="@color/gray_dark"
+                    android:layout_marginStart="@dimen/margin_8"
+                    />
+
+            </LinearLayout>
+
             <com.willy.ratingbar.BaseRatingBar
                 android:id="@+id/brb_exhibition_review"
                 android:layout_width="wrap_content"
@@ -83,7 +92,7 @@
                 android:id="@+id/tv_review_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/iv_profile"
+                app:layout_constraintTop_toBottomOf="@id/ll_user_profile_area"
                 android:layout_marginTop="@dimen/margin_12"
                 android:text="특이한 작품도 많았고 보는 내내 즐거웠어요. 주변에도 소개해 줄 생각이에요. 특히 뎁스 작가의 작품이 인상 깊었습니다. 특이한 작품도 많았고 보는 내내 즐"
                 style="@style/M_regular"
