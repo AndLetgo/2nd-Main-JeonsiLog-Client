@@ -19,5 +19,8 @@ data class SearchPlacesInformationEntity(
     @SerializedName("placeId")
     val placeId: Int,
     @SerializedName("placeName")
-    val placeName: String
+    val placeName: String,
+    @SerializedName("placeAddress")
+    val placeAddress: String
+
 )
