@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.MyPageSettingViewmodel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -78,7 +80,7 @@
             app:track="@drawable/shape_switch_track"
             android:textOff=""
             android:textOn=""
-            android:checked="false"
+            android:checked="@{vm.isRecvFollowing()}"
 
             app:layout_constraintTop_toTopOf="@id/tv_mypage_setting_following"
             app:layout_constraintBottom_toBottomOf="@id/tv_mypage_setting_following"
@@ -106,7 +108,7 @@
             app:track="@drawable/shape_switch_track"
             android:textOff=""
             android:textOn=""
-            android:checked="false"
+            android:checked="@{vm.isRecvActive()}"
 
             app:layout_constraintTop_toTopOf="@id/tv_mypage_setting_activity"
             app:layout_constraintBottom_toBottomOf="@id/tv_mypage_setting_activity"

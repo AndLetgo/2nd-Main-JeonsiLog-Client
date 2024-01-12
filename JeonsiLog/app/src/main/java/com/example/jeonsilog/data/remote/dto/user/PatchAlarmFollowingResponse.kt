@@ -12,6 +12,6 @@ data class PatchAlarmFollowingResponse(
 data class PatchAlarmFollowingInformation(
     @SerializedName("userId")
     val userId: Int,
-    @SerializedName("recvFollowing")
-    val recvFollowing: Boolean
+    @SerializedName("isRecvFollowing")
+    val isRecvFollowing: Boolean
 )
