@@ -25,6 +25,7 @@ class ExhibitionPlaceItemAdapter(private val context: Context, private val list:
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameTextView: TextView = view.findViewById(R.id.tv_exhibition_place_name)
+        val addressTextView: TextView = view.findViewById(R.id.tv_exhibition_place_address)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,6 +40,13 @@ class ExhibitionPlaceItemAdapter(private val context: Context, private val list:
             .into(holder.itemView.findViewById(R.id.iv_exhibition_place_img))
 
         holder.nameTextView.text = list[position].placeName
+        val words = list[position].placeAddress!!.split(" ")
+        // 앞의 2개의 단어 추출
+        if (words.size >= 2) {
+            val firstWord = words[0]
+            val secondWord = words[1]
+            holder.addressTextView.text = "$firstWord $secondWord"
+        }
         holder.itemView.setOnClickListener {
             //전시장 id
             listener?.onItemClick(2, list[position])
