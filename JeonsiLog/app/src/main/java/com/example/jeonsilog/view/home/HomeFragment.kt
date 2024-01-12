@@ -30,7 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             }
         })
 
-        setExhibitionRvByPage(0)
+        //setExhibitionRvByPage(0)
 
         //recyclerView 페이징 처리
         binding.rvHomeExhibition.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -39,7 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                 val totalCount = recyclerView.adapter?.itemCount?.minus(2)
                 if(rvPosition == totalCount){
-                    setExhibitionRvByPage(totalCount)
+                    //setExhibitionRvByPage(totalCount)
                 }
             }
         })

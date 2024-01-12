@@ -23,21 +23,13 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     //FCM 메시지를 수신했을 때 호출
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // 메시지가 데이터 페이로드를 포함하는 경우에는 이를 처리하고, 긴 작업이 필요한지 확인하여 작업을 예약하거나 즉시 처리
+        Log.d("onMessageReceivedRTag", "Message data payload: ${remoteMessage}")
+        sendNotification(remoteMessage)
+        if (needsToBeScheduled()) {
+            // For long-running tasks (10 seconds or more) use WorkManager.
+            scheduleJob()
+        } else {
 
-        if (remoteMessage.data.isNotEmpty()) {
-            Log.d("myTag", "Message data payload: ${remoteMessage.data}")
-
-            // Check if data needs to be processed by long running job
-            if (needsToBeScheduled()) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob()
-            } else {
-
-            }
-        }
-        remoteMessage.notification?.let {
-            Log.d("myTag", "Message Notification Body: ${it}")
-            sendNotification(it!!)
         }
     }
     // [END receive_message]
@@ -63,9 +55,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         // [END dispatch_job]
     }
 
-    private fun handleNow() {
-        Log.d(TAG, "Short lived task is done.")
-    }
+
 
     private fun sendRegistrationToServer(token: String?) {
         // TODO: Implement this method to send token to your app server.
@@ -73,7 +63,24 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     }
 
     //알림을 생성하고 표시
-    private fun sendNotification(message: RemoteMessage.Notification) {
+    private fun sendNotification(remoteMessage: RemoteMessage) {
+        if (remoteMessage.notification != null) {//fcm 형식이 notification인경우
+            // Handle notification payload.
+            val title = remoteMessage.notification?.title
+            val body = remoteMessage.notification?.body
+            // You can customize the notification using title and body.
+            showNotification(title, body)
+        } else if (remoteMessage.data.isNotEmpty()) {//fcm 형식이 data인 경우
+            // Handle data payload.
+            val dataTitle = remoteMessage.data["title"]
+            val dataBody = remoteMessage.data["body"]
+            // You can customize the notification using dataTitle and dataBody.
+            showNotification(dataTitle, dataBody)
+        }
+    }
+
+    private fun showNotification(title: String?, body: String?) {
+        //알림페이지로 이동
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val requestCode = 0
@@ -86,15 +93,14 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
         val channelId = "fcm_default_channel"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.fcm_logo_jeonsilog) // 아이콘 지정하는 부분
-            .setContentTitle(message.title)
-            .setContentText(message.body)
+            .setSmallIcon(R.drawable.fcm_logo_jeonsilog)
+            .setContentTitle(title)
+            .setContentText(body)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntent) // 알림을 클릭했을 때 액티비티를 시작
+            .setContentIntent(pendingIntent)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        //알림 채널을 생성하여 적절한 중요도를 지정
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
@@ -107,7 +113,6 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         val notificationId = 0
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
-
     companion object {
         private const val TAG = "MyFirebaseMsgService"
     }
