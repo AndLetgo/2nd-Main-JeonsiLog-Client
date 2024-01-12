@@ -27,7 +27,6 @@
             android:layout_width="@dimen/item_0"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16"
-            android:text="전시회명"
             android:textColor="@color/basic_black"
             app:layout_constraintBottom_toTopOf="@+id/tv_exhibition_date"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +41,6 @@
             android:layout_width="@dimen/item_0"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16"
-            android:text="date"
             android:textColor="@color/gray_medium"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,7 +69,6 @@
                 android:elevation="@dimen/shadow_2"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="시작전"
                 android:textColor="@color/basic_point"
                 android:layout_margin="@dimen/margin_2" />
 
@@ -87,7 +84,6 @@
                 android:elevation="@dimen/shadow_2"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="무료"
                 android:textColor="@color/basic_point" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

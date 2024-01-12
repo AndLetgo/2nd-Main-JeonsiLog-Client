@@ -5,13 +5,24 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentMyPageListBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MyPageListFragment(private val startTab: Int): BaseFragment<FragmentMyPageListBinding>(R.layout.fragment_my_page_list) {
 
     override fun init() {
-        val mActivity = activity as MainActivity
-        mActivity.setStateBn(true)
+        try{
+            (activity as MainActivity).setStateBn(false)
+        }catch (e:ClassCastException){
+
+        }
+
+        isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(MyPageListFragment(startTab))
+                isRefresh.value = false
+            }
+        }
 
         binding.tvMypageListNick.text = encryptedPrefs.getNN()
 

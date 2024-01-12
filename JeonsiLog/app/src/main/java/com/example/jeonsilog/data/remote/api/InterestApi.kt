@@ -9,11 +9,13 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface InterestApi {
     @GET("/api/interest")
     suspend fun getInterest(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
+        @Query("page") page: Int
     ): Response<GetInterestResponse>
 
     @POST("/api/interest/{exhibitionId}")

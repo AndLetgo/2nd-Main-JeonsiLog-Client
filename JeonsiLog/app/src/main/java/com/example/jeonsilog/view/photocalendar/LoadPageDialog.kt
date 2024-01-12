@@ -19,29 +19,47 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
+import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.databinding.ViewLoadPageDialogBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
-import com.example.jeonsilog.view.search.ExhibitionInfoItemAdapter
-import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
-import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import java.time.LocalDate
 
 
-class LoadPageDialog(private var selectedDate: LocalDate,private val listener: CommunicationListener) : DialogFragment() {
+class LoadPageDialog(private var selectedDate: LocalDate,private val listener: CommunicationListener,private var myEditText:String?) : DialogFragment() {
     private var _binding: ViewLoadPageDialogBinding? = null
     private val binding get() = _binding!!
-
+    val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
+    private lateinit var loadPageRvAdapter: LoadPageRvAdapter
+    private var loadPageRvList = mutableListOf<SearchInformationEntity>()
+    private var exhibitionPage = 0
+    private var hasNextPage = true
+    private var edittext=""
+    var addItemCount = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = ViewLoadPageDialogBinding.inflate(inflater, container, false)
-
+        isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(LoadPageDialog(selectedDate,listener,myEditText))
+                isRefresh.value = false
+            }
+        }
         return binding.root
     }
 
@@ -60,6 +78,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // 다이얼로그의 배경을 투명하게 설정
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.WHITE))
 
@@ -86,11 +105,32 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         binding.root.layoutParams = params
         binding.ivRecordDelete.isGone=true
 
+
+
+
+
+
+        binding.rvLoadPage.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+                if(rvPosition == totalCount && hasNextPage){
+                    val startPosition = totalCount + 1
+                    loadPageRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
+                    setExhibitionRvByPage(edittext)
+
+                }
+            }
+        })
+
+
         setEditBoxDeleteBt()
         setOnEditorActionListener()
+
+
         showKeyboard()
-
-
     }
 
     fun setOnEditorActionListener(){
@@ -99,17 +139,78 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
             ) {
                 // 키보드의 완료 버튼이 눌렸을 때 수행할 동작
-                var enteredText = binding.etLoadPage.text.toString()
-                if(enteredText.isBlank()) {
+                myEditText = binding.etLoadPage.text.toString()
+
+                if(myEditText!!.isBlank()) {
                     Toast.makeText(context, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
+
+                }else if(regexPattern.containsMatchIn(myEditText!!)&&myEditText!!.length<=2){
+                    Toast.makeText(context, "해당 검색어는 검색할수 없어요", Toast.LENGTH_SHORT).show()
                 }else{
-                    setLayoutView(enteredText)
+                    loadPageRvList = mutableListOf<SearchInformationEntity>()
+                    exhibitionPage=0
+                    edittext= myEditText as String
+                    setExhibitionRvByPage(edittext)
+                    if(loadPageRvList.isEmpty()){
+                        checkEmptyListTrue()
+                    }else{
+                        checkEmptyListFalse()
+                    }
+                    loadPageRvAdapter = LoadPageRvAdapter(requireContext(),loadPageRvList,selectedDate,listener,this@LoadPageDialog)
+                    binding.rvLoadPage.adapter = loadPageRvAdapter
+                    binding.rvLoadPage.layoutManager = LinearLayoutManager(requireContext())
                     hideSoftKeyboard()
                 }
                 return@setOnEditorActionListener true
             }
             false
         }
+
+    }
+    private fun setExhibitionRvByPage(edittext:String){
+
+        runBlocking(Dispatchers.IO) {
+            var response: Response<GetCalendarExhibitionResponse> = ExhibitionRepositoryImpl().searchCalendarExhibition(encryptedPrefs.getAT(),edittext,exhibitionPage)
+            if(response.isSuccessful && response.body()!!.check){
+
+                val searchExhibitionResponse = response.body()
+                val temp = searchExhibitionResponse!!.information.data.listIterator()
+                while (temp.hasNext()){
+                    val response02=ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(),temp.next().exhibitionId)
+                    if(response02.isSuccessful && response02.body()!!.check){
+                        val data = response02.body()!!.information
+                        loadPageRvList.add(SearchInformationEntity(
+                            exhibitionId = data.exhibitionId,
+                            exhibitionName = data.exhibitionName,
+                            priceKeyword = data.priceKeyword,
+                            operatingKeyword = data.operatingKeyword,
+                            imageUrl = data.imageUrl,
+                            place = SearchPlaceEntity(
+                                placeId = data.place.placeId,
+                                placeName = data.place.placeName ?: "",
+                                placeAddress = data.place.address ?: ""
+                            )
+                        ))
+                    }
+                }
+
+                addItemCount = response.body()!!.information.data.size
+                hasNextPage = response.body()!!.information.hasNextPage
+                CoroutineScope(Dispatchers.Main).launch{
+
+                    Log.d("loadPageRvList", "checkEmptyListTrue: ")
+
+                }
+
+            }else{
+                CoroutineScope(Dispatchers.Main).launch {
+
+                    Log.d("loadPageRvList", "checkEmptyListFalse: ")
+                }
+            }
+        }
+
+        exhibitionPage++
 
     }
     fun setEditBoxDeleteBt(){
@@ -137,34 +238,6 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         binding.ivRecordDelete.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    fun setLayoutView(edittext:String){
-
-        //리사이클러뷰 제어
-        binding.rvLoadPage.layoutManager = LinearLayoutManager(requireContext())
-        var adapter: LoadPageRvAdapter?
-        var list: List<SearchInformationEntity>?
-        runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().searchExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,0)
-            if(response.isSuccessful && response.body()!!.check){
-                val searchExhibitionResponse = response.body()
-                list=searchExhibitionResponse?.informationEntity
-            }
-            else{
-                val searchExhibitionResponse = response.body()
-                list=searchExhibitionResponse?.informationEntity
-
-            }
-        }
-        if (!list.isNullOrEmpty()){
-            adapter = context?.let { LoadPageRvAdapter(it,edittext,list!!.toMutableList(),selectedDate,listener,this) }
-            checkEmptyListFalse()
-        }
-        else{
-            adapter =LoadPageRvAdapter(requireContext(),edittext,list?.toMutableList() ?: mutableListOf(),selectedDate,listener,this)
-            checkEmptyListTrue()
-        }
-        binding.rvLoadPage.adapter = adapter
-    }
 
     private fun hideSoftKeyboard() {
         val imm =
@@ -177,7 +250,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
             binding.etLoadPage.requestFocus()
             val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(binding.etLoadPage, InputMethodManager.SHOW_IMPLICIT)
-        }, 130)
+        }, 200)
 
     }
     override fun onDestroyView() {

@@ -35,15 +35,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/M_medium"
-                android:text="tittitletitletitetitletitletetitletitle"
-                android:textColor="@color/basic_black" />
+                android:textColor="@color/basic_black"
+                android:maxLines="2"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/tv_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/S_regular"
-                android:text="addressaddressaddressaddressaddr"
                 android:textColor="@color/gray_medium"
                 android:layout_marginTop="@dimen/margin_4" />
 
@@ -52,7 +52,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/S_regular"
-                android:text="placeplacaceplaceplaceplaceplace"
                 android:textColor="@color/gray_medium" />
 
             <LinearLayout

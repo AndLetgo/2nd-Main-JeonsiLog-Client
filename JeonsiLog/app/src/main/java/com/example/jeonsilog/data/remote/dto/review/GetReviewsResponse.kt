@@ -6,17 +6,19 @@ data class GetReviewsResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: GetReviewsInformationEntity
+    val information: GetReviewsInformation
 )
 
-data class GetReviewsInformationEntity(
+data class GetReviewsInformation(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
     @SerializedName("numReview")
     val numReview: Int,
     @SerializedName("data")
-    val dataEntity: List<GetReviewsDataEntity>
+    val data: List<GetReviewsEntity>
 )
 
-data class GetReviewsDataEntity(
+data class GetReviewsEntity(
     @SerializedName("reviewId")
     val reviewId: Int,
     @SerializedName("exhibitionId")

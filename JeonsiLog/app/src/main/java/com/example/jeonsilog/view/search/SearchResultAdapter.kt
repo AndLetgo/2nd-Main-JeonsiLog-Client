@@ -1,19 +1,14 @@
 package com.example.jeonsilog.view.search
 
 import android.util.Log
-import android.widget.Toast
-import androidx.browser.trusted.TokenStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.jeonsilog.data.remote.dto.ExhibitionInfoItem
-import com.example.jeonsilog.data.remote.dto.ExhibitionPlaceItem
-import com.example.jeonsilog.data.remote.dto.UserSearchItem
 import com.example.jeonsilog.viewmodel.SearchViewModel
 
 
-class SearchResultAdapter(fm: FragmentManager, lifecycle: Lifecycle, itemstr:String,initialTabPosition: Int,private var viewModel: SearchViewModel) : FragmentStateAdapter(fm, lifecycle) {
+class SearchResultAdapter(fm: FragmentManager, lifecycle: Lifecycle, itemstr:String) : FragmentStateAdapter(fm, lifecycle) {
     var edittext=itemstr
 
     override fun getItemCount(): Int = 3 // 탭의 개수

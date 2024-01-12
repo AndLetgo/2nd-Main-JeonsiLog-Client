@@ -1,26 +1,19 @@
 package com.example.jeonsilog.view.photocalendar
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.PhotoCalendarItem
 import com.example.jeonsilog.data.remote.dto.calendar.GetPhotoInformation
-import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
-import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDate
 import java.time.Month
-import java.time.format.DateTimeFormatter
 
 
 class PhotoCalendatAdapter(private val dayList: ArrayList<String>,

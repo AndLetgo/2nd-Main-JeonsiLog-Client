@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
@@ -33,17 +35,11 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
             if(item.place.placeAddress != null){
                 val addressList = item.place.placeAddress.split(" ")
                 address = "${addressList[0]} ${addressList[1]}"
-                binding.tvAddress.visibility = View.VISIBLE
                 binding.tvAddress.text = address
-            }else{
-                binding.tvAddress.isGone = true
             }
 
             if(item.place.placeName !=null){
-                binding.tvPlace.visibility = View.VISIBLE
                 binding.tvPlace.text = item.place.placeName
-            }else{
-                binding.tvPlace.isGone = true
             }
 
             var operatingKeyword = ""
@@ -54,7 +50,7 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
             var priceKeyword = ""
             when(item.priceKeyword){
                 "FREE" -> priceKeyword = context.getString(R.string.keyword_free)
-                else -> binding.tvKeywordSecond.isGone = true
+                else -> binding.tvKeywordSecond.visibility = View.INVISIBLE
             }
 
             if(operatingKeyword!=""){
@@ -62,17 +58,25 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
                 binding.tvKeywordSecond.text = priceKeyword
             }else{
                 if(priceKeyword!=""){
-                    binding.tvKeywordSecond.isGone = true
+                    binding.tvKeywordSecond.visibility = View.INVISIBLE
                     binding.tvKeywordFirst.text = priceKeyword
                 }else {
-                    binding.tvKeywordFirst.isGone
+                    binding.tvKeywordFirst.visibility = View.INVISIBLE
                 }
             }
 
-            Glide.with(context)
-                .load(item.imageUrl)
-                .transform(CenterCrop(), RoundedCorners(16))
-                .into(binding.ivPoster)
+            if(item.imageUrl != null){
+                Glide.with(context)
+                    .load(item.imageUrl)
+                    .transform(CenterCrop(), RoundedCorners(16))
+                    .into(binding.ivPoster)
+            }else{
+                Glide.with(context)
+                    .load(R.drawable.illus_empty_poster)
+                    .transform(CenterInside(), RoundedCorners(16))
+                    .into(binding.ivPoster)
+            }
+
         }
     }
 
@@ -107,7 +111,7 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
 
                 if(position != RecyclerView.NO_POSITION){
                     holder.itemView.setOnClickListener {
-                        listener?.onItemClick(holder.itemView, homeRvList[position], position)
+                        listener?.onItemClick(holder.itemView, homeRvList[position-1], position)
                     }
                 }
             }

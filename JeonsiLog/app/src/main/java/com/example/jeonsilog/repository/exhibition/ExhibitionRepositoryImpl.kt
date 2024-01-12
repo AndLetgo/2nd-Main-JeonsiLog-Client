@@ -8,6 +8,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.GetPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetRandomPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
 import retrofit2.Response
 
@@ -76,6 +77,20 @@ class ExhibitionRepositoryImpl: ExhibitionRepository {
         body: PatchExhibitionRequest
     ): Response<OnlyMsgResponse> {
         val response = service.patchExhibition("Bearer $token", body)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun searchCalendarExhibition(
+        token: String,
+        searchWord: String,
+        page: Int
+    ): Response<GetCalendarExhibitionResponse> {
+        val response = service.searchCalendarExhibition("Bearer $token", searchWord,page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

@@ -64,7 +64,7 @@ class SingleFragment(val Position:Int) : Fragment(),
             list= response.body()!!.information
 
         } else {
-            list= response.body()!!.information
+            list= listOf<GetPhotoInformation>()
 
         }
         adapter = context?.let { PhotoCalendatAdapter(dayInMonthArray(selectedDate) ,this, it , list  , selectedDate) }
@@ -116,7 +116,7 @@ class SingleFragment(val Position:Int) : Fragment(),
     }
     //아이템 클릭 이벤트
     override fun onItemClick(itemDate: LocalDate) {
-        bottomSheetDialogFragment = LoadBottomDialog(itemDate,Position,this)
+        bottomSheetDialogFragment = LoadBottomDialog(itemDate,this)
         bottomSheetDialogFragment!!.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
         bottomSheetDialogFragment!!.setOnDismissListener(this)
         bottomSheetDialogFragment!!.show(childFragmentManager, bottomSheetDialogFragment!!.tag)

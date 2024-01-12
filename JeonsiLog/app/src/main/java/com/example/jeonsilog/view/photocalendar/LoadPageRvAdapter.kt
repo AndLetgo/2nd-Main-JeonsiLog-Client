@@ -15,6 +15,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromPosterRequest
 
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlideApp
@@ -28,8 +29,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class LoadPageRvAdapter(private val context: Context, private val edittext:String, private val list:MutableList <SearchInformationEntity>,private var selectedMonth: LocalDate,private val listener: CommunicationListener,private val dialog: LoadPageDialog) : RecyclerView.Adapter<LoadPageRvAdapter.ViewHolder>() {
-    var itemPage=0
+class LoadPageRvAdapter(
+    private val context: Context, private val list:List <SearchInformationEntity>,private var selectedMonth: LocalDate,private val listener: CommunicationListener,private val dialog: LoadPageDialog)
+    : RecyclerView.Adapter<LoadPageRvAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val exhibitionnameTextView: TextView = view.findViewById(R.id.tv_title)
         val exhibitionlocationTextView: TextView = view.findViewById(R.id.tv_address)
@@ -47,81 +49,68 @@ class LoadPageRvAdapter(private val context: Context, private val edittext:Strin
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (!list.isNullOrEmpty()){
-            val item = list[position]
-            //list.size가 position 보다 커야함
-            //list의 마지막요소가 아닌 마지막 전요소에서 비교
-            if (list.size>5){
-                if (list.size-4==position){
-                    itemPage+=1
-                    runBlocking(Dispatchers.IO) {
-                        val response = ExhibitionRepositoryImpl().searchExhibition(GlobalApplication.encryptedPrefs.getAT(),edittext,itemPage)
-                        if(response.isSuccessful && response.body()!!.check){
-                            val searchExhibitionResponse = response.body()
-                            list.addAll(searchExhibitionResponse?.informationEntity!!.toMutableList())
-                        }
-                    }
-                }
-            }
-            val unsplashUrl = item.imageUrl
-            val radiusDp = 4f
-            val radiusPx = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, radiusDp, context.resources.displayMetrics).toInt()
-            GlideApp.with(context)
-                .load(unsplashUrl)
-                .transform(CenterCrop(), RoundedCorners(radiusPx))
-                .into(holder.itemView.findViewById(R.id.iv_poster))
-            holder.exhibitionnameTextView.text =item.exhibitionName
-            if (item.place.placeAddress!=null){
-                val words = item.place.placeAddress.split(" ")
-                // 앞의 2개의 단어 추출
-                if (words.size >= 2) {
-                    val firstWord = words[0]
-                    val secondWord = words[1]
-                    holder.exhibitionlocationTextView.text =firstWord+" "+secondWord
-                }
-            }
-            else{
-                holder.exhibitionlocationTextView.isGone=true
-            }
+        Log.d("djakdkjaskjkdj", "$list: ")
+        val unsplashUrl = list[position].imageUrl
+        val radiusDp = 4f
+        val radiusPx = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, radiusDp, context.resources.displayMetrics).toInt()
+        GlideApp.with(context)
+            .load(unsplashUrl)
+            .transform(CenterCrop(), RoundedCorners(radiusPx))
+            .into(holder.itemView.findViewById(R.id.iv_poster))
 
-            holder.exhibitionplaceTextView.text = item.place.placeName
+        holder.exhibitionnameTextView.text =list[position].exhibitionName
 
-
-            if (item.operatingKeyword=="AFTER_DISPLAY"){
-                holder.exhibitiondateTextViewBefore.isGone=true
-                holder.exhibitiondateTextViewIng.isGone=true
-                Log.d("TAG", "$item.operatingKeyword: ")
-            }else if (item.operatingKeyword=="ON_DISPLAY"){
-                holder.exhibitiondateTextViewBefore.isGone=false
-                holder.exhibitiondateTextViewIng.isGone=true
-                Log.d("TAG", "$item.operatingKeyword: ")
-            }else{
-                holder.exhibitiondateTextViewBefore.isGone=true
-                holder.exhibitiondateTextViewIng.isGone=false
-                Log.d("TAG", "$item.operatingKeyword: ")
-            }
-            holder.exhibitionpriceTextViewFree.isGone = item.priceKeyword=="PAY"
-
-            //셀아이템 터치 관련 처리
-            holder.itemView.setOnClickListener{
-                //현재 날짜 : selectedDate
-                //처리해야할것 01 : 존재하지 않으면 그냥 추가
-                runBlocking(Dispatchers.IO) {
-                    val body= PostPhotoFromPosterRequest(monthYearFromDate(selectedMonth),item.imageUrl)
-                    val response = CalendarRepositoryImpl().postPhotoFromPoster(encryptedPrefs.getAT(),body)
-                    Log.d("tag", "$response")
-                    if(response.isSuccessful && response.body()!!.check){
-                        Log.d("Upload", "Image uploaded successfully")
-
-                    } else {
-                        Log.e("Upload", "Image upload failed")
-                    }
-                }
-                listener.onRecyclerViewItemClick(position)
-                dialog?.dismiss()
+        if (list[position].place.placeAddress!=null){
+            val words = list[position].place.placeAddress!!.split(" ")
+            // 앞의 2개의 단어 추출
+            if (words.size >= 2) {
+                val firstWord = words[0]
+                val secondWord = words[1]
+                holder.exhibitionlocationTextView.text =firstWord+" "+secondWord
             }
         }
+        else{
+            holder.exhibitionlocationTextView.isGone=true
+        }
+
+        holder.exhibitionplaceTextView.text = list[position].place.placeName
+
+
+        if (list[position].operatingKeyword=="AFTER_DISPLAY"){
+            holder.exhibitiondateTextViewBefore.isGone=true
+            holder.exhibitiondateTextViewIng.isGone=true
+
+        }else if (list[position].operatingKeyword=="ON_DISPLAY"){
+            holder.exhibitiondateTextViewBefore.isGone=false
+            holder.exhibitiondateTextViewIng.isGone=true
+
+        }else{
+            holder.exhibitiondateTextViewBefore.isGone=true
+            holder.exhibitiondateTextViewIng.isGone=false
+
+        }
+        holder.exhibitionpriceTextViewFree.isGone = list[position].priceKeyword=="PAY"
+
+        //셀아이템 터치 관련 처리
+        holder.itemView.setOnClickListener{
+            //현재 날짜 : selectedDate
+            //처리해야할것 01 : 존재하지 않으면 그냥 추가
+            runBlocking(Dispatchers.IO) {
+                val body= PostPhotoFromPosterRequest(monthYearFromDate(selectedMonth),list[position].imageUrl)
+                val response = CalendarRepositoryImpl().postPhotoFromPoster(encryptedPrefs.getAT(),body)
+                Log.d("tag", "$response")
+                if(response.isSuccessful && response.body()!!.check){
+                    Log.d("Upload", "Image uploaded successfully")
+
+                } else {
+                    Log.e("Upload", "Image upload failed")
+                }
+            }
+            listener.onRecyclerViewItemClick(position)
+            dialog?.dismiss()
+        }
+
     }
 
 

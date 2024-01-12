@@ -9,4 +9,5 @@
     <color name="gray_light">#F4F4F4</color>
 
     <color name="transparent">#00ff0000</color>
+    <color name="dimming_zone_color">#59000000</color>
 </resources>

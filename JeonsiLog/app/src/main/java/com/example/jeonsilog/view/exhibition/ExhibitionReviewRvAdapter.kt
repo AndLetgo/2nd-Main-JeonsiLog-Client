@@ -12,29 +12,43 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
+import com.example.jeonsilog.widget.utils.DateUtil
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 
 class ExhibitionReviewRvAdapter(
-    private val reviewList:List<GetReviewsExhibitionInformationEntity>,
+    private val reviewList:MutableList<GetReviewsExhibitionInformationEntity>,
     private val context: Context):
     RecyclerView.Adapter<ExhibitionReviewRvAdapter.RecycleViewHolder>()  {
 
     private var listener: OnItemClickListener? = null
     inner class RecycleViewHolder(private val binding: ItemExhibitionReviewBinding):
         RecyclerView.ViewHolder(binding.root){
-        fun bind(item: GetReviewsExhibitionInformationEntity){
-            Log.d("review", "bind: adapter nickname: ${item.nickname}")
+        fun bind(position: Int){
+            val item = reviewList[position]
+
             binding.tvUserName.text = item.nickname
             binding.tvReviewContent.text = item.contents
             binding.brbExhibitionReviewRating.rating = item.rate.toFloat()
             binding.tvReplyCount.text = "${context.getString(R.string.exhibition_reply)} ${item.numReply}"
-//            binding.tvReviewDate.text = item.
-            Glide.with(context)
-                .load(item.imgUrl)
-                .transform(CenterCrop(), RoundedCorners(80))
-                .into(binding.ivProfile)
+            binding.tvReviewDate.text = DateUtil().formatElapsedTime(item.createdDate)
+            if(binding.ivProfile!=null){
+                Glide.with(context)
+                    .load(item.imgUrl)
+                    .transform(CenterCrop(), RoundedCorners(80))
+                    .into(binding.ivProfile)
+            }else{
+                Glide.with(context)
+                    .load(R.drawable.illus_empty_poster)
+                    .transform(CenterCrop(), RoundedCorners(80))
+                    .into(binding.ivProfile)
+            }
 
             binding.ibMenu.setOnClickListener{
-                listener?.onMenuBtnClick(it)
+                if(item.userId == encryptedPrefs.getUI()){
+                    listener?.onMenuBtnClick(it, 0, item.reviewId, position)
+                }else{
+                    listener?.onMenuBtnClick(it, 1, item.reviewId, position)
+                }
             }
         }
     }
@@ -51,7 +65,7 @@ class ExhibitionReviewRvAdapter(
     override fun getItemCount(): Int = reviewList.size
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
-        holder.bind(reviewList[position])
+        holder.bind(position)
 
         if(position != RecyclerView.NO_POSITION){
             holder.itemView.setOnClickListener {
@@ -62,10 +76,22 @@ class ExhibitionReviewRvAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int)
-        fun onMenuBtnClick(btn:View)
+        fun onMenuBtnClick(btn:View, user:Int, contentId: Int, position: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){
         this.listener = listener
+    }
+
+    fun removeItem(position: Int){
+        reviewList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun replaceItem(review: GetReviewsExhibitionInformationEntity, position: Int){
+        if(reviewList.size>0){
+            reviewList[position] = review
+            notifyItemChanged(position)
+        }
     }
 }

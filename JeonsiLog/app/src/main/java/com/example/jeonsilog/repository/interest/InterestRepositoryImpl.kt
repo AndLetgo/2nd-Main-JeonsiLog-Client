@@ -10,8 +10,8 @@ import retrofit2.Response
 class InterestRepositoryImpl: InterestRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(InterestApi::class.java)
 
-    override suspend fun getInterest(token: String): Response<GetInterestResponse> {
-        val response = service.getInterest("Bearer $token")
+    override suspend fun getInterest(token: String, page: Int): Response<GetInterestResponse> {
+        val response = service.getInterest("Bearer $token", page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

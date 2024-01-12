@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import com.example.jeonsilog.BuildConfig
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentMyPageSettingBinding
@@ -20,12 +21,15 @@ import kotlinx.coroutines.runBlocking
 
 class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout.fragment_my_page_setting) {
     override fun init() {
-        val mainActivity = activity as MainActivity
-        mainActivity.setStateBn(false)
+        try{
+            (activity as MainActivity).setStateBn(false)
+        }catch (e:ClassCastException){
+
+        }
 
         binding.switchMypageSettingFollowing.isChecked = encryptedPrefs.getIsRecvFollowing()
         binding.switchMypageSettingActivity.isChecked = encryptedPrefs.getIsRecvActive()
-        binding.tvMypageSettingVersion.text = getString(R.string.setting_version, "0.0.1")
+        binding.tvMypageSettingVersion.text = getString(R.string.setting_version, BuildConfig.VERSION_NAME)
 
         binding.switchMypageSettingFollowing.setOnCheckedChangeListener { _, _ ->
             runBlocking(Dispatchers.IO){

@@ -10,9 +10,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/basic_white"
+        >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_search"
@@ -55,6 +56,8 @@
                 android:drawableLeft="@drawable/ic_search"
                 android:hint="검색어를 입력하세요"
                 android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:paddingStart="@dimen/margin_8"
                 android:textColor="@color/gray_dark"
                 android:textColorHint="@color/gray_medium"
@@ -139,7 +142,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:id="@+id/cl_random_poster01"
+                >
 
                 <ImageView
                     android:id="@+id/iv_random_01"
@@ -175,7 +180,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:id="@+id/cl_random_poster02"
+                >
 
                 <ImageView
                     android:id="@+id/iv_random_02"

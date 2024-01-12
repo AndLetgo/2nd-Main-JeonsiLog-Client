@@ -1,39 +1,52 @@
 package com.example.jeonsilog.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 
-class ExhibitionViewModel:ViewModel() {
-    private var _exhibitionName = MutableLiveData<String>()
-    val exhibitionName:LiveData<String>
-        get() = _exhibitionName
+class ExhibitionViewModel: ViewModel() {
+    private var _currentExhibitionIds = MutableLiveData<MutableList<Int>>()
+    val currentExhibitionIds: LiveData<MutableList<Int>>
+        get() = _currentExhibitionIds
+    fun setCurrentExhibitionIds(exhibitionId:Int){
+        _currentExhibitionIds.value = mutableListOf(exhibitionId)
+    }
+    fun addCurrentExhibitionId(exhibitionId:Int){
+        _currentExhibitionIds.value?.add(exhibitionId)
+    }
+    fun getCurrentExhibitionsSize():Int{
+        return _currentExhibitionIds.value!!.size
+    }
+    fun removeLastExhibitionId(){
+        if(getCurrentExhibitionsSize()>0){
+            _currentExhibitionIds.value?.removeAt(getCurrentExhibitionsSize()-1)
+        }
+    }
 
-    private var _placeName = MutableLiveData<String>()
-    val placeName:LiveData<String>
-        get() = _placeName
+    private var _userReview = MutableLiveData("")
+    val userReview: LiveData<String>
+        get() = _userReview
+    fun setUserReview(review: String){
+        _userReview.value = review
+    }
 
-    private var _placeAddress = MutableLiveData<String>()
-    val placeAddress:LiveData<String>
-        get() = _placeAddress
+    private var _replyCount = MutableLiveData(0)
+    val replyCount: LiveData<Int>
+        get() = _replyCount
+    fun setReplyCount(count: Int){
+        _replyCount.value = count
+    }
 
-    private var _exhibitionDate = MutableLiveData<String>()
-    val exhibitionDate:LiveData<String>
-        get() = _exhibitionDate
-
-    private var _operatingKeyword = MutableLiveData<String>()
-    val operatingKeyword:LiveData<String>
-        get() = _operatingKeyword
-
-    private var _priceKeyword = MutableLiveData<String>()
-    val priceKeyword:LiveData<String>
-        get() = _priceKeyword
-
-    private var _exhibitionDescription = MutableLiveData<String>()
-    val exhibitionDescription:LiveData<String>
-        get() = _exhibitionDescription
-
-    private var _exhibitionRating = MutableLiveData<String>()
-    val exhibitionRating:LiveData<String>
-        get() = _exhibitionRating
+    private var _reviewItem = MutableLiveData<UpdateReviewItem>()
+    val reviewItem: LiveData<UpdateReviewItem>
+        get() = _reviewItem
+    fun setReviewItem(review:UpdateReviewItem){
+        _reviewItem.value = review
+    }
 }
+data class UpdateReviewItem(
+    val item:GetReviewsExhibitionInformationEntity,
+    val position: Int
+)

@@ -3,21 +3,22 @@ package com.example.jeonsilog.data.remote.dto.rating
 import com.google.gson.annotations.SerializedName
 
 data class GetRatingsResponse(
-
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: GetMyRatingsInformationEntity
+    val information: GetMyRatingsInformation
 )
 
-data class GetMyRatingsInformationEntity(
+data class GetMyRatingsInformation(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
     @SerializedName("numRating")
     val numRating: Int,
     @SerializedName("data")
-    val dataEntity: List<GetMyRatingsDataEntity>
+    val data: List<GetMyRatingsEntity>
 )
 
-data class GetMyRatingsDataEntity(
+data class GetMyRatingsEntity(
     @SerializedName("ratingId")
     val ratingId: Int,
     @SerializedName("exhibitionId")

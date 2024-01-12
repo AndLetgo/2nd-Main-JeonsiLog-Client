@@ -8,13 +8,13 @@ import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingInformation
-import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingInformation
+import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowerEntity
+import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingEntity
 import com.example.jeonsilog.databinding.ItemMyPageListFollowBinding
 import com.example.jeonsilog.databinding.ItemMyPageListFollowingBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.otheruser.OtherUserFragment
+import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowerUpdate
@@ -26,7 +26,7 @@ import java.lang.IllegalArgumentException
 class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeFollowViewHolder(private val binding: ItemMyPageListFollowBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetOtherFollowingInformation){
+        fun bind(data: GetMyFollowerEntity){
             GlideApp.with(binding.ivMypageListFollowProfile)
                 .load(data.profileImgUrl)
                 .optionalCircleCrop()
@@ -56,7 +56,7 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
 
             binding.btnMypageListFollowing.setOnClickListener {
                 if(data.ifollow){
-                    list[adapterPosition] = GetOtherFollowingInformation(
+                    list[adapterPosition] = GetMyFollowerEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
@@ -68,11 +68,12 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
                     notifyItemChanged(adapterPosition)
 
                 } else {
-                    list[adapterPosition] = GetOtherFollowingInformation(
+                    list[adapterPosition] = GetMyFollowerEntity(
                         followUserId = data.followUserId,
                         profileImgUrl = data.profileImgUrl,
                         nickname = data.nickname,
                         ifollow = true) as T
+
                     runBlocking(Dispatchers.IO){
                         FollowRepositoryImpl().postFollow(encryptedPrefs.getAT(), data.followUserId)
                     }
@@ -82,18 +83,26 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowProfile.setOnClickListener{
-                moveOtherUserProfile(data.followUserId)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                moveOtherUserProfile(data.followUserId)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
         }
     }
 
 
     inner class TypeFollowingViewHolder(private val binding: ItemMyPageListFollowingBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(data: GetMyFollowingInformation) {
+        fun bind(data: GetMyFollowingEntity) {
             GlideApp.with(binding.ivMypageListFollowingProfile)
                 .load(data.profileImgUrl)
                 .optionalCircleCrop()
@@ -105,7 +114,6 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
                 list.removeAt(adapterPosition)
                 notifyItemRemoved(adapterPosition)
 
-                // 서버에 팔로우 취소 요청
                 runBlocking(Dispatchers.IO) {
                     FollowRepositoryImpl().deleteFollow(encryptedPrefs.getAT(), data.followUserId)
                 }
@@ -114,11 +122,19 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
             }
 
             binding.ivMypageListFollowingProfile.setOnClickListener {
-                moveOtherUserProfile(data.followUserId)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
 
             binding.tvMypageListFollowNick.setOnClickListener {
-                moveOtherUserProfile(data.followUserId)
+                if (context.javaClass.simpleName == "MainActivity"){
+                    (context as MainActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }else if(context.javaClass.simpleName=="ExtraActivity"){
+                    (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
+                }
             }
         }
     }
@@ -152,12 +168,12 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (this.type) {
             0 -> {
-                val followerData = list[position] as GetOtherFollowingInformation
+                val followerData = list[position] as GetMyFollowerEntity
                 holder as MyPageListRvAdapter<*>.TypeFollowViewHolder
                 holder.bind(followerData)
             }
             1 -> {
-                val followingData = list[position] as GetMyFollowingInformation
+                val followingData = list[position] as GetMyFollowingEntity
                 holder as MyPageListRvAdapter<*>.TypeFollowingViewHolder
                 holder.bind(followingData)
             }
@@ -169,11 +185,4 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
         return type
     }
 
-    private fun moveOtherUserProfile(otherUserId: Int){
-        val fragment = OtherUserFragment(otherUserId)
-        (context as MainActivity).supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_main, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
 }

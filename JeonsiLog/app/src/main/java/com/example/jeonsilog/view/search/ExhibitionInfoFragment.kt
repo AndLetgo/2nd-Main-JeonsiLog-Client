@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.search
 
+import android.util.Log
 import androidx.core.view.isGone
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.databinding.FragmentExihibitionInfoBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.view.home.HomeRvAdapter
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.CoroutineScope
@@ -21,11 +23,33 @@ import kotlinx.coroutines.runBlocking
 
 class ExhibitionInfoFragment(private val edittext:String): BaseFragment<FragmentExihibitionInfoBinding>(R.layout.fragment_exihibition_info){
 
+    private lateinit var exhibitionInfoItemAdapter: ExhibitionInfoItemAdapter
+    val exhibitionInfoRvList= mutableListOf<SearchInformationEntity>()
+    var itemPage=0
+    var hasNextPage=true
+
     lateinit var viewModel: SearchViewModel
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        checkEmptyListFalse()
-        setLayoutView()
+
+        exhibitionInfoItemAdapter = ExhibitionInfoItemAdapter(requireContext(),exhibitionInfoRvList)
+        binding.rvExhibitioninfo.adapter = exhibitionInfoItemAdapter
+        binding.rvExhibitioninfo.layoutManager = LinearLayoutManager(requireContext())
+
+        setExhibitionRvByPage(0)
+
+
+
+        binding.rvExhibitioninfo.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+                if(rvPosition == totalCount && hasNextPage){
+                    setExhibitionRvByPage(totalCount)
+                }
+            }
+        })
 
     }
     fun checkEmptyListTrue(){
@@ -38,27 +62,23 @@ class ExhibitionInfoFragment(private val edittext:String): BaseFragment<Fragment
         binding.tvEmpty01.isGone=false
         binding.tvEmpty02.isGone=false
     }
-    fun setLayoutView(){
-        //리사이클러뷰 제어
-        binding.rvExhibitioninfo.layoutManager = LinearLayoutManager(requireContext())
-        var adapter: ExhibitionInfoItemAdapter?
-        var list: List<SearchInformationEntity>?
+
+
+    private fun setExhibitionRvByPage(totalCount:Int){
+        var addItemCount = 0
         runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,0)
+            val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,itemPage)
             if(response.isSuccessful && response.body()!!.check){
-                val searchExhibitionResponse = response.body()
-                list=searchExhibitionResponse?.informationEntity
-            }
-            else{
-                val searchExhibitionResponse = response.body()
-                list=searchExhibitionResponse?.informationEntity
+                exhibitionInfoRvList.addAll(response.body()!!.information.data.toMutableList())
+                addItemCount = response.body()!!.information.data.size
+                hasNextPage = response.body()!!.information.hasNextPage
+                checkEmptyListTrue()
+            }else{
                 checkEmptyListFalse()
             }
         }
-        if (!list.isNullOrEmpty()){
-            adapter = context?.let { ExhibitionInfoItemAdapter(it,edittext,list!!.toMutableList()) }
-            binding.rvExhibitioninfo.adapter = adapter
-            checkEmptyListTrue()
-        }
+        val startPosition = totalCount + 1
+        exhibitionInfoItemAdapter.notifyItemRangeInserted(startPosition,addItemCount)
+        itemPage++
     }
 }
