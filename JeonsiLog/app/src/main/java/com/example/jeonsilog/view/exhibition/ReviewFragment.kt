@@ -24,6 +24,7 @@ import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -46,6 +47,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private var hasNextPage = true
 
     override fun init() {
+        //네트워크 새로고침
         isRefresh.observe(this){
             if(it){
                 (activity as ExtraActivity).refreshFragment(R.id.reviewFragment)
@@ -136,6 +138,8 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
                 newReview = response.body()!!.information
             }
         }
+        val newReviewItem = UpdateReviewItem(newReview!!, 0)
+        exhibitionViewModel.setReviewItem(newReviewItem)
         return newReview
     }
     private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
