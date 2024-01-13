@@ -70,6 +70,10 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
                 getString(R.string.exhibition_writing_review_count, it)
         }
     }
+    //기존 감상평 있는지 체크
+    private fun checkReviewExist(){
+
+    }
 
     private fun showCustomDialog(type:String, contentId:Int, position:Int) {
         val customDialogFragment = DialogWithIllus(type, contentId, 0, position, this)
