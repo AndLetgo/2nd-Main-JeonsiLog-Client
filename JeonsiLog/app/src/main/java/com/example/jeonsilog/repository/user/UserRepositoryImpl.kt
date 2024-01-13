@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.UserApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.user.ChangeFcmTokenRequest
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
 import com.example.jeonsilog.data.remote.dto.user.GetIsOpenResponse
 import com.example.jeonsilog.data.remote.dto.user.MyInfoResponse
@@ -138,4 +139,18 @@ class UserRepositoryImpl: UserRepository {
             response
         }
     }
+    override suspend fun changeFcmToken(token: String, requestBody: ChangeFcmTokenRequest): Boolean {
+        val response = service.changeFcmToken("Bearer $token", requestBody)
+
+        return if(response.isSuccessful && response.body()?.check == true){
+            //encryptedPrefs.setNN(requestBody.nickname)
+            response
+            true
+        } else {
+            Log.e(tag, "닉네임 수정 실패")
+            response
+            false
+        }
+    }
+
 }

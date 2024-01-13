@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -40,6 +41,10 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedP
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
+import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import java.net.URLDecoder
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -66,7 +71,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
     override fun init() {
         this.onBackPressedDispatcher.addCallback(this, callback)
+    // Shared Preferences에서 알림 데이터 가져오기
+        val sharedPref = getSharedPreferences("notification", Context.MODE_PRIVATE)
+        val data = sharedPref.getString("key1", null)
 
+        // 원하는 함수 호출
+        data?.let {
+            Log.d("xxxxxinit", "init: ")
+        }
         networkState.observe(this) {
             if(!it) {
                 networkDialog = if(networkDialog != null) {
@@ -114,6 +126,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             Log.d(tag, "isFinish: $it")
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
         }
+
+        val targetFragment=intent.getStringExtra("action")
+        Log.d("targetFragmenttargetFragment", "$targetFragment: ")
+        if (targetFragment!= null) {
+
+            binding.bnvMain.selectedItemId=R.id.item_notification
+            moveSearchResultFrament()
+        }
+        askNotificationPermission()
+        getToken()
     }
 
     fun setStateBn(isVisible:Boolean){
@@ -223,6 +245,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 .commit()
         }
     }
+    fun moveSearchResultFrament(){
+        val fragment = NotificationFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
     fun moveSearchResultFrament(str :String){
         val fragment = SearchResultFragment(str)
         supportFragmentManager.beginTransaction()
@@ -236,4 +265,50 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             .replace(R.id.fl_main, fragment)
             .commit()
     }
+    fun getToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                //Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d("11111", msg)
+            //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
+    }
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        //if (isGranted) {
+        //    // 권한이 승인된 경우
+        //} else {
+        //    // 권한이 거부된 경우
+        //}
+    }
+    //알림 권한 확인 함수
+    private fun askNotificationPermission() {
+        // Android API level이 TIRAMISU (33) 이상인 경우에만 실행
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // 이미 권한이 부여된 경우
+
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // 사용자에게 이미 거부한 이력이 있는 경우
+
+            } else {
+                // 권한을 요청하는 경우
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }else{
+
+        }
+    }
+
 }
