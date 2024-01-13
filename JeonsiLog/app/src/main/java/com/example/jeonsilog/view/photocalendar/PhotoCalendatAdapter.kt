@@ -42,6 +42,7 @@ class PhotoCalendatAdapter(private val dayList: ArrayList<String>,
     //데이터 설정
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+
         if (dayList[holder.adapterPosition]!=""){
             var year=selectedDate.year
             var month=selectedDate.month
@@ -50,8 +51,9 @@ class PhotoCalendatAdapter(private val dayList: ArrayList<String>,
             val itemDate = LocalDate.of(year, Month.valueOf(month.toString()), dayOfMonth.toInt())
             var nowDate=LocalDate.now()
             if (nowDate==itemDate){
-                holder.dayText.setTextColor(ContextCompat.getColor(context, R.color.basic_point))
-                holder.dayText.setTextAppearance(R.style.L_bold)
+                holder.dayText.setTextColor(ContextCompat.getColor(context, R.color.basic_white))
+                holder.dayText.setBackgroundResource(R.drawable.shape_calendar_cell_background)
+                holder.dayText.setTextAppearance(R.style.S_regular)
             }
         }
         var originalString=dayList[holder.adapterPosition]
