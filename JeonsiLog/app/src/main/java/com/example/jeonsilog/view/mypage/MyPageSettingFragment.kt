@@ -37,9 +37,9 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
 
         binding.tvMypageSettingVersion.text = getString(R.string.setting_version, BuildConfig.VERSION_NAME)
 
-        binding.switchMypageSettingFollowing.setOnCheckedChangeListener { _, isChecked ->
-            if(viewModel.isRecvFollowing.value != isChecked){
-                isFollowing()
+        binding.switchMypageSettingExhibition.setOnCheckedChangeListener { _, isChecked ->
+            if(viewModel.isRecvExhibition.value != isChecked){
+                isExhibition()
             }
         }
 
@@ -89,12 +89,12 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
         customDialogFragment.show(parentFragmentManager, "MyPageUnLinkDialog")
     }
 
-    private fun isFollowing(){
+    private fun isExhibition(){
         runBlocking(Dispatchers.IO){
-            val response = UserRepositoryImpl().patchAlarmFollowing(encryptedPrefs.getAT())
+            val response = UserRepositoryImpl().patchAlarmExhibition(encryptedPrefs.getAT())
             if(response.isSuccessful && response.body()!!.check){
                 CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.setIsRecvFollowing(response.body()!!.information.isRecvFollowing)
+                    viewModel.setChecked()
                 }
             }
         }
@@ -105,7 +105,7 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
             val response = UserRepositoryImpl().patchAlarmActive(encryptedPrefs.getAT())
             if(response.isSuccessful && response.body()!!.check){
                 CoroutineScope(Dispatchers.Main).launch {
-                    viewModel.setIsRecvActive(response.body()!!.information.isRecvActive)
+                    viewModel.setChecked()
                 }
             }
         }
