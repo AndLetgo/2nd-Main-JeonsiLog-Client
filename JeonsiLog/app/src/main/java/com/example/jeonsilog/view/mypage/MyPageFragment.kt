@@ -195,7 +195,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
     private fun setDefalutImage() {
         val outputDir: File = requireActivity().cacheDir
-        val outputFile: File = File.createTempFile("", "", outputDir)
+        val outputFile: File = File.createTempFile("prefix", "suffix", outputDir)
 
         val requestFile: RequestBody = outputFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
         val imagePart: MultipartBody.Part = MultipartBody.Part.createFormData("image", null, requestFile)
