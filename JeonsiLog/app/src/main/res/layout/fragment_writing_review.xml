@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.ExhibitionWritingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,14 +43,15 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toTopOf="@id/btn_cancel"
             android:layout_marginBottom="@dimen/margin_20"
-            android:padding="@dimen/margin_12"
+            android:paddingHorizontal="@dimen/margin_12"
+            android:paddingTop="@dimen/margin_12"
             android:paddingBottom="@dimen/margin_32"
             android:gravity="top|start"/>
         <TextView
             android:id="@+id/tv_count_writing_review"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/exhibition_writing_review_count"
+            android:text="@{@string/exhibition_writing_review_count(vm.writingCount)}"
             style="@style/S_regular"
             android:textColor="@color/gray_medium"
             app:layout_constraintEnd_toEndOf="@id/et_writing_review"

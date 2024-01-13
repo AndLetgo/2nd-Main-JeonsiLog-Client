@@ -29,26 +29,26 @@
                 android:text="@{vm.selectedDate}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/basic_black"
-                app:drawableEndCompat="@drawable/ic_arrow_down"
-                android:drawablePadding="@dimen/margin_4" />
+                android:textColor="@color/basic_black"/>
 
             <ImageButton
                 android:id="@+id/ib_other_user_next_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_next"
                 android:background="@color/transparent"
                 android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_8"
                 tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/ib_other_user_prev_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_back"
                 android:background="@color/transparent"
                 android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_8"
                 tools:ignore="ContentDescription" />
         </androidx.appcompat.widget.Toolbar>
         

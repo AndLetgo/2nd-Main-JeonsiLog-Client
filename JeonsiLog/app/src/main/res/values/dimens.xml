@@ -18,9 +18,11 @@
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
     <dimen name="margin_76">76dp</dimen>
+    <dimen name="margin_80">80dp</dimen>
     <dimen name="margin_84">84dp</dimen>
-    <dimen name="margin_96">96dp</dimen>
+    <dimen name="margin_88">88dp</dimen>
     <dimen name="margin_212">212dp</dimen>
+    <dimen name="margin_224">224dp</dimen>
 
     <!--    Dp Item  -->
     <dimen name="item_0">0dp</dimen>
@@ -41,6 +43,7 @@
     <dimen name="item_74">74dp</dimen>
     <dimen name="item_76">76dp</dimen>
     <dimen name="item_84">84dp</dimen>
+    <dimen name="item_96">96dp</dimen>
     <dimen name="item_100">100dp</dimen>
     <dimen name="item_108">108dp</dimen>
     <dimen name="item_132">132dp</dimen>
@@ -61,9 +64,11 @@
 
     <!--    Dp Shadow  -->
     <dimen name="shadow_2">2dp</dimen>
+    <dimen name="shadow_6">6dp</dimen>
     <dimen name="shadow_12">12dp</dimen>
 
     <!--    Dp Corner Radius  -->
+    <dimen name="radius_4">4dp</dimen>
     <dimen name="radius_8">8dp</dimen>
     <dimen name="radius_12">12dp</dimen>
     <dimen name="radius_16">16dp</dimen>

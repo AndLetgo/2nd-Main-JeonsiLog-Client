@@ -3,16 +3,18 @@ package com.example.jeonsilog.repository.review
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.ReviewApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.review.GetReviewResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsResponse
 import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
 import retrofit2.Response
+import retrofit2.http.Query
 
 class ReviewRepositoryImpl: ReviewRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(ReviewApi::class.java)
 
-    override suspend fun getMyReviews(token: String): Response<GetReviewsResponse> {
-        val response = service.getMyReviews("Bearer $token")
+    override suspend fun getMyReviews(token: String, page: Int): Response<GetReviewsResponse> {
+        val response = service.getMyReviews("Bearer $token", page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
@@ -21,8 +23,8 @@ class ReviewRepositoryImpl: ReviewRepository {
         }
     }
 
-    override suspend fun getOtherReviews(token: String, userId: Int): Response<GetReviewsResponse> {
-        val response = service.getOtherReviews("Bearer $token", userId)
+    override suspend fun getOtherReviews(token: String, userId: Int, page: Int): Response<GetReviewsResponse> {
+        val response = service.getOtherReviews("Bearer $token", userId, page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
@@ -33,9 +35,23 @@ class ReviewRepositoryImpl: ReviewRepository {
 
     override suspend fun getReviews(
         token: String,
-        exhibitionId: Int
+        exhibitionId: Int,
+        page: Int
     ): Response<GetReviewsExhibitionResponse> {
-        val response = service.getReviews("Bearer $token", exhibitionId)
+        val response = service.getReviews("Bearer $token", exhibitionId, page)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun getReview(
+        token: String,
+        reviewId: Int
+    ): Response<GetReviewResponse> {
+        val response = service.getReview("Bearer $token", reviewId)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

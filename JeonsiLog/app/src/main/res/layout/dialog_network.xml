@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/margin_16"
+        android:background="@drawable/shape_corner_round_dialog">
+
+        <ImageView
+            android:id="@+id/iv_dialog_network"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/illus_dialog_warning"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/margin_20"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_dialog_network_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_failure_internet"
+            style="@style/M_medium"
+            android:textColor="@color/basic_black"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/iv_dialog_network"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_16" />
+
+
+
+        <Button
+            android:id="@+id/btn_dialog_network_cancel"
+            android:layout_width="142dp"
+            android:layout_height="44dp"
+            android:background="@drawable/shape_corner_round_start_btn"
+            android:text="@string/btn_cancel"
+            style="@style/M_medium"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_dialog_network_title"
+            app:layout_constraintEnd_toStartOf="@id/btn_dialog_network_refresh"
+            android:layout_marginTop="@dimen/margin_36"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:outlineProvider="none"/>
+
+        <Button
+            android:id="@+id/btn_dialog_network_refresh"
+            android:layout_width="142dp"
+            android:layout_height="44dp"
+            android:text="@string/btn_refresh"
+            style="@style/M_medium"
+            android:background="@drawable/shape_corner_round_start_btn_activate"
+            android:textColor="@color/basic_white"
+            app:layout_constraintStart_toEndOf="@+id/btn_dialog_network_cancel"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_network_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_36"
+            android:layout_marginStart="@dimen/margin_8"
+            android:outlineProvider="none"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

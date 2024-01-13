@@ -24,7 +24,8 @@
     <fragment
         android:id="@+id/reviewFragment"
         android:name="com.example.jeonsilog.view.exhibition.ReviewFragment"
-        android:label="ReviewFragment" />
+        android:label="ReviewFragment" >
+    </fragment>
     <fragment
         android:id="@+id/PosterFragment"
         android:name="com.example.jeonsilog.view.exhibition.PosterFragment"
@@ -37,5 +38,9 @@
     <fragment
         android:id="@+id/exhibitionPlaceFragment"
         android:name="com.example.jeonsilog.view.exhibition.ExhibitionPlaceFragment"
-        android:label="ExhibitionPlaceFragment" />
+        android:label="ExhibitionPlaceFragment" >
+        <action
+            android:id="@+id/action_exhibitionPlaceFragment_to_exhibitionFragment"
+            app:destination="@id/exhibitionFragment" />
+    </fragment>
 </navigation>

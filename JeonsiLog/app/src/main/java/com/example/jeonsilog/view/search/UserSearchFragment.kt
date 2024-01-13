@@ -3,43 +3,73 @@ package com.example.jeonsilog.view.search
 import androidx.core.view.isGone
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.UserSearchItem
+import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
 import com.example.jeonsilog.databinding.FragmentUserSearchBinding
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.viewmodel.SearchViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 
-class UserSearchFragment(itemlist: List<Int>) : BaseFragment<FragmentUserSearchBinding>(R.layout.fragment_user_search) {
-    var itemlist=itemlist
+class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUserSearchBinding>(R.layout.fragment_user_search) {
+
+    private lateinit var userItemAdapter: UserSearchItemAdapter
+    val UserRvList= mutableListOf<SearchUserInformationEntity>()
+    var itemPage=0
+    var hasNextPage=true
+
+
+
     lateinit var viewModel: SearchViewModel
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        checkEmptyList()
-        setLayoutView()
-    }
-    fun checkEmptyList(){
-        if(itemlist.size!=0){
-            binding.ivEmpty.isGone=true
-            binding.tvEmpty01.isGone=true
-            binding.tvEmpty02.isGone=true
-        }
-    }
-    fun setLayoutView(){
-        //리사이클러뷰 제어
+
+        userItemAdapter = UserSearchItemAdapter(requireContext(),UserRvList)
+        binding.rvUserinfo.adapter = userItemAdapter
         binding.rvUserinfo.layoutManager = LinearLayoutManager(requireContext())
-        var items=extractItemsByIndices(viewModel.userlist,itemlist)
-        val adapter = context?.let { UserSearchItemAdapter(it,items) }
-        binding.rvUserinfo.adapter = adapter
+
+        setUserRvByPage(0)
+        binding.rvUserinfo.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+                if(rvPosition == totalCount && hasNextPage){
+                    setUserRvByPage(totalCount)
+                }
+            }
+        })
     }
-    fun extractItemsByIndices(exhibitionList: List<UserSearchItem>, indices: List<Int>): List<UserSearchItem> {
-        //검색해서 나온 인덱스 리스트를 전시회 리스트에서 추출
-        return indices.mapNotNull { index ->
-            if (index in exhibitionList.indices) {
-                exhibitionList[index]
-            } else {
-                null
+    fun checkEmptyListTrue(){
+        binding.ivEmpty.isGone=true
+        binding.tvEmpty01.isGone=true
+        binding.tvEmpty02.isGone=true
+    }
+    fun checkEmptyListFalse(){
+        binding.ivEmpty.isGone=false
+        binding.tvEmpty01.isGone=false
+        binding.tvEmpty02.isGone=false
+    }
+    private fun setUserRvByPage(totalCount:Int){
+        var addItemCount = 0
+        runBlocking(Dispatchers.IO) {
+            val response = UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(),edittext,itemPage)
+            if(response.isSuccessful && response.body()!!.check){
+                UserRvList.addAll(response.body()!!.information.data.toMutableList())
+                addItemCount = response.body()!!.information.data.size
+                hasNextPage = response.body()!!.information.hasNextPage
+                checkEmptyListTrue()
+            }else{
+                checkEmptyListFalse()
             }
         }
+        val startPosition = totalCount + 1
+        userItemAdapter.notifyItemRangeInserted(startPosition,addItemCount)
+        itemPage++
     }
+
 }

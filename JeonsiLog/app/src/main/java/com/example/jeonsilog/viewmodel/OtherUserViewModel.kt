@@ -1,8 +1,20 @@
 package com.example.jeonsilog.viewmodel
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.user.MyInfoInformation
+import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 
 class OtherUserViewModel: ViewModel() {
     private var _userId = MutableLiveData<Int>()
@@ -12,10 +24,6 @@ class OtherUserViewModel: ViewModel() {
     private var _title = MutableLiveData<String>()
     val title: LiveData<String>
         get() = _title
-
-    fun setTitle(p: String){
-        _title.value = p
-    }
 
     private var _nick = MutableLiveData<String>()
     val nick: LiveData<String>
@@ -37,15 +45,81 @@ class OtherUserViewModel: ViewModel() {
     val flag: LiveData<Boolean>
         get() = _flag
 
-    fun changeFlag(){
-        _flag.value = !flag.value!!
+    fun setTitle(context: Context){
+        _title.value = context.getString(R.string.other_nick_title, nick.value)
+
     }
 
-    fun testSet(){
-        _nick.value = "안드레고"
-        _follower.value = "14"
-        _following.value = "15"
-        _profileImg.value = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMwAAADACAMAAAB/Pny7AAABO1BMVEX////29vb///30+e/e7NR/vTyIwEGSxV3+//vj6dC52Jz4+euBvDaXxmHg6tL6iACbwVituFChtS6ary/Ds0WSvDqZujXSy5WKuDeUszOznADn59GovFKnsi2FujmkqyzKlACirRe0qx34egDwlgDWjADLmwDNqma/pBK/mAC9tlP57dv859r83878y535q2v4o2f3hy35cwD6m1n9zazohQDWlgDv4Lzs2qr61KT3mmbd1KPaz5Lc4Lje0LHIz4bQyH3S2KH4jkT6t4v3n0/0kTH1p3bvuIb4uXrtq2z7wpvmegD458z5aQDrlDzy1rbrpFTjsm/alyrkxobkn0HgjSHrw5v8t5nfplDVpVv5eybOnCfTumrGoifLrk+6pCjMoz6ziAC9x3KMsAB1sxOlyXLdxZbH3K6qzYR7+lLNAAAM70lEQVR4nO2cDV/aSBCH10VxcbFUa2tLqqVAYkK09Q3QAqfVeraVK61c7+rJWz1f+v0/wc1uAPFqAsluJPXHv3coQmCezOzO7GY3aAzdG42hEUwwNYIJqkYwQdUIJqgawQRVI5igagQTVI1ggio/YTAT/IB/7Bn/H2OCfftCXz0DlhP4wR8QhyDYPxTfPWM5pPvc8o1vX+h3myFkbIyaXHRszPKRb/IDpn32MVleXnn1evXN3loKtLb3ZvX1q5Xl5bG2a+S7yAcYzBsGWdncf5daX0/FesSev9vfXBlDvvQEfsBgRMzN/QPLfIBZe7cB2luznsHDwe+bJvk1PINI+XDV8sQBuGFzcwViCyJuBX7df7fGgFKp1f0V+e3HBxjz8FMsm46lPn3cXDH/ZzExVzY/HrDYS+3tL8v+Znkw2MqRoc2NbDp7dPB+2ew2inb2bD+BfuH92jr4bW8zhNoduBxJhCGsH1M+ZNPpo+y+SW6kmBtvZA76mAKc1KqJbN/mQRLDjJ3hlSxzy3uredvBQAeBsPkagi2VKvO/SLJAqmfw9lE6nf1cbid7OxuJVRiUN6Dp/LFtC+1esmCYSWQbQuzgkHIujG17K9z+R/eht14/xO0/iksODD+75BWwfKq4Oa6yBw3no1WHSjBDFgxYs/m1HWIDH4XRyl4qtrZJkJxYkxZmuPI1/fVd2U1PywqaZfDNWgUHKcxA5mc1+6ns7hQz8JW1VGxjWU5tIweGoNAXVVUrbk8wQ6gcQb4ZC1KbwRVg2fZkEDmEfLMZIM8geqyqH0wvp5cgE/JNlsqwQpJnqmruzzLyMkJhZcNaN9uISQ6M+VVV/0L2adJBbFj693osZUowQxiGp3pwzDcBa5Y3YqnfJXRoEmDgPzWnVgW6I7IPZQ3/MDFbxMMMaPK8xQiovBf7oyI+spERZugkl/silCcIDLNXxafUJHgGhY5zx67qy5+1+U/sHzr8MGNRlssdm2KGmGuQOMUMQXK65pqaOBE6q3DoBsSZpzzVKwkw5FsuVxX6BPDu+1hsgww/zJB5qh0LVyPmemwtP3QYhPKnWk6wyRBEYZC2MnQYjLZOtVPhAp6swYhT9EMkeKaa0JbExr0sv7yJxfZFLZEAs6QlLkUDBKO/U7HXopbIgSmKlSLsWBiirYpaIs0zIq5hZwJg3ohaIgdmSzzMttcDAvN9S/QzEMBkgwMj5BqMgwGDrTATExRl2ymAGXbSRFgijKAkhFlN04qC55T3ZtkgdM01zRDOMxjtx7JBSJrVulEVh/k7FnsvaomEDqBSN5aQ0BIFNsPzJpv9KGaJnCFAXa8Lj6voQfagMvzeDJXruiE4HwkjvKP0QXnoMGAHwIhdYIFjKcAoYpbImWqq6YZY3wzHnmTTwmlGylQTwNRE57xep7MfhC84yYApxPWG0IwGRNmndHZ7+FNN8P3U0OtCMysYlQ/SWXP407NsjU9DrxfEPuWvdHqDeLq+0yspE+eXcb0mNnH+WYWUKXyBRkKegYj/rrfELml8Uo/MAFzS4JNMcV0viLSZV+n0kYSVZ1LCDBUNvRby/hn0gxVlQ4fhMuN6M+/tAi1b6lxR09m8BDMkXTrP6PEi8Xi5GZPDr+rn4KzQQPl4c67sqTtiq+iO1azglTdLkjwTmtP1oqdxAEHklar+GaAVGohASTOnePMMOEbdlrK0UdYSLWq1Gg8ih6r6TfD6TluyYEihqTcVLxblj3PqX8IjVS5ZYYZoTfdU09ATVf1C5aygldQBQPFeiifjHsrNbTWnSlicwSVvXTMp6s14yNVGLMhLVM3lDmVtcZC44lyZa8bn3GVOHPqWy30TqlF7JXHFOSo0k/Gau8z5Rc0dC1/c6UrqXoDdZDNedHPIZU7LfQnixgbWADLxZDOPB2nO7C24fKzlTkzhoX9XMmFglNZMJln53N861k+UW4nEsfjI/1oyNwNB7EeAJpMfoAvAiDCWxG8y96HKbDOMAbJNcq40iGvyLU1L5G/uehKU7G1apE3T992FU2DZIgGF4YJQK7F2w/s0/PPups7WGXwJLKd5iRuBmGTvBgSAUjKZjGcUfs7/11FhQrgjzFpCNxID9RRuJH9rI0ZKBmjixdCtUxTMW9Xvmq6d8NX2gfYM4vNouxBq8bkS/albg06MspZvnNao1ObCJR2GL+jFJe6cTMGkN6zFIbPQMLS60apglisl3x7Ary30ZnGONZ3mbkFRLAcRaipb1bph6Eb9UlpteUO+3Q+A5IvgHR3qm7nd+QJofrfRNJha1UGyqhf5BgMxpBQyUEdD8dmWruvxem2+7MeGcy6/YHjbxlQp7CbjXem1QpnFnOR235WPt52w7mkSoopSKIIKiklDft4O5C7uO4N5riRE0vZFJ/kO09nl7LjbWZL8h+EthPjW6Ht1JzDWLzdpfqpAJUgIBrfr/q6Zt96a4eejrIEc7v0L6n6UAJYYTOe7Q5QqkVJX9PruTPaH0fxvlvL5vGlS2n3Juz2CMKzvBYqds7Pnj2ZftrWwE7HuomN3FHuhXNONtvR6o1GrVfKQg8SiTbDNKKW3Z89n2+qwLCzMzHOrbz+Gn4JCA+qBLg37TTNatcu8p7n3jjzBEOvkKgDy6BHD+Pff2UfPZ852uM4YzlkJdZrBDQ7reanW1PV6rVYs1rhanEkzjHprqWoSr+HmBcYKhquLh7NPnjyZ/ffl7EwpElFCIJYcCX0LMAsv2jj8PkZ80EnaN9XC+d2m3ow3C5S0RZVyvgJDAwMGOlqitVQYQ562fXiBYctlpp4ByBPwyM4V7bk3lnVGlTMWbC9nikr3gG7QmfNz8WZTj2fMzmlpv4AJ3aoabAyqJU6rni4LeoKJnJ0/ZizPdsa5JaQ9iXndt0ZmOM7Ll5kS7TRrGNCwMRtTvFbuDUL+aJ0RswjjUMBJ1BT34wT3MISePX36+PHjZ885SbdM6ZJ0cF6waAOeZCazC8pkoH7mKM1MqYuAO97EnfRK8o2WhUPdBpoLGB7/KDR1fg4oD6ecA4EF287MDONZSCZfJruay8z3Xb5IL1un0HgSWyF3XYEbz8CHhkoXzC0XHMXpS7gJNPJ252xmZu7FAqN4kclk5t8qtN94hs2MmlsnCfDOSTnkpidw5xn6YzG6+PThFe3b2+DOXXRoRCmV3oJKJcVK8/1qFsyv1pqXjURdS1RNNPhVAjeeIaXpaDganXrQmYNxsoiPNH+yepACrNP0zEvWV5+4mDAYEIa31alwOBydHied5uNoEcKd0VhvGdrbfdke2oEl5RrEWuuSXJfezhoMhn0U+cFYfgisxHIrCOsqazlVMuCswYCeIYhesBAbv5NBVkfs4lo9YWgNOtgq4cFgCCIT0fD59APfh/G94rMHSiMBFcFg7WZAz9BolIeYnGUhA8qqK0JVrZ5oDVTe9IXhHSydBJYp/6dXbtcltJsWHaAXGAAG2uE0Z8FDuRsyuwQCGadB+zfW/mEGLBcT3C8+3znW5uv5gtZEHUq1vtmzv2dQ6Ae0/ak7mfi61QCmy4RmXPbNCo4w1t3xrsAvF9b1yWHAWJVRFUahvBZwMqGPZ+DQyGQ0Ou26Gpct2tCMVrlP3eHsGdYzQrIMj/s2cT+Q+Oi1rmnQbByzZ782g6/Ow9ErIm99iyexQjqvGYkt5/VffdoMGp8In/+40xrmdksgRC4N49R5XOfsGYwhw9xxEWNnCjIbWmLJMdz7hFnkPDxxFQQWdmK36sZ3xyu7fWDAMRdSFoOLC1yzZCQannsz9MByTEA8g/q5xhaGZ0jI/ZOh4XbL14K6qmEYVYf5EDsYa3YFxpZTPprnWluG3nKY3XGAwWiKOyZAog1dK9iHvSPMZHjih3+WedGuoS/ZzwvatxkY9i+Gz698tMyDSka9Zb/D3aEDQFfh8LlPRnmWode3ELEpruxhoMmEwxc+2uVJNb1uf8MOhzxDLliUDWN06SDoz+w3tjjA0OnweSQYpUxHGOUNtsPdZZ5hC64nw+ehYMEgFIrrDcUtDEQltP/osGaX7ESgB2gWPMBMRScWgwaDAUaft0ubTjDh6KSfhnlTU9eLbmFQIGEAAmBs73PnDDMdkPK/R3NxgLHRLwhjv3nqV4SZt3ttBDNM3T8Y9+VMUGGa9wgmea9gkvcEBqzhMDYawQxN9w0mEwiYnsVM1z+vVw9ev96zWAj3SAJM4MRh3M/OTIXDk+N+6cENRSKR9o9bpfRoxjPM4qQ8TV//9tBOz29o5qYyXEmPMNGwj1p83NWTXs3e0MJNJReSL5JJ98NmhManoxN+aLGjpz16dq1HPVpYYI8vbijjeqqJKXQXou0HestLlD/0yHqv7cZbp0sagUox17I3zMkzw13I4CAPlwGH4JlBv9V9B/DraQQTVI1ggqoRTFA1ggmqRjBB1QgmqBrBBFX3C+Y/qp+NoVfNWKcAAAAASUVORK5CYII="
-        _flag.value = false
+    fun getOtherUserInfo(otherUserId: Int){
+        Log.d("vm", "getOtherUserInfo")
+
+        try{
+            val userData: MyInfoInformation
+            runBlocking(Dispatchers.IO) {
+                val response = UserRepositoryImpl().getOtherInfo(encryptedPrefs.getAT(), otherUserId)
+                userData = if(response.isSuccessful && response.body()!!.check){
+                    response.body()!!.information
+                } else {
+                    MyInfoInformation(0, "알 수 없음", "null", 0, 0)
+                }
+            }
+
+            runBlocking(Dispatchers.IO) {
+                var page = 0
+
+                while(true){
+                    val response2 = FollowRepositoryImpl().getMyFollowing(encryptedPrefs.getAT(), page)
+                    if (response2.isSuccessful && response2.body()!!.check) {
+                        val userList = response2.body()!!.information.data.listIterator()
+                        while (userList.hasNext()) {
+                            if (userList.next().followUserId == otherUserId) {
+                                viewModelScope.launch(Dispatchers.Main) {
+                                    _flag.value = true
+                                }
+                            }
+                        }
+                    } else {
+                        break
+                    }
+
+                    page++
+                }
+
+            }
+
+
+            viewModelScope.launch(Dispatchers.Main){
+                _userId.value = userData.userId
+                _nick.value = userData.nickname
+                _profileImg.value = userData.profileImgUrl
+                _follower.value = userData.numFollower.toString()
+                _following.value = userData.numFollowing.toString()
+            }
+        } catch (e: Exception) {throw IllegalArgumentException("타유저 정보 요청 실패")}
+    }
+
+    fun changeFlag(){
+        if(flag.value!!){
+            runBlocking(Dispatchers.IO){
+                val response = FollowRepositoryImpl().deleteFollow(encryptedPrefs.getAT(), userId.value!!)
+
+                viewModelScope.launch(Dispatchers.Main) {
+                    if (response.isSuccessful && response.body()!!.check) {
+                        _flag.value = false
+                    }
+                }
+            }
+        } else {
+            runBlocking(Dispatchers.IO){
+                val response = FollowRepositoryImpl().postFollow(encryptedPrefs.getAT(), userId.value!!)
+
+                viewModelScope.launch(Dispatchers.Main) {
+                    if (response.isSuccessful && response.body()!!.check) {
+                        _flag.value = true
+                    }
+                }
+            }
+        }
+        getOtherUserInfo(userId.value!!)
     }
 }

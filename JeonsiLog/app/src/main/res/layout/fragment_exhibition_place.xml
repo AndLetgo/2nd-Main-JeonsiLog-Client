@@ -12,13 +12,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.exhibition.ExhibitionPlaceFragment">
+        tools:context=".view.exhibition.ExhibitionPlaceFragment"
+        android:background="@color/basic_white">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
             <TextView
+                android:id="@+id/tv_tool_bar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="전시장명"

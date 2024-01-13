@@ -6,7 +6,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import com.example.jeonsilog.R
 
 class SpannableStringUtil {
@@ -16,20 +15,29 @@ class SpannableStringUtil {
         val numberPattern = "\\d+".toRegex()
         val matchResults = numberPattern.findAll(str)
 
+        var lastStart = -1
+        var lastEnd = -1
+
         for (matchResult in matchResults) {
             val start = matchResult.range.first
             val end = matchResult.range.last + 1
 
+            lastStart = start
+            lastEnd = end
+        }
+
+        if (lastStart != -1 && lastEnd != -1) {
             spannableStr.setSpan(
                 ForegroundColorSpan(context.getColor(R.color.basic_point)),
-                start,
-                end,
+                lastStart,
+                lastEnd,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
 
         return spannableStr
     }
+
 
     fun boldTextBetweenBrackets(str: String): SpannableString {
         val startBracket = '['

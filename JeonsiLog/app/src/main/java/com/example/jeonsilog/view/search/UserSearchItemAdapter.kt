@@ -2,24 +2,29 @@ package com.example.jeonsilog.view.search
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.UserSearchItem
+import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
+import com.example.jeonsilog.widget.utils.GlideApp
+import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
-class UserSearchItemAdapter(private val context: Context, private val items: List<UserSearchItem>) : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
-
+class UserSearchItemAdapter(
+    private val context: Context,private val list:List<SearchUserInformationEntity>)
+    : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
+    var itemPage=0
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val usernameTextView: TextView = view.findViewById(R.id.tv_user_name)
-        //val userprofileImageView:ImageView=view.findViewById(R.id.iv_user_profile)
+
 
     }
 
@@ -29,19 +34,25 @@ class UserSearchItemAdapter(private val context: Context, private val items: Lis
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
 
-        val unsplashUrl = "https://picsum.photos/id/${position}/200/300"
-        Glide.with(context)
+        val unsplashUrl = list[position].profileImgUrl
+        GlideApp.with(context)
             .load(unsplashUrl)
-            .transform(CenterCrop(), RoundedCorners(R.dimen.item_48))
+            .centerCrop()
+            .circleCrop()
             .into(holder.itemView.findViewById(R.id.iv_user_profile))
+        holder.usernameTextView.text = list[position].nickname
+        holder.itemView.setOnClickListener {
+            //유저 id
 
-        holder.usernameTextView.text = item.username
+            holder.itemView.setOnClickListener {
+                (context as MainActivity).moveOtherUserProfile(list[position].userId, list[position].nickname)
 
+            }
+
+        }
     }
-
     override fun getItemCount(): Int {
-        return items.size
+        return list.size
     }
 }

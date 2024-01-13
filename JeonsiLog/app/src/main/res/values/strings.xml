@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JeonsiLog</string>
+    <string name="app_name">전시로그</string>
 
     <!-- Button -->
     <string name="btn_delete">삭제</string>
@@ -33,7 +33,7 @@
 
     <string name="btn_start">시작하기</string>
     <string name="btn_refresh">새로고침</string>
-    <string name="btn_duplicate">중복체크</string>
+    <string name="btn_duplicate">중복확인</string>
 
     <!-- Date -->
     <string name="date_now">지금</string>
@@ -52,16 +52,23 @@
 
     <string name="dialog_nick_modify_title">닉네임 수정</string>
     <string name="dialog_nick_modify_hint">2~10글자, 특수문자, 공백 사용 불가</string>
-    <string name="dialog_nick_duplicate">중복된 닉네임이에요.</string>
+    <string name="dialog_nick_duplicate">중복된 닉네임이에요</string>
     <string name="dialog_nick_prohibited_words_check">부적절한 단어가 포함되어 있어요.</string>
-    <string name="dialog_failure_internet">인터넷에 연결할 수 없어요. \n 새로고침을 하거나 \n 네트워크 설정을 확인해주세요.</string>
+    <string name="dialog_failure_internet">인터넷에 연결할 수 없어요 \n새로고침을 하거나 \n네트워크 설정을 확인해주세요</string>
+
+    <!-- Toast Message -->
+    <string name="toast_poster_download_success">저장 성공!</string>
+    <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
+    <string name="toast_poster_report_success">접수 되었어요!</string>
+    <string name="toast_poster_report_failure">접수 실패. 다시 시도해주세요.</string>
+    <string name="toast_notification_go_review_exception">해당 감상평이 삭제되었어요.</string>
 
     <!-- Login -->
-    <string name="login_nick_placeholder">닉네임을 입력하세요.</string>
+    <string name="login_nick_placeholder">닉네임을 입력하세요</string>
     <string name="login_nick_hint">2~10글자, 특수문자, 공백 사용 불가</string>
     <string name="login_nick_check_success">사용 가능한 닉네임이에요.</string>
     <string name="login_nick_check_duplicate">중복된 닉네임이에요.</string>
-    <string name="login_nick_check_prohibited_words">부적절한 단어가 포함되어 있어요.</string>
+    <string name="login_nick_check_forbidden">부적절한 단어가 포함되어 있어요.</string>
     <string name="login_nick_check_special_char">특수문자 및 공백은 사용할 수 없어요.</string>
     <string name="login_nick_check_is_pair">자음 또는 모음을 홀로 사용할 수 없어요.</string>
 
@@ -69,23 +76,25 @@
     <string name="home_title">요즘 뜨는 전시</string>
 
     <!-- Keyword -->
-    <string name="keyword_state_before">시작 전</string>
-    <string name="keyword_state_on">전시 중</string>
+    <string name="keyword_state_before">시작전</string>
+    <string name="keyword_state_on">전시중</string>
     <string name="keyword_free">무료</string>
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>
-    <string name="exhibition_more_info">...더보기</string>
+    <string name="exhibition_more_info">&#160;...더보기</string>
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>
     <string name="exhibition_reply">댓글</string>
+    <string name="exhibition_reply_count">댓글 %1$d</string>
     <string name="exhibition_writing_review">감상평 작성하기</string>
     <string name="exhibition_writing_review_hint">여기에 감상평을 입력하세요!</string>
     <string name="exhibition_reply_hint">댓글을 남겨 보세요!</string>
-    <string name="exhibition_writing_review_count">(%d/1000)</string>
+    <string name="exhibition_writing_review_count">(%1$s/1000)</string>
 
     <!-- Search -->
     <string name="search_edit_hint">검색어를 입력하세요</string>
+    <string name="search_exhibition_name">전시회를 검색해 주세요</string>
     <string name="search_recent_title">최근검색어</string>
     <string name="search_title">검색</string>
     <string name="search_random_exhibition">이런 전시회도 있어요</string>
@@ -96,7 +105,7 @@
 
     <!-- PhotoCalendar -->
     <string name="search_photocalendar_title">전시회 포스터 불러오기</string>
-    <string name="search_photocalendar_edit_hint">전시회명을 입력하세요</string>
+    <string name="search_photocalendar_edit_hint">전시회 이름을 입력하세요</string>
     <string name="calendar_mon">월</string>
     <string name="calendar_tue">화</string>
     <string name="calendar_wed">수</string>
@@ -171,6 +180,15 @@
     <string name="empty_other_rating">기록된 별점이 없어요</string>
     <string name="empty_other_review">기록된 감상평이 없어요</string>
     <string name="empty_other_photocalendar">포토캘린더가 비공개 되어있어요</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- 약관 동의 -->
+    <string name="tos_comment">전시로그를 이용하시려면\n동의가 필요해요</string>
+    <string name="tos_all">전체 동의</string>
+    <string name="tos_tos">개인정보 처리방침 (필수)</string>
+    <string name="tos_permission_photo">사진 접근 권한 동의 (선택)</string>
+    <string name="tos_next">다음</string>
+
+    <!-- 권한 요청 라이팅 -->
+    <string name="permission_modify">해제를 원하시면 설정에서 해당 권한을 직접 거부하셔야 합니다.</string>
+    <string name="permission_denied">사진 접근 권한이 거부되었습니다.\n사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다.</string>
 </resources>

@@ -8,20 +8,23 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_20"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_mypage_rating_item_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="[전시회 이름]"
+            android:breakStrategy="high_quality"
             style="@style/M_regular"
             android:textColor="@color/basic_black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/margin_4" />
+            app:layout_constraintEnd_toStartOf="@+id/rb_mypage_rating_item_rating"
+            android:layout_marginStart="@dimen/margin_4"
+            android:layout_marginEnd="@dimen/margin_20"/>
 
         <com.willy.ratingbar.BaseRatingBar
             android:id="@+id/rb_mypage_rating_item_rating"

@@ -3,7 +3,9 @@ package com.example.jeonsilog.repository.user
 import android.util.Log
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.UserApi
+import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
+import com.example.jeonsilog.data.remote.dto.user.GetIsOpenResponse
 import com.example.jeonsilog.data.remote.dto.user.MyInfoResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmActiveResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmFollowingResponse
@@ -11,6 +13,7 @@ import com.example.jeonsilog.data.remote.dto.user.PatchCalendarOpenResponse
 import com.example.jeonsilog.data.remote.dto.user.SearchUserResponse
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
+import okhttp3.MultipartBody
 import retrofit2.Response
 
 
@@ -71,9 +74,10 @@ class UserRepositoryImpl: UserRepository {
 
     override suspend fun searchUserInfo(
         token: String,
-        searchWord: String
+        searchWord: String,
+        page:Int
     ): Response<SearchUserResponse> {
-        val response = service.searchUserInfo("Bearer $token", searchWord)
+        val response = service.searchUserInfo("Bearer $token", searchWord,page)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
@@ -104,6 +108,29 @@ class UserRepositoryImpl: UserRepository {
 
     override suspend fun patchAlarmFollowing(token: String): Response<PatchAlarmFollowingResponse> {
         val response = service.patchAlarmFollowing("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun uploadProfileImg(
+        token: String,
+        img: MultipartBody.Part
+    ): Response<OnlyMsgResponse> {
+        val response = service.uploadProfileImg("Bearer $token", img)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun getIsOpen(token: String, userId: Int): Response<GetIsOpenResponse> {
+        val response = service.getIsOpen("Bearer $token", userId)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

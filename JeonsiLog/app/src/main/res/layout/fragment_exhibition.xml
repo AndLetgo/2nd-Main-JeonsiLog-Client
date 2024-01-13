@@ -9,13 +9,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/basic_white">
         <ImageView
             android:id="@+id/iv_poster_image"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_0"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/illus_dialog_warning"/>
+            android:adjustViewBounds="true" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/fl_bottom_sheet"
@@ -26,7 +27,9 @@
                 android:id="@+id/nsv_bottom_sheet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+                android:background="@drawable/shape_bottom_sheet"
+                android:elevation="@dimen/shadow_12">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -52,47 +55,17 @@
                         android:textColor="@color/basic_black"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/tv_keyword_second"
-                        android:layout_marginTop="@dimen/margin_40"
-                        android:layout_marginStart="@dimen/margin_24"
-                        android:layout_marginEnd="@dimen/margin_12" />
-
-                    <TextView
-                        android:id="@+id/tv_keyword_second"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_corner_round_full"
-                        android:elevation="@dimen/shadow_2"
-                        android:text="전시중"
-                        style="@style/S_bold"
-                        android:textColor="@color/basic_point"
-                        android:gravity="center"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/tv_keyword_first"
-                        android:layout_marginTop="@dimen/margin_40"
-                        android:layout_marginEnd="@dimen/margin_8" />
-
-                    <TextView
-                        android:id="@+id/tv_keyword_first"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_corner_round_full"
-                        android:elevation="@dimen/shadow_2"
-                        android:text="무료"
-                        style="@style/S_bold"
-                        android:textColor="@color/basic_point"
-                        android:gravity="center"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="@dimen/margin_40"
-                        android:layout_marginEnd="@dimen/margin_24" />
+                        android:layout_marginHorizontal="@dimen/margin_24"/>
 
                     <LinearLayout
                         android:id="@+id/ll_exhibition_place"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/tv_exhibition_name"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="@dimen/margin_20"
                         android:orientation="horizontal"
                         android:layout_marginHorizontal="@dimen/margin_24"
@@ -130,29 +103,49 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_address"
                         android:layout_marginHorizontal="@dimen/margin_24"/>
                     <TextView
-                        android:id="@+id/tv_place_time"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="00:00 - 00:00 / 휴관"
-                        style="@style/S_regular"
-                        android:textColor="@color/basic_black"
-                        app:layout_constraintTop_toBottomOf="@id/tv_date"
+                        android:id="@+id/tv_keyword_first"
+                        android:layout_width="@dimen/item_48"
+                        android:layout_height="@dimen/item_24"
+                        android:background="@drawable/shape_item_keyword"
+                        android:text="전시중"
+                        style="@style/Keyword_bold"
+                        android:textColor="@color/basic_point"
+                        android:gravity="center"
+                        android:elevation="@dimen/shadow_2"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/ll_info_btns"
-                        android:layout_marginHorizontal="@dimen/margin_24"/>
+                        app:layout_constraintTop_toBottomOf="@id/tv_date"
+                        android:layout_marginStart="@dimen/margin_24"
+                        android:layout_marginTop="@dimen/margin_16"/>
+                    <TextView
+                        android:id="@+id/tv_keyword_second"
+                        android:layout_width="@dimen/item_48"
+                        android:layout_height="@dimen/item_24"
+                        android:background="@drawable/shape_item_keyword"
+                        android:text="전시중"
+                        style="@style/Keyword_bold"
+                        android:textColor="@color/basic_point"
+                        android:gravity="center"
+                        android:elevation="@dimen/shadow_2"
+                        app:layout_constraintStart_toEndOf="@id/tv_keyword_first"
+                        app:layout_constraintTop_toBottomOf="@id/tv_date"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_16"/>
                     <LinearLayout
                         android:id="@+id/ll_info_btns"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@id/tv_place_time"
+                        app:layout_constraintTop_toBottomOf="@id/tv_date"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginEnd="@dimen/margin_24"
+                        android:layout_marginTop="@dimen/margin_8"
                         android:gravity="end">
-                        <ImageButton
-                            android:id="@+id/ib_interest"
+                        <ToggleButton
+                            android:id="@+id/tb_interest"
                             android:layout_width="@dimen/item_32"
                             android:layout_height="@dimen/item_32"
-                            android:src="@drawable/selector_btn_interest"
+                            android:textOn=""
+                            android:textOff=""
+                            android:background="@drawable/selector_btn_interest"
                             />
                         <ImageButton
                             android:id="@+id/ib_call"
@@ -173,7 +166,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/item_1"
                         android:background="@color/gray_light"
-                        app:layout_constraintTop_toBottomOf="@id/tv_place_time"
+                        app:layout_constraintTop_toBottomOf="@id/ll_info_btns"
                         app:layout_constraintBottom_toTopOf="@id/tv_info_title"
                         android:layout_marginVertical="@dimen/margin_28"
                         android:layout_marginHorizontal="@dimen/margin_24"/>
@@ -191,14 +184,14 @@
                         android:id="@+id/tv_information"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="류지안, 김종언, 김동우 등 유명 작가들의 작품을 한 공간에서 만나보세요. 많은 화제가 되고 있는 류지안 작가의 신작과 MOONLIGHT 시리즈, HERITAGE 시리즈, THE MO"
                         style="@style/S_regular"
                         android:textColor="@color/gray_medium"
+                        android:maxLines="3"
                         app:layout_constraintTop_toBottomOf="@id/tv_info_title"
                         android:layout_marginHorizontal="@dimen/margin_24"
                         android:layout_marginTop="@dimen/margin_4"/>
                     <TextView
-                        android:id="@+id/tv_more_info"
+                        android:id="@+id/tv_read_more_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/exhibition_more_info"
@@ -209,13 +202,24 @@
                         android:background="@color/basic_white"/>
                     <TextView
                         android:id="@+id/tv_rating_title"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/exhibition_rating"
                         style="@style/M_medium"
                         android:textColor="@color/basic_black"
                         app:layout_constraintTop_toBottomOf="@id/tv_information"
-                        android:layout_marginHorizontal="@dimen/margin_24"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_24"
+                        android:layout_marginTop="@dimen/margin_32"/>
+                    <TextView
+                        android:id="@+id/tv_rating_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/M_medium"
+                        android:textColor="@color/basic_point"
+                        app:layout_constraintStart_toEndOf="@id/tv_rating_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_information"
+                        android:layout_marginStart="@dimen/margin_4"
                         android:layout_marginTop="@dimen/margin_32"/>
                     <com.willy.ratingbar.BaseRatingBar
                         android:id="@+id/rating_bar"

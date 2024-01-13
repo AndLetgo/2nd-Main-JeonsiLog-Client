@@ -1,48 +1,80 @@
 package com.example.jeonsilog.view.home
 
+
+import android.util.Log
 import android.view.View
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.FragmentHomeBinding
+import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.admin.AdminExhibitionFragment
-import com.example.jeonsilog.viewmodel.ExhibitionModel
-import com.example.jeonsilog.viewmodel.HomeRvModel
+import com.example.jeonsilog.view.exhibition.ExhibitionFragment
+import com.example.jeonsilog.view.mypage.MyPageFragment
+import com.example.jeonsilog.widget.utils.GlobalApplication
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private lateinit var homeRvAdapter: HomeRvAdapter
-    override fun init() {
-        (activity as MainActivity).setStateBn(true,"admin")
+    private var homeRvList = mutableListOf<ExhibitionsInfo>()
+    private var exhibitionPage = 0
+    private var hasNextPage = true
 
-        val list = listOf<ExhibitionModel>(
-            ExhibitionModel(0,"title","address","place","",""),
-            ExhibitionModel(1,"title","address","place","",""),
-            ExhibitionModel(2,"title","address","place","",""),
-            ExhibitionModel(3,"title","address","place","",""),
-            ExhibitionModel(4,"title","address","place","",""),
-            ExhibitionModel(5,"title","address","place","",""),
-            ExhibitionModel(6,"title","address","place","",""),
-            ExhibitionModel(7,"title","address","place","",""),
-            ExhibitionModel(8,"title","address","place","",""),
-            ExhibitionModel(9,"title","address","place","",""),
-            ExhibitionModel(10,"title","address","place","",""),
-            ExhibitionModel(11,"title","address","place","","")
-        )
-        homeRvAdapter = HomeRvAdapter(list)
+    override fun init() {
+
+        homeRvAdapter = HomeRvAdapter(homeRvList, requireContext())
         binding.rvHomeExhibition.adapter = homeRvAdapter
         binding.rvHomeExhibition.layoutManager = LinearLayoutManager(this.context)
 
         homeRvAdapter.setOnItemClickListener(object : HomeRvAdapter.OnItemClickListener{
-            override fun onItemClick(v: View, data: ExhibitionModel, position: Int) {
-                //UserId check
-//                (activity as MainActivity).replaceFragment(AdminExhibitionFragment())
-                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminExhibitionFragment)
-                (activity as MainActivity).setStateBn(false,"admin")
+            override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
+                Log.d("exhibitoinId", "onItemClick: exhibitionID: ${data.exhibitionId}")
+                (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
             }
         })
+
+        setExhibitionRvByPage(0)
+
+        //recyclerView 페이징 처리
+        binding.rvHomeExhibition.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+                if(rvPosition == totalCount && hasNextPage){
+                    setExhibitionRvByPage(totalCount)
+                }
+            }
+        })
+
+        binding.ibFabTop.setOnClickListener {
+            binding.rvHomeExhibition.smoothScrollToPosition(0)
+        }
+        binding.toolbar.setOnClickListener {
+            binding.rvHomeExhibition.smoothScrollToPosition(0)
+        }
+    }
+
+    //recyclerView 페이징
+    private fun setExhibitionRvByPage(totalCount:Int){
+        var addItemCount = 0
+        runBlocking(Dispatchers.IO) {
+            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),exhibitionPage)
+            if(response.isSuccessful && response.body()!!.check ){
+                homeRvList.addAll(response.body()!!.information.data)
+                addItemCount = response.body()!!.information.data.size
+                hasNextPage = response.body()!!.information.hasNextPage
+            }
+        }
+        val startPosition = totalCount + 1
+        homeRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
+        exhibitionPage++
     }
 
 }

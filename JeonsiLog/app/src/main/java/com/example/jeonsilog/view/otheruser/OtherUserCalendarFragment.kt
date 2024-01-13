@@ -1,7 +1,5 @@
 package com.example.jeonsilog.view.otheruser
 
-import android.os.Bundle
-
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.fragment.app.viewModels
@@ -13,78 +11,32 @@ import com.example.jeonsilog.viewmodel.OtherUserCalendarViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 
-class OtherUserCalendarFragment: BaseFragment<FragmentOtherUserCalendarBinding>(R.layout.fragment_other_user_calendar) {
+class OtherUserCalendarFragment(private val otherUserId: Int): BaseFragment<FragmentOtherUserCalendarBinding>(R.layout.fragment_other_user_calendar) {
     private val viewModel: OtherUserCalendarViewModel by viewModels()
     private lateinit var adapter: OtherUserCalendarRvAdapter
-//    private lateinit var gestureDetector: GestureDetector
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
-//            override fun onFling(
-//                e1: MotionEvent?,
-//                e2: MotionEvent,
-//                distanceX: Float,
-//                distanceY: Float
-//            ): Boolean {
-//                println(e1 ?: "null")
-//                if (e1 != null && e2 != null) {
-//                    val deltaY = e2.y - e1.y
-//                    println(deltaY)
-//                    if (deltaY > 0) {
-//                        // 위로 스와이프
-//                        viewModel.processVerticalSwipeUp()
-//                    } else if (deltaY < 0) {
-//                        // 아래로 스와이프
-//                        viewModel.processVerticalSwipeDown()
-//                    }
-//                }
-//
-//                return true
-//            }
-//        })
-//
-//        binding.rvOtherUserCalendar.setOnTouchListener { _, event ->
-//            gestureDetector.onTouchEvent(event)
-//            true
-//        }
-    }
 
     override fun init() {
         binding.vm = viewModel
         binding.lifecycleOwner = requireActivity()
         viewModel.setSelectedDate(LocalDate.now())
-        setView()
+        viewModel.getIsOpen(otherUserId)
 
-        binding.rvOtherUserCalendar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val width = binding.rvOtherUserCalendar.height / 7
-                adapter.setLength(width)
-                adapter.notifyDataSetChanged()
-                binding.clOtherUserCalendar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+        setMonthView()
+
+        viewModel.isOpen.observe(this) {
+            if (it) {
+                binding.ivOtherUserCalendarEmptyImg.visibility = View.GONE
+                binding.tvOtherUserCalendarEmptyTitle.visibility = View.GONE
+                binding.tbOtherUserCalendar.visibility = View.VISIBLE
+                binding.rvOtherUserCalendar.visibility = View.VISIBLE
+                binding.llOtherUserCalendar.visibility = View.VISIBLE
+            } else {
+                binding.ivOtherUserCalendarEmptyImg.visibility = View.VISIBLE
+                binding.tvOtherUserCalendarEmptyTitle.visibility = View.VISIBLE
+                binding.tbOtherUserCalendar.visibility = View.GONE
+                binding.rvOtherUserCalendar.visibility = View.GONE
+                binding.llOtherUserCalendar.visibility = View.GONE
             }
-        })
-
-        viewModel.selectedDate.observe(this){
-            viewModel.getImageList()
-            daysInMonthArray(LocalDate.of(viewModel.selectedDate.value!!.slice(0..3).toInt(), viewModel.selectedDate.value!!.slice(6..7).toInt(), 1))
-        }
-
-        viewModel.imageList.observe(this){
-            adapter.notifyDataSetChanged()
-        }
-
-        binding.tvOtherUserYearMonth.setOnClickListener {
-            val pickYearMonthDialog = OtherUserCalendarBottomSheetDialog(viewModel)
-            pickYearMonthDialog.show(parentFragmentManager, "pickYearMonthDialog")
-        }
-
-        binding.ibOtherUserNextMonth.setOnClickListener {
-            viewModel.processVerticalSwipeUp()
-        }
-        binding.ibOtherUserPrevMonth.setOnClickListener {
-            viewModel.processVerticalSwipeDown()
         }
     }
 
@@ -94,6 +46,38 @@ class OtherUserCalendarFragment: BaseFragment<FragmentOtherUserCalendarBinding>(
         val manager = GridLayoutManager(requireContext(), 7)
         binding.rvOtherUserCalendar.layoutManager = manager
         binding.rvOtherUserCalendar.adapter = adapter
+
+        if(viewModel.isOpen.value!!){
+            binding.rvOtherUserCalendar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    val width = binding.rvOtherUserCalendar.height / 7
+                    adapter.setLength(width)
+                    adapter.notifyDataSetChanged()
+                    binding.clOtherUserCalendar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            })
+
+            viewModel.selectedDate.observe(this){
+                viewModel.getImageList(otherUserId)
+                daysInMonthArray(LocalDate.of(viewModel.selectedDate.value!!.slice(0..3).toInt(), viewModel.selectedDate.value!!.slice(6..7).toInt(), 1))
+            }
+
+            viewModel.imageList.observe(this){
+                adapter.notifyDataSetChanged()
+            }
+
+            binding.tvOtherUserYearMonth.setOnClickListener {
+                val pickYearMonthDialog = OtherUserCalendarBottomSheetDialog(viewModel)
+                pickYearMonthDialog.show(parentFragmentManager, "pickYearMonthDialog")
+            }
+
+            binding.ibOtherUserNextMonth.setOnClickListener {
+                viewModel.nextMonth()
+            }
+            binding.ibOtherUserPrevMonth.setOnClickListener {
+                viewModel.prevMonth()
+            }
+        }
     }
 
     private fun daysInMonthArray(date: LocalDate) {
@@ -112,23 +96,5 @@ class OtherUserCalendarFragment: BaseFragment<FragmentOtherUserCalendarBinding>(
         }
 
         viewModel.setDayList(dayList)
-    }
-
-    private fun setView(){
-        if (!viewModel.isPublic.value!!) {
-            binding.ivOtherUserCalendarEmptyImg.visibility = View.VISIBLE
-            binding.tvOtherUserCalendarEmptyTitle.visibility = View.VISIBLE
-            binding.tbOtherUserCalendar.visibility = View.GONE
-            binding.rvOtherUserCalendar.visibility = View.GONE
-            binding.llOtherUserCalendar.visibility = View.GONE
-        } else {
-            binding.ivOtherUserCalendarEmptyImg.visibility = View.GONE
-            binding.tvOtherUserCalendarEmptyTitle.visibility = View.GONE
-            binding.tbOtherUserCalendar.visibility = View.VISIBLE
-            binding.rvOtherUserCalendar.visibility = View.VISIBLE
-            binding.llOtherUserCalendar.visibility = View.VISIBLE
-
-            setMonthView()
-        }
     }
 }

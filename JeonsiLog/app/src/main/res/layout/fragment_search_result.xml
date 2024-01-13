@@ -8,9 +8,10 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/basic_white"
+        >
 
 
 
@@ -40,8 +41,8 @@
                 android:textColor="@color/gray_dark"
                 android:textColorHint="@color/gray_medium"
                 app:layout_constraintBottom_toBottomOf="parent"
-
-
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 app:layout_constraintEnd_toStartOf="@+id/iv_result_delete"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

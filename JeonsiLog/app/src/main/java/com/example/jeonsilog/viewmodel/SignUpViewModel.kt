@@ -1,10 +1,12 @@
 package com.example.jeonsilog.viewmodel
 
+import android.content.Context
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.jeonsilog.R
 import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,10 +14,13 @@ import kotlinx.coroutines.launch
 class SignUpViewModel: ViewModel(){
     private var _comment = MutableLiveData("")
     private var _isNickFocused = MutableLiveData(false)
-    private var _btnFlag = MutableLiveData(true)
+    private var _btnFlag = MutableLiveData(false)
     private var _checkableFlag = MutableLiveData(false)
     private var _etNick = MutableLiveData("")
     private var _profileImagePath = MutableLiveData("")
+    private var _tosIsCheckedTos = MutableLiveData(false)
+    private var _tosIsCheckedPermissionPhoto = MutableLiveData(false)
+    private var _tosIsCheckedAll = MutableLiveData(false)
 
     val comment: LiveData<String>
         get() = _comment
@@ -38,16 +43,22 @@ class SignUpViewModel: ViewModel(){
         _btnFlag.value = state
     }
 
-    fun duplicateCheck(nick: String, comment: String){
-        viewModelScope.launch(Dispatchers.IO){
-            val flag = AuthRepositoryImpl().getIsAvailable(nick)
+    fun nickAvailableCheck(nick: String, context: Context){
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = AuthRepositoryImpl().getIsAvailable(nick)
+            if (response.isSuccessful && response.body()!!.check) {
+                val result = response.body()!!.information
 
-            launch(Dispatchers.Main) {
-                if(flag){
-                    onBtnFlagChange(false)
-                } else {
-                    setComment(comment)
+                launch(Dispatchers.Main) {
+                    if (!result.isDuplicate && !result.isForbidden) {
+                        onBtnFlagChange(true)
+                    } else if (result.isDuplicate) {
+                        setComment(context.getString(R.string.login_nick_check_duplicate))
+                    } else {
+                        setComment(context.getString(R.string.login_nick_check_forbidden))
+                    }
                 }
+
             }
         }
     }
@@ -67,5 +78,30 @@ class SignUpViewModel: ViewModel(){
 
     fun setProfileUrl(path: String){
         _profileImagePath.value = path
+    }
+
+    val tosIsCheckedTos: LiveData<Boolean>
+        get() = _tosIsCheckedTos
+
+    val tosIsCheckedPermissionPhoto: LiveData<Boolean>
+        get() = _tosIsCheckedPermissionPhoto
+
+    val tosIsCheckedAll: LiveData<Boolean>
+        get() = _tosIsCheckedAll
+
+    fun changeAll(p: Boolean){
+        _tosIsCheckedAll.value = p
+    }
+
+    fun changeTosTos(p: Boolean){
+        _tosIsCheckedTos.value = p
+
+        _tosIsCheckedAll.value = tosIsCheckedTos.value!! && tosIsCheckedPermissionPhoto.value!!
+    }
+
+    fun changeTosPhoto(p: Boolean){
+        _tosIsCheckedPermissionPhoto.value = p
+
+        _tosIsCheckedAll.value = tosIsCheckedTos.value!! && tosIsCheckedPermissionPhoto.value!!
     }
 }

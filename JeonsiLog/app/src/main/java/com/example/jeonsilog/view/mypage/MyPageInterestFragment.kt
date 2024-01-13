@@ -2,24 +2,25 @@ package com.example.jeonsilog.view.mypage
 
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.interest.GetInterestEntity
 import com.example.jeonsilog.databinding.FragmentMyPageInterestBinding
+import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
+import com.example.jeonsilog.widget.utils.GlobalApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class MyPageInterestFragment:BaseFragment<FragmentMyPageInterestBinding>(R.layout.fragment_my_page_interest) {
+    var list = mutableListOf<GetInterestEntity>()
+    private var page = 0
+    private var isFinished = false
+    private lateinit var adapter: MyPageRvAdapter<GetInterestEntity>
+    private var newItemCount = 0
+
     override fun init() {
-        val list = mutableListOf<MyPageInterestModel>()
-        list.add(MyPageInterestModel(1, "https://picsum.photos/id/1/200/300", "유혜정 : 평정심", "갤러리 한옥", listOf(KeyWord.on)))
-        list.add(MyPageInterestModel(2, "https://picsum.photos/id/2/200/300", "김춘재 : 현현炫玄의 빛", "갤러리 끼 SEOUL", listOf(KeyWord.on, KeyWord.free)))
-        list.add(MyPageInterestModel(3, "https://picsum.photos/id/3/200/300", "손다현 개인전", "갤러리 끼 SEOUL", listOf(KeyWord.on, KeyWord.free)))
-        list.add(MyPageInterestModel(4, "https://picsum.photos/id/4/200/300", "김춘재 : 현현炫玄의 빛", "갤러리아람", listOf(KeyWord.on)))
-        list.add(MyPageInterestModel(5, "https://picsum.photos/id/5/200/300", "우리는 흔들리는 땅에 집을 짓는다?", "챔버1965", listOf(KeyWord.on, KeyWord.free)))
-        list.add(MyPageInterestModel(6, "https://picsum.photos/id/6/200/300", "Group by 6", "갤러리 끼 SEOUL", listOf(KeyWord.on, KeyWord.free)))
-        list.add(MyPageInterestModel(7, "https://picsum.photos/id/7/200/300", "김은형:서로를 안아주는 관계의 존재", "갤러리 끼 SEOUL", listOf(KeyWord.on, KeyWord.free)))
-        list.add(MyPageInterestModel(8, "https://picsum.photos/id/8/200/300", "올:ToGather", "갤러리 끼 SEOUL", listOf(KeyWord.on)))
-        list.add(MyPageInterestModel(9, "https://picsum.photos/id/9/200/300", "CONNECT", "갤러리 끼 SEOUL", listOf(KeyWord.before, KeyWord.free)))
-        list.add(MyPageInterestModel(10, "https://picsum.photos/id/10/200/300", "이한빈:Islet", "갤러리 끼 SEOUL", listOf(KeyWord.on)))
-        list.add(MyPageInterestModel(11, "https://picsum.photos/id/11/200/300", "이야기 발생 시점", "갤러리 끼 SEOUL", listOf(KeyWord.on, KeyWord.free)))
+        getItems()
 
         if(list.isEmpty()){
             binding.rvMypageInterest.visibility = View.GONE
@@ -27,9 +28,46 @@ class MyPageInterestFragment:BaseFragment<FragmentMyPageInterestBinding>(R.layou
             binding.tvMypageInterestEmptyTitle.visibility = View.VISIBLE
             binding.tvMypageReviewEmptyDescription.visibility = View.VISIBLE
         } else {
-            val adapter = MyPageRvAdapter<MyPageInterestModel>(list, 2)
+            adapter = MyPageRvAdapter<GetInterestEntity>(list, 2, requireContext())
             binding.rvMypageInterest.adapter = adapter
             binding.rvMypageInterest.layoutManager = LinearLayoutManager(requireContext())
+
+            binding.rvMypageInterest.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                    if(totalCount == rvPosition){
+                        if(!isFinished){
+                            getItems()
+
+                            recyclerView.post {
+                                adapter.notifyItemRangeInserted(totalCount+1, newItemCount)
+                                newItemCount = 0
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    private fun getItems(){
+        runBlocking(Dispatchers.IO){
+            val response = InterestRepositoryImpl().getInterest(GlobalApplication.encryptedPrefs.getAT(), page)
+            if(response.isSuccessful && response.body()!!.check){
+                newItemCount = response.body()!!.information.data.size
+                val data = response.body()!!.information.data.listIterator()
+                while (data.hasNext()){
+                    list.add(data.next())
+                }
+            } else {
+                isFinished = true
+            }
+
+            page++
         }
     }
 }
