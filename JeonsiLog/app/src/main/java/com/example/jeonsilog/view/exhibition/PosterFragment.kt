@@ -24,6 +24,7 @@ import com.example.jeonsilog.databinding.FragmentPosterBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -37,6 +38,14 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
     private var thisPosterUrl = ""
 
     override fun init() {
+        //네트워크
+        GlobalApplication.isRefresh.observe(this){
+            if(it){
+                (activity as ExtraActivity).refreshFragment(R.id.PosterFragment)
+                GlobalApplication.isRefresh.value = false
+            }
+        }
+
         thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.currentExhibitionIds.value!!.size-1]
         posterList = mutableListOf()
 
@@ -64,7 +73,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
         binding.btnReportPosterEmpty.setOnClickListener {
             var isSuccess = false
             runBlocking(Dispatchers.IO){
-                val body = PostReportRequest("POSTER", thisExhibitionId)
+                val body = PostReportRequest("EXHIBITION", thisExhibitionId)
                 val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
                 if(response.isSuccessful && response.body()!!.check){
                     isSuccess = true
