@@ -4,9 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable
-            name="vm"
-            type="com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +48,6 @@
                 style="@style/M_bold"
                 android:layout_width="@dimen/item_24"
                 android:layout_height="wrap_content"
-                android:text="@{vm.count}"
                 android:textColor="@color/basic_black"
                 android:gravity="center"/>
 
@@ -69,7 +65,6 @@
                 style="@style/M_bold"
                 android:layout_width="@dimen/item_24"
                 android:layout_height="wrap_content"
-                android:text="@{vm.maxCount}"
                 android:textColor="@color/basic_black" />
         </LinearLayout>
 

@@ -101,7 +101,7 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
         }
     }
 
-    override fun getItemCount(): Int = exhibitionList.size +1
+    override fun getItemCount(): Int = homeRvList.size +1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
@@ -116,14 +116,6 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
                 }
             }
         }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(v: View, data: ExhibitionModel, position: Int)
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        this.listener = listener
     }
 
     interface OnItemClickListener {

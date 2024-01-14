@@ -44,8 +44,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         binding.searchData=viewModel
         binding.lifecycleOwner = this
-        val mActivity = context as MainActivity
-        mActivity.setStateBn(true)
+//        (context as MainActivity).setStateBn("admin")
         isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragment(RecordSearchFragment())

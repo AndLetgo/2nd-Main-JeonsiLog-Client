@@ -10,7 +10,7 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel
+//import com.example.jeonsilog.viewmodel.ExhibitionPosterViewModel
 
 class AdminPosterVpAdapter(private val posterList: List<Int>,private val  context: Context):PagerAdapter() {
     private var listener: CountListener? = null

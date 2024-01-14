@@ -3,8 +3,6 @@ package com.example.jeonsilog.view
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.jeonsilog.R
@@ -28,6 +26,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.spalshpage.SplashActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFinish
@@ -68,6 +67,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
     override fun init() {
+        //admin 계정 체크
+
         this.onBackPressedDispatcher.addCallback(this, callback)
 
         networkState.observe(this) {
@@ -117,20 +118,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         binding.bnvAdmin.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.item_admin_home->{
-                    setStateFl("home")
+//                    setStateFl("home")
                     val navController = findNavController(R.id.fcv_nav_admin)
                     navController.navigate(R.id.homeFragment)
                 }
                 R.id.item_admin_search->{
-                    setStateFl("")
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,SearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
+//                    setStateFl("")
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,RecordSearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_admin_report->{
-                    setStateFl("")
+//                    setStateFl("")
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminReportFragment()).commit()
                 }
                 R.id.item_admin_managing->{
-                    setStateFl("")
+//                    setStateFl("")
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminManagingFragment()).commit()
                 }
             }
@@ -143,13 +144,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         }
     }
 
-    fun setStateBn(isVisible:Boolean, type:String){
+    fun setStateBn(isVisible:Boolean){
         var view = binding.bnvMain
-        when(type){
-            "main" -> view = binding.bnvMain
-            "admin" -> view = binding.bnvAdmin
-        }
-
+//        when(type){
+//            "main" -> view = binding.bnvMain
+//            "admin" -> view = binding.bnvAdmin
+//        }
+        view.isVisible = isVisible
     }
 
     private fun kakaoLogOut(msg: String){
@@ -182,6 +183,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+    //admin 계정 체크
+    private fun checkAdmin(){
+
     }
 
     fun loadExtraActivity(type:Int, newTargetId:Int){
