@@ -11,6 +11,7 @@
 
     <application
         android:name=".widget.utils.GlobalApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -20,7 +21,6 @@
         android:roundIcon="@drawable/logo_jeonsilog"
         android:supportsRtl="true"
         android:theme="@style/Theme.JeonsiLog"
-        android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
             android:name=".view.exhibition.ExtraActivity"
@@ -28,7 +28,11 @@
         <activity
             android:name=".view.spalshpage.SplashActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".view.login.LoginActivity"/>
         <activity android:name=".view.login.SignUpActivity"/>
@@ -37,7 +41,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 

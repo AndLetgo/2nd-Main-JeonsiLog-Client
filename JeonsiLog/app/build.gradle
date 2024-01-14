@@ -85,5 +85,5 @@ dependencies {
 
     //read more
     implementation 'kr.co.prnd:readmore-textview:1.0.0'
-    
+
 }
