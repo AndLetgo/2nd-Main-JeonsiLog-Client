@@ -122,6 +122,7 @@ class SignUpFragment: BaseFragment<FragmentSignupBinding>(R.layout.fragment_sign
                                     CoroutineScope(Dispatchers.Main).launch {
                                         val intent = Intent(requireContext(), SplashActivity::class.java)
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                                        requireActivity().finishAffinity()
                                         startActivity(intent)
                                     }
                                 } else {

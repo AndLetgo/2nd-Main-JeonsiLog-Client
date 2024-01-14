@@ -2,16 +2,18 @@ package com.example.jeonsilog.data.remote.dto.user
 
 import com.google.gson.annotations.SerializedName
 
-data class PatchAlarmActiveResponse(
+data class GetReceptionResponse (
     @SerializedName("check")
-    var check: Boolean,
+    val check: Boolean,
     @SerializedName("information")
-    var information: PatchAlarmActiveInformation
+    val information: GetReceptionInformation
 )
 
-data class PatchAlarmActiveInformation(
+data class GetReceptionInformation(
     @SerializedName("userId")
     val userId: Int,
+    @SerializedName("isRecvExhibition")
+    val isRecvExhibition: Boolean,
     @SerializedName("isRecvActive")
     val isRecvActive: Boolean
 )

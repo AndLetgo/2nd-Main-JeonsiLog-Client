@@ -75,7 +75,7 @@ class TokenRefreshInterceptor : Authenticator {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     encryptedPrefs.clearAll()
-                    encryptedPrefs.clearAll()
+                    prefs.clearAll()
                     isFinish.value = true
                 }
             }
