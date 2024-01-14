@@ -236,4 +236,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             .replace(R.id.fl_main, fragment)
             .commit()
     }
+    fun setBottomNavCurrentItem(index:Int){
+        binding.bnvMain.menu.getItem(index).isChecked = true
+    }
 }

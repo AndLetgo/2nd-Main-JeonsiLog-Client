@@ -27,8 +27,8 @@ class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUse
 
     lateinit var viewModel: SearchViewModel
     override fun init() {
+        Log.d("Fragment", "UserSearchFragment: ")
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-
         userItemAdapter = UserSearchItemAdapter(requireContext(),UserRvList)
         binding.rvUserinfo.adapter = userItemAdapter
         binding.rvUserinfo.layoutManager = LinearLayoutManager(requireContext())

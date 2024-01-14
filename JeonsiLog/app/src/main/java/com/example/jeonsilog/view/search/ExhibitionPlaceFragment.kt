@@ -36,7 +36,6 @@ class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<Fragme
     lateinit var viewModel: SearchViewModel
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-
         exhibitionPlaceItemAdapter = ExhibitionPlaceItemAdapter(requireContext(),exhibitionPlaceRvList)
         binding.rvExhibitionplace.adapter = exhibitionPlaceItemAdapter
         binding.rvExhibitionplace.layoutManager = LinearLayoutManager(requireContext())

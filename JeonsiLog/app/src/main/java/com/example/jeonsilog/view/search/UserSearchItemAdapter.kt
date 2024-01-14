@@ -43,11 +43,8 @@ class UserSearchItemAdapter(
         holder.usernameTextView.text = list[position].nickname
         holder.itemView.setOnClickListener {
             //유저 id
+            (context as MainActivity).moveOtherUserProfile(list[position].userId, list[position].nickname)
 
-            holder.itemView.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(list[position].userId, list[position].nickname)
-
-            }
 
         }
     }
