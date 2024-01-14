@@ -11,6 +11,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -129,7 +130,8 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         setEditBoxDeleteBt()
         setOnEditorActionListener()
 
-
+        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        dialog?.window?.setBackgroundDrawable(null)
         showKeyboard()
     }
 
