@@ -20,6 +20,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -27,6 +28,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.spalshpage.SplashActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFinish
@@ -40,6 +42,7 @@ import com.example.jeonsilog.view.search.SearchResultFragment
 import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 
@@ -55,7 +58,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         override fun handleOnBackPressed() {
             if(supportFragmentManager.backStackEntryCount != 0){
                 supportFragmentManager.popBackStack()
-            } else {
+            }else if(isAdminExhibitionOpen){
+                Navigation.findNavController(binding.fcvNavAdmin).popBackStack()
+            }else{
                 if (System.currentTimeMillis() - backPressedTime <= 2000) {
                     finish()
                 } else {
@@ -68,6 +73,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
     override fun init() {
         //admin 계정 체크
+//        if(encryptedPrefs.){
+//            //관리자
+//            binding.bnvMain.visibility = View.GONE
+//            binding.bnvAdmin.visibility = View.VISIBLE
+//        }else{
+//            //일반 유저
+//            binding.bnvMain.visibility = View.VISIBLE
+//            binding.bnvAdmin.visibility = View.GONE
+//        setStateFcm(false)
+//            supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
+//        }
 
         this.onBackPressedDispatcher.addCallback(this, callback)
 
@@ -83,7 +99,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             }
         }
 
-        supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
         //Main Bottom Nav
         binding.bnvMain.setOnItemSelectedListener {
             when(it.itemId){
@@ -118,20 +133,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         binding.bnvAdmin.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.item_admin_home->{
-//                    setStateFl("home")
+                    setStateFcm(true)
                     val navController = findNavController(R.id.fcv_nav_admin)
                     navController.navigate(R.id.homeFragment)
                 }
                 R.id.item_admin_search->{
-//                    setStateFl("")
+                    setStateFcm(false)
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,RecordSearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
                 }
                 R.id.item_admin_report->{
-//                    setStateFl("")
+                    setStateFcm(false)
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminReportFragment()).commit()
                 }
                 R.id.item_admin_managing->{
-//                    setStateFl("")
+                    setStateFcm(false)
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminManagingFragment()).commit()
                 }
             }
@@ -146,11 +161,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
     fun setStateBn(isVisible:Boolean){
         var view = binding.bnvMain
+        //관리자 계정 체크
 //        when(type){
 //            "main" -> view = binding.bnvMain
 //            "admin" -> view = binding.bnvAdmin
 //        }
         view.isVisible = isVisible
+    }
+    private fun setStateFcm(isVisible: Boolean){
+        if(isVisible){
+            binding.fcvNavAdmin.visibility = View.VISIBLE
+            binding.flMain.visibility = View.GONE
+        }else{
+            binding.fcvNavAdmin.visibility = View.GONE
+            binding.flMain.visibility = View.VISIBLE
+        }
     }
 
     private fun kakaoLogOut(msg: String){

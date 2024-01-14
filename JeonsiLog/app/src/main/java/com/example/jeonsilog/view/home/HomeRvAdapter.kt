@@ -28,7 +28,6 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
     inner class ViewHolder(val binding: ItemHomeExhibitionBinding):
         RecyclerView.ViewHolder(binding.root){
         fun bind(item: ExhibitionsInfo){
-            Log.d(tag, "bind: ")
             binding.tvTitle.text = item.exhibitionName
 
             var address = ""

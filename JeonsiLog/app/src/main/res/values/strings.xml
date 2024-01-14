@@ -56,6 +56,13 @@
     <string name="dialog_nick_prohibited_words_check">부적절한 단어가 포함되어 있어요.</string>
     <string name="dialog_failure_internet">인터넷에 연결할 수 없어요 \n새로고침을 하거나 \n네트워크 설정을 확인해주세요</string>
 
+    <string name="dialog_admin_edit_exhibition_name">전시회 이름 수정</string>
+    <string name="dialog_admin_edit_place_name">전시공간 이름 수정</string>
+    <string name="dialog_admin_edit_place_address">전시공간 주소 수정</string>
+    <string name="dialog_admin_edit_place_call">전시공간 전화번호 수정</string>
+    <string name="dialog_admin_edit_place_homepage">전시공간 홈페이지 링크 수정</string>
+    <string name="dialog_admin_edit_exhibition_information">전시회 정보 수정</string>
+
     <!-- Toast Message -->
     <string name="toast_poster_download_success">저장 성공!</string>
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
@@ -160,6 +167,11 @@
     <string name="admin_report_reply">님의 댓글이 신고됐어요</string>
     <string name="admin_report_poster">포스터 등록이 필요해요</string>
     <string name="admin_report_review">님의 감상평이 신고됐어요</string>
+    <string name="admin_exhibition_place_name_empty">전시공간 이름 없음</string>
+    <string name="admin_exhibition_place_address_empty">전시공간 주소 없음</string>
+    <string name="admin_exhibition_place_call_empty">전시공간 전화번호 없음</string>
+    <string name="admin_exhibition_place_homepage_empty">전시공간 홈페이지 주소 없음</string>
+    <string name="admin_exhibition_information_empty">전시회 정보 없음</string>
 
     <!-- Empty State -->
     <string name="empty_search_title">검색 결과가 없어요</string>
@@ -191,4 +203,6 @@
     <!-- 권한 요청 라이팅 -->
     <string name="permission_modify">해제를 원하시면 설정에서 해당 권한을 직접 거부하셔야 합니다.</string>
     <string name="permission_denied">사진 접근 권한이 거부되었습니다.\n사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

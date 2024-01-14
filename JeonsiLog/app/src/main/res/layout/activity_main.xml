@@ -47,7 +47,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/shape_bn_round"
-            android:elevation="@dimen/shadow_12"
             app:labelVisibilityMode="unlabeled"
             app:itemBackground="@null"
             app:itemIconTint="@drawable/selector_bn_color"

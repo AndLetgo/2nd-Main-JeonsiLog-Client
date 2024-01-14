@@ -43,13 +43,13 @@ class ExhibitionReviewRvAdapter(
                     .into(binding.ivProfile)
             }
 
-            binding.ibMenu.setOnClickListener{
-                if(item.userId == encryptedPrefs.getUI()){
-                    listener?.onMenuBtnClick(it, 0, item.reviewId, position)
-                }else{
-                    listener?.onMenuBtnClick(it, 1, item.reviewId, position)
-                }
-            }
+//            binding.ibMenu.setOnClickListener{
+//                if(item.userId == encryptedPrefs.getUI()){
+//                    listener?.onMenuBtnClick(it, 0, item.reviewId, position)
+//                }else{
+//                    listener?.onMenuBtnClick(it, 1, item.reviewId, position)
+//                }
+//            }
         }
     }
 

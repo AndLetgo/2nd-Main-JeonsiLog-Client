@@ -22,11 +22,13 @@ class GlobalApplication: Application() {
         var isFollowingUpdate = MutableLiveData(false)
         var isRefresh = MutableLiveData(false)
 
-        var extraActivityReference: Int = 0 //0: Default, 1: Review, 2: Place, 3: AfterPlace, 4: Admin
+        var extraActivityReference: Int = 0 //0: Default, 1: Review, 2: Place, 3: AfterPlace
         var exhibitionId: Int = 0
         var newPlaceId: Int = 0
         var newPlaceName: String = ""
         var newReviewId: Int = 0
+
+        var isAdminExhibitionOpen:Boolean = false
     }
 
     override fun onCreate() {

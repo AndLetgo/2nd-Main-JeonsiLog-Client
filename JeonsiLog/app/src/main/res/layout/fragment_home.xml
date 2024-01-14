@@ -51,5 +51,17 @@
             android:layout_marginEnd="@dimen/margin_28"
             android:layout_marginBottom="@dimen/margin_32"
             android:elevation="@dimen/shadow_12"/>
+        <ImageButton
+            android:id="@+id/ib_fab_top_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_home_fab"
+            android:background="@drawable/shape_round_iv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="@dimen/margin_28"
+            android:layout_marginBottom="@dimen/margin_88"
+            android:elevation="@dimen/shadow_12"
+            android:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

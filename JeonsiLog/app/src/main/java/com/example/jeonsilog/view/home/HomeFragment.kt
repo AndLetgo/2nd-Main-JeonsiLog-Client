@@ -3,6 +3,8 @@ package com.example.jeonsilog.view.home
 
 import android.util.Log
 import android.view.View
+import androidx.core.view.marginBottom
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
@@ -11,7 +13,10 @@ import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.FragmentHomeBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -23,6 +28,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private var hasNextPage = true
 
     override fun init() {
+        isAdminExhibitionOpen = false
+        //관리자 체크
+//        if(){
+//            binding.ibFabTop.visibility = View.GONE
+//            binding.ibFabTopAdmin.visibility = View.VISIBLE
+//        }else{
+//            binding.ibFabTop.visibility = View.VISIBLE
+//            binding.ibFabTopAdmin.visibility = View.GONE
+//        }
+        binding.ibFabTop.visibility = View.VISIBLE
+        binding.ibFabTopAdmin.visibility = View.GONE
 
         homeRvAdapter = HomeRvAdapter(homeRvList, requireContext())
         binding.rvHomeExhibition.adapter = homeRvAdapter
@@ -30,8 +46,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
         homeRvAdapter.setOnItemClickListener(object : HomeRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
-                Log.d("exhibitoinId", "onItemClick: exhibitionID: ${data.exhibitionId}")
-                (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
+                //관리자 체크
+//                Log.d("exhibitoinId", "onItemClick: exhibitionID: ${data.exhibitionId}")
+//                (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
+                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminExhibitionFragment)
+                exhibitionId = data.exhibitionId
+                isAdminExhibitionOpen = true
             }
         })
 
