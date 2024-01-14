@@ -92,24 +92,21 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     private fun showNotification(title: String?, body: String?) {
         //알림페이지로 이동
         val intent: Intent
-        intent = Intent("your_special_action").apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            putExtra("action", "your_special_action") // 특정 동작을 나타내는 데이터 추가
-            action = "your_special_action"
+
+        if(body=="활동알림"){
+            intent = Intent("your_special_action").apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                putExtra("action", "your_special_action") // 특정 동작을 나타내는 데이터 추가
+                action = "your_special_action"
+            }
+        }else{
+            intent = Intent("your_special_exhibition").apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                putExtra("action", "your_special_exhibition") // 특정 동작을 나타내는 데이터 추가
+                action = "your_special_exhibition"
+            }
+
         }
-        //if(title=="전시"){
-        //    intent = Intent("your_special_exhibition").apply {
-        //        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        //        putExtra("action", "your_special_exhibition") // 특정 동작을 나타내는 데이터 추가
-        //        action = "your_special_exhibition"
-        //    }
-        //}else{
-        //    intent = Intent("your_special_action").apply {
-        //        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        //        putExtra("action", "your_special_action") // 특정 동작을 나타내는 데이터 추가
-        //        action = "your_special_action"
-        //    }
-        //}
 
         Log.d("GGGGGshowNotification", "${intent.extras}||$title")
 
