@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.search
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import androidx.core.view.isGone
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,7 @@ import kotlinx.coroutines.runBlocking
 
 
 class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<FragmentSearchExhibitionPlaceBinding>(R.layout.fragment_search_exhibition_place) {
+
     private lateinit var exhibitionPlaceItemAdapter: ExhibitionPlaceItemAdapter
     val exhibitionPlaceRvList= mutableListOf<SearchPlacesInformationEntity>()
     var itemPage=0
@@ -38,6 +40,7 @@ class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<Fragme
         exhibitionPlaceItemAdapter = ExhibitionPlaceItemAdapter(requireContext(),exhibitionPlaceRvList)
         binding.rvExhibitionplace.adapter = exhibitionPlaceItemAdapter
         binding.rvExhibitionplace.layoutManager = LinearLayoutManager(requireContext())
+
         exhibitionPlaceItemAdapter?.setOnItemClickListener(object : ExhibitionPlaceItemAdapter.OnItemClickListener{
             override fun onItemClick(type: Int, placeItem: SearchPlacesInformationEntity) {
                 extraActivityReference = type
@@ -47,7 +50,7 @@ class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<Fragme
                 startActivity(intent)
             }
         })
-
+        itemPage=0
         setExhibitionPlaceRvByPage(0)
 
         binding.rvExhibitionplace.addOnScrollListener(object : RecyclerView.OnScrollListener(){
@@ -65,18 +68,25 @@ class ExhibitionPlaceFragment(private val edittext:String) : BaseFragment<Fragme
         binding.ivEmpty.isGone=true
         binding.tvEmpty01.isGone=true
         binding.tvEmpty02.isGone=true
+        Log.d("setExhibitionPlaceRBPP", "CheckEmptyListTrue: ")
     }
     fun checkEmptyListFalse(){
         binding.ivEmpty.isGone=false
         binding.tvEmpty01.isGone=false
         binding.tvEmpty02.isGone=false
+        Log.d("setExhibitionPlaceRBPP", "CheckEmptyListFalse: ")
     }
 
     private fun setExhibitionPlaceRvByPage(totalCount:Int){
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
+            Log.d("setExhibitionPlaceRBPP", "Edittext==$edittext||ItemPage==$itemPage ")
             val response = PlaceRepositoryImpl().searchPlaces(encryptedPrefs.getAT(),edittext,itemPage)
+            Log.d("setExhibitionPlaceRBPP", "$response: ")
             if(response.isSuccessful && response.body()!!.check){
+                if(itemPage==0){
+                    exhibitionPlaceRvList.clear()
+                }
                 exhibitionPlaceRvList.addAll(response.body()!!.information.data.toMutableList())
                 addItemCount = response.body()!!.information.data.size
                 hasNextPage = response.body()!!.information.hasNextPage

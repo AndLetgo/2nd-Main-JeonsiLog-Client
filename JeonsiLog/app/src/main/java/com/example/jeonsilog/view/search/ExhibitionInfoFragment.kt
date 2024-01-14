@@ -35,7 +35,7 @@ class ExhibitionInfoFragment(private val edittext:String): BaseFragment<Fragment
         exhibitionInfoItemAdapter = ExhibitionInfoItemAdapter(requireContext(),exhibitionInfoRvList)
         binding.rvExhibitioninfo.adapter = exhibitionInfoItemAdapter
         binding.rvExhibitioninfo.layoutManager = LinearLayoutManager(requireContext())
-
+        itemPage=0
         setExhibitionRvByPage(0)
 
 
@@ -69,6 +69,9 @@ class ExhibitionInfoFragment(private val edittext:String): BaseFragment<Fragment
         runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,itemPage)
             if(response.isSuccessful && response.body()!!.check){
+                if(itemPage==0){
+                    exhibitionInfoRvList.clear()
+                }
                 exhibitionInfoRvList.addAll(response.body()!!.information.data.toMutableList())
                 addItemCount = response.body()!!.information.data.size
                 hasNextPage = response.body()!!.information.hasNextPage

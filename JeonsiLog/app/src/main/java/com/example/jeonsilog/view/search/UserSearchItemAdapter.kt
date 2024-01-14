@@ -21,7 +21,6 @@ import kotlinx.coroutines.runBlocking
 class UserSearchItemAdapter(
     private val context: Context,private val list:List<SearchUserInformationEntity>)
     : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
-    var itemPage=0
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val usernameTextView: TextView = view.findViewById(R.id.tv_user_name)
 
