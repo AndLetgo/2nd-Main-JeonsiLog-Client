@@ -71,14 +71,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
     override fun init() {
         this.onBackPressedDispatcher.addCallback(this, callback)
-    // Shared Preferences에서 알림 데이터 가져오기
-        val sharedPref = getSharedPreferences("notification", Context.MODE_PRIVATE)
-        val data = sharedPref.getString("key1", null)
 
-        // 원하는 함수 호출
-        data?.let {
-            Log.d("xxxxxinit", "init: ")
-        }
         networkState.observe(this) {
             if(!it) {
                 networkDialog = if(networkDialog != null) {
@@ -110,7 +103,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 }
                 R.id.item_notification->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,
-                        NotificationFragment()
+                        NotificationFragment("main")
                     ).commit()
                 }
                 R.id.item_mypage->{
@@ -127,17 +120,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
         }
 
-        val targetFragment=intent.getStringExtra("action")
-        Log.d("targetFragmenttargetFragment", "$targetFragment: ")
-        if (targetFragment!= null) {
-
-            binding.bnvMain.selectedItemId=R.id.item_notification
-            moveSearchResultFrament()
-        }
         askNotificationPermission()
         getToken()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null) {
+            val extras = intent.extras
+            val targetFragment = extras?.getString("action")
+            Log.d("GGGGGtargetFragmenttargetFragment", "${targetFragment}: ")
+            if (targetFragment != null) {
+                binding.bnvMain.selectedItemId = R.id.item_notification
+                moveNotificationFragment(targetFragment.toString())
+            }
+        }
+    }
     fun setStateBn(isVisible:Boolean){
         if(isVisible){
             binding.bnvMain.visibility = View.VISIBLE
@@ -245,8 +243,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 .commit()
         }
     }
-    fun moveSearchResultFrament(){
-        val fragment = NotificationFragment()
+    fun moveNotificationFragment(action:String){
+        val fragment = NotificationFragment(action)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_main, fragment)
             .addToBackStack(null)
@@ -277,7 +275,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
             // Log and toast
             val msg = getString(R.string.msg_token_fmt, token)
-            Log.d("11111", msg)
+            Log.d("myFcmToken", msg)
             //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
