@@ -35,6 +35,9 @@
     <string name="btn_refresh">새로고침</string>
     <string name="btn_duplicate">중복확인</string>
 
+    <string name="btn_change_to_admin">관리자 화면</string>
+    <string name="btn_change_to_user">사용자 화면</string>
+
     <!-- Date -->
     <string name="date_now">지금</string>
     <string name="date_min">%d분 전</string>

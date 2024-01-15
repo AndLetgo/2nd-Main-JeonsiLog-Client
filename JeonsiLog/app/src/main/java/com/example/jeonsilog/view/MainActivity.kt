@@ -28,6 +28,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.navigation.Navigation
 import com.example.jeonsilog.view.exhibition.ExtraActivity
@@ -75,18 +76,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
     override fun init() {
+        Log.d("admin", "init: MainActivity init")
         //admin 계정 체크
-//        if(encryptedPrefs.){
-//            //관리자
-            binding.bnvMain.visibility = View.GONE
-            binding.bnvAdmin.visibility = View.VISIBLE
-//        }else{
-//            //일반 유저
-//            binding.bnvMain.visibility = View.VISIBLE
-//            binding.bnvAdmin.visibility = View.GONE
-//        setStateFcm(false)
-//            supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
-//        }
+        if(encryptedPrefs.getCheckAdmin()){
+            adminExhibitionViewModel.setIsAdminPage(true)
+        }
+        checkAdmin(encryptedPrefs.getCheckAdmin())
 
         this.onBackPressedDispatcher.addCallback(this, callback)
 
@@ -213,8 +208,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         return super.dispatchTouchEvent(event)
     }
     //admin 계정 체크
-    private fun checkAdmin(){
-
+    fun checkAdmin(check:Boolean){
+        if(check){
+            //관리자
+            binding.bnvMain.visibility = View.GONE
+            binding.bnvAdmin.visibility = View.VISIBLE
+            setStateFcm(true)
+        }else{
+            //일반 유저
+            binding.bnvMain.visibility = View.VISIBLE
+            binding.bnvAdmin.visibility = View.GONE
+            setStateFcm(false)
+            supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
+        }
+        adminExhibitionViewModel.setIsAdminPage(check)
     }
 
     fun loadExtraActivity(type:Int, newTargetId:Int){

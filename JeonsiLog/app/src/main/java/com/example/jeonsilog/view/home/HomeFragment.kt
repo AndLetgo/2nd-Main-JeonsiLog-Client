@@ -4,6 +4,7 @@ package com.example.jeonsilog.view.home
 import android.util.Log
 import android.view.View
 import androidx.core.view.marginBottom
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.FragmentHomeBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
+import com.example.jeonsilog.viewmodel.AdminExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
@@ -21,25 +23,32 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-
+    private val adminExhibitionViewModel: AdminExhibitionViewModel by activityViewModels()
     private lateinit var homeRvAdapter: HomeRvAdapter
     private var homeRvList = mutableListOf<ExhibitionsInfo>()
     private var exhibitionPage = 0
     private var hasNextPage = true
+    private val TAG = "admin"
 
     override fun init() {
         isAdminExhibitionOpen = false
-        (activity as MainActivity).setStateBn(true, "admin")
         //관리자 체크
-//        if(){
-//            binding.ibFabTop.visibility = View.GONE
-//            binding.ibFabTopAdmin.visibility = View.VISIBLE
-//        }else{
-//            binding.ibFabTop.visibility = View.VISIBLE
-//            binding.ibFabTopAdmin.visibility = View.GONE
-//        }
-        binding.ibFabTop.visibility = View.VISIBLE
-        binding.ibFabTopAdmin.visibility = View.GONE
+        if(encryptedPrefs.getCheckAdmin()){
+            binding.btnChangeAdminUser.visibility = View.VISIBLE
+        }else{
+            binding.btnChangeAdminUser.visibility = View.GONE
+        }
+        if(adminExhibitionViewModel.isAdminPage.value!!){
+            binding.ibFabTop.visibility = View.GONE
+            binding.ibFabTopAdmin.visibility = View.VISIBLE
+            binding.btnChangeAdminUser.text = getString(R.string.btn_change_to_user)
+            (activity as MainActivity).setStateBn(true, "admin")
+        }else{
+            binding.ibFabTop.visibility = View.VISIBLE
+            binding.ibFabTopAdmin.visibility = View.GONE
+            binding.btnChangeAdminUser.text = getString(R.string.btn_change_to_admin)
+            (activity as MainActivity).setStateBn(true, "user")
+        }
 
         homeRvAdapter = HomeRvAdapter(homeRvList, requireContext())
         binding.rvHomeExhibition.adapter = homeRvAdapter
@@ -48,11 +57,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         homeRvAdapter.setOnItemClickListener(object : HomeRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
                 //관리자 체크
-//                Log.d("exhibitoinId", "onItemClick: exhibitionID: ${data.exhibitionId}")
-//                (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
-                Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminExhibitionFragment)
-                exhibitionId = data.exhibitionId
-                isAdminExhibitionOpen = true
+                if(adminExhibitionViewModel.isAdminPage.value!!){
+                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminExhibitionFragment)
+                    exhibitionId = data.exhibitionId
+                    isAdminExhibitionOpen = true
+                }else{
+                    (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
+                }
             }
         })
 
@@ -73,8 +84,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.ibFabTop.setOnClickListener {
             binding.rvHomeExhibition.smoothScrollToPosition(0)
         }
-        binding.toolbar.setOnClickListener {
+        binding.ibFabTopAdmin.setOnClickListener {
             binding.rvHomeExhibition.smoothScrollToPosition(0)
+        }
+        binding.ivLogo.setOnClickListener {
+            binding.rvHomeExhibition.smoothScrollToPosition(0)
+        }
+
+        binding.btnChangeAdminUser.setOnClickListener {
+            when(binding.btnChangeAdminUser.text){
+                getString(R.string.btn_change_to_admin) -> {
+                    (activity as MainActivity).checkAdmin(true)
+                }
+                getString(R.string.btn_change_to_user) -> {
+                    (activity as MainActivity).checkAdmin(false)
+                }
+            }
         }
     }
 

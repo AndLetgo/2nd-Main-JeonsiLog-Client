@@ -8,6 +8,15 @@ import androidx.lifecycle.ViewModel
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 
 class AdminExhibitionViewModel:ViewModel() {
+    //현재 Admin || User 화면 체크
+    private var _isAdminPage = MutableLiveData<Boolean>()
+    val isAdminPage : LiveData<Boolean>
+        get() = _isAdminPage
+    fun setIsAdminPage(check:Boolean){
+        Log.d("admin", "setIsAdminPage: in ViewModel: $check")
+        _isAdminPage.value = check
+    }
+
     private var _isChanged = MutableLiveData(false)
     val isChanged: LiveData<Boolean> get() = _isChanged
     fun setIsChanged(check:Boolean){ _isChanged.value = check }

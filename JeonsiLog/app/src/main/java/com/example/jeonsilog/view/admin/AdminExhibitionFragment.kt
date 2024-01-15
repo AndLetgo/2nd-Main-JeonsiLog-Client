@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
@@ -305,7 +306,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             exhibitionInfoData?.operatingKeyword!!,
             exhibitionInfoData?.priceKeyword!!,
             adminExhibitionViewModel.exhibitionInformation.value!!,
-            false,
+            true,
             UpdatePlaceInfoEntity(
                 exhibitionInfoData?.place?.placeId!!,
                 adminExhibitionViewModel.placeName.value!!,
@@ -341,5 +342,19 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     fun deleteReview(position:Int){
         exhibitionRvAdapter.deleteItem(position)
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
+    }
+
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                adminExhibitionViewModel.setIsChanged(false)
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 }

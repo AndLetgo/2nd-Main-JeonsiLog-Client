@@ -15,7 +15,7 @@
         android:background="@color/basic_white">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -24,10 +24,25 @@
                 android:layout_height="@dimen/item_32"
                 android:src="@drawable/logo_jeonsilog"/>
             <ImageView
+                android:id="@+id/iv_logo"
                 android:layout_width="81dp"
                 android:layout_height="20dp"
                 android:src="@drawable/illus_jeonsilog_title"
                 android:layout_marginStart="@dimen/margin_28"/>
+            <Button
+                android:id="@+id/btn_change_admin_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/item_0"
+                android:minWidth="@dimen/item_0"
+                android:paddingHorizontal="@dimen/margin_16"
+                android:paddingVertical="@dimen/margin_8"
+                android:text="@string/btn_change_to_user"
+                style="@style/S_regular"
+                android:textColor="@color/basic_point"
+                android:background="@drawable/shape_btn_stroke_r4"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_16"/>
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
