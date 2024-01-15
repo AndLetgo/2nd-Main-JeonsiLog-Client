@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.calendar.UploadImageReqEntity
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.exhibition.UpdatePlaceInfoEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentAdminExhibitionBinding
+import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.exhibition.DialogWithIllus
@@ -32,9 +34,20 @@ import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
+import com.example.jeonsilog.widget.utils.ImageUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.time.LocalDate
+import java.util.Date
 
 class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.layout.fragment_admin_exhibition){
     private lateinit var exhibitionRvAdapter: AdminExhibitionReviewRvAdapter
@@ -46,7 +59,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     private var reviewPage = 0
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private val adminExhibitionViewModel: AdminExhibitionViewModel by activityViewModels()
-    val TAG = "dialog"
+    val TAG = "poster"
 
     override fun init() {
         isRefresh.observe(this){
@@ -55,13 +68,17 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
                 isRefresh.value = false
             }
         }
-        Log.d("dialog", "init: is it Refresh?")
         thisExhibitionId = exhibitionId
 
-        getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
 
+        binding.vm = adminExhibitionViewModel
         //감상평 - RecyclerView
+        if(adminExhibitionViewModel.isChanged.value!!){
+            reloadExhibitionInfo()
+        }else{
+            getExhibitionInfo()
+        }
         getReviewInfo()
 
         adminExhibitionViewModel.exhibitionName.observe(this){
@@ -120,19 +137,18 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     }
     private fun getExhibitionInfo(){
         exhibitionInfoData = runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().getExhibition(GlobalApplication.encryptedPrefs.getAT(), thisExhibitionId)
+            val response = ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(), thisExhibitionId)
             if(response.isSuccessful && response.body()!!.check){
                 response.body()!!.information
             }else{
                 null
             }
         }
-
+        //포스터
+        adminExhibitionViewModel.setExhibitionPosterImg(exhibitionInfoData?.imageUrl!!)
         Glide.with(requireContext())
             .load(exhibitionInfoData?.imageUrl)
             .into(binding.ivPosterImage)
-
-        binding.vm = adminExhibitionViewModel
 
         //전시회 이름
         adminExhibitionViewModel.setExhibitionName(exhibitionInfoData?.exhibitionName!!)
@@ -252,28 +268,58 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         exhibitionRvAdapter.notifyItemRangeInserted(totalCount, addItemCount)
         reviewPage++
     }
+    private fun reloadExhibitionInfo(){
+        //포스터
+        if(adminExhibitionViewModel.posterUri.value!=null){
+            Glide.with(requireContext())
+                .load(adminExhibitionViewModel.posterUri.value)
+                .into(binding.ivPosterImage)
+        }else{
+            Glide.with(requireContext())
+                .load(adminExhibitionViewModel.exhibitionPosterImg.value)
+                .into(binding.ivPosterImage)
+        }
+        //정보
+        binding.tvExhibitionName.text = adminExhibitionViewModel.exhibitionName.value
+        binding.tvPlaceName.text = adminExhibitionViewModel.placeName.value
+        binding.tvAddress.text = adminExhibitionViewModel.placeAddress.value
+        binding.tvCall.text = adminExhibitionViewModel.placeCall.value
+        binding.tvHomepage.text = adminExhibitionViewModel.placeHomepage.value
+        binding.tvInformation.text = adminExhibitionViewModel.exhibitionInformation.value
+    }
 
     //수정사항 저장
     private fun saveEditInformations(){
         var isSuccess = false
-        runBlocking(Dispatchers.IO){
-            val body = PatchExhibitionRequest(
-                exhibitionInfoData?.exhibitionId!!,
-                adminExhibitionViewModel.exhibitionName.value!!,
-                exhibitionInfoData?.operatingKeyword!!,
-                exhibitionInfoData?.priceKeyword!!,
-                adminExhibitionViewModel.exhibitionInformation.value!!,
-                false,
-                UpdatePlaceInfoEntity(
-                    exhibitionInfoData?.place?.placeId!!,
-                    adminExhibitionViewModel.placeName.value!!,
-                    adminExhibitionViewModel.placeAddress.value!!,
-                    adminExhibitionViewModel.placeCall.value!!,
-                    adminExhibitionViewModel.placeHomepage.value!!
-                ))
-            val response = ExhibitionRepositoryImpl().patchExhibition(encryptedPrefs.getAT(),body)
+
+
+        val updateExhibitionDetailReq = PatchExhibitionRequest(
+            exhibitionInfoData?.exhibitionId!!,
+            adminExhibitionViewModel.exhibitionName.value!!,
+            exhibitionInfoData?.operatingKeyword!!,
+            exhibitionInfoData?.priceKeyword!!,
+            adminExhibitionViewModel.exhibitionInformation.value!!,
+            false,
+            UpdatePlaceInfoEntity(
+                exhibitionInfoData?.place?.placeId!!,
+                adminExhibitionViewModel.placeName.value!!,
+                adminExhibitionViewModel.placeAddress.value!!,
+                adminExhibitionViewModel.placeCall.value!!,
+                adminExhibitionViewModel.placeHomepage.value!!
+            ))
+
+        val file = File(ImageUtil().absolutelyPath(requireContext(), adminExhibitionViewModel.posterUri.value!!))
+        val imageRequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val filePart = MultipartBody.Part.createFormData("img", file.name, imageRequestBody)
+
+//        val updateExhibitionDetailReq = UploadImageReqEntity(DateUtil().monthYearFromDate(LocalDate.now()))
+        val requestJson = Gson().toJson(updateExhibitionDetailReq)
+        val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(),requestJson)
+
+        runBlocking(Dispatchers.IO) {
+            val response = ExhibitionRepositoryImpl().patchExhibition(encryptedPrefs.getAT(), requestBody, filePart)
             if(response.isSuccessful && response.body()!!.check){
-                isSuccess = true
+                Log.d("gallery", "patchMyPhotoCalendarImg: ${response.body()!!.informationEntity.message}")
             }
         }
         if(isSuccess){

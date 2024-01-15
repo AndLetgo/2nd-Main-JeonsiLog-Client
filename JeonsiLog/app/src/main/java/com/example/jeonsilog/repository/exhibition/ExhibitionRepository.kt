@@ -8,11 +8,15 @@ import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -48,10 +52,12 @@ interface ExhibitionRepository {
         @Query("page") page: Int
     ): Response<SearchResponse>
 
+    @Multipart
     @PATCH("/api/exhibitions")
     suspend fun patchExhibition(
         @Header("Authorization") token: String,
-        @Body body: PatchExhibitionRequest
+        @Part("updateExhibitionDetailReq") updateExhibitionDetailReq:RequestBody,
+        @Part img: MultipartBody.Part
     ): Response<OnlyMsgResponse>
 
     @GET("/api/exhibitions/search/name/{searchWord}")

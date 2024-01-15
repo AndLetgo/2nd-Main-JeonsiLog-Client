@@ -10,6 +10,9 @@ import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
+import okhttp3.MultipartBody
+import okhttp3.Request
+import okhttp3.RequestBody
 import retrofit2.Response
 
 class ExhibitionRepositoryImpl: ExhibitionRepository {
@@ -74,9 +77,10 @@ class ExhibitionRepositoryImpl: ExhibitionRepository {
 
     override suspend fun patchExhibition(
         token: String,
-        body: PatchExhibitionRequest
+        updateExhibitionDetailReq: RequestBody,
+        img: MultipartBody.Part
     ): Response<OnlyMsgResponse> {
-        val response = service.patchExhibition("Bearer $token", body)
+        val response = service.patchExhibition("Bearer $token", updateExhibitionDetailReq, img)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
