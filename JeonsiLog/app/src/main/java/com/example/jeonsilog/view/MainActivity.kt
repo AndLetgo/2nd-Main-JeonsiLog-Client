@@ -20,9 +20,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
+import com.example.jeonsilog.fcm.services.FcmDialog
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
 import com.example.jeonsilog.view.spalshpage.SplashActivity
@@ -41,6 +43,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedP
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -52,7 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private var networkDialog: NetworkDialog? = null
     private var backPressedTime: Long = 0L
     private var alertDialog: AlertDialog.Builder? = null
-
+    private var isPermissionDenied = false
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -119,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             Log.d(tag, "isFinish: $it")
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
         }
-
+        isPermissionDenied=prefs.getIsAllowNotify()
         askNotificationPermission()
         getToken()
     }
@@ -282,11 +285,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
-        //if (isGranted) {
-        //    // 권한이 승인된 경우
-        //} else {
-        //    // 권한이 거부된 경우
-        //}
+        if (isGranted) {
+            Log.d("requestPermissionLauncher", "권한이 승인된 경우")
+            // 권한이 승인된 경우
+        } else {
+            Log.d("requestPermissionLauncher", "권한이 거부된 경우")
+            // 권한이 거부된 경우
+        }
     }
     //알림 권한 확인 함수
     private fun askNotificationPermission() {
@@ -299,14 +304,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
 
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
                 // 사용자에게 이미 거부한 이력이 있는 경우
-
+                if (!isPermissionDenied){
+                    Log.d("requestPermissionLauncher", "사용자에게 이미 거부한 이력이 있는 경우")
+                    //다이얼로그 띄우기
+                    showFcmDialog(supportFragmentManager)
+                    prefs.setIsAllowNotify(true)
+                }
             } else {
                 // 권한을 요청하는 경우
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }else{
-
+            Log.d("requestPermissionLauncher", "뭐지뭐지")
         }
     }
-
+    fun showFcmDialog(fragmentManager: FragmentManager) {
+        val dialog = FcmDialog()
+        dialog.show(fragmentManager, "FcmDialog")
+    }
 }
