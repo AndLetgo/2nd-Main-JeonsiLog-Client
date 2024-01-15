@@ -3,9 +3,10 @@ package com.example.jeonsilog.fcm.services
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_MUTABLE
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -16,13 +17,15 @@ import androidx.work.WorkerParameters
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.user.ChangeFcmTokenRequest
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
-import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class FirebaseMessagingService : FirebaseMessagingService() {
@@ -74,15 +77,18 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     //알림을 생성하고 표시
     private fun sendNotification(remoteMessage: RemoteMessage) {
         if (remoteMessage.notification != null) {//fcm 형식이 notification인경우
+            Log.d("sendNotification", "notification: ")
             // Handle notification payload.
             val title = remoteMessage.notification?.title
             val body = remoteMessage.notification?.body
             // You can customize the notification using title and body.
-            showNotification(title, body)
+            showNotification(title, body,)
         } else if (remoteMessage.data.isNotEmpty()) {//fcm 형식이 data인 경우
+            Log.d("sendNotification", "data: ")
             // Handle data payload.
             val dataTitle = remoteMessage.data["title"]
             val dataBody = remoteMessage.data["body"]
+
             // You can customize the notification using dataTitle and dataBody.
             showNotification(dataTitle, dataBody)
         }
@@ -92,8 +98,9 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     private fun showNotification(title: String?, body: String?) {
         //알림페이지로 이동
         val intent: Intent
+        Log.d("bodybodybody", "$body: ")
 
-        if(body=="활동알림"){
+        if(body==null){
             intent = Intent("your_special_action").apply {
                 addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra("action", "your_special_action") // 특정 동작을 나타내는 데이터 추가
@@ -114,7 +121,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
         val pendingIntent:PendingIntent =
             PendingIntent.getActivity(this,0,intent, PendingIntent.FLAG_IMMUTABLE) //@@
-
+        val myBitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.notification_logo)
         //val channelId = "fcm_default_channel"
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL[0])
             .setSmallIcon(R.drawable.fcm_logo_jeonsilog)
@@ -123,6 +130,9 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(null) // 소리 끄기
             .setContentIntent(pendingIntent)
+            .setLargeIcon(myBitmap)
+
+
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
