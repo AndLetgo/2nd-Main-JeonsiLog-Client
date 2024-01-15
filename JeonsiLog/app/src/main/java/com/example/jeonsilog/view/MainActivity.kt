@@ -28,7 +28,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.navigation.Navigation
 import com.example.jeonsilog.view.exhibition.ExtraActivity
@@ -41,7 +40,7 @@ import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.view.search.RecordSearchFragment
 import com.example.jeonsilog.view.search.SearchResultFragment
-import com.example.jeonsilog.viewmodel.AdminExhibitionViewModel
+import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
@@ -55,7 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private var networkDialog: NetworkDialog? = null
     private var backPressedTime: Long = 0L
     private var alertDialog: AlertDialog.Builder? = null
-    private val adminExhibitionViewModel: AdminExhibitionViewModel by viewModels()
+    private val adminViewModel: AdminViewModel by viewModels()
 
 
     private val callback = object : OnBackPressedCallback(true) {
@@ -79,7 +78,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         Log.d("admin", "init: MainActivity init")
         //admin 계정 체크
         if(encryptedPrefs.getCheckAdmin()){
-            adminExhibitionViewModel.setIsAdminPage(true)
+            adminViewModel.setIsAdminPage(true)
         }
         checkAdmin(encryptedPrefs.getCheckAdmin())
 
@@ -221,7 +220,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             setStateFcm(false)
             supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
         }
-        adminExhibitionViewModel.setIsAdminPage(check)
+        adminViewModel.setIsAdminPage(check)
     }
 
     fun loadExtraActivity(type:Int, newTargetId:Int){

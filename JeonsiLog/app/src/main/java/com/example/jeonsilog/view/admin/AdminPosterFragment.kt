@@ -7,40 +7,31 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentAdminPosterBinding
-import com.example.jeonsilog.view.exhibition.AdminPosterVpAdapter
-import com.example.jeonsilog.viewmodel.AdminExhibitionViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import com.example.jeonsilog.viewmodel.AdminViewModel
 import java.io.IOException
 
 class AdminPosterFragment : BaseFragment<FragmentAdminPosterBinding>(R.layout.fragment_admin_poster) {
-    private val adminExhibitionViewModel:AdminExhibitionViewModel by activityViewModels()
+    private val adminViewModel:AdminViewModel by activityViewModels()
     private val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 1
     private var imageUri: Uri? = null
     override fun init() {
-        if(adminExhibitionViewModel.exhibitionPosterImg!=null){
+        if(adminViewModel.exhibitionPosterImg!=null){
             setPosterView(true)
             Glide.with(requireContext())
-                .load(adminExhibitionViewModel.exhibitionPosterImg.value)
+                .load(adminViewModel.exhibitionPosterImg.value)
                 .into(binding.ivPoster)
         }else{
             setPosterView(false)
@@ -156,8 +147,8 @@ class AdminPosterFragment : BaseFragment<FragmentAdminPosterBinding>(R.layout.fr
     }
 
     private fun updateImageView(imageUri:Uri){
-        adminExhibitionViewModel.setPosterUri(imageUri)
-        adminExhibitionViewModel.setIsChanged(true)
+        adminViewModel.setPosterUri(imageUri)
+        adminViewModel.setIsChanged(true)
         Glide.with(this)
             .load(imageUri)
             .into(binding.ivPoster)

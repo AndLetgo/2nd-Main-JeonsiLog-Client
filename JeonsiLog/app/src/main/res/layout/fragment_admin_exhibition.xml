@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="com.example.jeonsilog.viewmodel.AdminExhibitionViewModel" />
+            type="com.example.jeonsilog.viewmodel.AdminViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -11,14 +11,15 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.databinding.DialogAdminBinding
-import com.example.jeonsilog.viewmodel.AdminExhibitionViewModel
+import com.example.jeonsilog.viewmodel.AdminViewModel
 
 class DialogAdmin(private val type:String, private val defaultText: String) : DialogFragment() {
     private var _binding: DialogAdminBinding? = null
     private val binding get() = _binding!!
-    private val adminExhibitionViewModel: AdminExhibitionViewModel by activityViewModels()
+    private val adminViewModel: AdminViewModel by activityViewModels()
     override fun onStart() {
         super.onStart()
 
@@ -53,13 +54,14 @@ class DialogAdmin(private val type:String, private val defaultText: String) : Di
         binding.btnConfirm.setOnClickListener {
             val editTextText = binding.etDialogAdmin.text.toString()
             when(type){
-                "exhibitionName" -> {adminExhibitionViewModel.setExhibitionName(editTextText)}
-                "placeName" -> {adminExhibitionViewModel.setPlaceName(editTextText)}
-                "placeAddress" -> {adminExhibitionViewModel.setAddress(editTextText)}
-                "placeCall" -> {adminExhibitionViewModel.setPlaceCall(editTextText)}
-                "placeHomepage" -> {adminExhibitionViewModel.setPlaceHomepage(editTextText)}
-                "exhibitionInformation" -> {adminExhibitionViewModel.setExhibitionInformation(editTextText)}
+                "exhibitionName" -> {adminViewModel.setExhibitionName(editTextText)}
+                "placeName" -> {adminViewModel.setPlaceName(editTextText)}
+                "placeAddress" -> {adminViewModel.setAddress(editTextText)}
+                "placeCall" -> {adminViewModel.setPlaceCall(editTextText)}
+                "placeHomepage" -> {adminViewModel.setPlaceHomepage(editTextText)}
+                "exhibitionInformation" -> {adminViewModel.setExhibitionInformation(editTextText)}
             }
+            adminViewModel.setIsChanged(true)
             dismiss()
         }
 

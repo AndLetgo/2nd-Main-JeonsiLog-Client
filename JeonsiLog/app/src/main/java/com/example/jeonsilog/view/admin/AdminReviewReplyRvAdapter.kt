@@ -10,9 +10,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyInformation
 import com.example.jeonsilog.databinding.ItemReviewReplyBinding
-import com.example.jeonsilog.view.admin.ReplyModel
 import com.example.jeonsilog.widget.utils.DateUtil
-import com.example.jeonsilog.widget.utils.GlobalApplication
 
 class AdminReviewReplyRvAdapter(private val replyList: MutableList<GetReplyInformation>, private val context: Context) :
     RecyclerView.Adapter<AdminReviewReplyRvAdapter.RecycleViewHolder>(){

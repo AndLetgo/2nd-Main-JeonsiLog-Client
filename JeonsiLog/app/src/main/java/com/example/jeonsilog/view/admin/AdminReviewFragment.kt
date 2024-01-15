@@ -17,12 +17,9 @@ import com.example.jeonsilog.databinding.FragmentAdminReviewBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.exhibition.AdminReviewReplyRvAdapter
-import com.example.jeonsilog.view.exhibition.ExhibitionReplyRvAdapter
-import com.example.jeonsilog.viewmodel.AdminExhibitionViewModel
-import com.example.jeonsilog.viewmodel.ExhibitionViewModel
+import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.DateUtil
-import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
@@ -31,14 +28,14 @@ import kotlinx.coroutines.runBlocking
 
 class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fragment_admin_review) {
     private lateinit var adminReviewReplyRvAdapter: AdminReviewReplyRvAdapter
-    private val adminExhibitionViewModel: AdminExhibitionViewModel by activityViewModels()
+    private val adminViewModel: AdminViewModel by activityViewModels()
     private lateinit var replyList: MutableList<GetReplyInformation>
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
     private var hasNextPage = true
     private var reviewItem:UpdateReviewItem? = null
     override fun init() {
-        reviewItem = adminExhibitionViewModel.reviewItem.value
+        reviewItem = adminViewModel.reviewItem.value
         reviewInfo = reviewItem?.item!!
         setReviewUi(reviewInfo)
 
@@ -66,7 +63,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
             runBlocking(Dispatchers.IO){
                 ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), review.reviewId)
             }
-            adminExhibitionViewModel.setDeletedReviewId(reviewItem?.position!!)
+            adminViewModel.setDeletedReviewId(reviewItem?.position!!)
             Navigation.findNavController(it).popBackStack()
         }
 

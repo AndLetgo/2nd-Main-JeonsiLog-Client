@@ -1,22 +1,21 @@
 package com.example.jeonsilog.viewmodel
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
+import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 
-class AdminExhibitionViewModel:ViewModel() {
+class AdminViewModel:ViewModel() {
     //현재 Admin || User 화면 체크
     private var _isAdminPage = MutableLiveData<Boolean>()
     val isAdminPage : LiveData<Boolean>
         get() = _isAdminPage
     fun setIsAdminPage(check:Boolean){
-        Log.d("admin", "setIsAdminPage: in ViewModel: $check")
         _isAdminPage.value = check
     }
 
+    //수정 체크
     private var _isChanged = MutableLiveData(false)
     val isChanged: LiveData<Boolean> get() = _isChanged
     fun setIsChanged(check:Boolean){ _isChanged.value = check }
@@ -46,21 +45,6 @@ class AdminExhibitionViewModel:ViewModel() {
     val exhibitionInformation : LiveData<String> get() = _exhibitionInformation
     fun setExhibitionInformation(information:String){ _exhibitionInformation.value = information }
 
-    //포스터
-    private var _exhibitionPosterImg = MutableLiveData<String>()
-    val exhibitionPosterImg : LiveData<String>
-        get() = _exhibitionPosterImg
-    fun setExhibitionPosterImg(posterImg:String){
-        _exhibitionPosterImg.value = posterImg
-    }
-    //포스터 Uri
-    private var _posterUri = MutableLiveData<Uri>()
-    val posterUri : LiveData<Uri>
-        get() = _posterUri
-    fun setPosterUri(uri:Uri){
-        _posterUri.value = uri
-    }
-
     //감상평 정보
     private var _reviewItem = MutableLiveData<UpdateReviewItem>()
     val reviewItem: LiveData<UpdateReviewItem>
@@ -74,4 +58,35 @@ class AdminExhibitionViewModel:ViewModel() {
     fun setDeletedReviewId(position:Int){
         _deletedReviewPosition.value = position
     }
+
+    //포스터
+    private var _exhibitionPosterImg = MutableLiveData<String>()
+    val exhibitionPosterImg : LiveData<String>
+        get() = _exhibitionPosterImg
+    fun setExhibitionPosterImg(posterImg:String){
+        _exhibitionPosterImg.value = posterImg
+    }
+    //포스터 Uri
+    private var _posterUri = MutableLiveData<Uri>()
+    val posterUri : LiveData<Uri>
+        get() = _posterUri
+    fun setPosterUri(uri: Uri){
+        _posterUri.value = uri
+    }
+    fun resetExhibitionInfo(){
+        _isChanged = MutableLiveData(false)
+
+        _exhibitionName = MutableLiveData<String>()
+        _placeName = MutableLiveData<String>()
+        _placeAddress = MutableLiveData<String>()
+        _placeCall = MutableLiveData<String>()
+        _placeHomepage = MutableLiveData<String>()
+        _exhibitionInformation = MutableLiveData<String>()
+
+        _reviewItem = MutableLiveData<UpdateReviewItem>()
+        _deletedReviewPosition = MutableLiveData<Int>()
+        _exhibitionPosterImg = MutableLiveData<String>()
+        _posterUri = MutableLiveData<Uri>()
+    }
+
 }
