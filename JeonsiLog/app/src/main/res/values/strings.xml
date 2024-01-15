@@ -180,6 +180,8 @@
     <string name="admin_report_review_content">%1$s 님의 감상평이 신고됐어요</string>
     <string name="admin_report_reply_content">%1$s 님의 댓글이 신고됐어요</string>
     <string name="admin_report_poster_content">%1$s 포스터 등록이 필요해요</string>
+    
+    <string name="admin_managing_search_hint">전시회명을 입력하세요</string>
 
     <!-- Empty State -->
     <string name="empty_search_title">검색 결과가 없어요</string>
