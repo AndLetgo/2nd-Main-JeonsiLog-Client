@@ -3,10 +3,9 @@ package com.example.jeonsilog.base
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.example.jeonsilog.widget.extension.LoadingDialog
 
 abstract class BaseActivity<B : ViewBinding>(
     private val inflate: (LayoutInflater) -> B) :
@@ -14,7 +13,7 @@ abstract class BaseActivity<B : ViewBinding>(
     protected lateinit var binding: B
         private set
 
-//    lateinit var mLoadingDialog: LoadingDialog
+    private lateinit var mLoadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,13 +23,13 @@ abstract class BaseActivity<B : ViewBinding>(
     }
     protected abstract fun init()
 
-//    fun showLoadingDialog(context: Context) {
-//        mLoadingDialog = LoadingDialog(context)
-//        mLoadingDialog.show()
-//    }
-//    fun dismissLoadingDialog() {
-//        if (mLoadingDialog.isShowing) {
-//            mLoadingDialog.dismiss()
-//        }
-//    }
+    fun showLoadingDialog(context: Context) {
+        mLoadingDialog = LoadingDialog(context)
+        mLoadingDialog.show()
+    }
+    fun dismissLoadingDialog() {
+        if (mLoadingDialog.isShowing) {
+            mLoadingDialog.dismiss()
+        }
+    }
 }

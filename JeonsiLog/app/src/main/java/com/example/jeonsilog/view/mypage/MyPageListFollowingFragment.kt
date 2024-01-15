@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingEntity
-import com.example.jeonsilog.data.remote.dto.follow.GetMyFollowingInformation
 import com.example.jeonsilog.databinding.FragmentMyPageListFollowingBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -15,7 +14,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
-class MyPageListFollowingFragment: BaseFragment<FragmentMyPageListFollowingBinding>(R.layout.fragment_my_page_list_following) {
+class MyPageListFollowingFragment: BaseFragment<FragmentMyPageListFollowingBinding>(R.layout.fragment_my_page_list_following), FollowingListener {
     private val list = mutableListOf<GetMyFollowingEntity>()
     private lateinit var adapter: MyPageListRvAdapter<GetMyFollowingEntity>
     private var newItemCount = 0
@@ -23,7 +22,7 @@ class MyPageListFollowingFragment: BaseFragment<FragmentMyPageListFollowingBindi
     private var page = 0
 
     override fun init() {
-        adapter = MyPageListRvAdapter(list, 1, requireContext())
+        adapter = MyPageListRvAdapter(list, 1, requireContext(), this)
         binding.rvMypageFollowing.adapter = adapter
         binding.rvMypageFollowing.layoutManager = LinearLayoutManager(requireContext())
 
@@ -101,4 +100,15 @@ class MyPageListFollowingFragment: BaseFragment<FragmentMyPageListFollowingBindi
             })
         }
     }
+
+    override fun setEmpty() {
+        binding.rvMypageFollowing.visibility = View.GONE
+        binding.ivMypageListFollowingEmptyImg.visibility = View.VISIBLE
+        binding.tvMypageListFollowingEmptyTitle.visibility = View.VISIBLE
+        binding.tvMypageListFollowingEmptyDescription.visibility = View.VISIBLE
+    }
+}
+
+interface FollowingListener{
+    fun setEmpty()
 }
