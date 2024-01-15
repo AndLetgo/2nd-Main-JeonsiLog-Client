@@ -165,7 +165,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         }
         view.isVisible = isVisible
     }
-    private fun setStateFcm(isVisible: Boolean){
+    fun setStateFcm(isVisible: Boolean){
         if(isVisible){
             binding.fcvNavAdmin.visibility = View.VISIBLE
             binding.flMain.visibility = View.GONE

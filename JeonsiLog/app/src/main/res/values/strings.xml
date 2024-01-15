@@ -176,6 +176,11 @@
     <string name="admin_exhibition_place_homepage_empty">전시공간 홈페이지 주소 없음</string>
     <string name="admin_exhibition_information_empty">전시회 정보 없음</string>
 
+    <string name="admin_report_title">접수된 신고</string>
+    <string name="admin_report_review_content">%1$s 님의 감상평이 신고됐어요</string>
+    <string name="admin_report_reply_content">%1$s 님의 댓글이 신고됐어요</string>
+    <string name="admin_report_poster_content">%1$s 포스터 등록이 필요해요</string>
+
     <!-- Empty State -->
     <string name="empty_search_title">검색 결과가 없어요</string>
     <string name="empty_search_description">검색어를 다시 확인해 주세요</string>

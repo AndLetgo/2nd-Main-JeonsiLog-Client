@@ -1,7 +1,9 @@
 package com.example.jeonsilog.view.admin
 
+import android.content.Context
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,12 +18,14 @@ import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformat
 import com.example.jeonsilog.databinding.FragmentAdminReviewBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.exhibition.AdminReviewReplyRvAdapter
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -35,8 +39,13 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
     private var hasNextPage = true
     private var reviewItem:UpdateReviewItem? = null
     override fun init() {
-        reviewItem = adminViewModel.reviewItem.value
-        reviewInfo = reviewItem?.item!!
+        if(adminViewModel.reportReviewId.value!=null){
+            reviewInfo = getReviewInfo(adminViewModel.reportReviewId.value!!)!!
+        }else{
+            reviewItem = adminViewModel.reviewItem.value
+            reviewInfo = reviewItem?.item!!
+        }
+
         setReviewUi(reviewInfo)
 
         //댓글 RecyclerView
@@ -52,6 +61,20 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
                 }
             }
         })
+
+        binding.tvBtnDelete.setOnClickListener {
+            deleteReview()
+        }
+    }
+    private fun getReviewInfo(reviewId: Int):GetReviewsExhibitionInformationEntity?{
+        var review: GetReviewsExhibitionInformationEntity? = null
+        runBlocking(Dispatchers.IO){
+            val response = ReviewRepositoryImpl().getReview(encryptedPrefs.getAT(), reviewId)
+            if(response.isSuccessful && response.body()!!.check){
+                review = response.body()?.information!!
+            }
+        }
+        return review
     }
     private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
         binding.tvUserName.text = review.nickname
@@ -105,5 +128,37 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
         val startPosition = totalCount + 1
         adminReviewReplyRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
         replyPage++
+    }
+    private fun deleteReview(){
+        Log.d("report", "deleteReview: is clicked")
+        var isSuccess = false
+        runBlocking(Dispatchers.IO){
+            val response = ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), reviewInfo.reviewId)
+            if(response.isSuccessful && response.body()!!.check){
+                isSuccess = true
+            }
+        }
+        if(isSuccess){
+            Log.d("report", "deleteReview: is success")
+            onAttach(requireContext())
+        }
+    }
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        Log.d("report", "onAttach: is clicked")
+        super.onAttach(context)
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("tag", "onAttach Back")
+                if(adminViewModel.reportReviewId.value!=null){
+                    (activity as MainActivity).setStateFcm(false)
+                    adminViewModel.deleteReportReviewId()
+                }
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 }

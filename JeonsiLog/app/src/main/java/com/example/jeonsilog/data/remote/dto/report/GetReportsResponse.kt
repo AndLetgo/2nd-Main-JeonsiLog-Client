@@ -6,7 +6,13 @@ data class GetReportsResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: GetReportsInformation
+    val information: ReportsResponseData
+)
+data class ReportsResponseData(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<GetReportsInformation>
 )
 
 data class GetReportsInformation(

@@ -89,4 +89,14 @@ class AdminViewModel:ViewModel() {
         _posterUri = MutableLiveData<Uri>()
     }
 
+    //신고
+    private var _reportReviewId = MutableLiveData<Int>()
+    val reportReviewId : LiveData<Int>
+        get() = _reportReviewId
+    fun setReportReviewId(reviewId:Int){
+        _reportReviewId.value = reviewId
+    }
+    fun deleteReportReviewId(){
+        _reportReviewId = MutableLiveData<Int>()
+    }
 }

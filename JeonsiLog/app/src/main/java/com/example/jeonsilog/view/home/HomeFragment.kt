@@ -32,7 +32,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         Log.d(TAG, "init: home init 실행")
         if(adminViewModel.isChanged.value!!){
             Log.d(TAG, "init: adminExhibitionViewModel.isChanged.value!!: true")
-            homeRvList = mutableListOf<ExhibitionsInfo>()
+            homeRvList = mutableListOf()
             exhibitionPage = 0
             setExhibitionRvByPage(0)
             adminViewModel.resetExhibitionInfo()
