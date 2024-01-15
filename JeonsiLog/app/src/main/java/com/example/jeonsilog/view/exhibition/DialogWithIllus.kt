@@ -43,15 +43,9 @@ class DialogWithIllus(
         super.onStart()
 
         val widthInDp = 324
-        val heightInDp = 242
 
         val widthInPixels = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, widthInDp.toFloat(),
-            resources.displayMetrics
-        ).toInt()
-
-        val heightInPixels = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, heightInDp.toFloat(),
             resources.displayMetrics
         ).toInt()
 

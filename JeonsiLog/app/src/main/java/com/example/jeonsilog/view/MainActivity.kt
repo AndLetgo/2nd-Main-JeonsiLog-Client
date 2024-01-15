@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -39,6 +40,7 @@ import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.view.search.RecordSearchFragment
 import com.example.jeonsilog.view.search.SearchResultFragment
+import com.example.jeonsilog.viewmodel.AdminExhibitionViewModel
 import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
@@ -52,6 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private var networkDialog: NetworkDialog? = null
     private var backPressedTime: Long = 0L
     private var alertDialog: AlertDialog.Builder? = null
+    private val adminExhibitionViewModel: AdminExhibitionViewModel by viewModels()
 
 
     private val callback = object : OnBackPressedCallback(true) {

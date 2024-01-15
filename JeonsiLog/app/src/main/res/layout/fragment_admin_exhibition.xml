@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.AdminExhibitionViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,18 +46,29 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginTop="@dimen/margin_16" />
-
+                    <Button
+                        android:id="@+id/btn_save_all"
+                        android:layout_width="@dimen/item_84"
+                        android:layout_height="@dimen/item_32"
+                        android:text="@string/btn_save"
+                        style="@style/M_medium"
+                        android:textColor="@color/basic_point"
+                        android:background="@color/transparent"
+                        app:layout_constraintTop_toBottomOf="@id/iv_handle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="@dimen/margin_20"
+                        android:layout_marginEnd="@dimen/margin_16"/>
                     <TextView
                         android:id="@+id/tv_exhibition_name"
                         android:layout_width="@dimen/item_0"
                         android:layout_height="wrap_content"
-                        android:text="NameNameNameNameNameName"
+                        android:text="title"
                         style="@style/XL_bold"
                         android:textColor="@color/basic_black"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/btn_save_all"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="@dimen/margin_40"
+                        android:layout_marginTop="@dimen/margin_4"
                         android:layout_marginHorizontal="@dimen/margin_24"/>
                     <TextView
                         android:id="@+id/tv_place_name"
