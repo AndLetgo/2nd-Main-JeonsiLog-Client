@@ -78,8 +78,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         //admin 계정 체크
 //        if(encryptedPrefs.){
 //            //관리자
-//            binding.bnvMain.visibility = View.GONE
-//            binding.bnvAdmin.visibility = View.VISIBLE
+            binding.bnvMain.visibility = View.GONE
+            binding.bnvAdmin.visibility = View.VISIBLE
 //        }else{
 //            //일반 유저
 //            binding.bnvMain.visibility = View.VISIBLE
@@ -162,13 +162,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         }
     }
 
-    fun setStateBn(isVisible:Boolean){
+    fun setStateBn(isVisible:Boolean, type:String){
         var view = binding.bnvMain
         //관리자 계정 체크
-//        when(type){
-//            "main" -> view = binding.bnvMain
-//            "admin" -> view = binding.bnvAdmin
-//        }
+        when(type){
+            "user" -> view = binding.bnvMain
+            "admin" -> view = binding.bnvAdmin
+        }
         view.isVisible = isVisible
     }
     private fun setStateFcm(isVisible: Boolean){

@@ -29,6 +29,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun init() {
         isAdminExhibitionOpen = false
+        (activity as MainActivity).setStateBn(true, "admin")
         //관리자 체크
 //        if(){
 //            binding.ibFabTop.visibility = View.GONE

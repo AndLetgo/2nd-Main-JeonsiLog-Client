@@ -53,7 +53,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
     }
     fun setbottomNavigation(){
         val mActivity = context as MainActivity
-        mActivity.setStateBn(false)
+        mActivity.setStateBn(false, "user")
     }
     fun setLayoutView(){
         //뷰페이저설정(검색어)

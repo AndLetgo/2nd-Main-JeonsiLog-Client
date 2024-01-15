@@ -52,7 +52,7 @@
                 app:layout_constraintStart_toEndOf="@id/iv_profile"
                 app:layout_constraintTop_toTopOf="parent"/>
             <com.willy.ratingbar.BaseRatingBar
-                android:id="@+id/rv_exhibition_review"
+                android:id="@+id/brb_exhibition_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srb_numStars="5"
@@ -66,14 +66,15 @@
                 app:srb_drawableEmpty="@drawable/ic_rating_empty"
                 app:srb_drawableFilled="@drawable/ic_rating_full"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ib_menu"
+                app:layout_constraintEnd_toStartOf="@id/tv_btn_delete"
                 android:layout_marginEnd="@dimen/margin_8"/>
-            <ImageButton
-                android:id="@+id/ib_menu"
+            <TextView
+                android:id="@+id/tv_btn_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_menu"
                 android:background="@color/basic_white"
+                android:text="@string/btn_delete"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/margin_2"/>
@@ -87,6 +88,7 @@
                 style="@style/M_regular"
                 android:textColor="@color/gray_dark"/>
             <TextView
+                android:id="@+id/tv_reply_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/exhibition_reply"
@@ -97,6 +99,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="@dimen/margin_16"/>
             <TextView
+                android:id="@+id/tv_review_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="어제"

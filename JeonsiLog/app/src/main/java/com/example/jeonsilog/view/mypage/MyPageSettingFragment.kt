@@ -22,7 +22,7 @@ import kotlinx.coroutines.runBlocking
 class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout.fragment_my_page_setting) {
     override fun init() {
         try{
-            (activity as MainActivity).setStateBn(false)
+            (activity as MainActivity).setStateBn(false, "user")
         }catch (e:ClassCastException){
 
         }

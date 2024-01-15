@@ -24,6 +24,7 @@ import com.example.jeonsilog.databinding.FragmentAdminExhibitionBinding
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.exhibition.DialogWithIllus
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.viewmodel.AdminExhibitionViewModel
@@ -34,6 +35,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.example.jeonsilog.widget.utils.ImageUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
@@ -57,7 +59,6 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     //감상평
     private var reviewList = mutableListOf<GetReviewsExhibitionInformationEntity>()
     private var reviewPage = 0
-    private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private val adminExhibitionViewModel: AdminExhibitionViewModel by activityViewModels()
     val TAG = "poster"
 
@@ -68,6 +69,8 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
                 isRefresh.value = false
             }
         }
+        (activity as MainActivity).setStateBn(false, "admin")
+
         thisExhibitionId = exhibitionId
 
         setBottomSheet() //바텀시트 세팅
@@ -80,6 +83,9 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             getExhibitionInfo()
         }
         getReviewInfo()
+        if(adminExhibitionViewModel.deletedReviewPosition.value != null){
+            deleteReview(adminExhibitionViewModel.deletedReviewPosition.value!!)
+        }
 
         adminExhibitionViewModel.exhibitionName.observe(this){
             binding.tvExhibitionName.text = adminExhibitionViewModel.exhibitionName.value
@@ -233,8 +239,8 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             override fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int) {
                 //감상평 페이지로 이동
                 val item = UpdateReviewItem(data, position)
-                exhibitionViewModel.setReviewItem(item)
-                GlobalApplication.newReviewId = data.reviewId
+                adminExhibitionViewModel.setReviewItem(item)
+                newReviewId = data.reviewId
                 Navigation.findNavController(v).navigate(R.id.action_adminExhibitionFragment_to_adminReviewFragment)
             }
 
@@ -332,4 +338,8 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         customDialogFragment.show(parentFragmentManager, tag)
     }
 
+    fun deleteReview(position:Int){
+        exhibitionRvAdapter.deleteItem(position)
+        binding.rvExhibitionReview.adapter = exhibitionRvAdapter
+    }
 }

@@ -81,7 +81,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         binding.ibMenu.setOnClickListener {
             val popupMenu: PopupMenu
-            if(reviewInfo.userId == GlobalApplication.encryptedPrefs.getUI()){
+            if(reviewInfo.userId == encryptedPrefs.getUI()){
                 popupMenu = DialogUtil().setMenuButton(it, 0)
                 popupMenu.setOnMenuItemClickListener{
                     showCustomDialog("삭제_감상평", reviewInfo.reviewId,-1, 1)
