@@ -85,5 +85,8 @@ dependencies {
 
     //read more
     implementation 'kr.co.prnd:readmore-textview:1.0.0'
+
+    // spin kit
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     
 }
