@@ -1,6 +1,8 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
@@ -45,8 +47,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
     private var hasNextPage = true
+    val TAG = "reply"
 
     override fun init() {
+        replyPage = 0
+
         isRefresh.observe(this){
             if(it){
                 (activity as ExtraActivity).refreshFragment(R.id.reviewFragment)
@@ -55,17 +60,15 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         }
 
         binding.vm = exhibitionViewModel
+        binding.lifecycleOwner = activity
         if(extraActivityReference==4){
-            Log.d("review", "init: newReviewId: $newReviewId, newReplyId: $newReplyId")
             //댓글 존재여부 체크
             val check = checkHasReply()
-            Log.d("review", "init: checkHasReply(): $check")
             if(!check){
                 Toast.makeText(requireContext(), getString(R.string.toast_notification_go_reply_exception), Toast.LENGTH_SHORT).show()
                 activity?.finish()
             }
         }
-        Log.d("review", "init: after has reply check")
         if(getReviewInfo(newReviewId)!=null){
             reviewInfo = getReviewInfo(newReviewId)!!
             setReviewUi(reviewInfo)
@@ -109,8 +112,24 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             popupMenu.show()
         }
 
+        binding.etWritingReply.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s?.length!! > 0 ){
+                    exhibitionViewModel.setCheckCount(true)
+                }else{
+                    exhibitionViewModel.setCheckCount(false)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
         binding.btnEnterReply.setOnClickListener{
-            postReply() //댓글 입력 등록 버튼 처리
+            if(exhibitionViewModel.checkCount.value!!){
+                postReply() //댓글 입력 등록 버튼 처리
+            }
         }
         Glide.with(requireContext())
             .load(encryptedPrefs.getURL())
@@ -197,7 +216,6 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     }
 
     private fun setReplyRvByPage(totalCount:Int){
-        Log.d("reply", "setReplyRvByPage: called")
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
             val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), newReviewId,replyPage)
@@ -254,7 +272,6 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d("TAG", "handleOnBackPressed: extraActivityReference: $extraActivityReference ")
                 if(extraActivityReference == 1){
                     activity?.finish()
                 }else{
