@@ -21,7 +21,6 @@ import kotlinx.coroutines.runBlocking
 class UserSearchItemAdapter(
     private val context: Context,private val list:List<SearchUserInformationEntity>)
     : RecyclerView.Adapter<UserSearchItemAdapter.ViewHolder>() {
-    var itemPage=0
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val usernameTextView: TextView = view.findViewById(R.id.tv_user_name)
 
@@ -44,11 +43,8 @@ class UserSearchItemAdapter(
         holder.usernameTextView.text = list[position].nickname
         holder.itemView.setOnClickListener {
             //유저 id
+            (context as MainActivity).moveOtherUserProfile(list[position].userId, list[position].nickname)
 
-            holder.itemView.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(list[position].userId, list[position].nickname)
-
-            }
 
         }
     }

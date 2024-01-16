@@ -1,6 +1,8 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
@@ -30,6 +32,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReplyId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -44,8 +47,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
     private var hasNextPage = true
+    val TAG = "reply"
 
     override fun init() {
+        replyPage = 0
+
         isRefresh.observe(this){
             if(it){
                 (activity as ExtraActivity).refreshFragment(R.id.reviewFragment)
@@ -54,6 +60,15 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         }
 
         binding.vm = exhibitionViewModel
+        binding.lifecycleOwner = activity
+        if(extraActivityReference==4){
+            //댓글 존재여부 체크
+            val check = checkHasReply()
+            if(!check){
+                Toast.makeText(requireContext(), getString(R.string.toast_notification_go_reply_exception), Toast.LENGTH_SHORT).show()
+                activity?.finish()
+            }
+        }
         if(getReviewInfo(newReviewId)!=null){
             reviewInfo = getReviewInfo(newReviewId)!!
             setReviewUi(reviewInfo)
@@ -97,8 +112,24 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             popupMenu.show()
         }
 
+        binding.etWritingReply.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s?.length!! > 0 ){
+                    exhibitionViewModel.setCheckCount(true)
+                }else{
+                    exhibitionViewModel.setCheckCount(false)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
         binding.btnEnterReply.setOnClickListener{
-            postReply() //댓글 입력 등록 버튼 처리
+            if(exhibitionViewModel.checkCount.value!!){
+                postReply() //댓글 입력 등록 버튼 처리
+            }
         }
         Glide.with(requireContext())
             .load(encryptedPrefs.getURL())
@@ -140,7 +171,12 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     }
     private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
         binding.tvUserName.text = review.nickname
-        binding.brbExhibitionReview.rating = review.rate.toFloat()
+        if(review.rate==null || review.rate==0.0){
+            binding.brbExhibitionReview.visibility = View.GONE
+        }else{
+            binding.brbExhibitionReview.visibility = View.VISIBLE
+            binding.brbExhibitionReview.rating = review.rate.toFloat()
+        }
         binding.tvReviewContent.text = review.contents
         binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${review.numReply}"
         exhibitionViewModel.setReplyCount(review.numReply)
@@ -180,7 +216,6 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     }
 
     private fun setReplyRvByPage(totalCount:Int){
-        Log.d("reply", "setReplyRvByPage: called")
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
             val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), newReviewId,replyPage)
@@ -211,9 +246,9 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.etWritingReply.setText("")
 
         exhibitionViewModel.setReplyCount(exhibitionViewModel.replyCount.value!!+1)
-        val review = exhibitionViewModel.reviewItem.value
-        review!!.item.numReply++
-        exhibitionViewModel.setReviewItem(review)
+        if(exhibitionViewModel.reviewItem.value!=null){
+            exhibitionViewModel.setReviewItemNumReply(true)
+        }
     }
 
     fun showCustomDialog(type:String, contentId:Int,position:Int, reviewSide:Int) {
@@ -224,6 +259,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     override fun confirmButtonClick(position: Int) {
         exhibitionReplyRvAdapter.removeItem(position)
         binding.rvExhibitionReviewReply.adapter = exhibitionReplyRvAdapter
+        if(exhibitionViewModel.reviewItem.value!=null){
+            exhibitionViewModel.setReviewItemNumReply(false)
+        }
+        exhibitionViewModel.setReplyCount(exhibitionViewModel.replyCount.value!!-1)
+
     }
 
     //Back Button 눌렀을 때
@@ -232,7 +272,6 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d("TAG", "handleOnBackPressed: extraActivityReference: $extraActivityReference ")
                 if(extraActivityReference == 1){
                     activity?.finish()
                 }else{
@@ -242,5 +281,20 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    //댓글 존재 여부 체크
+    private fun checkHasReply():Boolean{
+        var check = true
+        runBlocking(Dispatchers.IO){
+            val response = ReplyRepositoryImpl().getHasReply(encryptedPrefs.getAT(), newReplyId)
+            if(response.isSuccessful && response.body()!!.check){
+                check = response.body()!!.information.isExist
+                Log.d("review", "checkHasReply: success $check", )
+            }else{
+                Log.e("review", "checkHasReply: fail", )
+            }
+        }
+        return check
     }
 }

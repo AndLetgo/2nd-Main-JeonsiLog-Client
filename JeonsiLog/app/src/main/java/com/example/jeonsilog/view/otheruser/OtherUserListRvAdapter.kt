@@ -10,21 +10,17 @@ import androidx.core.content.ContextCompat.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerEntity
-import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowerInformation
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingEntity
-import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingInformation
 import com.example.jeonsilog.databinding.ItemOtherUserListFollowBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.exhibition.ExtraActivity
-import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowerUpdate
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFollowingUpdate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import java.lang.ClassCastException
 import java.lang.IllegalArgumentException
 
 class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -66,10 +62,15 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                         ifollow = false,
                         followMe = data.followMe) as T
 
+                   showDialog()
+
                     runBlocking(Dispatchers.IO){
                         FollowRepositoryImpl().deleteFollow(encryptedPrefs.getAT(), data.followUserId)
                     }
+
                     notifyItemChanged(adapterPosition)
+
+                    dismissDialog()
 
                 } else {
                     list[adapterPosition] = GetOtherFollowerEntity(
@@ -78,10 +79,15 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                         nickname = data.nickname,
                         ifollow = true,
                         followMe = data.followMe) as T
+
+                    showDialog()
+
                     runBlocking(Dispatchers.IO){
                         FollowRepositoryImpl().postFollow(encryptedPrefs.getAT(), data.followUserId)
                     }
                     notifyItemChanged(adapterPosition)
+
+                    dismissDialog()
                 }
                 isFollowerUpdate.value = true
             }
@@ -92,7 +98,6 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                 }else if(context.javaClass.simpleName=="ExtraActivity"){
                     (context as ExtraActivity).moveOtherUserProfile(data.followUserId, data.nickname)
                 }
-
             }
 
             binding.tvOtherUserListFollowNick.setOnClickListener {
@@ -143,10 +148,15 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                         ifollow = false,
                         followMe = data.followMe) as T
 
+                   showDialog()
+
                     runBlocking(Dispatchers.IO){
                         FollowRepositoryImpl().deleteFollow(encryptedPrefs.getAT(), data.followUserId)
                     }
+
                     notifyItemChanged(adapterPosition)
+
+                    dismissDialog()
 
                 } else {
                     list[adapterPosition] = GetOtherFollowingEntity(
@@ -156,10 +166,15 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
                         ifollow = true,
                         followMe = data.followMe) as T
 
+                    showDialog()
+
                     runBlocking(Dispatchers.IO){
                         FollowRepositoryImpl().postFollow(encryptedPrefs.getAT(), data.followUserId)
                     }
+
                     notifyItemChanged(adapterPosition)
+
+                    dismissDialog()
                 }
                 isFollowingUpdate.value = true
             }
@@ -226,6 +241,22 @@ class OtherUserListRvAdapter<T>(private val list: MutableList<T>, private val ty
 
     override fun getItemViewType(position: Int): Int {
         return type
+    }
+
+    private fun showDialog(){
+        if (context.javaClass.simpleName == "MainActivity"){
+            (context as MainActivity).showLoadingDialog(context)
+        }else if(context.javaClass.simpleName=="ExtraActivity"){
+            (context as ExtraActivity).showLoadingDialog(context)
+        }
+    }
+
+    private fun dismissDialog(){
+        if (context.javaClass.simpleName == "MainActivity"){
+            (context as MainActivity).dismissLoadingDialog()
+        }else if(context.javaClass.simpleName=="ExtraActivity"){
+            (context as ExtraActivity).dismissLoadingDialog()
+        }
     }
 
 }

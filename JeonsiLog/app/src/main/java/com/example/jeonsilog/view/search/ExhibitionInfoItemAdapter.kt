@@ -35,7 +35,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.math.log
 
-class ExhibitionInfoItemAdapter(private val context: Context,private val list:List<SearchInformationEntity>) : RecyclerView.Adapter<ExhibitionInfoItemAdapter.ViewHolder>() {
+class ExhibitionInfoItemAdapter(private val context: Context,private val list:List<SearchInformationEntity>)
+    : RecyclerView.Adapter<ExhibitionInfoItemAdapter.ViewHolder>() {
     class ViewHolder(binding: ItemExhibitionInfoBinding) : RecyclerView.ViewHolder(binding.root) {
         val exhibitionnameTextView: TextView = binding.tvTitle
         val exhibitionlocationTextView: TextView = binding.tvAddress

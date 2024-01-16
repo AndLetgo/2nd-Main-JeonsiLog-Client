@@ -3,14 +3,11 @@ package com.example.jeonsilog.view.mypage
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -18,7 +15,6 @@ import com.example.jeonsilog.databinding.BottomSheetMypageProfileEditBinding
 import com.example.jeonsilog.databinding.FragmentMyPageBinding
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.otheruser.OtherUserListFragment
 import com.example.jeonsilog.viewmodel.MyPageViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -31,11 +27,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val viewModel: MyPageViewModel by viewModels()
@@ -50,7 +45,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         try{
             (activity as MainActivity).setStateBn(true)
         }catch (e:ClassCastException){
-
+            // ExtraActivity는 처리 필요 없음
+        }
+        if(nowActivityName == "MainActivity"){
+            (requireActivity()  as MainActivity).setBottomNavCurrentItem(4)
         }
         viewModel.getMyInfo()
         binding.vm = viewModel
@@ -198,18 +196,37 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     }
 
     private fun setDefalutImage() {
-        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.illus_default_profile)
-        val bitmap = (drawable as BitmapDrawable).bitmap
+        val outputDir: File = requireActivity().cacheDir
+        val outputFile: File = File.createTempFile("prefix", "suffix", outputDir)
 
-        val file = File(requireContext().cacheDir, "default.png")
-        val outputStream: OutputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-        outputStream.flush()
-        outputStream.close()
+        val requestFile: RequestBody = outputFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val imagePart: MultipartBody.Part = MultipartBody.Part.createFormData("image", null, requestFile)
 
-        val uri = Uri.fromFile(file)
+        outputFile.deleteOnExit()
 
-        patchMyProfileImg(uri)
+        CoroutineScope(Dispatchers.IO).launch{
+            val response = UserRepositoryImpl().uploadProfileImg(encryptedPrefs.getAT(), imagePart)
+
+            if(response.isSuccessful && response.body()!!.check){
+                Log.d("Upload", "Image uploaded successfully")
+                encryptedPrefs.setURL(null)
+            } else {
+                Log.e("Upload", "Image upload failed")
+            }
+        }
+
+//        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.illus_default_profile)
+//        val bitmap = (drawable as BitmapDrawable).bitmap
+//
+//        val file = File(requireContext().cacheDir, "default.png")
+//        val outputStream: OutputStream = FileOutputStream(file)
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+//        outputStream.flush()
+//        outputStream.close()
+//
+//        val uri = Uri.fromFile(file)
+//
+//        patchMyProfileImg(uri)
     }
 
 

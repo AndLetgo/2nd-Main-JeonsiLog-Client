@@ -12,6 +12,6 @@ data class PatchAlarmActiveResponse(
 data class PatchAlarmActiveInformation(
     @SerializedName("userId")
     val userId: Int,
-    @SerializedName("recvActive")
-    val recvActive: Boolean
+    @SerializedName("isRecvActive")
+    val isRecvActive: Boolean
 )

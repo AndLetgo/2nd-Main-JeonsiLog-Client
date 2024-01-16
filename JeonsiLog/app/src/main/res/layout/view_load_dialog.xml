@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/iv_dimming_zone"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/item_0"
             android:background="@drawable/shape_dialog_dimming_zone"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="parent"

@@ -16,12 +16,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
+import com.example.jeonsilog.fcm.services.FcmDialog
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.home.HomeFragment
 import com.example.jeonsilog.view.spalshpage.SplashActivity
@@ -40,6 +43,11 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedP
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
+import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import java.net.URLDecoder
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -47,7 +55,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private var networkDialog: NetworkDialog? = null
     private var backPressedTime: Long = 0L
     private var alertDialog: AlertDialog.Builder? = null
-
+    private var isPermissionDenied = false
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -98,7 +106,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 }
                 R.id.item_notification->{
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,
-                        NotificationFragment()
+                        NotificationFragment("main")
                     ).commit()
                 }
                 R.id.item_mypage->{
@@ -114,8 +122,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             Log.d(tag, "isFinish: $it")
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
         }
+        isPermissionDenied=prefs.getIsAllowNotify()
+        askNotificationPermission()
+        getToken()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null) {
+            val extras = intent.extras
+            val targetFragment = extras?.getString("action")
+            Log.d("GGGGGtargetFragmenttargetFragment", "${targetFragment}: ")
+            if (targetFragment != null) {
+                binding.bnvMain.selectedItemId = R.id.item_notification
+                moveNotificationFragment(targetFragment.toString())
+            }
+        }
+    }
     fun setStateBn(isVisible:Boolean){
         if(isVisible){
             binding.bnvMain.visibility = View.VISIBLE
@@ -161,6 +184,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         when(type){
             0 -> exhibitionId = newTargetId
             1 -> newReviewId = newTargetId
+            4 -> newReviewId = newTargetId
         }
         val intent = Intent(this, ExtraActivity::class.java)
         startActivity(intent)
@@ -223,6 +247,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 .commit()
         }
     }
+    fun moveNotificationFragment(action:String){
+        val fragment = NotificationFragment(action)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_main, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
     fun moveSearchResultFrament(str :String){
         val fragment = SearchResultFragment(str)
         supportFragmentManager.beginTransaction()
@@ -236,4 +267,64 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             .replace(R.id.fl_main, fragment)
             .commit()
     }
+    fun setBottomNavCurrentItem(index:Int){
+        binding.bnvMain.menu.getItem(index).isChecked = true
+    }
+    fun getToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                //Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d("myFcmToken", msg)
+            //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
+    }
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Log.d("requestPermissionLauncher", "권한이 승인된 경우")
+            // 권한이 승인된 경우
+        } else {
+            Log.d("requestPermissionLauncher", "권한이 거부된 경우")
+            // 권한이 거부된 경우
+        }
+    }
+    //알림 권한 확인 함수
+    private fun askNotificationPermission() {
+        // Android API level이 TIRAMISU (33) 이상인 경우에만 실행
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // 이미 권한이 부여된 경우
+
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // 사용자에게 이미 거부한 이력이 있는 경우
+                if (!isPermissionDenied){
+                    Log.d("requestPermissionLauncher", "사용자에게 이미 거부한 이력이 있는 경우")
+                    //다이얼로그 띄우기
+                    showFcmDialog(supportFragmentManager)
+                    prefs.setIsAllowNotify(true)
+                }
+            } else {
+                // 권한을 요청하는 경우
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }else{
+            Log.d("requestPermissionLauncher", "뭐지뭐지")
+        }
+    }
+    fun showFcmDialog(fragmentManager: FragmentManager) {
+        val dialog = FcmDialog()
+        dialog.show(fragmentManager, "FcmDialog")
+    }
+
 }

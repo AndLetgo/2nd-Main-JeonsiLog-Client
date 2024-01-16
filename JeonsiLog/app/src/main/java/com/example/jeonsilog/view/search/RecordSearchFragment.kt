@@ -42,6 +42,10 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
     val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+
+        (requireActivity()  as MainActivity).setBottomNavCurrentItem(1)
+
+
         binding.searchData=viewModel
         binding.lifecycleOwner = this
         val mActivity = context as MainActivity
