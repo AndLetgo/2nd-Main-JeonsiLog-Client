@@ -23,5 +23,5 @@ data class GetMyFollowingEntity(
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImgUrl")
-    val profileImgUrl: String
+    val profileImgUrl: String?
 )

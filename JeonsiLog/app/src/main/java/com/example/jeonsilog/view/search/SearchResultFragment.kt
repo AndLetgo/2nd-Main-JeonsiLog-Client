@@ -28,6 +28,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
     var initialTabPosition=0
     lateinit var viewModel: SearchViewModel
     val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
+    var nowViewPagerIndex = 0
 
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
@@ -63,6 +64,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
         binding.vpResult.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 // 페이지가 선택될 때 호출
+                nowViewPagerIndex = position
                 binding.tlResult.setScrollPosition(position, 0f, true)
             }
         })
@@ -91,6 +93,9 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
             }
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Not used in this example
+                if(binding.tlResult.selectedTabPosition != nowViewPagerIndex){
+                    binding.vpResult.currentItem = binding.tlResult.selectedTabPosition
+                }
             }
         })
     }
@@ -189,19 +194,12 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
         }
     }
 
-//    fun <T> MutableList<T>.prepend(element: T) {
-//        add(0, element)
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         bottomNavigationView?.visibility = View.VISIBLE
 
     }
-
-
-
-
 
 
 }

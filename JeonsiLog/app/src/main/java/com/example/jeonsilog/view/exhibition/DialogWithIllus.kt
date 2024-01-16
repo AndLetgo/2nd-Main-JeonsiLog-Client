@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
@@ -25,6 +26,7 @@ import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.home.HomeRvAdapter
+import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.kakao.sdk.common.KakaoSdk.type
@@ -34,7 +36,7 @@ import kotlinx.coroutines.runBlocking
 class DialogWithIllus(
     private val type:String, private val contentId:Int, private val reviewSide:Int, private val position: Int, private val dialogWithIllusInterface: DialogWithIllusInterface):
     DialogFragment(){
-
+    private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private var _binding: DialogWithIllusBinding? = null
     private val binding get() = _binding!!
     val TAG = "Dialog"
@@ -97,7 +99,7 @@ class DialogWithIllus(
                 Log.d("interest", "init: 등록 성공")
             }
         }
-        Toast.makeText(context, "신고가 접수되었습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.toast_report_success), Toast.LENGTH_SHORT).show()
     }
     private fun setDeleteReview(){
         binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_delete) })
@@ -109,6 +111,7 @@ class DialogWithIllus(
                 activity?.finish()
             }else{
                 if(reviewSide == 1){
+                    exhibitionViewModel.setCheckReviewDelte(true)
                     parentFragment?.view?.let { it1 -> Navigation.findNavController(it1).popBackStack() }
                 }else{
                     dialogWithIllusInterface.confirmButtonClick(position)
@@ -121,7 +124,7 @@ class DialogWithIllus(
         runBlocking(Dispatchers.IO) {
             ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), contentId)
         }
-        Toast.makeText(context, "감상평이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.toast_delete_review), Toast.LENGTH_SHORT).show()
     }
     private fun setDeleteReply(){
         binding.ivDialogIllus.setImageDrawable(context?.let { ContextCompat.getDrawable(it,R.drawable.illus_dialog_delete) })
@@ -137,7 +140,7 @@ class DialogWithIllus(
         runBlocking(Dispatchers.IO){
             ReplyRepositoryImpl().deleteReply(encryptedPrefs.getAT(), contentId)
         }
-        Toast.makeText(context, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.toast_delete_reply), Toast.LENGTH_SHORT).show()
     }
     private fun setCancelReview(){
         Log.d(TAG, "onCreateView: 감상평")

@@ -27,7 +27,7 @@
                 android:id="@+id/iv_profile"
                 android:layout_width="@dimen/item_24"
                 android:layout_height="@dimen/item_24"
-                android:src="@drawable/illus_default_profile"
+                android:background="@drawable/illus_default_profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

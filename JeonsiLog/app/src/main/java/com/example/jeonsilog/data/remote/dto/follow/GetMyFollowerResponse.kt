@@ -23,7 +23,7 @@ data class GetMyFollowerEntity(
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImgUrl")
-    val profileImgUrl: String,
+    val profileImgUrl: String?,
     @SerializedName("ifollow")
     val ifollow: Boolean
 )

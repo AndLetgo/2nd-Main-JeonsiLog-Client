@@ -45,7 +45,7 @@
             android:layout_width="142dp"
             android:layout_height="44dp"
             android:background="@drawable/shape_corner_round_start_btn"
-            android:text="@string/btn_cancel"
+            android:text="@string/btn_close"
             style="@style/M_medium"
             android:textColor="@color/gray_medium"
             app:layout_constraintStart_toStartOf="parent"

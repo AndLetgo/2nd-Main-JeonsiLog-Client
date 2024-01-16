@@ -24,7 +24,7 @@
                 android:id="@+id/iv_user_profile"
                 android:layout_width="@dimen/item_24"
                 android:layout_height="@dimen/item_24"
-                android:src="@drawable/shape_round_iv"/>
+                android:background="@drawable/illus_default_profile"/>
 
             <TextView
                 android:id="@+id/tv_user_name"

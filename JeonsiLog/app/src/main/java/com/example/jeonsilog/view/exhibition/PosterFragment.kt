@@ -71,7 +71,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
                 }
             }
             if(isSuccess){
-                Toast.makeText(requireContext(), getString(R.string.toast_poster_report_success), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_report_success), Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(requireContext(), getString(R.string.toast_poster_report_failure), Toast.LENGTH_SHORT).show()
             }

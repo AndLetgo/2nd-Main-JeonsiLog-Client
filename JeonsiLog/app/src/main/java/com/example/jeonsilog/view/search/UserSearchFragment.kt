@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.search
 
+import android.util.Log
 import androidx.core.view.isGone
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,13 +27,14 @@ class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUse
 
     lateinit var viewModel: SearchViewModel
     override fun init() {
+        Log.d("Fragment", "UserSearchFragment: ")
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-
         userItemAdapter = UserSearchItemAdapter(requireContext(),UserRvList)
         binding.rvUserinfo.adapter = userItemAdapter
         binding.rvUserinfo.layoutManager = LinearLayoutManager(requireContext())
-
+        itemPage=0
         setUserRvByPage(0)
+
         binding.rvUserinfo.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -48,17 +50,24 @@ class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUse
         binding.ivEmpty.isGone=true
         binding.tvEmpty01.isGone=true
         binding.tvEmpty02.isGone=true
+        Log.d("setUserRBPP", "checkEmptyListTrue: ")
     }
     fun checkEmptyListFalse(){
         binding.ivEmpty.isGone=false
         binding.tvEmpty01.isGone=false
         binding.tvEmpty02.isGone=false
+        Log.d("setUserRBPP", "checkEmptyListFalse: ")
     }
     private fun setUserRvByPage(totalCount:Int){
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
+            Log.d("setUserRBPP", "edittext==$edittext||itemPage==$itemPage ")
             val response = UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(),edittext,itemPage)
+            Log.d("setUserRBPP", "$response: ")
             if(response.isSuccessful && response.body()!!.check){
+                if(itemPage==0){
+                    UserRvList.clear()
+                }
                 UserRvList.addAll(response.body()!!.information.data.toMutableList())
                 addItemCount = response.body()!!.information.data.size
                 hasNextPage = response.body()!!.information.hasNextPage

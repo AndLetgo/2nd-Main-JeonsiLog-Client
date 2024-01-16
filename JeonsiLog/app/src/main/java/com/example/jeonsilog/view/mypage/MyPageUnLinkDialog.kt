@@ -23,6 +23,7 @@ import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MyPageUnLinkDialog(): DialogFragment() {
     private var _binding: DialogReconfirmUnlinkBinding? = null
@@ -32,15 +33,9 @@ class MyPageUnLinkDialog(): DialogFragment() {
         super.onStart()
 
         val widthInDp = 324
-        val heightInDp = 242
 
         val widthInPixels = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, widthInDp.toFloat(),
-            resources.displayMetrics
-        ).toInt()
-
-        val heightInPixels = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, heightInDp.toFloat(),
             resources.displayMetrics
         ).toInt()
 
@@ -61,20 +56,24 @@ class MyPageUnLinkDialog(): DialogFragment() {
         }
 
         binding.btnDialogReconfirmDoUnlink.setOnClickListener {
-            UserApiClient.instance.unlink { error ->
-                if(error != null){
-                    Log.e("LOGIN", error.message.toString())
-                }
-                CoroutineScope(Dispatchers.IO).launch{
-                    if(UserRepositoryImpl().doUnLink(encryptedPrefs.getAT().toString())){
-                        launch(Dispatchers.Main) {
+            runBlocking(Dispatchers.IO){
+                if(UserRepositoryImpl().doUnLink(encryptedPrefs.getAT())){
+
+                    UserApiClient.instance.unlink { error ->
+                        if(error != null){
+                            Log.e("KAKAO", error.message.toString())
+                            CoroutineScope(Dispatchers.Main).launch {
+                                Toast.makeText(requireContext(), "회원탈퇴 실패", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
                             val intent = Intent(requireContext(), SplashActivity::class.java)
+                            requireActivity().finishAffinity()
                             startActivity(intent)
                         }
-                    } else {
-                        launch(Dispatchers.Main) {
-                            Toast.makeText(requireContext(), "회원탈퇴 실패", Toast.LENGTH_SHORT).show()
-                        }
+                    }
+                } else {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Toast.makeText(requireContext(), "회원탈퇴 실패", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

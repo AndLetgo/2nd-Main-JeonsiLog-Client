@@ -2,16 +2,16 @@ package com.example.jeonsilog.data.remote.dto.user
 
 import com.google.gson.annotations.SerializedName
 
-data class PatchAlarmFollowingResponse(
+data class PatchAlarmExhibitionResponse(
     @SerializedName("check")
     var check: Boolean,
     @SerializedName("information")
-    var information: PatchAlarmFollowingInformation
+    var information: PatchAlarmExhibitionInformation
 )
 
-data class PatchAlarmFollowingInformation(
+data class PatchAlarmExhibitionInformation(
     @SerializedName("userId")
     val userId: Int,
-    @SerializedName("recvFollowing")
-    val recvFollowing: Boolean
+    @SerializedName("isRecvFollowing")
+    val isRecvFollowing: Boolean
 )

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.example.jeonsilog.BuildConfig
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -12,6 +13,7 @@ import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.spalshpage.SplashActivity
+import com.example.jeonsilog.viewmodel.MyPageSettingViewmodel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +22,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout.fragment_my_page_setting) {
+    private val viewModel: MyPageSettingViewmodel by viewModels()
+
     override fun init() {
         try{
             (activity as MainActivity).setStateBn(false, "user")
@@ -27,29 +31,22 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
 
         }
 
-        binding.switchMypageSettingFollowing.isChecked = encryptedPrefs.getIsRecvFollowing()
-        binding.switchMypageSettingActivity.isChecked = encryptedPrefs.getIsRecvActive()
+        binding.vm = viewModel
+        binding.lifecycleOwner = this
+        viewModel.setChecked()
+
         binding.tvMypageSettingVersion.text = getString(R.string.setting_version, BuildConfig.VERSION_NAME)
 
-        binding.switchMypageSettingFollowing.setOnCheckedChangeListener { _, _ ->
-            runBlocking(Dispatchers.IO){
-                val response = UserRepositoryImpl().patchAlarmFollowing(encryptedPrefs.getAT())
-                if(response.isSuccessful && response.body()!!.check){
-                    encryptedPrefs.setIsRecvFollowing(response.body()!!.information.recvFollowing)
-                }
+        binding.switchMypageSettingExhibition.setOnCheckedChangeListener { _, isChecked ->
+            if(viewModel.isRecvExhibition.value != isChecked){
+                isExhibition()
             }
-            binding.switchMypageSettingFollowing.isChecked = encryptedPrefs.getIsRecvFollowing()
         }
 
-        binding.switchMypageSettingActivity.setOnCheckedChangeListener { _, _ ->
-            runBlocking(Dispatchers.IO){
-                val response = UserRepositoryImpl().patchAlarmActive(encryptedPrefs.getAT())
-                if(response.isSuccessful && response.body()!!.check){
-                    encryptedPrefs.setIsRecvActive(response.body()!!.information.recvActive)
-                }
+        binding.switchMypageSettingActivity.setOnCheckedChangeListener { _, isChecked ->
+            if(viewModel.isRecvActive.value != isChecked){
+                isActive()
             }
-
-            binding.switchMypageSettingActivity.isChecked = encryptedPrefs.getIsRecvActive()
         }
 
         binding.ibMypageSettingGoWeb.setOnClickListener {
@@ -69,6 +66,7 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
                     if(AuthRepositoryImpl().signOut(encryptedPrefs.getAT())){
                         launch(Dispatchers.Main) {
                             val intent = Intent(requireContext(), SplashActivity::class.java)
+                            requireActivity().finishAffinity()
                             startActivity(intent)
                         }
                     } else {
@@ -89,5 +87,27 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
     private fun showCustomDialog() {
         val customDialogFragment = MyPageUnLinkDialog()
         customDialogFragment.show(parentFragmentManager, "MyPageUnLinkDialog")
+    }
+
+    private fun isExhibition(){
+        runBlocking(Dispatchers.IO){
+            val response = UserRepositoryImpl().patchAlarmExhibition(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check){
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.setChecked()
+                }
+            }
+        }
+    }
+
+    private fun isActive(){
+        runBlocking(Dispatchers.IO){
+            val response = UserRepositoryImpl().patchAlarmActive(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check){
+                CoroutineScope(Dispatchers.Main).launch {
+                    viewModel.setChecked()
+                }
+            }
+        }
     }
 }
