@@ -1,6 +1,7 @@
 package com.example.jeonsilog.repository.reply
 
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.reply.GetHasReplyResponse
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyResponse
 import com.example.jeonsilog.data.remote.dto.reply.PostReplyRequest
 import retrofit2.Response
@@ -13,12 +14,18 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ReplyRepository {
-    @GET("/api/replies/{reviewId}")
+    @GET("/api/replies/reviews/{reviewId}")
     suspend fun getReply(
         @Header("Authorization") token: String,
         @Path("reviewId") reviewId: Int,
         @Query("page") page: Int
     ): Response<GetReplyResponse>
+
+    @GET("/api/replies/{replyId}")
+    suspend fun getHasReply(
+        @Header("Authorization") token: String,
+        @Path("replyId") replyId: Int
+    ): Response<GetHasReplyResponse>
 
     @POST("/api/replies")
     suspend fun postReply(

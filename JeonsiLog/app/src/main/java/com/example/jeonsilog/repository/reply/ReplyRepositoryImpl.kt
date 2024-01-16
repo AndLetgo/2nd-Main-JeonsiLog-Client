@@ -3,6 +3,7 @@ package com.example.jeonsilog.repository.reply
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.ReplyApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.reply.GetHasReplyResponse
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyResponse
 import com.example.jeonsilog.data.remote.dto.reply.PostReplyRequest
 import retrofit2.Response
@@ -16,6 +17,19 @@ class ReplyRepositoryImpl: ReplyRepository {
         page: Int
     ): Response<GetReplyResponse> {
         val response = service.getReply(token, reviewId, page)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun getHasReply(
+        token: String,
+        replyId: Int
+    ): Response<GetHasReplyResponse> {
+        val response = service.getHasReply(token, replyId)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

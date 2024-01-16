@@ -46,6 +46,15 @@ class ExhibitionViewModel: ViewModel() {
     fun setReviewItem(review:UpdateReviewItem){
         _reviewItem.value = review
     }
+    fun setReviewItemNumReply(plus:Boolean){
+        val item = reviewItem.value
+        if(plus){
+            item!!.item.numReply++
+        }else{
+            item!!.item.numReply--
+        }
+        _reviewItem.value = item!!
+    }
 
     private var _myReviewItem = MutableLiveData<UpdateReviewItem>()
     val myReviewItem: LiveData<UpdateReviewItem>

@@ -30,6 +30,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReplyId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -54,6 +55,17 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         }
 
         binding.vm = exhibitionViewModel
+        if(extraActivityReference==4){
+            Log.d("review", "init: newReviewId: $newReviewId, newReplyId: $newReplyId")
+            //댓글 존재여부 체크
+            val check = checkHasReply()
+            Log.d("review", "init: checkHasReply(): $check")
+            if(!check){
+                Toast.makeText(requireContext(), getString(R.string.toast_notification_go_reply_exception), Toast.LENGTH_SHORT).show()
+                activity?.finish()
+            }
+        }
+        Log.d("review", "init: after has reply check")
         if(getReviewInfo(newReviewId)!=null){
             reviewInfo = getReviewInfo(newReviewId)!!
             setReviewUi(reviewInfo)
@@ -140,7 +152,12 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     }
     private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
         binding.tvUserName.text = review.nickname
-        binding.brbExhibitionReview.rating = review.rate.toFloat()
+        if(review.rate==null || review.rate==0.0){
+            binding.brbExhibitionReview.visibility = View.GONE
+        }else{
+            binding.brbExhibitionReview.visibility = View.VISIBLE
+            binding.brbExhibitionReview.rating = review.rate.toFloat()
+        }
         binding.tvReviewContent.text = review.contents
         binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${review.numReply}"
         exhibitionViewModel.setReplyCount(review.numReply)
@@ -212,9 +229,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         exhibitionViewModel.setReplyCount(exhibitionViewModel.replyCount.value!!+1)
         if(exhibitionViewModel.reviewItem.value!=null){
-            val review = exhibitionViewModel.reviewItem.value
-            review!!.item.numReply++
-            exhibitionViewModel.setReviewItem(review)
+            exhibitionViewModel.setReviewItemNumReply(true)
         }
     }
 
@@ -226,6 +241,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     override fun confirmButtonClick(position: Int) {
         exhibitionReplyRvAdapter.removeItem(position)
         binding.rvExhibitionReviewReply.adapter = exhibitionReplyRvAdapter
+        if(exhibitionViewModel.reviewItem.value!=null){
+            exhibitionViewModel.setReviewItemNumReply(false)
+        }
+        exhibitionViewModel.setReplyCount(exhibitionViewModel.replyCount.value!!-1)
+
     }
 
     //Back Button 눌렀을 때
@@ -244,5 +264,20 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    //댓글 존재 여부 체크
+    private fun checkHasReply():Boolean{
+        var check = true
+        runBlocking(Dispatchers.IO){
+            val response = ReplyRepositoryImpl().getHasReply(encryptedPrefs.getAT(), newReplyId)
+            if(response.isSuccessful && response.body()!!.check){
+                check = response.body()!!.information.isExist
+                Log.d("review", "checkHasReply: success $check", )
+            }else{
+                Log.e("review", "checkHasReply: fail", )
+            }
+        }
+        return check
     }
 }
