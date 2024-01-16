@@ -22,6 +22,8 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
@@ -246,6 +248,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         Glide.with(requireContext())
             .load(exhibitionInfoData?.imageUrl)
+            .transform(CenterCrop())
             .into(binding.ivPosterImage)
 
         binding.tvExhibitionName.text = exhibitionInfoData?.exhibitionName
@@ -316,10 +319,12 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
             regetExhibitionRate()
 
-            val review = exhibitionViewModel.myReviewItem.value
-            review!!.item.rate = rating.toDouble()
-            exhibitionViewModel.setMyReviewItem(review)
-            exhibitionRvAdapter.replaceItem(review.item, review.position)
+            if(exhibitionViewModel.myReviewItem.value!=null){
+                val review = exhibitionViewModel.myReviewItem.value
+                review!!.item.rate = rating.toDouble()
+                exhibitionViewModel.setMyReviewItem(review)
+                exhibitionRvAdapter.replaceItem(review.item, review.position)
+            }
         }
     }
     private fun regetExhibitionRate(){

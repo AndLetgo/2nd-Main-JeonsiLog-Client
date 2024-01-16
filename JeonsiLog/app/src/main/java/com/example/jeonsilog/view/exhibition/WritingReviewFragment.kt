@@ -37,6 +37,10 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
                 exhibitionViewModel.checkReviewEntity.value!!.contents,
                 TextView.BufferType.EDITABLE
             )
+            viewModel.setWritingCount(exhibitionViewModel.checkReviewEntity.value!!.contents.length.toString())
+            if(viewModel.writingCount.value!!.toInt() > 0){
+                viewModel.setCheckCount(true)
+            }
         }
 
         binding.btnCancel.setOnClickListener {
@@ -45,10 +49,6 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
 
         binding.vm = viewModel
         binding.lifecycleOwner = this
-        viewModel.setWritingCount(exhibitionViewModel.checkReviewEntity.value!!.contents.length.toString())
-        if(viewModel.writingCount.value!!.toInt() > 0){
-            viewModel.setCheckCount(true)
-        }
 
         binding.etWritingReview.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
