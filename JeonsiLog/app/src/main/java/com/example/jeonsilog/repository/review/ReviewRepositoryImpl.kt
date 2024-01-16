@@ -3,9 +3,11 @@ package com.example.jeonsilog.repository.review
 import com.example.jeonsilog.data.remote.RetrofitClient
 import com.example.jeonsilog.data.remote.api.ReviewApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.review.GetCheckReviewResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsResponse
+import com.example.jeonsilog.data.remote.dto.review.PatchReviewRequest
 import com.example.jeonsilog.data.remote.dto.review.PostReviewRequest
 import retrofit2.Response
 import retrofit2.http.Query
@@ -60,11 +62,37 @@ class ReviewRepositoryImpl: ReviewRepository {
         }
     }
 
+    override suspend fun getCheckHasReview(
+        token: String,
+        exhibitionId: Int
+    ): Response<GetCheckReviewResponse> {
+        val response = service.getCheckHasReview("Bearer $token", exhibitionId)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
     override suspend fun postReview(
         token: String,
         body: PostReviewRequest
     ): Response<OnlyMsgResponse> {
         val response = service.postReview("Bearer $token", body)
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
+    override suspend fun patchReview(
+        token: String,
+        body: PatchReviewRequest
+    ): Response<OnlyMsgResponse> {
+        val response = service.patchReview("Bearer $token", body)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
+import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 
@@ -25,23 +26,25 @@ class ExhibitionReviewRvAdapter(
         RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             val item = reviewList[position]
+            if(item.userId == encryptedPrefs.getUI()){
+                listener?.saveUserReview(item, position)
+            }
 
             binding.tvUserName.text = item.nickname
             binding.tvReviewContent.text = item.contents
-            binding.brbExhibitionReviewRating.rating = item.rate.toFloat()
+            Log.d("TAG", "bind: item.rate: ${item.rate}")
+            if(item.rate==null || item.rate==0.0){
+                binding.brbExhibitionReviewRating.visibility = View.GONE
+            }else{
+                binding.brbExhibitionReviewRating.visibility = View.VISIBLE
+                binding.brbExhibitionReviewRating.rating = item.rate.toFloat()
+            }
             binding.tvReplyCount.text = "${context.getString(R.string.exhibition_reply)} ${item.numReply}"
             binding.tvReviewDate.text = DateUtil().formatElapsedTime(item.createdDate)
-            if(binding.ivProfile!=null){
-                Glide.with(context)
-                    .load(item.imgUrl)
-                    .transform(CenterCrop(), RoundedCorners(80))
-                    .into(binding.ivProfile)
-            }else{
-                Glide.with(context)
-                    .load(R.drawable.illus_empty_poster)
-                    .transform(CenterCrop(), RoundedCorners(80))
-                    .into(binding.ivProfile)
-            }
+            Glide.with(context)
+                .load(item.imgUrl)
+                .transform(CenterCrop(), RoundedCorners(80))
+                .into(binding.ivProfile)
 
             binding.ibMenu.setOnClickListener{
                 if(item.userId == encryptedPrefs.getUI()){
@@ -77,6 +80,7 @@ class ExhibitionReviewRvAdapter(
     interface OnItemClickListener {
         fun onItemClick(v: View, data: GetReviewsExhibitionInformationEntity, position: Int)
         fun onMenuBtnClick(btn:View, user:Int, contentId: Int, position: Int)
+        fun saveUserReview(data: GetReviewsExhibitionInformationEntity, position: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){
