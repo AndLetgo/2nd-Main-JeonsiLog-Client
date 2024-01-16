@@ -209,6 +209,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
 
             if(response.isSuccessful && response.body()!!.check){
                 Log.d("Upload", "Image uploaded successfully")
+                encryptedPrefs.setURL(null)
             } else {
                 Log.e("Upload", "Image upload failed")
             }
