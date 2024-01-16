@@ -52,5 +52,12 @@ class PreferenceUtil(context: Context) {
 
         prefs.edit().putString("serachData", result).apply()
     }
+    fun setIsAllowNotify(p: Boolean) {
+        prefs.edit().putBoolean("isAllowNotify", p).apply()
+    }
+
+    fun getIsAllowNotify(): Boolean {
+        return prefs.getBoolean("isAllowNotify", false)
+    }
 
 }

@@ -47,7 +47,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         }catch (e:ClassCastException){
             // ExtraActivity는 처리 필요 없음
         }
-        
+        if(nowActivityName == "MainActivity"){
+            (requireActivity()  as MainActivity).setBottomNavCurrentItem(4)
+        }
         viewModel.getMyInfo()
         binding.vm = viewModel
         binding.lifecycleOwner = requireActivity()

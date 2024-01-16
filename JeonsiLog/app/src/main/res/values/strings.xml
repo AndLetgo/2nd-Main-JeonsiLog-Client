@@ -10,6 +10,7 @@
     <string name="btn_cancel">취소</string>
     <string name="btn_move">이동</string>
     <string name="btn_close">닫기</string>
+    <string name="btn_setting">설정</string>
     <string name="btn_wrting_review_close">창 닫기</string>
 
     <string name="btn_public">공개</string>
@@ -54,6 +55,7 @@
     <string name="dialog_nick_duplicate">중복된 닉네임이에요</string>
     <string name="dialog_nick_prohibited_words_check">부적절한 단어가 포함되어 있어요.</string>
     <string name="dialog_failure_internet">인터넷에 연결할 수 없어요 \n새로고침을 하거나 \n네트워크 설정을 확인해주세요</string>
+    <string name="dialog_fcm">알림을 허용하면\n전시회 소식을 바로 알 수 있어요!</string>
 
     <!-- Toast Message -->
     <string name="toast_poster_download_success">저장 성공!</string>
@@ -194,4 +196,8 @@
     <!-- 권한 요청 라이팅 -->
     <string name="permission_modify">해제를 원하시면 설정에서 해당 권한을 직접 거부하셔야 합니다.</string>
     <string name="permission_denied">사진 접근 권한이 거부되었습니다.\n사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다.</string>
+
+    <!-- fcm 토큰 -->
+    <string name="msg_token_fmt">FCM 토큰: %1$s</string>
+
 </resources>
