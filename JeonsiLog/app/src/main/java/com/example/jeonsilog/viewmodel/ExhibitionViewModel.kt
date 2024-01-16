@@ -47,6 +47,16 @@ class ExhibitionViewModel: ViewModel() {
         _reviewItem.value = review
     }
 
+    private var _myReviewItem = MutableLiveData<UpdateReviewItem>()
+    val myReviewItem: LiveData<UpdateReviewItem>
+        get() = _myReviewItem
+    fun setMyReviewItem(review:UpdateReviewItem){
+        _myReviewItem.value = review
+    }
+    fun resetMyReviewItem(){
+        _myReviewItem = MutableLiveData<UpdateReviewItem>()
+    }
+
     private var _checkReviewEntity = MutableLiveData<CheckReviewEntity>()
     val checkReviewEntity : LiveData<CheckReviewEntity>
         get() = _checkReviewEntity
@@ -58,6 +68,20 @@ class ExhibitionViewModel: ViewModel() {
         _checkReviewEntity = MutableLiveData<CheckReviewEntity>()
     }
 
+    private var _checkReviewDelete = MutableLiveData(false)
+    val checkReviewDelete: LiveData<Boolean>
+        get() = _checkReviewDelete
+    fun setCheckReviewDelte(check:Boolean){
+        _checkReviewDelete.value = check
+    }
+
+    //test
+    private var _information = MutableLiveData<String>()
+    val information: LiveData<String>
+        get() = _information
+    fun setInformation(info:String){
+        _information.value = info
+    }
 }
 data class UpdateReviewItem(
     val item:GetReviewsExhibitionInformationEntity,

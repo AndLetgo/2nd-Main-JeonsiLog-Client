@@ -16,6 +16,7 @@ import com.example.jeonsilog.databinding.FragmentWritingReviewBinding
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.viewmodel.ExhibitionWritingViewModel
+import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -43,12 +44,26 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
         }
 
         binding.vm = viewModel
+        binding.lifecycleOwner = this
+        viewModel.setWritingCount(exhibitionViewModel.checkReviewEntity.value!!.contents.length.toString())
+        if(viewModel.writingCount.value!!.toInt() > 0){
+            viewModel.setCheckCount(true)
+        }
+
         binding.etWritingReview.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 Log.d("writing", "onTextChanged: s?.length: ${s?.length}")
                 viewModel.setWritingCount(s?.length.toString())
+
+                if(s?.length!! > 0 ){
+                    viewModel.setCheckCount(true)
+                }else{
+                    viewModel.setCheckCount(false)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -56,35 +71,38 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
         })
 
         binding.btnConfirm.setOnClickListener {
-            var isSuccess = false
-            if(exhibitionViewModel.checkReviewEntity.value!!.isWrite){
-                runBlocking(Dispatchers.IO){
-                    val body = PatchReviewRequest(
-                        exhibitionViewModel.checkReviewEntity.value!!.reviewId,
-                        binding.etWritingReview.text.toString()
-                    )
-                    val response = ReviewRepositoryImpl().patchReview(encryptedPrefs.getAT(),body)
-                    if(response.isSuccessful && response.body()!!.check){
-                        isSuccess = true
+            if(viewModel.checkCount.value!!){
+                var isSuccess = false
+                if(exhibitionViewModel.checkReviewEntity.value!!.isWrite){
+                    runBlocking(Dispatchers.IO){
+                        val body = PatchReviewRequest(
+                            exhibitionViewModel.checkReviewEntity.value!!.reviewId,
+                            binding.etWritingReview.text.toString()
+                        )
+                        val response = ReviewRepositoryImpl().patchReview(encryptedPrefs.getAT(),body)
+                        if(response.isSuccessful && response.body()!!.check){
+                            isSuccess = true
+                        }
+                    }
+                }else{
+                    runBlocking(Dispatchers.IO) {
+                        val body = PostReviewRequest(thisExhibitionId, binding.etWritingReview.text.toString())
+                        val response = ReviewRepositoryImpl().postReview(encryptedPrefs.getAT(), body)
+                        if(response.isSuccessful && response.body()!!.check){
+                            Log.d(TAG, "init: post successful")
+                            isSuccess = true
+                        }else{
+                            null
+                        }
                     }
                 }
-            }else{
-                runBlocking(Dispatchers.IO) {
-                    val body = PostReviewRequest(thisExhibitionId, binding.etWritingReview.text.toString())
-                    val response = ReviewRepositoryImpl().postReview(encryptedPrefs.getAT(), body)
-                    if(response.isSuccessful && response.body()!!.check){
-                        Log.d(TAG, "init: post successful")
-                        isSuccess = true
-                    }else{
-                        null
-                    }
+                if(isSuccess){
+                    Log.d(TAG, "init: 성공")
+                    exhibitionViewModel.setUserReview(binding.etWritingReview.text.toString())
+
+                    exhibitionViewModel.resetCheckReviewEntity()
+                    Navigation.findNavController(it).popBackStack()
                 }
-            }
-            if(isSuccess){
-                Log.d(TAG, "init: 성공")
-                exhibitionViewModel.setUserReview(binding.etWritingReview.text.toString())
-                exhibitionViewModel.resetCheckReviewEntity()
-                Navigation.findNavController(it).popBackStack()
             }
         }
 

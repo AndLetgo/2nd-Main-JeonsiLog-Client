@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.example.jeonsilog.R"/>
+        <import type="android.content.Context"/>
+
         <variable
             name="vm"
             type="com.example.jeonsilog.viewmodel.ExhibitionWritingViewModel" />
@@ -77,10 +80,10 @@
             android:id="@+id/btn_confirm"
             android:layout_width="@dimen/item_142"
             android:layout_height="@dimen/item_45"
-            android:background="@drawable/shape_corner_round_start_btn_activate"
+            android:background="@{vm.checkCount ? context.getDrawable(R.drawable.shape_corner_round_start_btn_activate) : context.getDrawable(R.drawable.shape_corner_round_start_btn)}"
             android:text="@string/btn_register"
             style="@style/M_medium"
-            android:textColor="@color/basic_white"
+            android:textColor="@{vm.checkCount? context.getColor(R.color.basic_white) : context.getColor(R.color.gray_medium)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btn_cancel"

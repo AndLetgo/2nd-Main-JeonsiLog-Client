@@ -11,4 +11,11 @@ class ExhibitionWritingViewModel: ViewModel() {
     fun setWritingCount(writingCount:String){
         _writingCount.value = writingCount
     }
+
+    private var _checkCount = MutableLiveData(false)
+    val checkCount: LiveData<Boolean>
+        get() = _checkCount
+    fun setCheckCount(check:Boolean){
+        _checkCount.value = check
+    }
 }

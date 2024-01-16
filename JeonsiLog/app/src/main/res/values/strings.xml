@@ -58,9 +58,13 @@
     <!-- Toast Message -->
     <string name="toast_poster_download_success">저장 성공!</string>
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
-    <string name="toast_poster_report_success">접수 되었어요!</string>
     <string name="toast_poster_report_failure">접수 실패. 다시 시도해주세요.</string>
-    <string name="toast_notification_go_review_exception">해당 감상평이 삭제되었어요.</string>
+    <string name="toast_notification_go_review_exception">없어진 감상평이에요.</string>
+    <string name="toast_exhibition_place_call_empty">등록된 전화번호가 없어요.</string>
+    <string name="toast_exhibition_place_homepage_empty">등록된 링크가 없어요.</string>
+    <string name="toast_delete_review">감상평이 삭제되었어요.</string>
+    <string name="toast_delete_reply">댓글이 삭제되었어요.</string>
+    <string name="toast_report_success">신고가 정상적으로 접수되었어요.</string>
 
     <!-- Login -->
     <string name="login_nick_placeholder">닉네임을 입력하세요</string>
