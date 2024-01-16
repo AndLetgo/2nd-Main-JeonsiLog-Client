@@ -15,7 +15,7 @@
 <br>
 
 ## 팀원
-| [서윤지](https://github.com/syjeuion) | [문장훈](https://github.com/moondev03) | [임준형](https://github.com/Liminghing)
+| [서윤지](https://github.com/syjeuion) | [문장훈](https://github.com/moondev03) | [임준형](https://github.com/Liminghing) |
 | --- | --- | --- |
 | `홈` `전시회 상세` `감상평 및 댓글` `관리자 페이지` | `소셜로그인` `유저 프로필` `알림` `통신 작업` | `검색` `FCM` `포토캘린더`  |
 
