@@ -211,9 +211,11 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.etWritingReply.setText("")
 
         exhibitionViewModel.setReplyCount(exhibitionViewModel.replyCount.value!!+1)
-        val review = exhibitionViewModel.reviewItem.value
-        review!!.item.numReply++
-        exhibitionViewModel.setReviewItem(review)
+        if(exhibitionViewModel.reviewItem.value!=null){
+            val review = exhibitionViewModel.reviewItem.value
+            review!!.item.numReply++
+            exhibitionViewModel.setReviewItem(review)
+        }
     }
 
     fun showCustomDialog(type:String, contentId:Int,position:Int, reviewSide:Int) {
