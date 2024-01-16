@@ -24,6 +24,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import okhttp3.internal.notifyAll
 
 class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layout.fragment_admin_managing) {
     private lateinit var adminManagingRvAdapter : AdminManagingRvAdapter
@@ -67,6 +68,7 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
 
     private fun searchExhibition(searchWord:String){
         Log.d("managing", "searchExhibition: searchWord: $searchWord")
+        searchExhibitionList = mutableListOf<SearchInformationEntity>()
         runBlocking(Dispatchers.IO){
             val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),searchWord,0)
             if(response.isSuccessful && response.body()!!.check){

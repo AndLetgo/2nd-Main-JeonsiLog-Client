@@ -3,11 +3,7 @@ package com.example.jeonsilog.view
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.example.jeonsilog.R
-import com.example.jeonsilog.base.BaseActivity
-import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.view.admin.AdminManagingFragment
 import com.example.jeonsilog.view.admin.AdminReportFragment
 import com.example.jeonsilog.view.home.HomeFragment
@@ -26,8 +22,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.Navigation
 import androidx.activity.result.contract.ActivityResultContracts
@@ -57,7 +51,6 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
-import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import java.net.URLDecoder

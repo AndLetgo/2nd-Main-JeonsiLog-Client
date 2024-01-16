@@ -1,6 +1,8 @@
 package com.example.jeonsilog.view.admin
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.DisplayMetrics
 import android.util.Log
@@ -35,12 +37,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
 import java.net.URL
 
 class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.layout.fragment_admin_exhibition){
@@ -296,7 +302,8 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             filePart = uriToMultipart(adminViewModel.posterUri.value!!)
             checkPosterChange = true
         }else{
-            filePart = urlToMultipart(adminViewModel.exhibitionPosterImg.value!!)!!
+//            filePart = urlToMultipart(adminViewModel.exhibitionPosterImg.value!!)!!
+            filePart = createImagePartFromUrl(adminViewModel.exhibitionPosterImg.value!!, "img")!!
         }
 
         val updateExhibitionDetailReq = PatchExhibitionRequest(
@@ -330,17 +337,6 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             Navigation.findNavController(binding.btnSaveAll).popBackStack()
         }
     }
-    private fun urlToMultipart(imageUrl:String):MultipartBody.Part?{
-        try {
-            val url = URL(imageUrl)
-            val file = File(url.path) // Assuming the file is in the local filesystem
-            val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-            return MultipartBody.Part.createFormData("img", file.name, requestFile)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return null
-    }
     private fun uriToMultipart(uri: Uri): MultipartBody.Part{
         val file = File(ImageUtil().absolutelyPath(requireContext(), uri))
         val imageRequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
@@ -352,8 +348,50 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         customDialogFragment.show(parentFragmentManager, tag)
     }
 
-    fun deleteReview(position:Int){
+    private fun deleteReview(position:Int){
         exhibitionRvAdapter.deleteItem(position)
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
+    }
+
+    //imageUrl -> MultipartBody.Part
+    private fun downloadImageFromUrl(imageUrl: String, destinationFile: File): File {
+        val url = URL(imageUrl)
+
+        runBlocking(Dispatchers.IO){
+            val connection = url.openConnection() as HttpURLConnection
+            connection.connect()
+
+            if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+                val inputStream: InputStream = connection.inputStream
+                val outputStream = FileOutputStream(destinationFile)
+
+                val buffer = ByteArray(4096)
+                var bytesRead: Int
+                while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+                    outputStream.write(buffer, 0, bytesRead)
+                }
+
+                outputStream.close()
+                inputStream.close()
+            }
+        }
+
+        return destinationFile
+    }
+
+    // 이미지 URL을 MultipartBody.Part로 변환하는 함수
+    private fun createImagePartFromUrl(imageUrl: String, partName: String): MultipartBody.Part? {
+        try {
+            val destinationFile = File.createTempFile("tempImage", ".jpg")
+            downloadImageFromUrl(imageUrl, destinationFile)
+
+            val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), destinationFile)
+            destinationFile.deleteOnExit()
+
+            return MultipartBody.Part.createFormData(partName, destinationFile.name, requestFile)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
     }
 }

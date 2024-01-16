@@ -58,7 +58,8 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar"
             app:layout_constraintBottom_toTopOf="@id/rv_exhibition_list"
             android:layout_marginVertical="@dimen/margin_12"
-            android:layout_marginHorizontal="@dimen/margin_16"/>
+            android:layout_marginHorizontal="@dimen/margin_16"
+            android:completionThreshold="1"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_exhibition_list"
             android:layout_width="match_parent"
