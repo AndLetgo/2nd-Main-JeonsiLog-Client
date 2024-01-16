@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.jeonsilog.data.remote.dto.review.CheckReviewEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 
 class ExhibitionViewModel: ViewModel() {
@@ -44,6 +45,17 @@ class ExhibitionViewModel: ViewModel() {
         get() = _reviewItem
     fun setReviewItem(review:UpdateReviewItem){
         _reviewItem.value = review
+    }
+
+    private var _checkReviewEntity = MutableLiveData<CheckReviewEntity>()
+    val checkReviewEntity : LiveData<CheckReviewEntity>
+        get() = _checkReviewEntity
+    fun setCheckReviewEntity(reviewEntity: CheckReviewEntity){
+        _checkReviewEntity.value = reviewEntity
+    }
+    fun resetCheckReviewEntity(){
+        Log.d("TAG", "resetCheckReviewEntity: ")
+        _checkReviewEntity = MutableLiveData<CheckReviewEntity>()
     }
 }
 data class UpdateReviewItem(

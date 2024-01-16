@@ -24,6 +24,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.rating.PostRatingRequest
+import com.example.jeonsilog.data.remote.dto.review.CheckReviewEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
@@ -97,7 +98,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         getReviewInfo()
         //감상평 작성하기
         binding.btnWritingReview.setOnClickListener{
-//            if()
+            checkHasReview()
             Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_writingReviewFragment)
         }
         //댓글 입력하고 돌아왔을 때
@@ -422,4 +423,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         customDialogFragment.show(parentFragmentManager, tag)
     }
 
+    //기존 감상평 있는지 체크하고 있으면 띄우기
+    private fun checkHasReview(){
+        var checkReviewEntity : CheckReviewEntity? = null
+        runBlocking(Dispatchers.IO){
+            val response = ReviewRepositoryImpl().getCheckHasReview(encryptedPrefs.getAT(), thisExhibitionId)
+            if(response.isSuccessful && response.body()!!.check){
+                checkReviewEntity = response.body()!!.information
+            }
+        }
+        if(checkReviewEntity!=null){
+            exhibitionViewModel.setCheckReviewEntity(checkReviewEntity!!)
+        }
+    }
 }
