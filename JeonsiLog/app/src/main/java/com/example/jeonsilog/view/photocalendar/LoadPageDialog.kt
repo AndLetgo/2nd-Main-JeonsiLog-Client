@@ -46,9 +46,10 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
     private lateinit var loadPageRvAdapter: LoadPageRvAdapter
     private var loadPageRvList = mutableListOf<SearchInformationEntity>()
     private var exhibitionPage = 0
+    private var countItem = 0
     private var hasNextPage = true
+    private var hasMaxPage = true
     private var edittext=""
-    var addItemCount = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,6 +62,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
                 isRefresh.value = false
             }
         }
+
         return binding.root
     }
 
@@ -107,24 +109,25 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         binding.ivRecordDelete.isGone=true
 
 
-
-
-
-
         binding.rvLoadPage.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
-                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+                val totalCount = (recyclerView.adapter?.itemCount)?.div(2)
+                val tttt=(recyclerView.adapter?.itemCount)?.div(2)
+                Log.d("mymymymy", "${rvPosition} $tttt")
                 if(rvPosition == totalCount && hasNextPage){
-                    val startPosition = totalCount + 1
-                    loadPageRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
-                    setExhibitionRvByPage(edittext)
+                    hasMaxPage=true
+
+                    setExhibitionRvByShortPage()
 
                 }
             }
         })
+
+
+
+
 
 
         setEditBoxDeleteBt()
@@ -150,17 +153,15 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
                     Toast.makeText(context, "해당 검색어는 검색할수 없어요", Toast.LENGTH_SHORT).show()
                 }else{
                     loadPageRvList = mutableListOf<SearchInformationEntity>()
-                    exhibitionPage=0
                     edittext= myEditText as String
-                    setExhibitionRvByPage(edittext)
-                    if(loadPageRvList.isEmpty()){
-                        checkEmptyListTrue()
-                    }else{
-                        checkEmptyListFalse()
-                    }
                     loadPageRvAdapter = LoadPageRvAdapter(requireContext(),loadPageRvList,selectedDate,listener,this@LoadPageDialog)
                     binding.rvLoadPage.adapter = loadPageRvAdapter
                     binding.rvLoadPage.layoutManager = LinearLayoutManager(requireContext())
+                    exhibitionPage=0
+                    countItem=0
+                    hasNextPage = true
+                    hasMaxPage = true
+                    setExhibitionRvByPage()
                     hideSoftKeyboard()
                 }
                 return@setOnEditorActionListener true
@@ -169,51 +170,85 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         }
 
     }
-    private fun setExhibitionRvByPage(edittext:String){
-
-        runBlocking(Dispatchers.IO) {
-            var response: Response<GetCalendarExhibitionResponse> = ExhibitionRepositoryImpl().searchCalendarExhibition(encryptedPrefs.getAT(),edittext,exhibitionPage)
-            if(response.isSuccessful && response.body()!!.check){
-
-                val searchExhibitionResponse = response.body()
-                val temp = searchExhibitionResponse!!.information.data.listIterator()
-                while (temp.hasNext()){
-                    val response02=ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(),temp.next().exhibitionId)
-                    if(response02.isSuccessful && response02.body()!!.check){
-                        val data = response02.body()!!.information
-                        loadPageRvList.add(SearchInformationEntity(
-                            exhibitionId = data.exhibitionId,
-                            exhibitionName = data.exhibitionName,
-                            priceKeyword = data.priceKeyword,
-                            operatingKeyword = data.operatingKeyword,
-                            imageUrl = data.imageUrl,
-                            place = SearchPlaceEntity(
-                                placeId = data.place.placeId,
-                                placeName = data.place.placeName ?: "",
-                                placeAddress = data.place.address ?: ""
-                            )
-                        ))
+    private fun setExhibitionRvByPage(){
+        loadList()
+        if(loadPageRvList.size==0){
+            checkEmptyListTrue()
+        }else{
+            checkEmptyListFalse()
+        }
+        loadPageRvAdapter.notifyDataSetChanged()
+    }
+    fun loadList(){
+        if (hasNextPage && hasMaxPage){
+            runBlocking(Dispatchers.IO) {
+                val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,exhibitionPage)
+                if(response.isSuccessful && response.body()!!.check){
+                    if(exhibitionPage==0){
+                        loadPageRvList.clear()
+                    }
+                    val dataList = response.body()!!.information.data
+                    var index = 0
+                    while (index < dataList.size) {
+                        val item = dataList[index]
+                        if (item.exhibitionName.contains(edittext)) {
+                            loadPageRvList.add(item)
+                        }
+                        index++
+                    }
+                    exhibitionPage++
+                    hasNextPage = response.body()!!.information.hasNextPage
+                    Log.d("mymymymy", "loadList :$countItem ${loadPageRvList.size}")
+                    if(countItem<loadPageRvList.size/20){
+                        countItem++
+                        hasMaxPage=false
+                    }else{
+                        hasMaxPage=true
                     }
                 }
-
-                addItemCount = response.body()!!.information.data.size
-                hasNextPage = response.body()!!.information.hasNextPage
-                CoroutineScope(Dispatchers.Main).launch{
-
-                    Log.d("loadPageRvList", "checkEmptyListTrue: ")
-
+                else{
+                    hasNextPage = false
                 }
+            }
+            loadList()
+        }
 
-            }else{
-                CoroutineScope(Dispatchers.Main).launch {
+    }
+    private fun setExhibitionRvByShortPage(){
+        loadShortList()
 
-                    Log.d("loadPageRvList", "checkEmptyListFalse: ")
+        loadPageRvAdapter.notifyDataSetChanged()
+    }
+    fun loadShortList(){
+        if (hasNextPage && hasMaxPage){
+            runBlocking(Dispatchers.IO) {
+                val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,exhibitionPage)
+                if(response.isSuccessful && response.body()!!.check){
+
+                    val dataList = response.body()!!.information.data
+                    var index = 0
+                    while (index < dataList.size) {
+                        val item = dataList[index]
+                        if (item.exhibitionName.contains(edittext)) {
+                            loadPageRvList.add(item)
+                        }
+                        index++
+                    }
+                    exhibitionPage++
+                    hasNextPage = response.body()!!.information.hasNextPage
+                    Log.d("mymymymy", "loadShortList :$countItem ${loadPageRvList.size}")
+                    if(countItem<loadPageRvList.size/5){
+                        countItem++
+                        hasMaxPage=false
+                    }else{
+                        hasMaxPage=true
+                    }
+                }
+                else{
+                    hasNextPage = false
                 }
             }
         }
-
-        exhibitionPage++
-
     }
     fun setEditBoxDeleteBt(){
         //edittext x 버튼 제어
