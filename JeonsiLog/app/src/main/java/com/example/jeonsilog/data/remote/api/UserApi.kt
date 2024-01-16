@@ -1,6 +1,8 @@
 package com.example.jeonsilog.data.remote.api
 
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
+import com.example.jeonsilog.data.remote.dto.user.ChangeFcmTokenRequest
+import com.example.jeonsilog.data.remote.dto.user.ChangeFcmTokenResponse
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
 import com.example.jeonsilog.data.remote.dto.user.EditNickResponse
 import com.example.jeonsilog.data.remote.dto.user.GetIsOpenResponse
@@ -76,8 +78,17 @@ interface UserApi {
         @Path("userId") userId: Int
     ): Response<GetIsOpenResponse>
 
+
+    @PATCH("/api/users/fcm/token")
+    suspend fun changeFcmToken(
+        @Header("Authorization") token: String,
+        @Body requestBody: ChangeFcmTokenRequest
+    ): Response<ChangeFcmTokenResponse>
+
+
     @GET("/api/users/reception")
     suspend fun getReception(
         @Header("Authorization") token: String
     ): Response<GetReceptionResponse>
+
 }
