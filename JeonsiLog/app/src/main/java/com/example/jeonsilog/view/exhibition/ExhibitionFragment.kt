@@ -83,6 +83,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 navController.navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
                 extraActivityReference = 3
             }
+            4 -> {
+                navController.navigate(R.id.action_exhibitionFragment_to_reviewFragment)
+            }
         }
         if(exhibitionViewModel.currentExhibitionIds.value == null || exhibitionViewModel.getCurrentExhibitionsSize()<=0){
             thisExhibitionId = exhibitionId

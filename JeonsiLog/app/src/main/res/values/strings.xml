@@ -62,6 +62,7 @@
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
     <string name="toast_poster_report_failure">접수 실패. 다시 시도해주세요.</string>
     <string name="toast_notification_go_review_exception">없어진 감상평이에요.</string>
+    <string name="toast_notification_go_reply_exception">없어진 댓글이에요.</string>
     <string name="toast_exhibition_place_call_empty">등록된 전화번호가 없어요.</string>
     <string name="toast_exhibition_place_homepage_empty">등록된 링크가 없어요.</string>
     <string name="toast_delete_review">감상평이 삭제되었어요.</string>

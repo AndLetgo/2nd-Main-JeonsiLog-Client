@@ -46,6 +46,15 @@ class ExhibitionViewModel: ViewModel() {
     fun setReviewItem(review:UpdateReviewItem){
         _reviewItem.value = review
     }
+    fun setReviewItemNumReply(plus:Boolean){
+        val item = reviewItem.value
+        if(plus){
+            item!!.item.numReply++
+        }else{
+            item!!.item.numReply--
+        }
+        _reviewItem.value = item!!
+    }
 
     private var _myReviewItem = MutableLiveData<UpdateReviewItem>()
     val myReviewItem: LiveData<UpdateReviewItem>
@@ -75,12 +84,20 @@ class ExhibitionViewModel: ViewModel() {
         _checkReviewDelete.value = check
     }
 
-    //test
+    //viewTreeObserver 대신 사용
     private var _information = MutableLiveData<String>()
     val information: LiveData<String>
         get() = _information
     fun setInformation(info:String){
         _information.value = info
+    }
+
+    //댓글
+    private var _checkCount = MutableLiveData(false)
+    val checkCount: LiveData<Boolean>
+        get() = _checkCount
+    fun setCheckCount(check:Boolean){
+        _checkCount.value = check
     }
 }
 data class UpdateReviewItem(
