@@ -23,7 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.lang.IllegalArgumentException
 
-class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type: Int, private val context: Context, private val listener: FollowingListener?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class TypeFollowViewHolder(private val binding: ItemMyPageListFollowBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(data: GetMyFollowerEntity){
@@ -119,6 +119,9 @@ class MyPageListRvAdapter<T>(private val list: MutableList<T>, private val type:
                 }
                 isFollowingUpdate.value = true
 
+                if(list.isEmpty()){
+                    listener?.setEmpty()
+                }
             }
 
             binding.ivMypageListFollowingProfile.setOnClickListener {

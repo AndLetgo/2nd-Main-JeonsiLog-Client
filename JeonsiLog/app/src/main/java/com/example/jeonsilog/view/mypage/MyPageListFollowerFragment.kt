@@ -23,7 +23,7 @@ class MyPageListFollowerFragment: BaseFragment<FragmentMyPageListFollowerBinding
     private var page = 0
 
     override fun init() {
-        adapter = MyPageListRvAdapter(list, 0, requireContext())
+        adapter = MyPageListRvAdapter(list, 0, requireContext(), null)
         binding.rvMypageFollower.adapter = adapter
         binding.rvMypageFollower.layoutManager = LinearLayoutManager(requireContext())
         updateList()

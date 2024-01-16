@@ -151,8 +151,8 @@
     <!-- Setting -->
     <string name="setting_title">환경설정</string>
     <string name="setting_noti">알림</string>
-    <string name="setting_following">팔로잉</string>
-    <string name="setting_my_activity">나의 활동</string>
+    <string name="setting_exhibition">전시</string>
+    <string name="setting_activity">활동</string>
     <string name="setting_terms_of_service">이용약관</string>
 
     <string name="setting_version">버전 정보 v.%s</string>

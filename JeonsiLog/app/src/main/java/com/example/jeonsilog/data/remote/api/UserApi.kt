@@ -6,9 +6,10 @@ import com.example.jeonsilog.data.remote.dto.user.ChangeFcmTokenResponse
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
 import com.example.jeonsilog.data.remote.dto.user.EditNickResponse
 import com.example.jeonsilog.data.remote.dto.user.GetIsOpenResponse
+import com.example.jeonsilog.data.remote.dto.user.GetReceptionResponse
 import com.example.jeonsilog.data.remote.dto.user.MyInfoResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmActiveResponse
-import com.example.jeonsilog.data.remote.dto.user.PatchAlarmFollowingResponse
+import com.example.jeonsilog.data.remote.dto.user.PatchAlarmExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchCalendarOpenResponse
 import com.example.jeonsilog.data.remote.dto.user.SearchUserResponse
 import okhttp3.MultipartBody
@@ -59,10 +60,10 @@ interface UserApi {
         @Header("Authorization") token: String,
     ): Response<PatchAlarmActiveResponse>
 
-    @PATCH("/api/users/alarm-following")
+    @PATCH("/api/users/alarm-exhibition")
     suspend fun patchAlarmFollowing(
         @Header("Authorization") token: String,
-    ): Response<PatchAlarmFollowingResponse>
+    ): Response<PatchAlarmExhibitionResponse>
 
     @Multipart
     @PATCH("/api/users/profile")
@@ -77,10 +78,17 @@ interface UserApi {
         @Path("userId") userId: Int
     ): Response<GetIsOpenResponse>
 
+
     @PATCH("/api/users/fcm/token")
     suspend fun changeFcmToken(
         @Header("Authorization") token: String,
         @Body requestBody: ChangeFcmTokenRequest
     ): Response<ChangeFcmTokenResponse>
+
+
+    @GET("/api/users/reception")
+    suspend fun getReception(
+        @Header("Authorization") token: String
+    ): Response<GetReceptionResponse>
 
 }

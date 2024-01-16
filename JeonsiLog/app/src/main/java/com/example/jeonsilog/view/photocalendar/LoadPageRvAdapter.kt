@@ -6,6 +6,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Space
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
@@ -16,8 +18,10 @@ import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromPosterRequest
 
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
+import com.example.jeonsilog.databinding.ItemExhibitionInfoBinding
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.view.search.ExhibitionInfoItemAdapter
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -32,24 +36,26 @@ import java.time.format.DateTimeFormatter
 class LoadPageRvAdapter(
     private val context: Context, private val list:List <SearchInformationEntity>,private var selectedMonth: LocalDate,private val listener: CommunicationListener,private val dialog: LoadPageDialog)
     : RecyclerView.Adapter<LoadPageRvAdapter.ViewHolder>() {
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val exhibitionnameTextView: TextView = view.findViewById(R.id.tv_title)
-        val exhibitionlocationTextView: TextView = view.findViewById(R.id.tv_address)
-        val exhibitionplaceTextView: TextView = view.findViewById(R.id.tv_place)
-        val exhibitiondateTextViewBefore: TextView = view.findViewById(R.id.tv_keyword_operating_before)
-        val exhibitiondateTextViewIng: TextView = view.findViewById(R.id.tv_keyword_operating_ing)
-        val exhibitionpriceTextViewFree: TextView = view.findViewById(R.id.tv_keyword_price_free)
-
-
+    class ViewHolder(binding: ItemExhibitionInfoBinding) : RecyclerView.ViewHolder(binding.root){
+        val exhibitionnameTextView: TextView = binding.tvTitle
+        val exhibitionlocationTextView: TextView = binding.tvAddress
+        val exhibitionplaceTextView: TextView = binding.tvPlace
+        val exhibitiondateTextViewBefore: TextView = binding.tvKeywordOperatingBefore
+        val exhibitiondateTextViewIng: TextView = binding.tvKeywordOperatingIng
+        val exhibitionpriceTextViewFree: TextView = binding.tvKeywordPriceFree
+        val posterImageView: ImageView = binding.ivPoster
+        val marginFirst=binding.sMarginFirst
+        val marginSecond=binding.sMarginSecond
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_exhibition_info, parent, false)
-        return ViewHolder(view)
+        val binding = ItemExhibitionInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
+
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d("djakdkjaskjkdj", "$list: ")
+
         val unsplashUrl = list[position].imageUrl
         val radiusDp = 4f
         val radiusPx = TypedValue.applyDimension(
@@ -57,7 +63,7 @@ class LoadPageRvAdapter(
         GlideApp.with(context)
             .load(unsplashUrl)
             .transform(CenterCrop(), RoundedCorners(radiusPx))
-            .into(holder.itemView.findViewById(R.id.iv_poster))
+            .into(holder.posterImageView)
 
         holder.exhibitionnameTextView.text =list[position].exhibitionName
 
@@ -71,26 +77,43 @@ class LoadPageRvAdapter(
             }
         }
         else{
-            holder.exhibitionlocationTextView.isGone=true
+            holder.exhibitionlocationTextView.text=""
+        }
+        if (list[position].place.placeName!=null){
+            holder.exhibitionplaceTextView.text = list[position].place.placeName
+        }
+        else{
+            holder.exhibitionplaceTextView.text=""
+            //holder.exhibitionplaceTextView.isVisible=false
         }
 
-        holder.exhibitionplaceTextView.text = list[position].place.placeName
 
 
         if (list[position].operatingKeyword=="AFTER_DISPLAY"){
-            holder.exhibitiondateTextViewBefore.isGone=true
-            holder.exhibitiondateTextViewIng.isGone=true
-
+            //
+            holder.exhibitiondateTextViewBefore.isGone=true //시작전 키워드 없음
+            holder.exhibitiondateTextViewIng.isGone=true //전시중 키워드 없음
+            holder.marginFirst.isGone=true//시작전 키워드와 전시중 키워드 사이 마진 제거
         }else if (list[position].operatingKeyword=="ON_DISPLAY"){
-            holder.exhibitiondateTextViewBefore.isGone=false
-            holder.exhibitiondateTextViewIng.isGone=true
+            //시작전
+            holder.exhibitiondateTextViewBefore.isGone=false //시작전 키워드 있음
+            holder.exhibitiondateTextViewIng.isGone=true //전시중 키워드 없음
+            holder.marginFirst.isGone=false//시작전 키워드와 전시중 키워드 사이 마진
 
         }else{
-            holder.exhibitiondateTextViewBefore.isGone=true
-            holder.exhibitiondateTextViewIng.isGone=false
-
+            //전시중
+            holder.exhibitiondateTextViewBefore.isGone=true //시작전 키워드 없음
+            holder.exhibitiondateTextViewIng.isGone=false //전시중 키워드 있음 => 마진값 변경
+            holder.marginFirst.isGone=false//시작전 키워드와 전시중 키워드 사이 마진
         }
-        holder.exhibitionpriceTextViewFree.isGone = list[position].priceKeyword=="PAY"
+
+        if (list[position].priceKeyword=="PAY") {
+            holder.marginSecond.isGone=false
+            holder.exhibitionpriceTextViewFree.isGone = true
+        }else{
+            holder.marginSecond.isGone=true
+            holder.exhibitionpriceTextViewFree.isGone = false
+        }
 
         //셀아이템 터치 관련 처리
         holder.itemView.setOnClickListener{

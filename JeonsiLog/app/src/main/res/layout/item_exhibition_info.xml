@@ -98,7 +98,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_place"
                 app:layout_constraintVertical_bias="1.0">
-
+                <Space
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent" />
                 <TextView
                     android:id="@+id/tv_keyword_operating_before"
                     style="@style/S_bold"

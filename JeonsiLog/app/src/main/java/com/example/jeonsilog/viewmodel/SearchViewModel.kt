@@ -9,7 +9,6 @@ import com.example.jeonsilog.data.remote.dto.ExhibitionRandom
 
 class SearchViewModel  : ViewModel() {
 
-    //=======================================================================================//
     // MutableLiveData를 사용하여 변경 가능한 리스트를 LiveData로 감싸기
     private val itemListLiveData = MutableLiveData<List<String>>()
     // ViewModel 밖에서는 LiveData로만 접근 가능하도록 노출

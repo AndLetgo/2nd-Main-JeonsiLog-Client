@@ -1,11 +1,14 @@
 package com.example.jeonsilog.view.photocalendar
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -37,11 +40,26 @@ class PhotoCalendatAdapter(private val dayList: ArrayList<String>,
     }
 
     //데이터 설정
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 
-
+        if (dayList[holder.adapterPosition]!=""){
+            var year=selectedDate.year
+            var month=selectedDate.month
+            var originalString=dayList[holder.adapterPosition]
+            val dayOfMonth = originalString.padStart(2, '0')
+            val itemDate = LocalDate.of(year, Month.valueOf(month.toString()), dayOfMonth.toInt())
+            var nowDate=LocalDate.now()
+            if (nowDate==itemDate){
+                holder.dayText.setTextColor(ContextCompat.getColor(context, R.color.basic_white))
+                holder.dayText.setBackgroundResource(R.drawable.shape_calendar_cell_background)
+                holder.dayText.setTextAppearance(R.style.S_regular)
+            }
+        }
         var originalString=dayList[holder.adapterPosition]
         val dayOfMonth = originalString.padStart(2, '0')
+
+        holder.dayText.text = dayList[holder.adapterPosition]
 
         // list에서 mydate의 "dd"와 동일한 date를 가진 첫 번째 요소의 인덱스 찾기
         if (list!!.size!=0){
@@ -61,7 +79,7 @@ class PhotoCalendatAdapter(private val dayList: ArrayList<String>,
             holder.dayImg.isVisible=false
         }
 
-        holder.dayText.text = dayList[holder.adapterPosition]
+
         //날짜 변수에 담기
         //날짜 클릭 이벤트
 

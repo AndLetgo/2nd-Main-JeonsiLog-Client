@@ -94,5 +94,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     //Firebase Cloud Messaging을 사용하기 위한 종속성을 추가
     implementation 'com.google.firebase:firebase-messaging'
+    // spin kit
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     
 }

@@ -266,6 +266,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             .replace(R.id.fl_main, fragment)
             .commit()
     }
+    fun setBottomNavCurrentItem(index:Int){
+        binding.bnvMain.menu.getItem(index).isChecked = true
+    }
     fun getToken(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -322,4 +325,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         val dialog = FcmDialog()
         dialog.show(fragmentManager, "FcmDialog")
     }
+
 }

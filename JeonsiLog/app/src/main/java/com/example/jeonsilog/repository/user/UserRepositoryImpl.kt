@@ -7,9 +7,10 @@ import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.user.ChangeFcmTokenRequest
 import com.example.jeonsilog.data.remote.dto.user.EditNickRequest
 import com.example.jeonsilog.data.remote.dto.user.GetIsOpenResponse
+import com.example.jeonsilog.data.remote.dto.user.GetReceptionResponse
 import com.example.jeonsilog.data.remote.dto.user.MyInfoResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchAlarmActiveResponse
-import com.example.jeonsilog.data.remote.dto.user.PatchAlarmFollowingResponse
+import com.example.jeonsilog.data.remote.dto.user.PatchAlarmExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.user.PatchCalendarOpenResponse
 import com.example.jeonsilog.data.remote.dto.user.SearchUserResponse
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -107,7 +108,7 @@ class UserRepositoryImpl: UserRepository {
         }
     }
 
-    override suspend fun patchAlarmFollowing(token: String): Response<PatchAlarmFollowingResponse> {
+    override suspend fun patchAlarmExhibition(token: String): Response<PatchAlarmExhibitionResponse> {
         val response = service.patchAlarmFollowing("Bearer $token")
 
         return if(response.isSuccessful && response.body()!!.check){
@@ -152,5 +153,17 @@ class UserRepositoryImpl: UserRepository {
             false
         }
     }
+
+
+    override suspend fun getReception(token: String): Response<GetReceptionResponse> {
+        val response = service.getReception("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+
 
 }
