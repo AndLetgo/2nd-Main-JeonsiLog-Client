@@ -319,10 +319,12 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
             regetExhibitionRate()
 
-            val review = exhibitionViewModel.myReviewItem.value
-            review!!.item.rate = rating.toDouble()
-            exhibitionViewModel.setMyReviewItem(review)
-            exhibitionRvAdapter.replaceItem(review.item, review.position)
+            if(exhibitionViewModel.myReviewItem.value!=null){
+                val review = exhibitionViewModel.myReviewItem.value
+                review!!.item.rate = rating.toDouble()
+                exhibitionViewModel.setMyReviewItem(review)
+                exhibitionRvAdapter.replaceItem(review.item, review.position)
+            }
         }
     }
     private fun regetExhibitionRate(){
