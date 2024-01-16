@@ -305,6 +305,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 }
             }
             regetExhibitionRate()
+
+            val review = exhibitionViewModel.reviewItem.value
+            review!!.item.rate = rating.toDouble()
+            exhibitionViewModel.setReviewItem(review)
+            exhibitionRvAdapter.replaceItem(review.item, review.position)
         }
     }
     private fun regetExhibitionRate(){
@@ -373,6 +378,11 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                     false
                 }
                 popupMenu.show()
+            }
+
+            override fun saveUserReview(data: GetReviewsExhibitionInformationEntity, position: Int) {
+                val item = UpdateReviewItem(data, position)
+                exhibitionViewModel.setReviewItem(item)
             }
         })
     }

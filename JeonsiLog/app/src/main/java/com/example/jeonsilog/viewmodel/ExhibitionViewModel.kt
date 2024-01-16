@@ -57,6 +57,7 @@ class ExhibitionViewModel: ViewModel() {
         Log.d("TAG", "resetCheckReviewEntity: ")
         _checkReviewEntity = MutableLiveData<CheckReviewEntity>()
     }
+
 }
 data class UpdateReviewItem(
     val item:GetReviewsExhibitionInformationEntity,
