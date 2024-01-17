@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
 import com.example.jeonsilog.databinding.DialogAdminBinding
 import com.example.jeonsilog.viewmodel.AdminViewModel

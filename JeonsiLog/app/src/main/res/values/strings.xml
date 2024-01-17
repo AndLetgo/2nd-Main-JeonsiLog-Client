@@ -80,6 +80,9 @@
     <string name="toast_exhibition_name_empty">전시회 이름은 비워둘 수 없어요!</string>
     <string name="toast_exhibition_update">전시회 정보가 업데이트 되었습니다.</string>
 
+    <string name="toast_admin_keyword_full">키워드를 삭제해 주세요!</string>
+    <string name="toast_admin_keyword_has">이미 존재하는 키워드예요!</string>
+
     <string name="toast_notification_go_review_exception">없어진 감상평이에요.</string>
     <string name="toast_delete_reply">댓글이 삭제되었어요.</string>
     <string name="toast_report_success">신고가 정상적으로 접수되었어요.</string>

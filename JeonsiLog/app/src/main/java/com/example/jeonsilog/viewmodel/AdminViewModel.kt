@@ -1,6 +1,7 @@
 package com.example.jeonsilog.viewmodel
 
 import android.net.Uri
+import android.util.Log
 import android.widget.ListView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,7 +22,9 @@ class AdminViewModel:ViewModel() {
     //수정 체크
     private var _isChanged = MutableLiveData(false)
     val isChanged: LiveData<Boolean> get() = _isChanged
-    fun setIsChanged(check:Boolean){ _isChanged.value = check }
+    fun setIsChanged(check:Boolean){ _isChanged.value = check
+        Log.d("admin", "setIsChanged: ${isChanged.value}")
+    }
 
     //전시회 정보
     private var _exhibitionInfo = MutableLiveData<ExhibitionInfo?>()
@@ -84,8 +87,6 @@ class AdminViewModel:ViewModel() {
         _posterUri.value = uri
     }
     fun resetExhibitionInfo(){
-        _isChanged = MutableLiveData(false)
-
         _exhibitionName = MutableLiveData<String>()
         _placeName = MutableLiveData<String?>()
         _placeAddress = MutableLiveData<String?>()

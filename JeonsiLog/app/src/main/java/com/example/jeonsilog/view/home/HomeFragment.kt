@@ -1,7 +1,6 @@
 package com.example.jeonsilog.view.home
 
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -26,16 +25,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private var homeRvList = mutableListOf<ExhibitionsInfo>()
     private var exhibitionPage = 0
     private var hasNextPage = true
-    private val TAG = "admin"
 
     override fun init() {
-        Log.d(TAG, "init: home init 실행")
+        adminViewModel.resetExhibitionInfo()
         if(adminViewModel.isChanged.value!!){
-            Log.d(TAG, "init: adminExhibitionViewModel.isChanged.value!!: true")
-            homeRvList = mutableListOf()
-            exhibitionPage = 0
-            setExhibitionRvByPage(0)
-            adminViewModel.resetExhibitionInfo()
+            (activity as MainActivity).refreshFragmentInAdmin(R.id.homeFragment)
+            adminViewModel.setIsChanged(false)
         }
         isAdminExhibitionOpen = false
         //관리자 체크
@@ -111,7 +106,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     //recyclerView 페이징
     private fun setExhibitionRvByPage(totalCount:Int){
-        Log.d(TAG, "setExhibitionRvByPage: setExhibitionRvByPage(0) 실행")
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),exhibitionPage)

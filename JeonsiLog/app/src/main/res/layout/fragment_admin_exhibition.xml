@@ -115,34 +115,67 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toBottomOf="@id/tv_homepage"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="@dimen/margin_24"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:id="@+id/tv_keyword_first"
-                            android:layout_width="@dimen/item_48"
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_marginTop="@dimen/margin_16"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+                        <LinearLayout
+                            android:id="@+id/ll_keyword_operating"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/item_24"
                             android:background="@drawable/shape_item_keyword"
-                            android:text="전시중"
-                            style="@style/Keyword_bold"
-                            android:textColor="@color/basic_point"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center"
                             android:gravity="center"
-                            android:elevation="@dimen/shadow_2"
-
-                            android:layout_marginTop="@dimen/margin_16"/>
-                        <TextView
-                            android:id="@+id/tv_keyword_second"
-                            android:layout_width="@dimen/item_48"
-                            android:layout_height="@dimen/item_24"
-                            android:background="@drawable/shape_item_keyword"
-                            android:text="전시중"
-                            style="@style/Keyword_bold"
-                            android:textColor="@color/basic_point"
-                            android:gravity="center"
-                            android:elevation="@dimen/shadow_2"
-                            app:layout_constraintStart_toEndOf="@id/tv_keyword_first"
-                            app:layout_constraintTop_toBottomOf="@id/tv_date"
+                            android:layout_marginVertical="@dimen/margin_2"
                             android:layout_marginStart="@dimen/margin_8"
-                            android:layout_marginTop="@dimen/margin_16"/>
+                            android:elevation="@dimen/shadow_2">
+                            <TextView
+                                android:id="@+id/tv_keyword_operating"
+                                android:layout_width="@dimen/item_48"
+                                android:layout_height="@dimen/item_24"
+                                android:text="전시중"
+                                style="@style/Keyword_bold"
+                                android:textColor="@color/basic_point"
+                                android:gravity="center"/>
+                            <ImageButton
+                                android:id="@+id/ib_keyword_operating"
+                                android:layout_width="@dimen/item_16"
+                                android:layout_height="@dimen/item_16"
+                                android:background="@drawable/ic_delete"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/ll_keyword_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/item_24"
+                            android:background="@drawable/shape_item_keyword"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:elevation="@dimen/shadow_2"
+                            android:layout_marginVertical="@dimen/margin_2"
+                            android:layout_marginStart="@dimen/margin_8">
+                            <TextView
+                                android:id="@+id/tv_keyword_price"
+                                android:layout_width="@dimen/item_48"
+                                android:layout_height="@dimen/item_24"
+                                android:text="전시중"
+                                style="@style/Keyword_bold"
+                                android:textColor="@color/basic_point"
+                                android:gravity="center"/>
+                            <ImageButton
+                                android:id="@+id/ib_keyword_price"
+                                android:layout_width="@dimen/item_16"
+                                android:layout_height="@dimen/item_16"
+                                android:background="@drawable/ic_delete"/>
+                        </LinearLayout>
+                        <ImageButton
+                            android:id="@+id/ib_keyword_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_admin_keyword"
+                            android:layout_marginVertical="@dimen/margin_2"
+                            android:layout_marginStart="@dimen/margin_8"/>
                     </LinearLayout>
                     <View
                         android:id="@+id/divider"

@@ -30,6 +30,7 @@
     <dimen name="item_1">1dp</dimen>
     <dimen name="item_2">2dp</dimen>
     <dimen name="item_4">4dp</dimen>
+    <dimen name="item_16">16dp</dimen>
     <dimen name="item_18">18dp</dimen>
     <dimen name="item_24">24dp</dimen>
     <dimen name="item_28">28dp</dimen>

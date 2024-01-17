@@ -1,18 +1,15 @@
 package com.example.jeonsilog.view.admin
 
-import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,16 +26,18 @@ import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
+import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.example.jeonsilog.widget.utils.ImageUtil
+import com.example.jeonsilog.widget.utils.OperatingKeyword
+import com.example.jeonsilog.widget.utils.PriceKeyword
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -59,7 +58,6 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     private var reviewList = mutableListOf<GetReviewsExhibitionInformationEntity>()
     private var reviewPage = 0
     private val adminViewModel: AdminViewModel by activityViewModels()
-    val TAG = "admin"
 
     override fun init() {
         isRefresh.observe(this){
@@ -196,6 +194,25 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         binding.btnSaveAll.setOnClickListener {
             saveEditInformations()
         }
+
+        binding.ibKeywordOperating.setOnClickListener {
+            binding.llKeywordOperating.visibility = View.GONE
+            val item = adminViewModel.exhibitionInfo.value!!
+            item.operatingKeyword = OperatingKeyword.AFTER_DISPLAY.name
+            adminViewModel.setExhibitionInfo(item)
+            adminViewModel.setIsChanged(true)
+        }
+        binding.ibKeywordPrice.setOnClickListener {
+            binding.llKeywordPrice.visibility = View.GONE
+            val item = adminViewModel.exhibitionInfo.value!!
+            item.priceKeyword = PriceKeyword.PAY.name
+            adminViewModel.setExhibitionInfo(item)
+            adminViewModel.setIsChanged(true)
+        }
+
+        binding.ibKeywordAdd.setOnClickListener {
+            showAddKeywordMenu()
+        }
     }
     private fun setBottomSheet(){
         //디바이스 높이값 가져오기
@@ -221,7 +238,6 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         }
         adminViewModel.setExhibitionInfo(exhibitionInfoData!!)
         //포스터
-        Log.d(TAG, "getExhibitionInfo: exhibitionInfoData?.imageUrl: ${exhibitionInfoData?.imageUrl}")
         if(exhibitionInfoData?.imageUrl!=null){
             adminViewModel.setExhibitionPosterImg(exhibitionInfoData?.imageUrl!!)
             Glide.with(requireContext())
@@ -271,23 +287,18 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         when(exhibitionInfoData?.operatingKeyword){
             "ON_DISPLAY" -> operatingKeyword = requireContext().getString(R.string.keyword_state_on)
             "BEFORE_DISPLAY" -> operatingKeyword = requireContext().getString(R.string.keyword_state_before)
+            else -> binding.llKeywordOperating.visibility = View.GONE
         }
-        var priceKeyword = ""
-        when(exhibitionInfoData?.priceKeyword){
-            "FREE" -> priceKeyword = requireContext().getString(R.string.keyword_free)
-            else -> binding.tvKeywordSecond.isGone = true
-        }
-
         if(operatingKeyword!=""){
-            binding.tvKeywordFirst.text = operatingKeyword
-            binding.tvKeywordSecond.text = priceKeyword
-        }else{
-            if(priceKeyword!=""){
-                binding.tvKeywordSecond.isGone = true
-                binding.tvKeywordFirst.text = priceKeyword
-            }else {
-                binding.tvKeywordFirst.isGone = true
+            binding.llKeywordOperating.visibility = View.VISIBLE
+            binding.tvKeywordOperating.text = operatingKeyword
+        }
+        when(exhibitionInfoData?.priceKeyword){
+            "FREE" -> {
+                binding.llKeywordPrice.visibility = View.VISIBLE
+                binding.tvKeywordPrice.text = getString(R.string.keyword_free)
             }
+            else -> binding.llKeywordPrice.visibility = View.GONE
         }
     }
 
@@ -420,7 +431,6 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             if(response.isSuccessful && response.body()!!.check){
                 isSuccess = true
             }else{
-                Log.e(TAG, "error: ${response.message()}")
             }
         }
         if(isSuccess){
@@ -495,4 +505,61 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         outputFile.deleteOnExit()
         return imagePart
     }
+
+    //키워드
+    private fun showAddKeywordMenu(){
+        val popupMenu = PopupMenu(requireContext(), binding.ibKeywordAdd)
+        popupMenu.menuInflater.inflate(R.menu.menu_admin_keywords, popupMenu.menu)
+        popupMenu.menu.getItem(0).setActionView(R.layout.item_popup_menu)
+
+        popupMenu.setOnMenuItemClickListener{
+            addKeyword(it)
+            false
+        }
+        popupMenu.show()
+    }
+    private fun addKeyword(it:MenuItem){
+        var hasKeyword = false
+        val item = adminViewModel.exhibitionInfo.value!!
+        var newKeyword = ""
+        when(it.itemId){
+            R.id.menu_keyword_free -> {
+                if(item.priceKeyword == PriceKeyword.FREE.name){
+                    hasKeyword = true
+                }else{
+                    item.priceKeyword = PriceKeyword.FREE.name
+                    binding.llKeywordPrice.visibility = View.VISIBLE
+                    binding.tvKeywordPrice.text = getString(R.string.keyword_free)
+                }
+            }
+            R.id.menu_keyword_state_before -> {
+                if(item.operatingKeyword == OperatingKeyword.BEFORE_DISPLAY.name){
+                    hasKeyword = true
+                }else{
+                    item.operatingKeyword = OperatingKeyword.BEFORE_DISPLAY.name
+                    newKeyword = getString(R.string.keyword_state_before)
+                }
+            }
+            R.id.menu_keyword_state_on -> {
+                if(item.operatingKeyword == OperatingKeyword.ON_DISPLAY.name){
+                    hasKeyword = true
+                }else{
+                    item.operatingKeyword = OperatingKeyword.ON_DISPLAY.name
+                    newKeyword = getString(R.string.keyword_state_on)
+                }
+            }
+        }
+        if(hasKeyword){
+            Toast.makeText(requireContext(), getString(R.string.toast_admin_keyword_has), Toast.LENGTH_SHORT).show()
+        }else{
+            if(newKeyword != ""){
+                binding.llKeywordOperating.visibility = View.VISIBLE
+                binding.tvKeywordOperating.text = newKeyword
+            }
+        }
+        adminViewModel.setExhibitionInfo(item)
+        adminViewModel.setIsChanged(true)
+    }
+
+
 }

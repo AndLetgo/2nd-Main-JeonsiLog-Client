@@ -20,9 +20,9 @@ data class ExhibitionInfo(
     @SerializedName("endDate")
     val endDate: String,
     @SerializedName("operatingKeyword")
-    val operatingKeyword: String,
+    var operatingKeyword: String,
     @SerializedName("priceKeyword")
-    val priceKeyword: String,
+    var priceKeyword: String,
     @SerializedName("information")
     var information: String?,
     @SerializedName("rate")
