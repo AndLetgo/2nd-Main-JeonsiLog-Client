@@ -32,7 +32,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
     R.layout.fragment_poster) {
     private var posterList:MutableList<String>? = null
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
-    private val TAG = "download"
+    private val TAG = "admin"
     private var thisExhibitionId = 0
     private var thisPosterUrl = ""
 
@@ -48,7 +48,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
                 null
             }
         }
-        if(thisPosterUrl != ""){
+        if(!thisPosterUrl.isNullOrEmpty()){
             Glide.with(requireContext())
                 .load(thisPosterUrl)
                 .transform(CenterInside())
@@ -64,7 +64,7 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
         binding.btnReportPosterEmpty.setOnClickListener {
             var isSuccess = false
             runBlocking(Dispatchers.IO){
-                val body = PostReportRequest("POSTER", thisExhibitionId)
+                val body = PostReportRequest("EXHIBITION", thisExhibitionId)
                 val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
                 if(response.isSuccessful && response.body()!!.check){
                     isSuccess = true
@@ -79,7 +79,6 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
 
         //이미지 다운로드
         binding.ibDownload.setOnClickListener {
-            Log.d(TAG, "init: click button")
             checkStoragePermission()
         }
     }
@@ -90,22 +89,18 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES)
                 != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없는 경우 권한 요청 다이얼로그를 표시
-                Log.d(TAG, "checkStoragePermission: 권한 없음")
                 showPermissionRationale(getString(R.string.permission_denied))
             } else {
                 // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
-                Log.d(TAG, "checkStoragePermission: 권한 있음")
                 useDownloadManager(thisPosterUrl)
             }
         } else{
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
                 // 권한이 없는 경우 권한 요청 다이얼로그를 표시
-                Log.d(TAG, "checkStoragePermission: 33이하, 권한 없음")
                 showPermissionRationale(getString(R.string.permission_denied))
             } else {
                 // 권한이 이미 있는 경우 갤러리에 접근할 수 있는 로직을 수행
-                Log.d(TAG, "checkStoragePermission: 33이하, 권한 있음")
                 useDownloadManager(thisPosterUrl)
             }
         }
