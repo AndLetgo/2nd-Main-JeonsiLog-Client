@@ -33,6 +33,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.fcm.services.FcmDialog
+import com.example.jeonsilog.view.admin.AdminSearchFragment
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.view.spalshpage.SplashActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFinish
@@ -144,7 +145,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 }
                 R.id.item_admin_search->{
                     setStateFcm(false)
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,RecordSearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
+//                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,RecordSearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminSearchFragment()).commit()
                 }
                 R.id.item_admin_report->{
                     setStateFcm(false)

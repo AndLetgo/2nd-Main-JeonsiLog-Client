@@ -199,9 +199,9 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                 // 키보드의 완료 버튼이 눌렸을 때 수행할 동작
                 val enteredText = binding.etSearchRecord.text.toString()
                 if(enteredText.isBlank()){
-                    Toast.makeText(context,"검색어를 입력하세요",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.search_edit_hint),Toast.LENGTH_SHORT).show()
                 }else if(regexPattern.containsMatchIn(enteredText)&&enteredText.length<=2){
-                    Toast.makeText(context, "해당 검색어는 검색할수 없어요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,  getString(R.string.toast_search_check_regex), Toast.LENGTH_SHORT).show()
                 }
                 else{
                     addItem(enteredText)
