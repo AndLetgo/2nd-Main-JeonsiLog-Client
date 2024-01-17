@@ -28,6 +28,7 @@ class ExhibitionReplyRvAdapter(private val replyList: MutableList<GetReplyInform
         RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             val item = replyList[position]
+            binding.tvBtnDelete.visibility = View.INVISIBLE
             binding.tvUserName.text = item.user.nickname
 
             binding.tvDate.text = DateUtil().formatElapsedTime(item.createdDate)

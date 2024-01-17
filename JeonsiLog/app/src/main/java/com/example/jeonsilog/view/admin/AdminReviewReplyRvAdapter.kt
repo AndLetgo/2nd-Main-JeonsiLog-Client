@@ -20,11 +20,12 @@ class AdminReviewReplyRvAdapter(private val replyList: MutableList<GetReplyInfor
         RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             val item = replyList[position]
+            binding.ibMenu.visibility = View.INVISIBLE
+
             binding.tvUserName.text = item.user.nickname
             binding.tvDate.text = DateUtil().formatElapsedTime(item.createdDate)
             binding.tvReplyContent.text = item.contents
 
-            binding.ibMenu.visibility = View.GONE
             binding.tvBtnDelete.visibility = View.VISIBLE
             binding.tvBtnDelete.setOnClickListener {
                 listener?.onDeleteBtnClick(it, position, item.replyId)

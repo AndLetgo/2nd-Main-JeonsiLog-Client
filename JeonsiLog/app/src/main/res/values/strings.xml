@@ -92,7 +92,7 @@
     <string name="toast_managing_duplication">이미 존재하는 전시회예요!</string>
 
     <string name="toast_search_check_regex">해당 검색어는 검색할 수 없어요.</string>
-
+    <string name="toast_input_filter">올바른 형식으로 입력해주세요!</string>
 
     <!-- Login -->
     <string name="login_nick_placeholder">닉네임을 입력하세요</string>

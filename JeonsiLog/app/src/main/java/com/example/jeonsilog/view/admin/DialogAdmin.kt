@@ -48,7 +48,10 @@ class DialogAdmin(private val type:String, private val defaultText: String?) : D
             "exhibitionName" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_exhibition_name)}
             "placeName" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_place_name)}
             "placeAddress" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_place_address)}
-            "placeCall" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_place_call)}
+            "placeCall" -> {
+                binding.tvTitle.text = getString(R.string.dialog_admin_edit_place_call)
+                binding.etDialogAdmin.filters = arrayOf(PhoneNumberFilter())
+            }
             "placeHomepage" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_place_homepage)}
             "exhibitionInformation" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_exhibition_information)}
         }

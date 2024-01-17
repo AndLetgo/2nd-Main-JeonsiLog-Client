@@ -25,6 +25,7 @@ class AdminExhibitionReviewRvAdapter(private val reviewList:MutableList<GetRevie
         RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
             val item = reviewList[position]
+            binding.ibMenu.visibility = View.INVISIBLE
 
             binding.tvUserName.text = item.nickname
             binding.tvReviewContent.text = item.contents

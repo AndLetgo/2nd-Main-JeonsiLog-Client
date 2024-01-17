@@ -29,6 +29,7 @@ class ExhibitionReviewRvAdapter(
             if(item.userId == encryptedPrefs.getUI()){
                 listener?.saveUserReview(item, position)
             }
+            binding.tvDelete.visibility = View.INVISIBLE
 
             binding.tvUserName.text = item.nickname
             binding.tvReviewContent.text = item.contents
@@ -46,13 +47,13 @@ class ExhibitionReviewRvAdapter(
                 .transform(CenterCrop(), RoundedCorners(80))
                 .into(binding.ivProfile)
 
-//            binding.ibMenu.setOnClickListener{
-//                if(item.userId == encryptedPrefs.getUI()){
-//                    listener?.onMenuBtnClick(it, 0, item.reviewId, position)
-//                }else{
-//                    listener?.onMenuBtnClick(it, 1, item.reviewId, position)
-//                }
-//            }
+            binding.ibMenu.setOnClickListener{
+                if(item.userId == encryptedPrefs.getUI()){
+                    listener?.onMenuBtnClick(it, 0, item.reviewId, position)
+                }else{
+                    listener?.onMenuBtnClick(it, 1, item.reviewId, position)
+                }
+            }
         }
     }
 
