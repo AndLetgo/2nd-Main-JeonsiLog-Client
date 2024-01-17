@@ -39,6 +39,13 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
     val TAG = "search"
 
     override fun init() {
+        GlobalApplication.isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(AdminSearchFragment())
+                GlobalApplication.isRefresh.value = false
+            }
+        }
+
         searchList = mutableListOf<SearchInformationEntity>()
         adminSearchRvAdapter = AdminSearchRvAdapter(searchList, requireContext())
         binding.rvSearchResult.adapter = adminSearchRvAdapter

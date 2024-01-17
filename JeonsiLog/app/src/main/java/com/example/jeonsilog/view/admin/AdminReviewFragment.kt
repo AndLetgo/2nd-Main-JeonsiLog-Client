@@ -39,6 +39,13 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
     private var hasNextPage = true
     private var reviewItem:UpdateReviewItem? = null
     override fun init() {
+        GlobalApplication.isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragmentInAdmin(R.id.adminReviewFragment)
+                GlobalApplication.isRefresh.value = false
+            }
+        }
+
         if(adminViewModel.reportReviewId.value!=null){
             reviewInfo = getReviewInfo(adminViewModel.reportReviewId.value!!)!!
         }else{

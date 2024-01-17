@@ -27,6 +27,7 @@ import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
+import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
@@ -66,7 +67,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     override fun init() {
         isRefresh.observe(this){
             if(it){
-                (activity as MainActivity).refreshFragment(AdminExhibitionFragment())
+                (activity as MainActivity).refreshFragmentInAdmin(R.id.adminExhibitionFragment)
                 isRefresh.value = false
             }
         }
@@ -256,6 +257,9 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             }else{
                 null
             }
+        }
+        if(exhibitionInfoData==null){
+            return
         }
         adminViewModel.setExhibitionInfo(exhibitionInfoData!!)
         //포스터

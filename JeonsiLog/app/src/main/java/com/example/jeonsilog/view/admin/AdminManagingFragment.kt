@@ -18,7 +18,9 @@ import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.exhibition.UpdateSequenceInfo
 import com.example.jeonsilog.databinding.FragmentAdminManagingBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -35,6 +37,13 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
     private var selectedExhibitionName = ""
     val TAG = "managing"
     override fun init() {
+        GlobalApplication.isRefresh.observe(this){
+            if(it){
+                (activity as MainActivity).refreshFragment(AdminManagingFragment())
+                GlobalApplication.isRefresh.value = false
+            }
+        }
+
         adminViewModel.setCheckListCount(false)
         setRecyclerView()
 
