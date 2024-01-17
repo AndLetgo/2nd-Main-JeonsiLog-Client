@@ -24,6 +24,12 @@ class AdminReportRvAdapter(
         RecyclerView.ViewHolder(binding.root){
         fun bind(position:Int){
             val item = reportList[position]
+            if (item.isChecked) {
+                itemView.alpha = 0.4f
+            } else {
+                itemView.alpha = 1.0f
+            }
+
             var icDrawable = ContextCompat.getDrawable(context, R.drawable.ic_admin_report_user)
             var content = ""
             var nameIndex = item.name.length

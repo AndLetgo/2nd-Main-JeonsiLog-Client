@@ -101,14 +101,23 @@ class AdminViewModel:ViewModel() {
     }
 
     //신고
-    private var _reportReviewId = MutableLiveData<Int>()
-    val reportReviewId : LiveData<Int>
+    private var _reportReviewId = MutableLiveData<Int?>()
+    val reportReviewId : LiveData<Int?>
         get() = _reportReviewId
-    fun setReportReviewId(reviewId:Int){
+    fun setReportReviewId(reviewId:Int?){
         _reportReviewId.value = reviewId
     }
-    fun deleteReportReviewId(){
-        _reportReviewId = MutableLiveData<Int>()
+    private var _reportExhibitionId = MutableLiveData<Int?>()
+    val reportExhibitionId : LiveData<Int?>
+        get() = _reportExhibitionId
+    fun setReportExhibitionId(exhibitionId:Int?){
+        _reportExhibitionId.value = exhibitionId
+    }
+    private var _isReport = MutableLiveData(false)
+    val isReport : LiveData<Boolean>
+        get() = _isReport
+    fun setIsReport(check:Boolean){
+        _isReport.value = check
     }
 
     //Managing

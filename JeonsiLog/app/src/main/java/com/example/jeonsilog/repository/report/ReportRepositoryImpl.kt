@@ -33,8 +33,8 @@ class ReportRepositoryImpl: ReportRepository {
         }
     }
 
-    override suspend fun postCheckReport(token: String, reportId: Int): Response<OnlyMsgResponse> {
-        val response = service.postCheckReport(token, reportId)
+    override suspend fun patchCheckReport(token: String, reportId: Int): Response<OnlyMsgResponse> {
+        val response = service.patchCheckReport(token, reportId)
 
         return if(response.isSuccessful && response.body()!!.check){
             response

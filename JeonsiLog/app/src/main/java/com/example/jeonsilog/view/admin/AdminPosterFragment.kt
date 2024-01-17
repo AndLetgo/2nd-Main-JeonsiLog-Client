@@ -3,6 +3,7 @@ package com.example.jeonsilog.view.admin
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,15 +12,18 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentAdminPosterBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import java.io.IOException
 
@@ -27,6 +31,7 @@ class AdminPosterFragment : BaseFragment<FragmentAdminPosterBinding>(R.layout.fr
     private val adminViewModel:AdminViewModel by activityViewModels()
     private val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 1
     private var imageUri: Uri? = null
+    val TAG = "report"
     override fun init() {
         if(adminViewModel.exhibitionPosterImg.value!=null){
             setPosterView(true)
@@ -160,5 +165,24 @@ class AdminPosterFragment : BaseFragment<FragmentAdminPosterBinding>(R.layout.fr
             .load(imageUri)
             .into(binding.ivPoster)
         setPosterView(true)
+    }
+
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(TAG, "onAttach: ")
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d(TAG, "handleOnBackPressed: adminViewModel.isReport.value!!: ${adminViewModel.isReport.value!!}")
+                if(adminViewModel.isReport.value!!){
+                    Log.d(TAG, "handleOnBackPressed: ")
+                    Navigation.findNavController(binding.ibGetPosterFromGallery).popBackStack()
+                }else{
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 }

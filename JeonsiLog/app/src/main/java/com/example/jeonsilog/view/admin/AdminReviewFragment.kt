@@ -129,8 +129,9 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if(adminViewModel.reportReviewId.value!=null){
+                    isAdminExhibitionOpen =false
                     (activity as MainActivity).setStateFcm(false)
-                    adminViewModel.deleteReportReviewId()
+                    adminViewModel.setReportReviewId(null)
                 }
                 isEnabled = false
                 requireActivity().onBackPressed()

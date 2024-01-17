@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,8 +28,10 @@ import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.DialogUtil
+import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.example.jeonsilog.widget.utils.ImageUtil
@@ -54,6 +57,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     private var exhibitionInfoData: ExhibitionInfo? = null
     private var thisExhibitionId = 0
     private var hasNextPage = true
+    val TAG = "report"
     //감상평
     private var reviewList = mutableListOf<GetReviewsExhibitionInformationEntity>()
     private var reviewPage = 0
@@ -68,11 +72,20 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         }
         (activity as MainActivity).setStateBn(false, "admin")
 
-        thisExhibitionId = exhibitionId
+        //신고 -> 포스터
+        Log.d(TAG, "init: adminViewModel.reportExhibitionId.value: ${adminViewModel.reportExhibitionId.value}")
+        if(adminViewModel.reportExhibitionId.value!=null){
+            thisExhibitionId = adminViewModel.reportExhibitionId.value!!
+            exhibitionId = adminViewModel.reportExhibitionId.value!!
+        }else{
+            thisExhibitionId = exhibitionId
+        }
 
         setBottomSheet() //바텀시트 세팅
 
         binding.vm = adminViewModel
+
+
         //감상평 - RecyclerView
         if(adminViewModel.isChanged.value!!){
             reloadExhibitionInfo()
@@ -213,6 +226,13 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
 
         binding.ibKeywordAdd.setOnClickListener {
             showAddKeywordMenu()
+        }
+
+        //신고 -> 포스터
+        if(adminViewModel.reportExhibitionId.value!=null){
+            Log.d(TAG, "init: go poster")
+            Navigation.findNavController(binding.ivPosterImage).navigate(R.id.action_adminExhibitionFragment_to_adminPosterFragment)
+            adminViewModel.setReportExhibitionId(null)
         }
     }
     private fun setBottomSheet(){
@@ -436,7 +456,14 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         }
         if(isSuccess){
             Toast.makeText(requireContext(), getString(R.string.toast_exhibition_update), Toast.LENGTH_SHORT).show()
-            Navigation.findNavController(binding.btnSaveAll).popBackStack()
+            if(adminViewModel.isReport.value!!){
+                (activity as MainActivity).setStateFcm(false)
+                Navigation.findNavController(binding.btnSaveAll).popBackStack()
+                (activity as MainActivity).setStateBn(true, "admin")
+                adminViewModel.setIsReport(false)
+            }else{
+                Navigation.findNavController(binding.btnSaveAll).popBackStack()
+            }
         }
     }
     private fun uriToMultipart(uri: Uri): MultipartBody.Part{
@@ -563,5 +590,23 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         adminViewModel.setIsChanged(true)
     }
 
-
+    //Back Button 눌렀을 때
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(adminViewModel.isReport.value!!){
+                    (activity as MainActivity).setStateFcm(false)
+                    Navigation.findNavController(binding.btnSaveAll).popBackStack()
+                    (activity as MainActivity).setStateBn(true, "admin")
+                    isAdminExhibitionOpen = false
+                    adminViewModel.setIsReport(false)
+                }else{
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 }

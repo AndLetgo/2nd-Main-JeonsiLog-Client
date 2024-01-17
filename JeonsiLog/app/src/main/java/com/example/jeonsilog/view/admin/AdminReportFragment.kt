@@ -44,21 +44,23 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
                 val navController = findNavController()
                 when(data.reportType){
                     "EXHIBITION" -> {
-
+                        adminViewModel.setReportExhibitionId(data.clickId)
+                        adminViewModel.setIsReport(true)
+                        navController.navigate(R.id.adminExhibitionFragment)
                     }
                     "REVIEW" -> {
-                        Log.d("review", "onItemClick: review")
-                        adminViewModel.setReportReviewId(data.reportedId)
-                        isAdminExhibitionOpen = true
+                        adminViewModel.setReportReviewId(data.clickId)
                         navController.navigate(R.id.adminReviewFragment)
-                        (activity as MainActivity).setStateFcm(true)
                     }
                     "REPLY" -> {
-//                        navController.navigate(R.id.adminReviewFragment)
+                        adminViewModel.setReportReviewId(data.clickId)
+                        navController.navigate(R.id.adminReviewFragment)
                     }
                 }
+                checkReport(data.reportId)
+                isAdminExhibitionOpen = true
+                (activity as MainActivity).setStateFcm(true)
             }
-
         })
 
         setReportRvByPage(0)
@@ -89,5 +91,12 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
         val startPosition = totalCount + 1
         adminReportRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
         reportPage++
+    }
+
+    //신고 확인
+    private fun checkReport(reportId:Int){
+        runBlocking(Dispatchers.IO){
+            ReportRepositoryImpl().patchCheckReport(encryptedPrefs.getAT(), reportId)
+        }
     }
 }
