@@ -69,7 +69,8 @@
     <string name="dialog_admin_edit_exhibition_information">전시회 정보 수정</string>
 
     <!-- Toast Message -->
-    <string name="toast_poster_download_success">저장 성공!</string>
+    <string name="toast_save_success">저장 성공!</string>
+    <string name="toast_save_failure">저장 실패!</string>
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
     <string name="toast_poster_report_failure">접수 실패. 다시 시도해주세요.</string>
     <string name="toast_notification_go_review_exception">없어진 감상평이에요.</string>
@@ -78,6 +79,9 @@
     <string name="toast_delete_review">감상평이 삭제되었어요.</string>
     <string name="toast_delete_reply">댓글이 삭제되었어요.</string>
     <string name="toast_report_success">신고가 정상적으로 접수되었어요.</string>
+    <string name="toast_managing_full">전시회를 삭제해 주세요!</string>
+    <string name="toast_managing_requre_full">전시회를 추가해 주세요.</string>
+    <string name="toast_managing_duplication">이미 존재하는 전시회예요!</string>
 
     <!-- Login -->
     <string name="login_nick_placeholder">닉네임을 입력하세요</string>

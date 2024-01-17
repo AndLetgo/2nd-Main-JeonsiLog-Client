@@ -75,4 +75,7 @@
     <dimen name="radius_16">16dp</dimen>
     <dimen name="radius_30">30dp</dimen>
     <dimen name="radius_40">40dp</dimen>
+
+    <!-- res/values/dimens.xml -->
+    <dimen name="dropdown_height">150dp</dimen>
 </resources>

@@ -132,6 +132,6 @@ class PosterFragment : BaseFragment<FragmentPosterBinding>(
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         val downloadManager = requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         downloadManager.enqueue(request)
-        Toast.makeText(requireContext(), "저장 성공!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.toast_save_success), Toast.LENGTH_SHORT).show()
     }
 }

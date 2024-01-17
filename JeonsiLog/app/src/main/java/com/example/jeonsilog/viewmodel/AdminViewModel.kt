@@ -1,10 +1,12 @@
 package com.example.jeonsilog.viewmodel
 
 import android.net.Uri
+import android.widget.ListView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 
 class AdminViewModel:ViewModel() {
     //현재 Admin || User 화면 체크
@@ -98,5 +100,13 @@ class AdminViewModel:ViewModel() {
     }
     fun deleteReportReviewId(){
         _reportReviewId = MutableLiveData<Int>()
+    }
+
+    //Managing
+    private var _checkListCount = MutableLiveData(false)
+    val checkListCount : LiveData<Boolean>
+        get() = _checkListCount
+    fun setCheckListCount(check:Boolean){
+        _checkListCount.value = check
     }
 }

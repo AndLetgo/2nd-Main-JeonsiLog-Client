@@ -7,6 +7,8 @@ import com.example.jeonsilog.data.remote.dto.exhibition.GetRandomPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
+import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionSequenceRequest
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchByNameResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -52,12 +54,25 @@ interface ExhibitionRepository {
         @Query("page") page: Int
     ): Response<SearchResponse>
 
+    @GET("/api/exhibitions/search/name/{searchWord}")
+    suspend fun searchExhibitionByName(
+        @Header("Authorization") token: String,
+        @Path("searchWord") searchWord: String,
+        @Query("page") page: Int
+    ): Response<SearchByNameResponse>
+
     @Multipart
     @PATCH("/api/exhibitions")
     suspend fun patchExhibition(
         @Header("Authorization") token: String,
         @Part("updateExhibitionDetailReq") updateExhibitionDetailReq:RequestBody,
         @Part img: MultipartBody.Part
+    ): Response<OnlyMsgResponse>
+
+    @PATCH("/api/exhibitions/sequence")
+    suspend fun patchExhibitionSequence(
+        @Header("Authorization") token: String,
+        @Body body: PatchExhibitionSequenceRequest,
     ): Response<OnlyMsgResponse>
 
     @GET("/api/exhibitions/search/name/{searchWord}")

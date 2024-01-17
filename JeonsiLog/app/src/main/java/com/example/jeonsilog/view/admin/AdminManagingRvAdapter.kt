@@ -3,20 +3,18 @@ package com.example.jeonsilog.view.admin
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
-import com.example.jeonsilog.databinding.DialogAdminBinding
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchByNameEntity
 import com.example.jeonsilog.databinding.ItemAdminManagingHomeBinding
-import com.example.jeonsilog.databinding.ItemAdminReportBinding
-import com.example.jeonsilog.view.home.HomeRvAdapter
+import com.example.jeonsilog.viewmodel.AdminViewModel
 
 class AdminManagingRvAdapter(
-    private val exhibitionList:MutableList<ExhibitionsInfo>, private val context: Context):
+    private val exhibitionList:MutableList<SearchByNameEntity>, private val context: Context):
     RecyclerView.Adapter<AdminManagingRvAdapter.ViewHolder>() {
+    private var listener: OnItemClickListener? = null
     private lateinit var binding: ItemAdminManagingHomeBinding
     val TAG = "managing"
 
@@ -26,9 +24,9 @@ class AdminManagingRvAdapter(
             val item = exhibitionList[position]
             binding.tvOrder.text = (position+1).toString()
             binding.tvExhibitionName.text = item.exhibitionName
+
             binding.ibDelete.setOnClickListener {
-                exhibitionList.removeAt(position)
-                notifyItemRemoved(position)
+                listener?.deleteItem(position)
             }
         }
     }
@@ -62,12 +60,20 @@ class AdminManagingRvAdapter(
                 exhibitionList[i] = item
             }
         }
-
         notifyItemMoved(fromPosition, toPosition)
+        listener?.checkItemMoved()
     }
 
     fun onDragFinished(){
         notifyDataSetChanged()
     }
 
+    interface OnItemClickListener {
+        fun deleteItem(position: Int)
+        fun checkItemMoved()
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
+    }
 }
