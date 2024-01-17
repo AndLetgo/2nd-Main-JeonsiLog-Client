@@ -13,7 +13,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ReplyApi {
-    @GET("/api/replies/{reviewId}")
+    @GET("/api/replies/reviews/{reviewId}")
     suspend fun getReply(
         @Header("Authorization") token: String,
         @Path("reviewId") reviewId: Int,

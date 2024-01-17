@@ -33,7 +33,7 @@ import kotlinx.coroutines.runBlocking
 class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fragment_admin_review) {
     private lateinit var adminReviewReplyRvAdapter: AdminReviewReplyRvAdapter
     private val adminViewModel: AdminViewModel by activityViewModels()
-    private lateinit var replyList: MutableList<GetReplyInformation>
+    private var replyList = mutableListOf<GetReplyInformation>()
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
     private var hasNextPage = true
@@ -61,10 +61,6 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
                 }
             }
         })
-
-        binding.tvBtnDelete.setOnClickListener {
-            deleteReview()
-        }
     }
     private fun getReviewInfo(reviewId: Int):GetReviewsExhibitionInformationEntity?{
         var review: GetReviewsExhibitionInformationEntity? = null
@@ -86,7 +82,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
             runBlocking(Dispatchers.IO){
                 ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), review.reviewId)
             }
-            adminViewModel.setDeletedReviewId(reviewItem?.position!!)
+            adminViewModel.setDeletedReviewPosition(reviewItem?.position!!)
             Navigation.findNavController(it).popBackStack()
         }
 
@@ -96,8 +92,6 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
             .into(binding.ivProfile)
     }
     private fun getReplyList(){
-        replyList = mutableListOf()
-
         adminReviewReplyRvAdapter = AdminReviewReplyRvAdapter(replyList, requireContext())
         binding.rvExhibitionReviewReply.adapter = adminReviewReplyRvAdapter
         binding.rvExhibitionReviewReply.layoutManager = LinearLayoutManager(this.context)
@@ -115,10 +109,9 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
         })
     }
     private fun setReplyRvByPage(totalCount:Int){
-        Log.d("reply", "setReplyRvByPage: called")
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
-            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), newReviewId,replyPage)
+            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), newReviewId, replyPage)
             if(response.isSuccessful && response.body()!!.check){
                 replyList.addAll(response.body()!!.information.data)
                 addItemCount = response.body()!!.information.data.size
@@ -129,28 +122,12 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
         adminReviewReplyRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
         replyPage++
     }
-    private fun deleteReview(){
-        Log.d("report", "deleteReview: is clicked")
-        var isSuccess = false
-        runBlocking(Dispatchers.IO){
-            val response = ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), reviewInfo.reviewId)
-            if(response.isSuccessful && response.body()!!.check){
-                isSuccess = true
-            }
-        }
-        if(isSuccess){
-            Log.d("report", "deleteReview: is success")
-            onAttach(requireContext())
-        }
-    }
+    
     //Back Button 눌렀을 때
     override fun onAttach(context: Context) {
-        Log.d("report", "onAttach: is clicked")
         super.onAttach(context)
-
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d("tag", "onAttach Back")
                 if(adminViewModel.reportReviewId.value!=null){
                     (activity as MainActivity).setStateFcm(false)
                     adminViewModel.deleteReportReviewId()

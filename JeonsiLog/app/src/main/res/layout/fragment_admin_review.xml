@@ -36,7 +36,7 @@
                 android:id="@+id/iv_profile"
                 android:layout_width="@dimen/item_24"
                 android:layout_height="@dimen/item_24"
-                android:src="@drawable/shape_round_iv"
+                android:background="@drawable/illus_default_profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="@dimen/margin_2"/>
@@ -48,7 +48,6 @@
                 style="@style/M_regular"
                 android:textColor="@color/gray_dark"
                 android:layout_marginStart="@dimen/margin_8"
-                android:layout_marginTop="@dimen/margin_2"
                 app:layout_constraintStart_toEndOf="@id/iv_profile"
                 app:layout_constraintTop_toTopOf="parent"/>
             <com.willy.ratingbar.BaseRatingBar
@@ -67,7 +66,8 @@
                 app:srb_drawableFilled="@drawable/ic_rating_full"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_btn_delete"
-                android:layout_marginEnd="@dimen/margin_8"/>
+                android:layout_marginEnd="@dimen/margin_8"
+                android:layout_marginBottom="@dimen/margin_2"/>
             <TextView
                 android:id="@+id/tv_btn_delete"
                 android:layout_width="wrap_content"

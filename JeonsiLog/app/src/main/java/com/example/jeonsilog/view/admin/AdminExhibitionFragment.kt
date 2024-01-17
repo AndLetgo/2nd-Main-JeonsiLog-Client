@@ -80,6 +80,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             getExhibitionInfo()
         }
         getReviewInfo()
+        //감상평 삭제 시
         if(adminViewModel.deletedReviewPosition.value != null){
             deleteReview(adminViewModel.deletedReviewPosition.value!!)
         }
@@ -452,6 +453,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     private fun deleteReview(position:Int){
         exhibitionRvAdapter.deleteItem(position)
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
+        adminViewModel.setDeletedReviewPosition(null)
     }
 
     //imageUrl -> MultipartBody.Part

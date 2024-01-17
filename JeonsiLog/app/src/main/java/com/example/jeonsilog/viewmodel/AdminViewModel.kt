@@ -65,10 +65,10 @@ class AdminViewModel:ViewModel() {
     fun setReviewItem(review:UpdateReviewItem){
         _reviewItem.value = review
     }
-    private var _deletedReviewPosition = MutableLiveData<Int>()
-    val deletedReviewPosition : LiveData<Int>
+    private var _deletedReviewPosition = MutableLiveData<Int?>()
+    val deletedReviewPosition : LiveData<Int?>
         get() = _deletedReviewPosition
-    fun setDeletedReviewId(position:Int){
+    fun setDeletedReviewPosition(position:Int?){
         _deletedReviewPosition.value = position
     }
 
@@ -95,7 +95,7 @@ class AdminViewModel:ViewModel() {
         _exhibitionInformation = MutableLiveData<String?>()
 
         _reviewItem = MutableLiveData<UpdateReviewItem>()
-        _deletedReviewPosition = MutableLiveData<Int>()
+        _deletedReviewPosition = MutableLiveData<Int?>()
         _exhibitionPosterImg = MutableLiveData<String?>()
         _posterUri = MutableLiveData<Uri>()
     }
