@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.example.jeonsilog.R"/>
+        <import type="android.content.Context"/>
+
         <variable
             name="vm"
             type="com.example.jeonsilog.viewmodel.AdminViewModel" />
@@ -52,7 +55,7 @@
                         android:layout_height="@dimen/item_32"
                         android:text="@string/btn_save"
                         style="@style/M_medium"
-                        android:textColor="@color/basic_point"
+                        android:textColor="@{vm.isChanged()? context.getColor(R.color.basic_point) : context.getColor(R.color.gray_medium)}"
                         android:background="@color/transparent"
                         app:layout_constraintTop_toBottomOf="@id/iv_handle"
                         app:layout_constraintEnd_toEndOf="parent"
