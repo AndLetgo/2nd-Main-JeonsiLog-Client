@@ -73,15 +73,21 @@
     <string name="toast_save_failure">저장 실패!</string>
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
     <string name="toast_poster_report_failure">접수 실패. 다시 시도해주세요.</string>
-    <string name="toast_notification_go_review_exception">없어진 감상평이에요.</string>
+
     <string name="toast_exhibition_place_call_empty">등록된 전화번호가 없어요.</string>
     <string name="toast_exhibition_place_homepage_empty">등록된 링크가 없어요.</string>
     <string name="toast_delete_review">감상평이 삭제되었어요.</string>
+    <string name="toast_exhibition_name_empty">전시회 이름은 비워둘 수 없어요!</string>
+    <string name="toast_exhibition_update">전시회 정보가 업데이트 되었습니다.</string>
+
+    <string name="toast_notification_go_review_exception">없어진 감상평이에요.</string>
     <string name="toast_delete_reply">댓글이 삭제되었어요.</string>
     <string name="toast_report_success">신고가 정상적으로 접수되었어요.</string>
+
     <string name="toast_managing_full">전시회를 삭제해 주세요!</string>
-    <string name="toast_managing_requre_full">전시회를 추가해 주세요.</string>
+    <string name="toast_managing_requre_full">전시회 10개를 채워주세요!</string>
     <string name="toast_managing_duplication">이미 존재하는 전시회예요!</string>
+
 
     <!-- Login -->
     <string name="login_nick_placeholder">닉네임을 입력하세요</string>
@@ -177,41 +183,42 @@
     <string name="setting_version">버전 정보 v.%s</string>
 
     <!-- Admin Page -->
-    <string name="admin_report_reply">님의 댓글이 신고됐어요</string>
-    <string name="admin_report_poster">포스터 등록이 필요해요</string>
-    <string name="admin_report_review">님의 감상평이 신고됐어요</string>
+    <string name="admin_report_reply">님의 댓글이 신고됐어요.</string>
+    <string name="admin_report_poster">포스터 등록이 필요해요.</string>
+    <string name="admin_report_review">님의 감상평이 신고됐어요.</string>
     <string name="admin_exhibition_place_name_empty">전시공간 이름 없음</string>
     <string name="admin_exhibition_place_address_empty">전시공간 주소 없음</string>
     <string name="admin_exhibition_place_call_empty">전시공간 전화번호 없음</string>
     <string name="admin_exhibition_place_homepage_empty">전시공간 홈페이지 주소 없음</string>
     <string name="admin_exhibition_information_empty">전시회 정보 없음</string>
+    <string name="admin_exhibition_poster_empty">포스터 이미지를 추가해주세요.</string>
 
     <string name="admin_report_title">접수된 신고</string>
-    <string name="admin_report_review_content">%1$s 님의 감상평이 신고됐어요</string>
-    <string name="admin_report_reply_content">%1$s 님의 댓글이 신고됐어요</string>
-    <string name="admin_report_poster_content">%1$s 포스터 등록이 필요해요</string>
+    <string name="admin_report_review_content">%1$s 님의 감상평이 신고됐어요.</string>
+    <string name="admin_report_reply_content">%1$s 님의 댓글이 신고됐어요.</string>
+    <string name="admin_report_poster_content">%1$s 포스터 등록이 필요해요.</string>
     
-    <string name="admin_managing_search_hint">전시회명을 입력하세요</string>
+    <string name="admin_managing_search_hint">전시회명을 입력하세요.</string>
 
     <!-- Empty State -->
-    <string name="empty_search_title">검색 결과가 없어요</string>
-    <string name="empty_search_description">검색어를 다시 확인해 주세요</string>
-    <string name="empty_poster_title">포스터 이미지를 준비 중이에요</string>
-    <string name="empty_poster_description">조금만 기다려 주세요</string>
-    <string name="empty_my_follower">아직 팔로워가 없어요</string>
-    <string name="empty_my_following_title">아직 팔로잉이 없어요</string>
-    <string name="empty_my_following_description">원하는 사용자를 팔로우 해보세요</string>
-    <string name="empty_my_rating_title">아직 남긴 별점이 없어요</string>
-    <string name="empty_my_rating_description">전시회 관람 후, 별점을 남겨보세요</string>
-    <string name="empty_my_review_title">아직 남긴 감상평이 없어요</string>
-    <string name="empty_my_review_description">전시회 관람 후, 감상평을 남겨보세요</string>
-    <string name="empty_my_interest_title">아직 즐겨찾기가 없어요</string>
-    <string name="empty_my_interest_description">마음에 드는 전시회를 즐겨찾기 해보세요</string>
-    <string name="empty_other_follower">팔로워가 없어요</string>
-    <string name="empty_other_following">팔로잉이 없어요</string>
-    <string name="empty_other_rating">기록된 별점이 없어요</string>
-    <string name="empty_other_review">기록된 감상평이 없어요</string>
-    <string name="empty_other_photocalendar">포토캘린더가 비공개 되어있어요</string>
+    <string name="empty_search_title">검색 결과가 없어요.</string>
+    <string name="empty_search_description">검색어를 다시 확인해 주세요.</string>
+    <string name="empty_poster_title">포스터 이미지를 준비 중이에요.</string>
+    <string name="empty_poster_description">조금만 기다려 주세요.</string>
+    <string name="empty_my_follower">아직 팔로워가 없어요.</string>
+    <string name="empty_my_following_title">아직 팔로잉이 없어요.</string>
+    <string name="empty_my_following_description">원하는 사용자를 팔로우 해보세요.</string>
+    <string name="empty_my_rating_title">아직 남긴 별점이 없어요.</string>
+    <string name="empty_my_rating_description">전시회 관람 후, 별점을 남겨보세요.</string>
+    <string name="empty_my_review_title">아직 남긴 감상평이 없어요.</string>
+    <string name="empty_my_review_description">전시회 관람 후, 감상평을 남겨보세요.</string>
+    <string name="empty_my_interest_title">아직 즐겨찾기가 없어요.</string>
+    <string name="empty_my_interest_description">마음에 드는 전시회를 즐겨찾기 해보세요.</string>
+    <string name="empty_other_follower">팔로워가 없어요.</string>
+    <string name="empty_other_following">팔로잉이 없어요.</string>
+    <string name="empty_other_rating">기록된 별점이 없어요.</string>
+    <string name="empty_other_review">기록된 감상평이 없어요.</string>
+    <string name="empty_other_photocalendar">포토캘린더가 비공개 되어있어요.</string>
 
     <!-- 약관 동의 -->
     <string name="tos_comment">전시로그를 이용하시려면\n동의가 필요해요</string>

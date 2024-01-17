@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -16,7 +17,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.databinding.DialogAdminBinding
 import com.example.jeonsilog.viewmodel.AdminViewModel
 
-class DialogAdmin(private val type:String, private val defaultText: String) : DialogFragment() {
+class DialogAdmin(private val type:String, private val defaultText: String?) : DialogFragment() {
     private var _binding: DialogAdminBinding? = null
     private val binding get() = _binding!!
     private val adminViewModel: AdminViewModel by activityViewModels()
@@ -40,7 +41,10 @@ class DialogAdmin(private val type:String, private val defaultText: String) : Di
     ): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.dialog_admin, container, false)
 
-        binding.etDialogAdmin.setText(defaultText, TextView.BufferType.EDITABLE)
+        if(defaultText!=null){
+            binding.etDialogAdmin.setText(defaultText, TextView.BufferType.EDITABLE)
+        }
+
         when(type){
             "exhibitionName" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_exhibition_name)}
             "placeName" -> {binding.tvTitle.text = getString(R.string.dialog_admin_edit_place_name)}
@@ -52,14 +56,36 @@ class DialogAdmin(private val type:String, private val defaultText: String) : Di
 
         binding.btnCancel.setOnClickListener { dismiss() }
         binding.btnConfirm.setOnClickListener {
-            val editTextText = binding.etDialogAdmin.text.toString()
+            val editTextText = if(binding.etDialogAdmin.text.isNullOrEmpty()){
+                null
+            }else{
+                binding.etDialogAdmin.text.toString()
+            }
+            val exhibitionInfo = adminViewModel.exhibitionInfo
             when(type){
-                "exhibitionName" -> {adminViewModel.setExhibitionName(editTextText)}
-                "placeName" -> {adminViewModel.setPlaceName(editTextText)}
-                "placeAddress" -> {adminViewModel.setAddress(editTextText)}
-                "placeCall" -> {adminViewModel.setPlaceCall(editTextText)}
-                "placeHomepage" -> {adminViewModel.setPlaceHomepage(editTextText)}
-                "exhibitionInformation" -> {adminViewModel.setExhibitionInformation(editTextText)}
+                "exhibitionName" -> {
+                    if(editTextText.isNullOrEmpty()){
+                        Toast.makeText(requireContext(), getString(R.string.toast_exhibition_name_empty), Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }else{
+                        adminViewModel.setExhibitionName(editTextText)
+                    }
+                }
+                "placeName" -> {adminViewModel.setPlaceName(editTextText)
+                    exhibitionInfo.value!!.place.placeName = editTextText
+                }
+                "placeAddress" -> {adminViewModel.setAddress(editTextText)
+                    exhibitionInfo.value!!.place.address = editTextText
+                }
+                "placeCall" -> {adminViewModel.setPlaceCall(editTextText)
+                    exhibitionInfo.value!!.place.tel = editTextText
+                }
+                "placeHomepage" -> {adminViewModel.setPlaceHomepage(editTextText)
+                    exhibitionInfo.value!!.place.homePage = editTextText
+                }
+                "exhibitionInformation" -> {adminViewModel.setExhibitionInformation(editTextText)
+                    exhibitionInfo.value!!.information = editTextText
+                }
             }
             adminViewModel.setIsChanged(true)
             dismiss()

@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.admin
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -75,7 +76,6 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
 
         binding.vm = adminViewModel
         //감상평 - RecyclerView
-        Log.d(TAG, "init: adminExhibitionViewModel.isChanged.value!!: ${adminViewModel.isChanged.value!!}")
         if(adminViewModel.isChanged.value!!){
             reloadExhibitionInfo()
         }else{
@@ -86,23 +86,93 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             deleteReview(adminViewModel.deletedReviewPosition.value!!)
         }
 
+        //전시회 이름
         adminViewModel.exhibitionName.observe(this){
             binding.tvExhibitionName.text = adminViewModel.exhibitionName.value
         }
+        binding.tvExhibitionName.setOnClickListener {
+            showCustomDialog("exhibitionName", adminViewModel.exhibitionInfo.value!!.exhibitionName)
+        }
+
+        //전시공간 이름
         adminViewModel.placeName.observe(this){
-            binding.tvPlaceName.text = adminViewModel.placeName.value
+            binding.tvPlaceName.text = if(!adminViewModel.placeName.value.isNullOrEmpty()){
+                adminViewModel.placeName.value
+            }else{
+
+                getString(R.string.admin_exhibition_place_name_empty)
+            }
         }
+        binding.tvPlaceName.setOnClickListener {
+            if(adminViewModel.exhibitionInfo.value!!.place.placeName !=null){
+                showCustomDialog("placeName", adminViewModel.exhibitionInfo.value!!.place.placeName!!)
+            }else{
+                showCustomDialog("placeName", null)
+            }
+        }
+
+        //전시공간 주소
         adminViewModel.placeAddress.observe(this){
-            binding.tvAddress.text = adminViewModel.placeAddress.value
+            binding.tvAddress.text = if(!adminViewModel.placeAddress.value.isNullOrEmpty()){
+                adminViewModel.placeAddress.value
+            }else{
+                getString(R.string.admin_exhibition_place_address_empty)
+            }
         }
+        binding.tvAddress.setOnClickListener {
+            if(adminViewModel.exhibitionInfo.value!!.place.address !=null){
+                showCustomDialog("placeAddress", adminViewModel.exhibitionInfo.value!!.place.address!!)
+            }else{
+                showCustomDialog("placeAddress", null)
+            }
+        }
+
+        //전시공간 번호
         adminViewModel.placeCall.observe(this){
-            binding.tvCall.text = adminViewModel.placeCall.value
+            binding.tvCall.text = if(!adminViewModel.placeCall.value.isNullOrEmpty()){
+                adminViewModel.placeCall.value
+            }else{
+                getString(R.string.admin_exhibition_place_call_empty)
+            }
         }
+        binding.tvCall.setOnClickListener {
+            if(adminViewModel.exhibitionInfo.value!!.place.tel!=null){
+                showCustomDialog("placeCall", adminViewModel.exhibitionInfo.value!!.place.tel!!)
+            }else{
+                showCustomDialog("placeCall", null)
+            }
+        }
+
+        //전시공간 홈페이지
         adminViewModel.placeHomepage.observe(this){
-            binding.tvHomepage.text = adminViewModel.placeHomepage.value
+            binding.tvHomepage.text = if(!adminViewModel.placeHomepage.value.isNullOrEmpty()){
+                adminViewModel.placeHomepage.value
+            }else{
+                getString(R.string.admin_exhibition_place_homepage_empty)
+            }
         }
+        binding.tvHomepage.setOnClickListener {
+            if(adminViewModel.exhibitionInfo.value!!.place.homePage!=null){
+                showCustomDialog("placeHomepage", adminViewModel.exhibitionInfo.value!!.place.homePage!!)
+            }else{
+                showCustomDialog("placeHomepage", null)
+            }
+        }
+
+        //전시회 정보
         adminViewModel.exhibitionInformation.observe(this){
-            binding.tvInformation.text = adminViewModel.exhibitionInformation.value
+            binding.tvInformation.text = if(!adminViewModel.exhibitionInformation.value.isNullOrEmpty()){
+                adminViewModel.exhibitionInformation.value
+            }else{
+                getString(R.string.admin_exhibition_information_empty)
+            }
+        }
+        binding.tvInformation.setOnClickListener {
+            if(adminViewModel.exhibitionInfo.value!!.information !=null){
+                showCustomDialog("exhibitionInformation", adminViewModel.exhibitionInfo.value!!.information!!)
+            }else{
+                showCustomDialog("exhibitionInformation", null)
+            }
         }
 
         //포스터
@@ -149,54 +219,49 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
                 null
             }
         }
+        adminViewModel.setExhibitionInfo(exhibitionInfoData!!)
         //포스터
-        adminViewModel.setExhibitionPosterImg(exhibitionInfoData?.imageUrl!!)
-        Glide.with(requireContext())
-            .load(exhibitionInfoData?.imageUrl)
-            .into(binding.ivPosterImage)
+        Log.d(TAG, "getExhibitionInfo: exhibitionInfoData?.imageUrl: ${exhibitionInfoData?.imageUrl}")
+        if(exhibitionInfoData?.imageUrl!=null){
+            adminViewModel.setExhibitionPosterImg(exhibitionInfoData?.imageUrl!!)
+            Glide.with(requireContext())
+                .load(exhibitionInfoData?.imageUrl)
+                .into(binding.ivPosterImage)
+        }else{
+            Glide.with(requireContext())
+                .load(R.drawable.illus_empty_poster)
+                .into(binding.ivPosterImage)
+        }
 
         //전시회 이름
         adminViewModel.setExhibitionName(exhibitionInfoData?.exhibitionName!!)
-        binding.tvExhibitionName.setOnClickListener {
-            showCustomDialog("exhibitionName", binding.tvExhibitionName.text.toString())
-        }
 
         //전시공간 이름
         if(exhibitionInfoData?.place?.placeName !=null){
             adminViewModel.setPlaceName(exhibitionInfoData?.place?.placeName!!)
         }else{ adminViewModel.setPlaceName(getString(R.string.admin_exhibition_place_name_empty)) }
-        binding.tvPlaceName.setOnClickListener {
-            showCustomDialog("placeName", binding.tvPlaceName.text.toString())
-        }
+
 
         //전시공간 주소
         if(exhibitionInfoData?.place?.address !=null){
             adminViewModel.setAddress(exhibitionInfoData?.place?.address!!)
         }else{ adminViewModel.setAddress(getString(R.string.admin_exhibition_place_address_empty)) }
-        binding.tvAddress.setOnClickListener {
-            showCustomDialog("placeAddress", binding.tvAddress.text.toString())
-        }
+
         //전시공간 전화번호
         if(exhibitionInfoData?.place?.tel !=null){
             adminViewModel.setPlaceCall(exhibitionInfoData?.place?.tel!!)
         }else{ adminViewModel.setPlaceCall(getString(R.string.admin_exhibition_place_call_empty)) }
-        binding.tvCall.setOnClickListener {
-            showCustomDialog("placeCall", binding.tvCall.text.toString())
-        }
+
         //전시공간 홈페이지
         if(exhibitionInfoData?.place?.homePage !=null){
             adminViewModel.setPlaceHomepage(exhibitionInfoData?.place?.homePage!!)
         }else{ adminViewModel.setPlaceHomepage(getString(R.string.admin_exhibition_place_homepage_empty)) }
-        binding.tvHomepage.setOnClickListener {
-            showCustomDialog("placeHomepage", binding.tvHomepage.text.toString())
-        }
+
         //전시회 정보
         if(exhibitionInfoData?.information !=null){
             adminViewModel.setExhibitionInformation(exhibitionInfoData?.information!!)
         }else{ adminViewModel.setExhibitionInformation(getString(R.string.admin_exhibition_information_empty)) }
-        binding.tvInformation.setOnClickListener {
-            showCustomDialog("exhibitionInformation", binding.tvInformation.text.toString())
-        }
+
 
         setKeywords()
     }
@@ -279,46 +344,73 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             Glide.with(requireContext())
                 .load(adminViewModel.posterUri.value)
                 .into(binding.ivPosterImage)
-        }else{
+        }else if(adminViewModel.exhibitionPosterImg.value!=null){
             Glide.with(requireContext())
                 .load(adminViewModel.exhibitionPosterImg.value)
+                .into(binding.ivPosterImage)
+        }else{
+            Glide.with(requireContext())
+                .load(R.drawable.illus_empty_poster)
                 .into(binding.ivPosterImage)
         }
         //정보
         binding.tvExhibitionName.text = adminViewModel.exhibitionName.value
-        binding.tvPlaceName.text = adminViewModel.placeName.value
-        binding.tvAddress.text = adminViewModel.placeAddress.value
-        binding.tvCall.text = adminViewModel.placeCall.value
-        binding.tvHomepage.text = adminViewModel.placeHomepage.value
-        binding.tvInformation.text = adminViewModel.exhibitionInformation.value
+        binding.tvPlaceName.text = if(adminViewModel.placeName.value!=null){
+            adminViewModel.placeName.value
+        }else{
+            getString(R.string.admin_exhibition_place_name_empty)
+        }
+        binding.tvAddress.text = if(adminViewModel.placeAddress.value!=null){
+            adminViewModel.placeAddress.value
+        }else{
+            getString(R.string.admin_exhibition_place_address_empty)
+        }
+        binding.tvCall.text = if(adminViewModel.placeCall.value!=null){
+            adminViewModel.placeCall.value
+        }else{
+            getString(R.string.admin_exhibition_place_call_empty)
+        }
+        binding.tvHomepage.text = if(adminViewModel.placeHomepage.value!=null){
+            adminViewModel.placeHomepage.value
+        }else{
+            getString(R.string.admin_exhibition_place_homepage_empty)
+        }
+        binding.tvInformation.text = if(adminViewModel.exhibitionInformation.value!=null){
+            adminViewModel.exhibitionInformation.value
+        }else{
+            getString(R.string.admin_exhibition_information_empty)
+        }
     }
 
     //수정사항 저장
     private fun saveEditInformations(){
         var isSuccess = false
         var checkPosterChange =false
+
         var filePart:MultipartBody.Part?
         if(adminViewModel.posterUri.value!=null){
             filePart = uriToMultipart(adminViewModel.posterUri.value!!)
             checkPosterChange = true
-        }else{
-//            filePart = urlToMultipart(adminViewModel.exhibitionPosterImg.value!!)!!
+        }else if(adminViewModel.exhibitionPosterImg.value!=null){
             filePart = createImagePartFromUrl(adminViewModel.exhibitionPosterImg.value!!, "img")!!
+        }else{
+            filePart = setDefalutImage()
+            checkPosterChange = true
         }
 
         val updateExhibitionDetailReq = PatchExhibitionRequest(
             exhibitionInfoData?.exhibitionId!!,
-            adminViewModel.exhibitionName.value!!,
-            exhibitionInfoData?.operatingKeyword!!,
-            exhibitionInfoData?.priceKeyword!!,
-            adminViewModel.exhibitionInformation.value!!,
+            adminViewModel.exhibitionInfo.value!!.exhibitionName,
+            adminViewModel.exhibitionInfo.value!!.operatingKeyword,
+            adminViewModel.exhibitionInfo.value!!.priceKeyword,
+            adminViewModel.exhibitionInfo.value!!.information,
             checkPosterChange,
             UpdatePlaceInfoEntity(
-                exhibitionInfoData?.place?.placeId!!,
-                adminViewModel.placeName.value!!,
-                adminViewModel.placeAddress.value!!,
-                adminViewModel.placeCall.value!!,
-                adminViewModel.placeHomepage.value!!
+                adminViewModel.exhibitionInfo.value!!.place.placeId,
+                adminViewModel.exhibitionInfo.value!!.place.placeName,
+                adminViewModel.exhibitionInfo.value!!.place.address,
+                adminViewModel.exhibitionInfo.value!!.place.tel,
+                adminViewModel.exhibitionInfo.value!!.place.homePage
             ))
         val requestJson = Gson().toJson(updateExhibitionDetailReq)
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(),requestJson)
@@ -326,14 +418,13 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().patchExhibition(encryptedPrefs.getAT(), requestBody, filePart)
             if(response.isSuccessful && response.body()!!.check){
-                Log.d("gallery", "patchMyPhotoCalendarImg: ${response.body()!!.informationEntity.message}")
                 isSuccess = true
             }else{
                 Log.e(TAG, "error: ${response.message()}")
             }
         }
         if(isSuccess){
-            Toast.makeText(requireContext(), "전시회 정보가 업데이트 되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_exhibition_update), Toast.LENGTH_SHORT).show()
             Navigation.findNavController(binding.btnSaveAll).popBackStack()
         }
     }
@@ -343,7 +434,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         val filePart = MultipartBody.Part.createFormData("img", file.name, imageRequestBody)
         return filePart
     }
-    private fun showCustomDialog(type:String, text: String) {
+    private fun showCustomDialog(type:String, text: String?) {
         val customDialogFragment = DialogAdmin(type, text)
         customDialogFragment.show(parentFragmentManager, tag)
     }
@@ -378,8 +469,6 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
 
         return destinationFile
     }
-
-    // 이미지 URL을 MultipartBody.Part로 변환하는 함수
     private fun createImagePartFromUrl(imageUrl: String, partName: String): MultipartBody.Part? {
         try {
             val destinationFile = File.createTempFile("tempImage", ".jpg")
@@ -393,5 +482,17 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             e.printStackTrace()
         }
         return null
+    }
+
+    // null 이미지
+    private fun setDefalutImage():MultipartBody.Part {
+        val outputDir: File = requireActivity().cacheDir
+        val outputFile: File = File.createTempFile("prefix", "suffix", outputDir)
+
+        val requestFile: RequestBody = outputFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val imagePart: MultipartBody.Part = MultipartBody.Part.createFormData("image", null, requestFile)
+
+        outputFile.deleteOnExit()
+        return imagePart
     }
 }

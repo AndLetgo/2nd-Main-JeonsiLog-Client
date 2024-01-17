@@ -28,16 +28,23 @@ class AdminPosterFragment : BaseFragment<FragmentAdminPosterBinding>(R.layout.fr
     private val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 1
     private var imageUri: Uri? = null
     override fun init() {
-        if(adminViewModel.exhibitionPosterImg!=null){
+        if(adminViewModel.exhibitionPosterImg.value!=null){
             setPosterView(true)
             Glide.with(requireContext())
                 .load(adminViewModel.exhibitionPosterImg.value)
+                .into(binding.ivPoster)
+        }else if(adminViewModel.posterUri.value!=null){
+            setPosterView(true)
+            Glide.with(requireContext())
+                .load(adminViewModel.posterUri.value)
                 .into(binding.ivPoster)
         }else{
             setPosterView(false)
         }
 
         binding.ibPosterDelete.setOnClickListener{
+            adminViewModel.setExhibitionPosterImg(null)
+            adminViewModel.setIsChanged(true)
             setPosterView(false)
         }
         binding.ibGetPosterFromGallery.setOnClickListener{

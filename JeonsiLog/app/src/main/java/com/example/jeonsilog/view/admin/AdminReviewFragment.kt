@@ -118,7 +118,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
         Log.d("reply", "setReplyRvByPage: called")
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
-            val response = ReplyRepositoryImpl().getReply(GlobalApplication.encryptedPrefs.getAT(), newReviewId,replyPage)
+            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), newReviewId,replyPage)
             if(response.isSuccessful && response.body()!!.check){
                 replyList.addAll(response.body()!!.information.data)
                 addItemCount = response.body()!!.information.data.size

@@ -125,8 +125,8 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         //전시장 상세정보
         binding.llExhibitionPlace.setOnClickListener {
-            newPlaceId = exhibitionInfoData!!.place.placeId
-            newPlaceName = exhibitionInfoData!!.place.placeName
+            newPlaceId = exhibitionInfoData!!.place.placeId!!
+            newPlaceName = exhibitionInfoData!!.place.placeName!!
             Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
         }
 

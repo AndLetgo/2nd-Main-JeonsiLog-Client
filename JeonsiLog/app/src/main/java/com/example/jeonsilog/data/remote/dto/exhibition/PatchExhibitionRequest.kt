@@ -21,7 +21,7 @@ data class PatchExhibitionRequest(
     @SerializedName("priceKeyword")
     val priceKeyword: String,
     @SerializedName("information")
-    val information: String,
+    val information: String?,
     @SerializedName("isImageChange")
     val isImageChange: Boolean,
     @SerializedName("updatePlaceInfo")
@@ -30,13 +30,13 @@ data class PatchExhibitionRequest(
 
 data class UpdatePlaceInfoEntity(
     @SerializedName("placeId")
-    val placeId: Int,
+    val placeId: Int?,
     @SerializedName("placeName")
-    val placeName: String,
+    val placeName: String?,
     @SerializedName("placeAddress")
-    val placeAddress: String,
+    val placeAddress: String?,
     @SerializedName("placeTel")
-    val placeTel: String,
+    val placeTel: String?,
     @SerializedName("placeHomePage")
-    val placeHomePage: String
+    val placeHomePage: String?
 )

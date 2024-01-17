@@ -14,7 +14,7 @@ data class ExhibitionInfo(
     @SerializedName("exhibitionId")
     val exhibitionId: Int,
     @SerializedName("exhibitionName")
-    val exhibitionName: String,
+    var exhibitionName: String,
     @SerializedName("startDate")
     val startDate: String,
     @SerializedName("endDate")
@@ -24,7 +24,7 @@ data class ExhibitionInfo(
     @SerializedName("priceKeyword")
     val priceKeyword: String,
     @SerializedName("information")
-    val information: String,
+    var information: String?,
     @SerializedName("rate")
     val rate: Float,
     @SerializedName("imageUrl")
@@ -39,13 +39,13 @@ data class ExhibitionInfo(
 
 data class ExhibitionPlaceEntity(
     @SerializedName("placeId")
-    val placeId: Int,
+    val placeId: Int?,
     @SerializedName("placeName")
-    val placeName: String,
+    var placeName: String?,
     @SerializedName("address")
-    val address: String,
+    var address: String?,
     @SerializedName("tel")
-    val tel: String,
+    var tel: String?,
     @SerializedName("homePage")
-    val homePage: String
+    var homePage: String?
 )
