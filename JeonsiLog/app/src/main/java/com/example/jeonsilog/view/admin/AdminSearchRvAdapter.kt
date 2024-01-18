@@ -16,7 +16,7 @@ import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformat
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 
 class AdminSearchRvAdapter(
-    private val exhibitionList:MutableList<SearchInformationEntity>, private val context: Context):
+    val exhibitionList:MutableList<SearchInformationEntity>, private val context: Context):
     RecyclerView.Adapter<AdminSearchRvAdapter.RecycleViewHolder>() {
     private var listener: OnItemClickListener? = null
 
@@ -26,11 +26,11 @@ class AdminSearchRvAdapter(
             Log.d("search", "bind: item.exhibitionName: ${item.exhibitionName}")
             binding.tvTitle.text = item.exhibitionName
             var address = ""
-            if(item.place.placeAddress != null){
-                val addressList = item.place.placeAddress.split(" ")
-                address = "${addressList[0]} ${addressList[1]}"
-                binding.tvAddress.text = address
-            }
+//            if(item.place.placeAddress != null){
+//                val addressList = item.place.placeAddress.split(" ")
+//                address = "${addressList[0]} ${addressList[1]}"
+//                binding.tvAddress.text = address
+//            }
 
             if(item.place.placeName !=null){
                 binding.tvPlace.text = item.place.placeName

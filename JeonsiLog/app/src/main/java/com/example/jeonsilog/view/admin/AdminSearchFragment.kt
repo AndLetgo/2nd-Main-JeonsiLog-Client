@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.adapters.ViewBindingAdapter.OnViewAttachedToWindow
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,19 +18,23 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.databinding.FragmentAdminSearchBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.home.HomeRvAdapter
+import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fragment_admin_search) {
     private val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
+    private val adminViewModel: AdminViewModel by activityViewModels()
     private lateinit var adminSearchRvAdapter: AdminSearchRvAdapter
     private var searchList = mutableListOf<SearchInformationEntity>()
 
@@ -46,6 +51,7 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
             }
         }
 
+        binding.lifecycleOwner = this
         searchList = mutableListOf<SearchInformationEntity>()
         adminSearchRvAdapter = AdminSearchRvAdapter(searchList, requireContext())
         binding.rvSearchResult.adapter = adminSearchRvAdapter
@@ -53,11 +59,14 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
 
         adminSearchRvAdapter.setOnItemClickListener(object : AdminSearchRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: SearchInformationEntity, position: Int) {
+                Log.d(TAG, "onItemClick: ")
                 val navController = findNavController()
                 navController.navigate(R.id.adminExhibitionFragment)
+                (activity as MainActivity).setStateFcm(true)
+                isAdminExhibitionOpen =true
+                adminViewModel.setIsReport(true)
                 exhibitionId = data.exhibitionId
             }
-
         })
 
         //recyclerView 페이징 처리
@@ -65,7 +74,7 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
-                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
                 if(rvPosition == totalCount && hasNextPage){
                     setSearchResultRvByPage(totalCount)
                 }
@@ -111,11 +120,15 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
 
     //recyclerView 페이징
     private fun setSearchResultRvByPage(totalCount:Int){
+        if(searchWord.isNullOrEmpty()){
+            return
+        }
         var addItemCount = 0
         runBlocking(Dispatchers.IO){
             val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),searchWord,searchPage)
             if(response.isSuccessful && response.body()!!.check){
-                searchList.addAll(response.body()!!.information.data)
+                adminSearchRvAdapter.exhibitionList.addAll(response.body()!!.information.data)
+//                searchList.addAll(response.body()!!.information.data)
                 addItemCount = response.body()!!.information.data.size
                 hasNextPage = response.body()!!.information.hasNextPage
             }
