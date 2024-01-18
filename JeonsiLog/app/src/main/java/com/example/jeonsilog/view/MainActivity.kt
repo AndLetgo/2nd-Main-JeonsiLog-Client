@@ -251,6 +251,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         when(type){
             0 -> exhibitionId = newTargetId
             1 -> newReviewId = newTargetId
+            4 -> newReviewId = newTargetId
         }
         val intent = Intent(this, ExtraActivity::class.java)
         startActivity(intent)

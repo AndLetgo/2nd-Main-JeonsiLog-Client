@@ -13,6 +13,7 @@ import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReplyId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +54,8 @@ class NotificationRvAdapter(private val notiList: List<AlarmEntity>, private val
                     }
                     "REPLY" -> {
                         // 해당 전시회 댓글 페이지로 이동
-                        (context as MainActivity).loadExtraActivity(1, data.clickId)
+                        newReplyId = data.targetId
+                        (context as MainActivity).loadExtraActivity(4, data.clickId)
                     }
                     "RATING" -> {
                         (context as MainActivity).loadExtraActivity(0, data.clickId)

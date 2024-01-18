@@ -45,6 +45,14 @@ class ExhibitionReplyRvAdapter(private val replyList: MutableList<GetReplyInform
                 .load(item.user.profileImgUrl)
                 .transform(CenterCrop(), RoundedCorners(80))
                 .into(binding.ivUserProfile)
+
+            binding.ivUserProfile.setOnClickListener{
+                (context as ExtraActivity).moveOtherUserProfile(item.user.userId, item.user.nickname)
+            }
+
+            binding.tvUserName.setOnClickListener {
+                (context as ExtraActivity).moveOtherUserProfile(item.user.userId, item.user.nickname)
+            }
         }
     }
 
