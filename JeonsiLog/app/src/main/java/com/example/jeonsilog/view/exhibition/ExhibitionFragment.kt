@@ -6,24 +6,21 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
@@ -35,13 +32,10 @@ import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
-import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
@@ -52,7 +46,6 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewI
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlin.NullPointerException
 
 class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.fragment_exhibition), DialogWithIllusInterface{
     private lateinit var exhibitionRvAdapter: ExhibitionReviewRvAdapter
@@ -63,8 +56,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private val exhibitionViewModel: ExhibitionViewModel by activityViewModels()
     private var check = true
     private var hasNextPage = true
-    private lateinit var preDrawListener: OnPreDrawListener
-
 
     override fun init() {
         isRefresh.observe(this){
@@ -128,8 +119,8 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         //전시장 상세정보
         binding.llExhibitionPlace.setOnClickListener {
-            newPlaceId = exhibitionInfoData!!.place.placeId
-            newPlaceName = exhibitionInfoData!!.place.placeName
+            newPlaceId = exhibitionInfoData!!.place.placeId!!
+            newPlaceName = exhibitionInfoData!!.place.placeName!!
             Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
         }
 
@@ -249,10 +240,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         }
 
-        Glide.with(requireContext())
-            .load(exhibitionInfoData?.imageUrl)
-            .transform(CenterCrop())
-            .into(binding.ivPosterImage)
+        if(!exhibitionInfoData?.imageUrl.isNullOrEmpty()){
+            Glide.with(requireContext())
+                .load(exhibitionInfoData?.imageUrl)
+                .transform(CenterCrop())
+                .into(binding.ivPosterImage)
+        }else{
+            Glide.with(requireContext())
+                .load(R.drawable.illus_empty_poster)
+                .transform(CenterInside())
+                .into(binding.ivPosterImage)
+        }
 
         binding.tvExhibitionName.text = exhibitionInfoData?.exhibitionName
         binding.tvAddress.text = exhibitionInfoData?.place?.address
@@ -312,10 +310,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                     }else{
                         runBlocking(Dispatchers.IO) {
                             val post = PostRatingRequest(thisExhibitionId, rating.toDouble())
-                            val response = RatingRepositoryImpl().postRating(encryptedPrefs.getAT(), post)
-                            if(response.isSuccessful && response.body()!!.check){
-                                Log.d("rating", "postRating: suceessful")
-                            }
+                            RatingRepositoryImpl().postRating(encryptedPrefs.getAT(), post)
                         }
                     }
                 }

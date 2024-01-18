@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_order"
+            android:layout_width="@dimen/item_24"
+            android:layout_height="wrap_content"
+            style="@style/L_bold"
+            android:textColor="@color/basic_black"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginVertical="@dimen/margin_16"
+            android:layout_marginStart="@dimen/margin_20"/>
+        <TextView
+            android:id="@+id/tv_exhibition_name"
+            android:layout_width="@dimen/item_0"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_edit_round"
+            style="@style/M_regular"
+            android:textColor="@color/basic_black"
+            android:paddingVertical="@dimen/margin_12"
+            android:paddingStart="@dimen/margin_12"
+            android:paddingEnd="@dimen/margin_48"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_order"
+            app:layout_constraintEnd_toStartOf="@id/ib_change_order"
+            android:layout_marginVertical="@dimen/margin_8"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_12"/>
+        <ImageButton
+            android:id="@+id/ib_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_edit_text"
+            android:background="@color/transparent"
+            app:layout_constraintTop_toTopOf="@id/tv_exhibition_name"
+            app:layout_constraintBottom_toBottomOf="@id/tv_exhibition_name"
+            app:layout_constraintEnd_toEndOf="@id/tv_exhibition_name"
+            android:layout_marginVertical="@dimen/margin_12"
+            android:layout_marginEnd="@dimen/margin_12"/>
+        <ImageButton
+            android:id="@+id/ib_change_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_admin_managing_order"
+            android:background="@color/basic_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginVertical="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_12"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

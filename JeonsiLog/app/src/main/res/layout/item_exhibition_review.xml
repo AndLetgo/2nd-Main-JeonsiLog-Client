@@ -58,8 +58,19 @@
                 app:srb_drawableFilled="@drawable/ic_rating_full"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ib_menu"
+                app:layout_constraintEnd_toStartOf="@id/tv_delete"
                 android:layout_marginEnd="@dimen/margin_8"/>
+            <TextView
+                android:id="@+id/tv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_delete"
+                style="@style/S_regular"
+                android:textColor="@color/gray_medium"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="@dimen/margin_2"/>
             <ImageButton
                 android:id="@+id/ib_menu"
                 android:layout_width="wrap_content"
@@ -69,7 +80,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginBottom="@dimen/margin_2"/>
+                android:layout_marginBottom="@dimen/margin_2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
         <TextView
             android:id="@+id/tv_review_content"
@@ -81,15 +92,6 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:textColor="@color/gray_dark"/>
-<!--        <TextView-->
-<!--            android:id="@+id/tv_more_info"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/exhibition_more_info"-->
-<!--            style="@style/M_bold"-->
-<!--            android:textColor="@color/gray_dark"-->
-<!--            app:layout_constraintEnd_toEndOf="@id/tv_review_content"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/tv_review_content"/>-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

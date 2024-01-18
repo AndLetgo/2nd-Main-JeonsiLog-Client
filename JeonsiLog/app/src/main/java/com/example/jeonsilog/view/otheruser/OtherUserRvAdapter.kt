@@ -1,13 +1,9 @@
 package com.example.jeonsilog.view.otheruser
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.rating.GetMyRatingsEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsEntity
 import com.example.jeonsilog.databinding.ItemOtherUserRatingBinding
@@ -15,8 +11,6 @@ import com.example.jeonsilog.databinding.ItemOtherUserReviewBinding
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.widget.utils.GlideApp
-import com.example.jeonsilog.widget.utils.GlobalApplication
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.SpannableStringUtil
 import kotlin.IllegalArgumentException
 

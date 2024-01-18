@@ -15,34 +15,27 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
-import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.databinding.ViewLoadPageDialogBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import retrofit2.Response
 import java.time.LocalDate
 
 
 class LoadPageDialog(private var selectedDate: LocalDate,private val listener: CommunicationListener,private var myEditText:String?) : DialogFragment() {
     private var _binding: ViewLoadPageDialogBinding? = null
     private val binding get() = _binding!!
-    val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
+    private val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
     private lateinit var loadPageRvAdapter: LoadPageRvAdapter
     private var loadPageRvList = mutableListOf<SearchInformationEntity>()
     private var exhibitionPage = 0
@@ -66,12 +59,12 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         return binding.root
     }
 
-    fun checkEmptyListFalse(){
+    private fun checkEmptyListFalse(){
         binding.ivEmptyLoad.isVisible=false
         binding.tvEmptyLoad01.isVisible=false
         binding.tvEmptyLoad02.isVisible=false
     }
-    fun checkEmptyListTrue(){
+    private fun checkEmptyListTrue(){
         binding.ivEmptyLoad.setBackgroundResource(R.drawable.illus_empty_search)
         binding.ivEmptyLoad.isVisible=true
         binding.tvEmptyLoad01.isVisible=true
@@ -138,7 +131,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         showKeyboard()
     }
 
-    fun setOnEditorActionListener(){
+    private fun setOnEditorActionListener(){
         binding.etLoadPage.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
@@ -179,7 +172,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
         }
         loadPageRvAdapter.notifyDataSetChanged()
     }
-    fun loadList(){
+    private fun loadList(){
         if (hasNextPage && hasMaxPage){
             runBlocking(Dispatchers.IO) {
                 val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,exhibitionPage)
@@ -219,7 +212,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
 
         loadPageRvAdapter.notifyDataSetChanged()
     }
-    fun loadShortList(){
+    private fun loadShortList(){
         if (hasNextPage && hasMaxPage){
             runBlocking(Dispatchers.IO) {
                 val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),edittext,exhibitionPage)
@@ -250,7 +243,7 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
             }
         }
     }
-    fun setEditBoxDeleteBt(){
+    private fun setEditBoxDeleteBt(){
         //edittext x 버튼 제어
         binding.etLoadPage.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
@@ -258,7 +251,6 @@ class LoadPageDialog(private var selectedDate: LocalDate,private val listener: C
             }
             override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
                 // 텍스트가 변경될 때 동작 (실시간 감지)
-                val newText = charSequence.toString()
                 updateClearButtonVisibility(charSequence?.isNotEmpty() == true)
                 // 여기에 텍스트가 변경될 때 수행할 동작을 추가
             }

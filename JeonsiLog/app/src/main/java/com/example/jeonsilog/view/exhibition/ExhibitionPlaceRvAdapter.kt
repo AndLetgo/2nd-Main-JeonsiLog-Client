@@ -22,7 +22,7 @@ class ExhibitionPlaceRvAdapter(private val placeList: List<GetPlacesInformationE
         RecyclerView.ViewHolder(binding.root){
         fun bind(item: GetPlacesInformationEntity){
             binding.tvExhibitionName.text = item.exhibitionName
-            val date = DateUtil().editStringDate(item!!.startDate) + " ~ " + DateUtil().editStringDate(item!!.endDate)
+            val date = DateUtil().editStringDate(item.startDate) + " ~ " + DateUtil().editStringDate(item.endDate)
             binding.tvExhibitionDate.text = date
 
             var operatingKeyword = ""

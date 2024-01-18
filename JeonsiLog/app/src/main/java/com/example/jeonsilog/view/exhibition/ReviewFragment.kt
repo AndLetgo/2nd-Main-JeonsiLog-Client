@@ -28,7 +28,6 @@ import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
@@ -36,9 +35,7 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReplyId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import okhttp3.internal.notify
 import java.time.LocalDateTime
-import java.util.Date
 
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_review), DialogWithIllusInterface {
     private lateinit var exhibitionReplyRvAdapter: ExhibitionReplyRvAdapter
@@ -96,7 +93,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         binding.ibMenu.setOnClickListener {
             val popupMenu: PopupMenu
-            if(reviewInfo.userId == GlobalApplication.encryptedPrefs.getUI()){
+            if(reviewInfo.userId == encryptedPrefs.getUI()){
                 popupMenu = DialogUtil().setMenuButton(it, 0)
                 popupMenu.setOnMenuItemClickListener{
                     showCustomDialog("삭제_감상평", reviewInfo.reviewId,-1, 1)
@@ -171,7 +168,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     }
     private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
         binding.tvUserName.text = review.nickname
-        if(review.rate==null || review.rate==0.0){
+        if(review.rate==0.0){
             binding.brbExhibitionReview.visibility = View.GONE
         }else{
             binding.brbExhibitionReview.visibility = View.VISIBLE
@@ -231,7 +228,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     }
 
     private fun postReply(){
-        var replyContent =""
+        var replyContent :String
         runBlocking(Dispatchers.IO) {
             replyContent = binding.etWritingReply.text.toString()
             val body = PostReplyRequest(reviewInfo.reviewId, replyContent)

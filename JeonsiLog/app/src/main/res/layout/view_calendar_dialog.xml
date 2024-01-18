@@ -37,7 +37,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_20"
                 android:layout_marginTop="@dimen/margin_20"
-                android:text="2023년 11월"
                 android:textColor="@color/basic_black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_20"
                 android:layout_marginEnd="@dimen/margin_20"
-                android:text="이동"
+                android:text="@string/btn_move"
                 android:textColor="@color/basic_point"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

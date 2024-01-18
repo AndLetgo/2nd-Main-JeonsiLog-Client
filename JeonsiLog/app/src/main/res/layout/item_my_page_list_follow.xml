@@ -37,7 +37,7 @@
             android:id="@+id/ib_mypage_list_follower_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete_follower"
+            android:src="@drawable/ic_delete"
             android:background="@color/transparent"
             app:layout_constraintTop_toTopOf="@id/tv_mypage_list_follow_nick"
             app:layout_constraintBottom_toBottomOf="@id/tv_mypage_list_follow_nick"

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="112dp"
-    android:layout_height="54dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="@dimen/radius_8">
-
-</androidx.cardview.widget.CardView>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_12"
+    android:textColor="@color/basic_black"
+    android:background="@color/basic_white"
+    style="@style/M_regular">
+</TextView>

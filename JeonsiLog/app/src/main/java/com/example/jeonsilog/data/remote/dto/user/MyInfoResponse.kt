@@ -12,6 +12,8 @@ data class MyInfoResponse(
 data class MyInfoInformation(
     @SerializedName("userId")
     var userId: Int,
+    @SerializedName("isAdmin")
+    val isAdmin: Boolean,
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImgUrl")

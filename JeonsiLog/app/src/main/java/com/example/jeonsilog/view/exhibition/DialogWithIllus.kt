@@ -1,6 +1,5 @@
 package com.example.jeonsilog.view.exhibition
 
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -17,19 +16,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.databinding.DialogWithIllusBinding
 import com.example.jeonsilog.repository.reply.ReplyRepositoryImpl
 import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
-import com.example.jeonsilog.view.home.HomeRvAdapter
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
-import com.kakao.sdk.common.KakaoSdk.type
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -45,15 +40,9 @@ class DialogWithIllus(
         super.onStart()
 
         val widthInDp = 324
-        val heightInDp = 242
 
         val widthInPixels = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, widthInDp.toFloat(),
-            resources.displayMetrics
-        ).toInt()
-
-        val heightInPixels = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, heightInDp.toFloat(),
             resources.displayMetrics
         ).toInt()
 

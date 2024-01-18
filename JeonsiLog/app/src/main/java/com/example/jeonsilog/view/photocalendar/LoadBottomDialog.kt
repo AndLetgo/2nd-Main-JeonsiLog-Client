@@ -1,7 +1,6 @@
 package com.example.jeonsilog.view.photocalendar
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -14,12 +13,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -29,28 +26,21 @@ import androidx.fragment.app.DialogFragment
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.calendar.DeletePhotoRequest
 import com.example.jeonsilog.data.remote.dto.calendar.GetPhotoInformation
-import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromGalleryRequest
 import com.example.jeonsilog.data.remote.dto.calendar.UploadImageReqEntity
 import com.example.jeonsilog.databinding.ViewLoadDialogBinding
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
+import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.ImageUtil
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
-import com.google.gson.JsonObject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.time.LocalDate
@@ -58,8 +48,7 @@ import java.time.format.DateTimeFormatter
 
 
 class LoadBottomDialog(private var selectedDate: LocalDate, private val listener: CommunicationListener) : DialogFragment() {
-    val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
-    val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 2
+    private val MY_PERMISSIONS_REQUEST_READ_MEDIA_IMAGES = 2
 
 
     private var _binding: ViewLoadDialogBinding? = null
@@ -89,7 +78,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         setView()
 
     }
-    fun setView(){
+    private fun setView(){
         // 다이얼로그의 배경을 투명하게 설정
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         // 다이얼로그의 외부 터치 이벤트 처리 (다이얼로그가 닫히지 않도록 함)
@@ -114,7 +103,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         params.height = ViewGroup.LayoutParams.MATCH_PARENT
         binding.root.layoutParams = params
     }
-    fun setDimClick(){
+    private fun setDimClick(){
         binding.ivDimmingZone.setOnClickListener {
             dismiss()
         }
@@ -125,7 +114,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         // 받아온 날짜를 해당 포맷으로 변경
         return date.format(formatter)
     }
-    fun SetDeleteImage(){
+    private fun SetDeleteImage(){
         lateinit var  list: List<GetPhotoInformation>
         var yearMonth = yearMonthFromDate(selectedDate)
         runBlocking(Dispatchers.IO) {
@@ -152,7 +141,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         //클릭설정
         binding.btSetDeleteImage.setOnClickListener {
             runBlocking(Dispatchers.IO) {
-                val body= DeletePhotoRequest(monthYearFromDate(selectedDate))
+                val body= DeletePhotoRequest(DateUtil().monthYearFromDate(selectedDate))
                 val response = CalendarRepositoryImpl().deletePhoto(encryptedPrefs.getAT(),body)
                 if(response.isSuccessful && response.body()!!.check){
                 }
@@ -163,7 +152,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
             }
         }
     }
-    fun setBtLoadPoster(){
+    private fun setBtLoadPoster(){
         binding.btLoadPoster.setOnClickListener {
             // 기존 다이얼로그 닫기
             dismiss()
@@ -172,7 +161,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
             loadPageDialog.show(parentFragmentManager, "LoadPageDialogTag")
         }
     }
-    fun setBtLoadImage() {
+    private fun setBtLoadImage() {
         binding.btLoadImage.setOnClickListener {
             checkPermissionAndOpenGallery()
         }
@@ -207,7 +196,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         }
 
     }
-    fun requestStoragePermission(){
+    private fun requestStoragePermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     requireActivity(),
@@ -251,7 +240,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
     }
 
 
-    fun accessGallery(){
+    private fun accessGallery(){
         // 갤러리 열기 Intent 생성
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         launcher.launch(intent)
@@ -278,7 +267,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         val imageRequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         val filePart = MultipartBody.Part.createFormData("img", file.name, imageRequestBody)
 
-        val uploadImageReq = UploadImageReqEntity(monthYearFromDate(selectedDate))
+        val uploadImageReq = UploadImageReqEntity(DateUtil().monthYearFromDate(selectedDate))
         val requestJson = Gson().toJson(uploadImageReq)
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(),requestJson)
 
@@ -294,11 +283,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
             dismissListener?.onDismiss()
         }
     }
-    private fun monthYearFromDate(date: LocalDate): String{
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        // 받아온 날짜를 해당 포맷으로 변경
-        return date.format(formatter)
-    }
+
     fun setOnDismissListener(listener: OnDismissListener) {
         dismissListener = listener
     }

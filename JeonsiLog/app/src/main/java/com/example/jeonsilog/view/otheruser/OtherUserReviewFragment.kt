@@ -100,7 +100,8 @@ class OtherUserReviewFragment(private val vm: OtherUserViewModel, private val ot
                             exhibitionId = temp.exhibitionId,
                             exhibitionName = "[${temp.exhibitionName}]",
                             contents = temp.contents,
-                            exhibitionImgUrl = temp.exhibitionImgUrl
+                            exhibitionImgUrl = temp.exhibitionImgUrl,
+                            createdDate = temp.createdDate
                         )
                     )
                 }

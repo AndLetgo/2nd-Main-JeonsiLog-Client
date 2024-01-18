@@ -25,6 +25,7 @@ class GlobalApplication: Application() {
         var newPlaceId: Int = 0
         var newPlaceName: String = ""
         var newReviewId: Int = 0
+        var isAdminExhibitionOpen:Boolean = false
         var newReplyId: Int = 0
     }
 

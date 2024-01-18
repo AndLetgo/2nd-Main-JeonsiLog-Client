@@ -13,7 +13,6 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
-import kotlinx.coroutines.runBlocking
 
 
 class RecordItemAdapter(
@@ -45,7 +44,6 @@ class RecordItemAdapter(
             val listIndex=viewModel.itemlist.value?.indexOf(currentItem)
             viewModel.removeItemAt(listIndex!!)
             prefs.setRecorList(viewModel.itemlist.value!!)
-            Log.d("reMoveTag", "${viewModel.itemlist.value!!}: ")
             callback.onAdapterItemClicked()
         }
 
@@ -54,18 +52,6 @@ class RecordItemAdapter(
     interface AdapterCallback{
         fun onAdapterItemClicked()
     }
-
-
-//    override fun add(item: String?) {
-//        //=======================================================================================//
-//        if (item != null) {
-//            if (count >= MAX_ITEMS) {
-//                remove(getItem(count - 1))
-//            }
-//            super.insert(item, 0)
-//        }
-//        //=======================================================================================//
-//    }
 
 }
 

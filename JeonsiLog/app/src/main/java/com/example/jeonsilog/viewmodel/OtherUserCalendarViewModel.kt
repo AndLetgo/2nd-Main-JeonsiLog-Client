@@ -8,7 +8,6 @@ import com.example.jeonsilog.data.remote.dto.calendar.GetPhotoInformation
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -40,9 +39,6 @@ class OtherUserCalendarViewModel: ViewModel() {
     val isOpen: LiveData<Boolean>
         get() = _isOpen
 
-    fun setIsOpen(p: Boolean){
-        _isOpen.value = p
-    }
 
     fun nextMonth() {
         setSelectedDate(LocalDate.of(selectedDate.value!!.slice(0..3).toInt(), selectedDate.value!!.slice(6..7).toInt(), 1).plusMonths(1))

@@ -31,7 +31,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/M_regular"
-                android:text="UserName"
                 android:textColor="@color/gray_dark"
                 android:layout_marginStart="@dimen/margin_8"
                 android:gravity="center_vertical" />
@@ -54,6 +53,18 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_menu"
             android:background="@color/basic_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_24" />
+        <TextView
+            android:id="@+id/tv_btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="@string/btn_delete"
+            style="@style/S_regular"
+            android:textColor="@color/gray_medium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_16"

@@ -1,5 +1,6 @@
 package com.example.jeonsilog.widget.utils
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -25,9 +26,13 @@ class DateUtil {
         }
     }
 
-    fun editStringDate(date:String):String{
-        var newDate = ""
-        newDate = date.substring(0,4) +"."+date.substring(4,6)+ "."+date.substring(6)
-        return newDate
+    fun editStringDate(date: String): String {
+        return date.substring(0, 4) + "." + date.substring(4, 6) + "." + date.substring(6)
+    }
+
+    fun monthYearFromDate(date: LocalDate): String{
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        // 받아온 날짜를 해당 포맷으로 변경
+        return date.format(formatter)
     }
 }

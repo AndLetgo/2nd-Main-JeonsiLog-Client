@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingEntity
-import com.example.jeonsilog.data.remote.dto.follow.GetOtherFollowingInformation
 import com.example.jeonsilog.databinding.FragmentOtherUserListFollowingBinding
 import com.example.jeonsilog.repository.follow.FollowRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlobalApplication

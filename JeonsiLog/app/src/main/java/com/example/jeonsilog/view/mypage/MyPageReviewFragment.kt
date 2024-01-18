@@ -88,7 +88,8 @@ class MyPageReviewFragment: BaseFragment<FragmentMyPageReviewBinding>(R.layout.f
                             exhibitionId = temp.exhibitionId,
                             exhibitionName = "[${temp.exhibitionName}]",
                             contents = temp.contents,
-                            exhibitionImgUrl = temp.exhibitionImgUrl
+                            exhibitionImgUrl = temp.exhibitionImgUrl,
+                            createdDate = temp.createdDate
                         )
                     )
                 }

@@ -12,7 +12,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
-import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 
@@ -29,11 +28,12 @@ class ExhibitionReviewRvAdapter(
             if(item.userId == encryptedPrefs.getUI()){
                 listener?.saveUserReview(item, position)
             }
+            binding.tvDelete.visibility = View.INVISIBLE
 
             binding.tvUserName.text = item.nickname
             binding.tvReviewContent.text = item.contents
             Log.d("TAG", "bind: item.rate: ${item.rate}")
-            if(item.rate==null || item.rate==0.0){
+            if(item.rate==0.0){
                 binding.brbExhibitionReviewRating.visibility = View.GONE
             }else{
                 binding.brbExhibitionReviewRating.visibility = View.VISIBLE

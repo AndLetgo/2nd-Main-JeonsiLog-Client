@@ -8,7 +8,6 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentOtherUserBinding
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.viewmodel.OtherUserViewModel
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -25,7 +24,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
 
     override fun init() {
         try{
-            (activity as MainActivity).setStateBn(false)
+            (activity as MainActivity).setStateBn(false, "user")
         }catch (e:ClassCastException){
 
         }

@@ -20,7 +20,7 @@ class MyPageNickEditDialogViewModel: ViewModel() {
     val isNickFocused: LiveData<Boolean>
         get() = _isNickFocused
 
-    fun onNickFocusChange(v: View?, hasFocus: Boolean) {
+    fun onNickFocusChange(v:View?, hasFocus: Boolean) {
         _isNickFocused.value = hasFocus
     }
 

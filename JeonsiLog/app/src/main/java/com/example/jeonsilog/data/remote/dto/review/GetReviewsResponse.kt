@@ -3,6 +3,7 @@ package com.example.jeonsilog.data.remote.dto.review
 import com.google.gson.annotations.SerializedName
 
 data class GetReviewsResponse(
+
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
@@ -10,10 +11,10 @@ data class GetReviewsResponse(
 )
 
 data class GetReviewsInformation(
-    @SerializedName("hasNextPage")
-    val hasNextPage: Boolean,
     @SerializedName("numReview")
     val numReview: Int,
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
     @SerializedName("data")
     val data: List<GetReviewsEntity>
 )
@@ -26,7 +27,9 @@ data class GetReviewsEntity(
     @SerializedName("exhibitionName")
     val exhibitionName: String,
     @SerializedName("exhibitionImgUrl")
-    val exhibitionImgUrl: String,
+    val exhibitionImgUrl: String?,
     @SerializedName("contents")
-    val contents: String
+    val contents: String,
+    @SerializedName("createdDate")
+    val createdDate: String
 )

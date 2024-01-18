@@ -28,6 +28,7 @@ class UserRepositoryImpl: UserRepository {
 
         return if(response.isSuccessful && response.body()?.check == true){
             encryptedPrefs.setNN(response.body()!!.information.nickname)
+            encryptedPrefs.setCheckAdmin(response.body()!!.information.isAdmin)
             encryptedPrefs.setUI(response.body()!!.information.userId)
             encryptedPrefs.setURL(response.body()!!.information.profileImgUrl)
             encryptedPrefs.setNumFollowing(response.body()!!.information.numFollowing)
@@ -143,15 +144,7 @@ class UserRepositoryImpl: UserRepository {
     override suspend fun changeFcmToken(token: String, requestBody: ChangeFcmTokenRequest): Boolean {
         val response = service.changeFcmToken("Bearer $token", requestBody)
 
-        return if(response.isSuccessful && response.body()?.check == true){
-            //encryptedPrefs.setNN(requestBody.nickname)
-            response
-            true
-        } else {
-            Log.e(tag, "닉네임 수정 실패")
-            response
-            false
-        }
+        return response.isSuccessful && response.body()?.check == true
     }
 
 

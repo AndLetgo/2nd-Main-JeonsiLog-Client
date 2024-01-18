@@ -26,20 +26,12 @@ class CryptedPreferenceUtil(context: Context) {
         encryptedPrefs.edit().clear().apply()
     }
 
-    fun clearExceptToken(){
-        val editor = encryptedPrefs.edit()
-
-        for ((key, _) in encryptedPrefs.all) {
-            if (key != "at" && key != "rt") {
-                editor.remove(key)
-            }
-        }
-
-        editor.apply()
-    }
-
     fun setAT(p: String){
         encryptedPrefs.edit().putString("at", p).apply()
+    }
+
+    fun setCheckAdmin(p: Boolean){
+        encryptedPrefs.edit().putBoolean("checkAdmin", p).apply()
     }
 
     fun setRT(p: String){
@@ -70,16 +62,12 @@ class CryptedPreferenceUtil(context: Context) {
         encryptedPrefs.edit().putInt("numFollower", p).apply()
     }
 
-    fun setIsRecvFollowing(p: Boolean){
-        encryptedPrefs.edit().putBoolean("isRecvFollowing", p).apply()
-    }
-
-    fun setIsRecvActive(p: Boolean){
-        encryptedPrefs.edit().putBoolean("isRecvActive", p).apply()
-    }
-
     fun getAT(): String{
         return encryptedPrefs.getString("at", null).toString()
+    }
+
+    fun getCheckAdmin(): Boolean{
+        return encryptedPrefs.getBoolean("checkAdmin", false)
     }
 
     fun getRT(): String {
@@ -104,13 +92,5 @@ class CryptedPreferenceUtil(context: Context) {
 
     fun getNumFollower(): Int {
         return encryptedPrefs.getInt("numFollower", 0)
-    }
-
-    fun getIsRecvFollowing(): Boolean {
-        return encryptedPrefs.getBoolean("isRecvFollowing", true)
-    }
-
-    fun getIsRecvActive(): Boolean {
-        return encryptedPrefs.getBoolean("isRecvActive", true)
     }
 }

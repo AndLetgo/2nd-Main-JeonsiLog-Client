@@ -10,13 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/margin_24"
-        android:paddingVertical="@dimen/margin_12">
+        android:paddingVertical="@dimen/margin_12"
+        android:background="@color/basic_white">
 
         <ImageView
             android:id="@+id/iv_poster"
             android:layout_width="@dimen/item_84"
             android:layout_height="@dimen/item_108"
-            android:src="@color/gray_light_medium"
+            android:background="@drawable/illus_empty_poster"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

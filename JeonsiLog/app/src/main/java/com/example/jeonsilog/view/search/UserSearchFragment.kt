@@ -19,8 +19,8 @@ import kotlinx.coroutines.runBlocking
 class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUserSearchBinding>(R.layout.fragment_user_search) {
 
     private lateinit var userItemAdapter: UserSearchItemAdapter
-    val UserRvList= mutableListOf<SearchUserInformationEntity>()
-    var itemPage=0
+    private val UserRvList= mutableListOf<SearchUserInformationEntity>()
+    private var itemPage=0
     var hasNextPage=true
 
 
@@ -46,13 +46,13 @@ class UserSearchFragment(private val edittext:String) : BaseFragment<FragmentUse
             }
         })
     }
-    fun checkEmptyListTrue(){
+    private fun checkEmptyListTrue(){
         binding.ivEmpty.isGone=true
         binding.tvEmpty01.isGone=true
         binding.tvEmpty02.isGone=true
         Log.d("setUserRBPP", "checkEmptyListTrue: ")
     }
-    fun checkEmptyListFalse(){
+    private fun checkEmptyListFalse(){
         binding.ivEmpty.isGone=false
         binding.tvEmpty01.isGone=false
         binding.tvEmpty02.isGone=false
