@@ -68,6 +68,10 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
                 }
             }
         })
+
+        adminViewModel.reviewItem.observe(this){
+            binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${adminViewModel.reviewItem.value!!.item.numReply}"
+        }
     }
     private fun getReviewInfo(reviewId: Int):GetReviewsExhibitionInformationEntity?{
         var review: GetReviewsExhibitionInformationEntity? = null
@@ -111,6 +115,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
                     ReplyRepositoryImpl().deleteReply(encryptedPrefs.getAT(), replyId)
                 }
                 adminReviewReplyRvAdapter.removeItem(position)
+                adminViewModel.setReviewItemNumReply(false)
                 binding.rvExhibitionReviewReply.adapter = adminReviewReplyRvAdapter
             }
         })

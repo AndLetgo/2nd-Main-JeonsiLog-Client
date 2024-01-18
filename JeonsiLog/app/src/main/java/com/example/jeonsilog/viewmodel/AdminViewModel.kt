@@ -127,4 +127,15 @@ class AdminViewModel:ViewModel() {
     fun setCheckListCount(check:Boolean){
         _checkListCount.value = check
     }
+
+    //댓글 Counting 관리
+    fun setReviewItemNumReply(plus:Boolean){
+        val item = reviewItem.value
+        if(plus){
+            item!!.item.numReply++
+        }else{
+            item!!.item.numReply--
+        }
+        _reviewItem.value = item!!
+    }
 }

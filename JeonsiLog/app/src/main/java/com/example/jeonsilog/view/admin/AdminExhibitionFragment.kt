@@ -100,6 +100,12 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         if(adminViewModel.deletedReviewPosition.value != null){
             deleteReview(adminViewModel.deletedReviewPosition.value!!)
         }
+        //댓글 삭제하고 돌아왔을 때
+        if(adminViewModel.reviewItem.value!=null){
+            val item = adminViewModel.reviewItem.value!!
+            exhibitionRvAdapter.replaceItem(item.item, item.position)
+            binding.rvExhibitionReview.adapter = exhibitionRvAdapter
+        }
 
         //전시회 이름
         adminViewModel.exhibitionName.observe(this){

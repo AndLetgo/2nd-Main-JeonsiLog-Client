@@ -90,4 +90,11 @@ class AdminExhibitionReviewRvAdapter(private val reviewList:MutableList<GetRevie
         reviewList.removeAt(position)
         notifyItemRemoved(position)
     }
+
+    fun replaceItem(review: GetReviewsExhibitionInformationEntity, position: Int){
+        if(reviewList.size>0){
+            reviewList[position] = review
+            notifyItemChanged(position)
+        }
+    }
 }
