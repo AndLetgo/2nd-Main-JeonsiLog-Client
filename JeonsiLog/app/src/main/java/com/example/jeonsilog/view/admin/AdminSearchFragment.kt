@@ -32,6 +32,7 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
     private var searchPage = 0
     private var hasNextPage = true
     private var searchWord = ""
+    val TAG = "admin"
 
     override fun init() {
         GlobalApplication.isRefresh.observe(this){
@@ -42,6 +43,7 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
         }
 
         binding.lifecycleOwner = this
+
         searchList = mutableListOf()
         adminSearchRvAdapter = AdminSearchRvAdapter(searchList, requireContext())
         binding.rvSearchResult.adapter = adminSearchRvAdapter
@@ -65,7 +67,7 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
                 val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                 val totalCount = recyclerView.adapter?.itemCount?.minus(1)
                 if(rvPosition == totalCount && hasNextPage){
-                    setSearchResultRvByPage(totalCount)
+                    setSearchResultRvByPage()
                 }
             }
         })
@@ -99,25 +101,23 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
         }else if(regexPattern.containsMatchIn(searchWord)&&searchWord.length<=2){
             Toast.makeText(context, getString(R.string.toast_search_check_regex), Toast.LENGTH_SHORT).show()
         }else{
-            searchList = mutableListOf()
+            adminSearchRvAdapter.exhibitionList.removeAll(searchList)
             searchPage = 0
             hasNextPage = true
-            setSearchResultRvByPage(0)
+            setSearchResultRvByPage()
             DialogUtil().hideSoftKeyboard(requireActivity())
         }
     }
 
     //recyclerView 페이징
-    private fun setSearchResultRvByPage(totalCount:Int){
+    private fun setSearchResultRvByPage(){
         if(searchWord.isNullOrEmpty()){
             return
         }
-        var addItemCount = 0
         runBlocking(Dispatchers.IO){
             val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),searchWord,searchPage)
             if(response.isSuccessful && response.body()!!.check){
                 adminSearchRvAdapter.exhibitionList.addAll(response.body()!!.information.data)
-                addItemCount = response.body()!!.information.data.size
                 hasNextPage = response.body()!!.information.hasNextPage
             }
         }
@@ -126,7 +126,8 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
         }else{
             binding.ivEmptySearchNotResult.visibility = View.GONE
         }
-        adminSearchRvAdapter.notifyItemRangeInserted(totalCount, addItemCount)
+        adminSearchRvAdapter.notifyDataSetChanged()
         searchPage++
     }
+
 }

@@ -14,7 +14,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 
 class AdminSearchRvAdapter(
-    val exhibitionList:MutableList<SearchInformationEntity>, private val context: Context):
+    var exhibitionList:MutableList<SearchInformationEntity>, private val context: Context):
     RecyclerView.Adapter<AdminSearchRvAdapter.RecycleViewHolder>() {
     private var listener: OnItemClickListener? = null
 
@@ -92,5 +92,9 @@ class AdminSearchRvAdapter(
 
     fun setOnItemClickListener(listener: OnItemClickListener){
         this.listener = listener
+    }
+
+    fun notifyList(startPosition:Int, itemCount:Int){
+        notifyList(startPosition, itemCount)
     }
 }

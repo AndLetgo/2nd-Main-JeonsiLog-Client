@@ -48,11 +48,14 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
             }
 
             if(operatingKeyword!=""){
+                binding.tvKeywordFirst.visibility = View.VISIBLE
+                binding.tvKeywordSecond.visibility = View.VISIBLE
                 binding.tvKeywordFirst.text = operatingKeyword
                 binding.tvKeywordSecond.text = priceKeyword
             }else{
                 if(priceKeyword!=""){
                     binding.tvKeywordSecond.visibility = View.INVISIBLE
+                    binding.tvKeywordFirst.visibility = View.VISIBLE
                     binding.tvKeywordFirst.text = priceKeyword
                 }else {
                     binding.tvKeywordFirst.visibility = View.INVISIBLE
