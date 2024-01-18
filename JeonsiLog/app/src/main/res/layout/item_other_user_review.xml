@@ -19,7 +19,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="@dimen/margin_8"
-            android:background="@color/gray_light_medium"
+            android:background="@drawable/illus_empty_poster"
             tools:ignore="ContentDescription" />
 
         <TextView
