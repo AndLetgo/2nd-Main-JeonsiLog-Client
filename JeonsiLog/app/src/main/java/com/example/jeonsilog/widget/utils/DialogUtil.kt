@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
-import androidx.fragment.app.FragmentManager
 import com.example.jeonsilog.R
 
 class DialogUtil {

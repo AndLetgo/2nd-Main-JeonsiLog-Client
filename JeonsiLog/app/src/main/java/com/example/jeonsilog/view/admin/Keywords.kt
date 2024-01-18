@@ -1,4 +1,4 @@
-package com.example.jeonsilog.widget.utils
+package com.example.jeonsilog.view.admin
 
 enum class OperatingKeyword(val type:String) {
     ON_DISPLAY("ON_DISPLAY"),

@@ -17,9 +17,6 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReplyId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 class NotificationRvAdapter(private val notiList: List<AlarmEntity>, private val context: Context): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class TypeActivityViewHolder(private val binding: ItemNotiActivityBinding): RecyclerView.ViewHolder(binding.root) {

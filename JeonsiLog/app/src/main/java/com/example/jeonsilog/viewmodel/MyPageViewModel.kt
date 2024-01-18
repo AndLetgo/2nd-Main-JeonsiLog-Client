@@ -39,7 +39,6 @@ class MyPageViewModel: ViewModel() {
         get() = _flag
 
     fun getMyInfo(){
-        Log.d("vm", "getMyInfo")
         runBlocking(Dispatchers.IO) {
             UserRepositoryImpl().getMyInfo(encryptedPrefs.getAT())
         }
@@ -47,7 +46,6 @@ class MyPageViewModel: ViewModel() {
     }
 
     private fun setInfo(){
-        Log.d("vm", "setInfo")
         _nick.value = encryptedPrefs.getNN()
         _profileImg.value = encryptedPrefs.getURL()
         _following.value = encryptedPrefs.getNumFollowing().toString()

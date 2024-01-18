@@ -2,7 +2,6 @@ package com.example.jeonsilog.view.admin
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -10,11 +9,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsPlaceEntity
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionSequenceRequest
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchByNameEntity
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.exhibition.UpdateSequenceInfo
 import com.example.jeonsilog.databinding.FragmentAdminManagingBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
@@ -24,7 +20,6 @@ import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlin.math.log
 
 class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layout.fragment_admin_managing) {
     private lateinit var adminManagingRvAdapter : AdminManagingRvAdapter
@@ -68,7 +63,7 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
             }
         }
 
-        binding.etSearchRecord.setOnItemClickListener { parent, view, position, id ->
+        binding.etSearchRecord.setOnItemClickListener { _, _, _, _ ->
             var searchedItem = SearchByNameEntity(0,"")
 
             selectedExhibitionName = binding.etSearchRecord.text.toString()

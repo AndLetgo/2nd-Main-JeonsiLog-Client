@@ -54,7 +54,6 @@ import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewI
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import java.net.URLDecoder
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.inflate(it)}) {
@@ -314,7 +313,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 .commit()
         }
     }
-    fun moveNotificationFragment(action:String){
+    private fun moveNotificationFragment(action:String){
         val fragment = NotificationFragment(action)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_main, fragment)
@@ -342,7 +341,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     fun setBottomNavCurrentItem(index:Int){
         binding.bnvMain.menu.getItem(index).isChecked = true
     }
-    fun getToken(){
+    private fun getToken(){
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 //Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -394,7 +393,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             Log.d("requestPermissionLauncher", "뭐지뭐지")
         }
     }
-    fun showFcmDialog(fragmentManager: FragmentManager) {
+    private fun showFcmDialog(fragmentManager: FragmentManager) {
         val dialog = FcmDialog()
         dialog.show(fragmentManager, "FcmDialog")
     }

@@ -12,10 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemExhibitionReviewBinding
-import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.widget.utils.DateUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 
 class AdminExhibitionReviewRvAdapter(private val reviewList:MutableList<GetReviewsExhibitionInformationEntity>, private val context:Context):
     RecyclerView.Adapter<AdminExhibitionReviewRvAdapter.RecycleViewHolder>() {

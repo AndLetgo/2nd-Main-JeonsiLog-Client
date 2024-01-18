@@ -8,11 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
-import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 
 class AdminSearchRvAdapter(
@@ -25,12 +23,12 @@ class AdminSearchRvAdapter(
         fun bind(item: SearchInformationEntity){
             Log.d("search", "bind: item.exhibitionName: ${item.exhibitionName}")
             binding.tvTitle.text = item.exhibitionName
-            var address = ""
-//            if(item.place.placeAddress != null){
-//                val addressList = item.place.placeAddress.split(" ")
-//                address = "${addressList[0]} ${addressList[1]}"
-//                binding.tvAddress.text = address
-//            }
+
+            if(item.place.placeAddress != null){
+                val addressList = item.place.placeAddress.split(" ")
+                val address = "${addressList[0]} ${addressList[1]}"
+                binding.tvAddress.text = address
+            }
 
             if(item.place.placeName !=null){
                 binding.tvPlace.text = item.place.placeName
@@ -59,17 +57,10 @@ class AdminSearchRvAdapter(
                 }
             }
 
-            if(item.imageUrl != null){
-                Glide.with(context)
-                    .load(item.imageUrl)
-                    .transform(CenterCrop(), RoundedCorners(16))
-                    .into(binding.ivPoster)
-            }else{
-                Glide.with(context)
-                    .load(R.drawable.illus_empty_poster)
-                    .transform(CenterInside(), RoundedCorners(16))
-                    .into(binding.ivPoster)
-            }
+            Glide.with(context)
+                .load(item.imageUrl)
+                .transform(CenterCrop(), RoundedCorners(16))
+                .into(binding.ivPoster)
 
         }
     }

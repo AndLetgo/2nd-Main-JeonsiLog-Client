@@ -1,15 +1,11 @@
 package com.example.jeonsilog.view.admin
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchByNameEntity
 import com.example.jeonsilog.databinding.ItemAdminManagingHomeBinding
-import com.example.jeonsilog.viewmodel.AdminViewModel
 
 class AdminManagingRvAdapter(
     private val exhibitionList:MutableList<SearchByNameEntity>, private val context: Context):

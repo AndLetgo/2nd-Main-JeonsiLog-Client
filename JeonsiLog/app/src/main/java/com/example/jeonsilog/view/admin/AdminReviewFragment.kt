@@ -25,8 +25,6 @@ import com.example.jeonsilog.viewmodel.UpdateReviewItem
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -75,7 +73,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
 
         adminViewModel.reviewItem.observe(this){
             if(it!=null){
-                binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${it!!.item.numReply}"
+                binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${it.item.numReply}"
             }
         }
     }

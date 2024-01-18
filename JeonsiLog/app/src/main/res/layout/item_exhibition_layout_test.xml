@@ -29,7 +29,6 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="24dp"
             android:textSize="16sp"
-            android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/iv_exhibition_img"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +39,6 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:textSize="16sp"
-            android:text="TextView"
             app:layout_constraintStart_toEndOf="@+id/iv_exhibition_img"
             app:layout_constraintTop_toBottomOf="@+id/tv_exhibition_name" />
 
@@ -50,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
-            android:text="TextView"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/iv_exhibition_img"
             app:layout_constraintTop_toBottomOf="@+id/tv_exhibition_location" />
@@ -61,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
-            android:text="TextView"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/iv_exhibition_img"
             app:layout_constraintTop_toBottomOf="@+id/tv_exhibition_place" />
@@ -72,7 +68,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:textSize="16sp"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="@+id/tv_exhibition_date"
             app:layout_constraintStart_toEndOf="@+id/tv_exhibition_date"
             app:layout_constraintTop_toTopOf="@+id/tv_exhibition_date" />

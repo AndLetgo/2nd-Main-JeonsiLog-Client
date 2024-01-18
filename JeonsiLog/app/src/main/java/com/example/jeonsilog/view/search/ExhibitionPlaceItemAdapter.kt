@@ -1,7 +1,6 @@
 package com.example.jeonsilog.view.search
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
-import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
-import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.exhibition.ExhibitionPlaceRvAdapter
-import com.example.jeonsilog.view.exhibition.ExtraActivity
 import com.example.jeonsilog.widget.utils.GlideApp
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class ExhibitionPlaceItemAdapter(private val context: Context, private val list:List <SearchPlacesInformationEntity>) : RecyclerView.Adapter<ExhibitionPlaceItemAdapter.ViewHolder>() {
     private var listener: OnItemClickListener? = null
@@ -40,7 +30,7 @@ class ExhibitionPlaceItemAdapter(private val context: Context, private val list:
             .into(holder.itemView.findViewById(R.id.iv_exhibition_place_img))
 
         holder.nameTextView.text = list[position].placeName
-        val words = list[position].placeAddress!!.split(" ")
+        val words = list[position].placeAddress.split(" ")
         // 앞의 2개의 단어 추출
         if (words.size >= 2) {
             val firstWord = words[0]

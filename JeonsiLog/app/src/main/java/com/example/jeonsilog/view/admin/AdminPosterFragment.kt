@@ -23,7 +23,6 @@ import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentAdminPosterBinding
-import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import java.io.IOException
 

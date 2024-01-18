@@ -1,28 +1,19 @@
 package com.example.jeonsilog.view.admin
 
-import android.app.Activity
-import android.content.Context
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.databinding.adapters.ViewBindingAdapter.OnViewAttachedToWindow
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.databinding.FragmentAdminSearchBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.home.HomeRvAdapter
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication
@@ -41,7 +32,6 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
     private var searchPage = 0
     private var hasNextPage = true
     private var searchWord = ""
-    val TAG = "search"
 
     override fun init() {
         GlobalApplication.isRefresh.observe(this){
@@ -52,14 +42,13 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
         }
 
         binding.lifecycleOwner = this
-        searchList = mutableListOf<SearchInformationEntity>()
+        searchList = mutableListOf()
         adminSearchRvAdapter = AdminSearchRvAdapter(searchList, requireContext())
         binding.rvSearchResult.adapter = adminSearchRvAdapter
         binding.rvSearchResult.layoutManager = LinearLayoutManager(requireContext())
 
         adminSearchRvAdapter.setOnItemClickListener(object : AdminSearchRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: SearchInformationEntity, position: Int) {
-                Log.d(TAG, "onItemClick: ")
                 val navController = findNavController()
                 navController.navigate(R.id.adminExhibitionFragment)
                 (activity as MainActivity).setStateFcm(true)
@@ -98,7 +87,7 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
             binding.etSearchBar.text.clear()
             searchWord = ""
             binding.ivEmptySearchBefore.visibility = View.VISIBLE
-//            binding.ivEmptySearchNotResult.visibility = View.GONE
+            binding.ivEmptySearchNotResult.visibility = View.GONE
         }
     }
 
@@ -128,24 +117,16 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
             val response = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(),searchWord,searchPage)
             if(response.isSuccessful && response.body()!!.check){
                 adminSearchRvAdapter.exhibitionList.addAll(response.body()!!.information.data)
-//                searchList.addAll(response.body()!!.information.data)
                 addItemCount = response.body()!!.information.data.size
                 hasNextPage = response.body()!!.information.hasNextPage
             }
         }
-        Log.d(TAG, "setSearchResultRvByPage: searchList.size: ${searchList.size}")
-        if(searchList.size == 0){
-//            binding.ivEmptySearchNotResult.visibility = View.VISIBLE
+        if(adminSearchRvAdapter.exhibitionList.size == 0){
+            binding.ivEmptySearchNotResult.visibility = View.VISIBLE
         }else{
-            Log.d(TAG, "setSearchResultRvByPage: visible")
-//            binding.ivEmptySearchBefore.visibility = View.GONE
-//            binding.ivEmptySearchNotResult.visibility = View.GONE
-//            binding.rvSearchResult.visibility = View.VISIBLE
+            binding.ivEmptySearchNotResult.visibility = View.GONE
         }
-        val startPosition = totalCount
-//        adminSearchRvAdapter = AdminSearchRvAdapter(searchList, requireContext())
-//        adminSearchRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
-        adminSearchRvAdapter.notifyDataSetChanged()
+        adminSearchRvAdapter.notifyItemRangeInserted(totalCount, addItemCount)
         searchPage++
     }
 }

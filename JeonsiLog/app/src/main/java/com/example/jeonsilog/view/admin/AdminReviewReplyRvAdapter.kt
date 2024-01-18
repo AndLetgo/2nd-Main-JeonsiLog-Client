@@ -1,4 +1,4 @@
-package com.example.jeonsilog.view.exhibition
+package com.example.jeonsilog.view.admin
 
 import android.content.Context
 import android.util.Log
@@ -12,7 +12,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyInformation
 import com.example.jeonsilog.databinding.ItemReviewReplyBinding
 import com.example.jeonsilog.widget.utils.DateUtil
-import kotlin.math.log
 
 class AdminReviewReplyRvAdapter(private val replyList: MutableList<GetReplyInformation>, private val context: Context) :
     RecyclerView.Adapter<AdminReviewReplyRvAdapter.RecycleViewHolder>(){

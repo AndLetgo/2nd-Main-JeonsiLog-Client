@@ -19,7 +19,7 @@
             android:layout_width="@dimen/item_100"
             android:layout_height="@dimen/item_132"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/illus_empty_poster"/>
+            android:background="@drawable/illus_empty_poster"/>
 
         <LinearLayout
             android:layout_width="match_parent"

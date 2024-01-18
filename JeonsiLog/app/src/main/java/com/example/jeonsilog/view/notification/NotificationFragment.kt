@@ -2,16 +2,11 @@ package com.example.jeonsilog.view.notification
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentNotificationBinding
 import com.example.jeonsilog.view.MainActivity
-import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
 
 class NotificationFragment(private val action:String) : BaseFragment<FragmentNotificationBinding>(
     R.layout.fragment_notification) {

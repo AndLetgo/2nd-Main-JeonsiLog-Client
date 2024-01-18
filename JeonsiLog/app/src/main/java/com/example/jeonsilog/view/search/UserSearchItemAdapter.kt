@@ -8,14 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
-import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.widget.utils.GlideApp
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 class UserSearchItemAdapter(

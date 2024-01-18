@@ -29,17 +29,12 @@ import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
-import com.example.jeonsilog.widget.extension.NetworkDialog
-import com.example.jeonsilog.widget.utils.DialogUtil
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.example.jeonsilog.widget.utils.ImageUtil
-import com.example.jeonsilog.widget.utils.OperatingKeyword
-import com.example.jeonsilog.widget.utils.PriceKeyword
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers

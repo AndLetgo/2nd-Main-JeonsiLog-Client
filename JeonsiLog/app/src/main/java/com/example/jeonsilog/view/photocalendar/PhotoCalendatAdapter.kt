@@ -2,7 +2,6 @@ package com.example.jeonsilog.view.photocalendar
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +61,7 @@ class PhotoCalendatAdapter(private val dayList: ArrayList<String>,
         holder.dayText.text = dayList[holder.adapterPosition]
 
         // list에서 mydate의 "dd"와 동일한 date를 가진 첫 번째 요소의 인덱스 찾기
-        if (list!!.size!=0){
+        if (list.isNotEmpty()){
 
             val matchingIndex = list.indexOfFirst { it.date.substring(8) == dayOfMonth }
             if (matchingIndex != -1) {
@@ -85,9 +84,9 @@ class PhotoCalendatAdapter(private val dayList: ArrayList<String>,
 
         holder.itemView.setOnClickListener {
             if (dayList[holder.adapterPosition]!=""){
-                var year=selectedDate.year
-                var month=selectedDate.month
-                var originalString=dayList[holder.adapterPosition]
+                val year=selectedDate.year
+                val month=selectedDate.month
+                val originalString=dayList[holder.adapterPosition]
                 val dayOfMonth = originalString.padStart(2, '0')
                 val itemDate = LocalDate.of(year, Month.valueOf(month.toString()), dayOfMonth.toInt())
                 onItemListener.onItemClick(itemDate)

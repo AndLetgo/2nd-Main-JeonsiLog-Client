@@ -144,15 +144,7 @@ class UserRepositoryImpl: UserRepository {
     override suspend fun changeFcmToken(token: String, requestBody: ChangeFcmTokenRequest): Boolean {
         val response = service.changeFcmToken("Bearer $token", requestBody)
 
-        return if(response.isSuccessful && response.body()?.check == true){
-            //encryptedPrefs.setNN(requestBody.nickname)
-            response
-            true
-        } else {
-            Log.e(tag, "닉네임 수정 실패")
-            response
-            false
-        }
+        return response.isSuccessful && response.body()?.check == true
     }
 
 

@@ -1,13 +1,7 @@
 package com.example.jeonsilog.view.admin
 
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +9,8 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.report.GetReportsInformation
 import com.example.jeonsilog.databinding.FragmentAdminReportBinding
-import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.home.HomeRvAdapter
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs

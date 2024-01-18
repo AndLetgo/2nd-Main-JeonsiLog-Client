@@ -1,34 +1,23 @@
 package com.example.jeonsilog.view.photocalendar
 
-import android.util.Log
-import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
-import com.example.jeonsilog.data.remote.dto.user.PatchCalendarOpenResponse
 import com.example.jeonsilog.databinding.FragmentPhotoCalendarBinding
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import kotlin.math.log
 
 class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
     R.layout.fragment_photo_calendar) {
@@ -95,18 +84,18 @@ class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
                 if (response.body()!!.information.isOpen){
                     //포토캘린더 공개 설정
                     binding.tbPublicPrivate.isChecked=true
-                    binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.basic_point))
+                    binding.tbPublicPrivate.setTextColor(getColor(requireContext(),R.color.basic_point))
                 }else{
                     //포토캘린더 비공개 설정
                     binding.tbPublicPrivate.isChecked=false
-                    binding.tbPublicPrivate.setTextColor(resources.getColor(R.color.gray_medium))
+                    binding.tbPublicPrivate.setTextColor(getColor(requireContext(),R.color.gray_medium))
                 }
             }
         }
     }
     private fun clickCalendarOpen(){
         runBlocking(Dispatchers.IO) {
-            val response01 = UserRepositoryImpl().patchCalendarOpen(encryptedPrefs.getAT())
+            UserRepositoryImpl().patchCalendarOpen(encryptedPrefs.getAT())
         }
         checkPathCalendarOpen()
     }

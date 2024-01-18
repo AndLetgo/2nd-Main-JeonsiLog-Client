@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
@@ -23,9 +22,7 @@ import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.databinding.FragmentSearchRecordBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
-import com.example.jeonsilog.view.mypage.MyPageFragment
 import com.example.jeonsilog.widget.utils.GlideApp
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
@@ -39,7 +36,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
     RecordItemAdapter.AdapterCallback {
     private lateinit var adapter: RecordItemAdapter
     lateinit var viewModel: SearchViewModel
-    val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
+    private val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
 
@@ -48,7 +45,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
 
         binding.searchData=viewModel
         binding.lifecycleOwner = this
-//        (context as MainActivity).setStateBn("admin")
+
         isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragment(RecordSearchFragment())
@@ -101,10 +98,10 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
 
         //=======================================================================================//
     }
-    fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
+    private fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
         return itemListValue?.indexOf(searchData) ?: -1
     }
-    fun loadRandomList(){
+    private fun loadRandomList(){
         viewModel.randomExhibitionList.clear()
 
         val radiusDp = 8f
@@ -133,7 +130,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                     val fristRandomPosterId=randomPosterResponse?.informationEntity?.getOrNull(0)?.exhibitionId
                     binding.clRandomPoster01.setOnClickListener {
                         if (fristRandomPosterId!=null){
-                            (context as MainActivity).loadExtraActivity(0,fristRandomPosterId!!)
+                            (context as MainActivity).loadExtraActivity(0, fristRandomPosterId)
                         }
                     }
                     GlideApp.with(requireContext())
@@ -148,22 +145,11 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
                         }
                     }
                 }
-            } else {
-                //예외처리
-                //랜덤이미지 로드 실패시
-
             }
-            //클릭 처리
-
-
-
-
-
-
         }
 
     }
-    fun loadSearchList(){
+    private fun loadSearchList(){
         //=======================================================================================//
         viewModel.setItemlist(prefs.getRecorList())
         //MutableLiveData<List<String>>()
@@ -182,15 +168,15 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
         }
         //=======================================================================================//
     }
-    fun setSearchList(){
+    private fun setSearchList(){
         //=======================================================================================//
         //최근검색어 리스트뷰의 아이템을 클릭시 SearchFragment의 replaceFragment()을 실행하기위해 frag 어댑터에 전달
-        var recordList=viewModel.itemlist.value!!.reversed()
+        val recordList=viewModel.itemlist.value!!.reversed()
         adapter = RecordItemAdapter(requireContext(), R.layout.item_search_record, recordList,viewModel,this)
         binding.lvSearch.adapter=adapter
         //=======================================================================================//
     }
-    fun setOnEditorActionListener(){
+    private fun setOnEditorActionListener(){
         //키보드 완료 버튼 눌럿을시 실행
         binding.etSearchRecord.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
@@ -217,7 +203,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
             false
         }
     }
-    fun setEditBoxDeleteBt(){
+    private fun setEditBoxDeleteBt(){
         //edittext x 버튼 제어
         binding.etSearchRecord.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
@@ -225,7 +211,6 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
             }
             override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
                 // 텍스트가 변경될 때 동작 (실시간 감지)
-                val newText = charSequence.toString()
                 updateClearButtonVisibility(charSequence?.isNotEmpty() == true)
                 // 여기에 텍스트가 변경될 때 수행할 동작을 추가
             }
@@ -234,7 +219,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
             }
         })
     }
-    fun hideSoftKeyboard(activity: Activity) {
+    private fun hideSoftKeyboard(activity: Activity) {
         //키보드 숨기기
         val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocus = activity.currentFocus

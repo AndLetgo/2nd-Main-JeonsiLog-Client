@@ -2,13 +2,10 @@ package com.example.jeonsilog.viewmodel
 
 import android.net.Uri
 import android.util.Log
-import android.widget.ListView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
-import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 
 class AdminViewModel:ViewModel() {
     //현재 Admin || User 화면 체크
@@ -136,6 +133,6 @@ class AdminViewModel:ViewModel() {
         }else{
             item!!.item.numReply--
         }
-        _reviewItem.value = item!!
+        _reviewItem.value = item
     }
 }

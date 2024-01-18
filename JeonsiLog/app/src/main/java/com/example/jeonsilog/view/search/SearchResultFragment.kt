@@ -24,7 +24,7 @@ import com.google.android.material.tabs.TabLayout
 
 class SearchResultFragment(private var ediytextstr :String) : BaseFragment<FragmentSearchResultBinding>(R.layout.fragment_search_result) {
 
-    var  bottomNavigationView: BottomNavigationView?=null
+    private var  bottomNavigationView: BottomNavigationView?=null
     var initialTabPosition=0
     lateinit var viewModel: SearchViewModel
     val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
@@ -49,14 +49,14 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
         }
     }
 
-    fun loadSearchList(){
+    private fun loadSearchList(){
         viewModel.setItemlist(prefs.getRecorList())
     }
-    fun setbottomNavigation(){
+    private fun setbottomNavigation(){
         val mActivity = context as MainActivity
         mActivity.setStateBn(false, "user")
     }
-    fun setLayoutView(){
+    private fun setLayoutView(){
         //뷰페이저설정(검색어)
 
         val pagerAdapter = SearchResultAdapter(childFragmentManager, lifecycle,ediytextstr)
@@ -102,7 +102,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
     private fun updateClearButtonVisibility(show: Boolean) {
         binding.ivResultDelete.visibility = if (show) View.VISIBLE else View.GONE
     }
-    fun addTextChangedListener(){
+    private fun addTextChangedListener(){
         binding.etSearchResult.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
                 // 텍스트 변경 전 동작
@@ -121,7 +121,7 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
             }
         })
     }
-    fun setOnEditorActionListener(){
+    private fun setOnEditorActionListener(){
         binding.etSearchResult.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
@@ -181,11 +181,11 @@ class SearchResultFragment(private var ediytextstr :String) : BaseFragment<Fragm
 
         //=======================================================================================//
     }
-    fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
+    private fun getIndexIfExists(itemListValue: List<String>?, searchData: String): Int {
         return itemListValue?.indexOf(searchData) ?: -1
     }
 
-    fun hideSoftKeyboard(activity: Activity) {
+    private fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val currentFocus = activity.currentFocus
 

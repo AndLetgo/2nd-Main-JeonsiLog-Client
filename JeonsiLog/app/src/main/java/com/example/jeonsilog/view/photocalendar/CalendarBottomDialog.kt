@@ -1,7 +1,6 @@
 package com.example.jeonsilog.view.photocalendar
 
 
-import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,11 +8,9 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.example.jeonsilog.databinding.ViewCalendarDialogBinding
 import com.example.jeonsilog.viewmodel.PhotoCalendarViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -38,7 +35,7 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
             dismiss()
         }
         //연 관련 넘버피커
-        binding.npYear.setOnValueChangedListener { picker, oldVal, newVal ->
+        binding.npYear.setOnValueChangedListener { _, _, newVal ->
             //년 설정
             date=LocalDate.of(newVal, date.monthValue, 1)
             // 값이 변경될 때의 동작
@@ -46,7 +43,7 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
 
         }
         //월 관련 넘버피커
-        binding.npMonth.setOnValueChangedListener { picker, oldVal, newVal ->
+        binding.npMonth.setOnValueChangedListener { _, _, newVal ->
             //월 설정
             date=LocalDate.of(date.year, newVal, 1)
             // 값이 변경될 때의 동작
@@ -59,7 +56,7 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
         setView()
 
     }
-    fun setView(){
+    private fun setView(){
         // 다이얼로그의 배경을 투명하게 설정
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         // 다이얼로그의 외부 터치 이벤트 처리 (다이얼로그가 닫히지 않도록 함)
@@ -84,16 +81,16 @@ class CalendarBottomDialog(var date: LocalDate,val viewModel: PhotoCalendarViewM
         params.height = ViewGroup.LayoutParams.MATCH_PARENT
         binding.root.layoutParams = params
     }
-    fun setDimClick(){
+    private fun setDimClick(){
         binding.ivDimmingZone.setOnClickListener {
             dismiss()
         }
     }
-    fun setDateDialog(Date:LocalDate){
+    private fun setDateDialog(Date:LocalDate){
         //받아온 날짜 텍스트 반영
         binding.tvDateDialog.text=monthYearFromDate(Date)
     }
-    fun setDate(){
+    private fun setDate(){
         //받아온 날짜 변수 저장
         var dateYear=date.year
         var dateMonth=date.monthValue

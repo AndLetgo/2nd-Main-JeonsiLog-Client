@@ -4,30 +4,20 @@ import android.content.Context
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Space
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromPosterRequest
-
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchPlaceEntity
 import com.example.jeonsilog.databinding.ItemExhibitionInfoBinding
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
-import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
-import com.example.jeonsilog.view.search.ExhibitionInfoItemAdapter
 import com.example.jeonsilog.widget.utils.GlideApp
-import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -131,14 +121,14 @@ class LoadPageRvAdapter(
                 }
             }
             listener.onRecyclerViewItemClick(position)
-            dialog?.dismiss()
+            dialog.dismiss()
         }
 
     }
 
 
     private fun monthYearFromDate(date: LocalDate): String{
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         // 받아온 날짜를 해당 포맷으로 변경
         return date.format(formatter)
     }

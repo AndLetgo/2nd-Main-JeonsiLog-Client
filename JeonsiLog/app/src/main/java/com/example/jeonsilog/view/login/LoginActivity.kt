@@ -6,19 +6,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.example.jeonsilog.data.remote.dto.auth.SignInRequest
 import com.example.jeonsilog.databinding.ActivityLoginBinding
-import com.example.jeonsilog.repository.auth.AuthRepositoryImpl
 import com.example.jeonsilog.view.spalshpage.SplashActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class LoginActivity: AppCompatActivity() {
     private val tag = this.javaClass.simpleName
