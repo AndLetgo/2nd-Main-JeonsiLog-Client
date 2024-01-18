@@ -378,7 +378,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
                 null
             }
         }
-        exhibitionRvAdapter.notifyItemRangeInserted(totalCount, addItemCount)
+        exhibitionRvAdapter.notifyItemRangeInserted(totalCount+1, addItemCount)
         reviewPage++
     }
     private fun reloadExhibitionInfo(){

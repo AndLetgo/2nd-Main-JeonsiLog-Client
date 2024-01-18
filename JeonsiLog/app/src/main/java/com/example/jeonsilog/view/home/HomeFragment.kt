@@ -115,8 +115,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 hasNextPage = response.body()!!.information.hasNextPage
             }
         }
-        val startPosition = totalCount + 1
-        homeRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
+        homeRvAdapter.notifyItemRangeInserted(totalCount+2, addItemCount)
         exhibitionPage++
     }
 

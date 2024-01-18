@@ -144,8 +144,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
                 Log.e(TAG, "setReplyRvByPage: ", )
             }
         }
-        val startPosition = totalCount + 1
-        adminReviewReplyRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
+        adminReviewReplyRvAdapter.notifyItemRangeInserted(totalCount+2, addItemCount)
         replyPage++
     }
     
