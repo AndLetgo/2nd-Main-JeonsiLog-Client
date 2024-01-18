@@ -40,8 +40,8 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
     override fun init() {
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
 
+        (requireActivity() as MainActivity).setStateBn(true, "user")
         (requireActivity()  as MainActivity).setBottomNavCurrentItem(1)
-
 
         binding.searchData=viewModel
         binding.lifecycleOwner = this
