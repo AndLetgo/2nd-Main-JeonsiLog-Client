@@ -59,10 +59,10 @@ class AdminViewModel:ViewModel() {
     fun setExhibitionInformation(information:String?){ _exhibitionInformation.value = information }
 
     //감상평 정보
-    private var _reviewItem = MutableLiveData<UpdateReviewItem>()
-    val reviewItem: LiveData<UpdateReviewItem>
+    private var _reviewItem = MutableLiveData<UpdateReviewItem?>()
+    val reviewItem: LiveData<UpdateReviewItem?>
         get() = _reviewItem
-    fun setReviewItem(review:UpdateReviewItem){
+    fun setReviewItem(review:UpdateReviewItem?){
         _reviewItem.value = review
     }
     private var _deletedReviewPosition = MutableLiveData<Int?>()
@@ -94,7 +94,7 @@ class AdminViewModel:ViewModel() {
         _placeHomepage = MutableLiveData<String?>()
         _exhibitionInformation = MutableLiveData<String?>()
 
-        _reviewItem = MutableLiveData<UpdateReviewItem>()
+        _reviewItem = MutableLiveData<UpdateReviewItem?>()
         _deletedReviewPosition = MutableLiveData<Int?>()
         _exhibitionPosterImg = MutableLiveData<String?>()
         _posterUri = MutableLiveData<Uri>()

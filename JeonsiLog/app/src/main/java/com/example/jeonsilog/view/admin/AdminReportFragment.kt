@@ -39,8 +39,11 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
                 GlobalApplication.isRefresh.value = false
             }
         }
+        if(isAdminExhibitionOpen){
+            (activity as MainActivity).refreshFragment(AdminReportFragment())
+            isAdminExhibitionOpen =false
+        }
 
-        isAdminExhibitionOpen =false
         reportList = mutableListOf()
 
         adminReportRvAdapter = AdminReportRvAdapter(reportList, requireContext())

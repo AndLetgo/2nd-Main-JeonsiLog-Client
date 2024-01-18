@@ -38,6 +38,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
     private var replyPage = 0
     private var hasNextPage = true
     private var reviewItem:UpdateReviewItem? = null
+    private val TAG = "admin"
     override fun init() {
         GlobalApplication.isRefresh.observe(this){
             if(it){
@@ -48,6 +49,9 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
 
         if(adminViewModel.reportReviewId.value!=null){
             reviewInfo = getReviewInfo(adminViewModel.reportReviewId.value!!)!!
+            val item = UpdateReviewItem(reviewInfo,0)
+            adminViewModel.setReviewItem(item)
+            Log.d(TAG, "init: reviewInfo: ${reviewInfo.reviewId}")
         }else{
             reviewItem = adminViewModel.reviewItem.value
             reviewInfo = reviewItem?.item!!
@@ -70,7 +74,9 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
         })
 
         adminViewModel.reviewItem.observe(this){
-            binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${adminViewModel.reviewItem.value!!.item.numReply}"
+            if(it!=null){
+                binding.tvReplyCount.text = "${requireContext().getString(R.string.exhibition_reply)} ${it!!.item.numReply}"
+            }
         }
     }
     private fun getReviewInfo(reviewId: Int):GetReviewsExhibitionInformationEntity?{
@@ -93,8 +99,15 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
             runBlocking(Dispatchers.IO){
                 ReviewRepositoryImpl().deleteReview(encryptedPrefs.getAT(), review.reviewId)
             }
-            adminViewModel.setDeletedReviewPosition(reviewItem?.position!!)
-            Navigation.findNavController(it).popBackStack()
+            if(adminViewModel.deletedReviewPosition.value!=null){
+                adminViewModel.setDeletedReviewPosition(reviewItem?.position!!)
+            }
+            if(adminViewModel.reportReviewId.value!=null){
+                (activity as MainActivity).setStateFcm(false)
+                adminViewModel.setReportReviewId(null)
+            }else{
+                Navigation.findNavController(it).popBackStack()
+            }
         }
 
         Glide.with(requireContext())
@@ -103,6 +116,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
             .into(binding.ivProfile)
     }
     private fun getReplyList(){
+        Log.d(TAG, "getReplyList: ")
         adminReviewReplyRvAdapter = AdminReviewReplyRvAdapter(replyList, requireContext())
         binding.rvExhibitionReviewReply.adapter = adminReviewReplyRvAdapter
         binding.rvExhibitionReviewReply.layoutManager = LinearLayoutManager(this.context)
@@ -123,11 +137,14 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
     private fun setReplyRvByPage(totalCount:Int){
         var addItemCount = 0
         runBlocking(Dispatchers.IO) {
-            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), newReviewId, replyPage)
+            val response = ReplyRepositoryImpl().getReply(encryptedPrefs.getAT(), reviewInfo.reviewId, replyPage)
             if(response.isSuccessful && response.body()!!.check){
                 replyList.addAll(response.body()!!.information.data)
+                Log.d(TAG, "setReplyRvByPage: ")
                 addItemCount = response.body()!!.information.data.size
                 hasNextPage = response.body()!!.information.hasNextPage
+            }else{
+                Log.e(TAG, "setReplyRvByPage: ", )
             }
         }
         val startPosition = totalCount + 1
@@ -141,7 +158,6 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if(adminViewModel.reportReviewId.value!=null){
-                    isAdminExhibitionOpen =false
                     (activity as MainActivity).setStateFcm(false)
                     adminViewModel.setReportReviewId(null)
                 }

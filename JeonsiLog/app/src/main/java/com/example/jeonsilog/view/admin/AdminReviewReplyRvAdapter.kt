@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyInformation
 import com.example.jeonsilog.databinding.ItemReviewReplyBinding
 import com.example.jeonsilog.widget.utils.DateUtil
+import kotlin.math.log
 
 class AdminReviewReplyRvAdapter(private val replyList: MutableList<GetReplyInformation>, private val context: Context) :
     RecyclerView.Adapter<AdminReviewReplyRvAdapter.RecycleViewHolder>(){
@@ -19,6 +20,7 @@ class AdminReviewReplyRvAdapter(private val replyList: MutableList<GetReplyInfor
     inner class RecycleViewHolder(private val binding: ItemReviewReplyBinding):
         RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){
+            Log.d("admin", "bind: ")
             val item = replyList[position]
             binding.ibMenu.visibility = View.INVISIBLE
 
