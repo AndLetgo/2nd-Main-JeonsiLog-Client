@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.example.jeonsilog.R"/>
+        <import type="android.content.Context"/>
+
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.AdminViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/basic_white">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:layout_width="@dimen/item_32"
+                android:layout_height="@dimen/item_32"
+                android:src="@drawable/logo_jeonsilog"/>
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="81dp"
+                android:layout_height="20dp"
+                android:src="@drawable/illus_jeonsilog_title"
+                android:layout_marginStart="@dimen/margin_28"/>
+            <Button
+                android:id="@+id/btn_save_sequence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/item_0"
+                android:minWidth="@dimen/item_0"
+                android:paddingHorizontal="@dimen/margin_16"
+                android:paddingVertical="@dimen/margin_8"
+                android:text="@string/btn_save"
+                style="@style/M_medium"
+                android:textColor="@{vm.checkListCount? context.getColor(R.color.basic_point) : context.getColor(R.color.gray_medium)}"
+                android:background="@color/transparent"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_16"/>
+        </androidx.appcompat.widget.Toolbar>
+        <AutoCompleteTextView
+            android:id="@+id/et_search_record"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_44"
+            android:autofillHints=""
+            android:background="@drawable/shape_edit_round"
+            android:drawableLeft="@drawable/ic_search"
+            android:hint="@string/admin_managing_search_hint"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:paddingStart="@dimen/margin_8"
+            android:textColor="@color/gray_dark"
+            android:textColorHint="@color/gray_medium"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintBottom_toTopOf="@id/rv_exhibition_list"
+            android:layout_marginVertical="@dimen/margin_12"
+            android:layout_marginHorizontal="@dimen/margin_16"
+            android:completionThreshold="1"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_exhibition_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_0"
+            app:layout_constraintTop_toBottomOf="@id/et_search_record"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/item_admin_managing_home"
+            android:layout_marginBottom="@dimen/margin_56"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -26,9 +26,9 @@ class MyPageSettingFragment: BaseFragment<FragmentMyPageSettingBinding>(R.layout
 
     override fun init() {
         try{
-            (activity as MainActivity).setStateBn(false)
-        } catch (e:ClassCastException){
-            // ExtraActivity에서는 처리 필요 없음
+            (activity as MainActivity).setStateBn(false, "user")
+        }catch (e:ClassCastException){
+
         }
 
         binding.vm = viewModel

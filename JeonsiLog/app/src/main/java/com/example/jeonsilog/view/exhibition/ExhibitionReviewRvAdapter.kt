@@ -29,6 +29,7 @@ class ExhibitionReviewRvAdapter(
             if(item.userId == encryptedPrefs.getUI()){
                 listener?.saveUserReview(item, position)
             }
+            binding.tvDelete.visibility = View.INVISIBLE
 
             binding.tvUserName.text = item.nickname
             binding.tvReviewContent.text = item.contents

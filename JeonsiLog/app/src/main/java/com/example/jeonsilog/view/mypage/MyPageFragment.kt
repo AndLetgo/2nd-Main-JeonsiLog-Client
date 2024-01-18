@@ -43,7 +43,7 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     }
     override fun init() {
         try{
-            (activity as MainActivity).setStateBn(true)
+            (activity as MainActivity).setStateBn(true,"user")
         }catch (e:ClassCastException){
             // ExtraActivity는 처리 필요 없음
         }

@@ -15,6 +15,8 @@ class GlobalApplication: Application() {
         lateinit var globalContext: GlobalApplication
             private set
 
+        var checkAdmin:Boolean = false
+
         var isFinish = MutableLiveData(false)
         var isFollowerUpdate = MutableLiveData(false)
         var isFollowingUpdate = MutableLiveData(false)
@@ -25,6 +27,7 @@ class GlobalApplication: Application() {
         var newPlaceId: Int = 0
         var newPlaceName: String = ""
         var newReviewId: Int = 0
+        var isAdminExhibitionOpen:Boolean = false
         var newReplyId: Int = 0
     }
 

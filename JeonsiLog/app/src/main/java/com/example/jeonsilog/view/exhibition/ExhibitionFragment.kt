@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
@@ -128,8 +129,8 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         //전시장 상세정보
         binding.llExhibitionPlace.setOnClickListener {
-            newPlaceId = exhibitionInfoData!!.place.placeId
-            newPlaceName = exhibitionInfoData!!.place.placeName
+            newPlaceId = exhibitionInfoData!!.place.placeId!!
+            newPlaceName = exhibitionInfoData!!.place.placeName!!
             Navigation.findNavController(it).navigate(R.id.action_exhibitionFragment_to_exhibitionPlaceFragment)
         }
 
@@ -249,10 +250,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         }
 
-        Glide.with(requireContext())
-            .load(exhibitionInfoData?.imageUrl)
-            .transform(CenterCrop())
-            .into(binding.ivPosterImage)
+        if(!exhibitionInfoData?.imageUrl.isNullOrEmpty()){
+            Glide.with(requireContext())
+                .load(exhibitionInfoData?.imageUrl)
+                .transform(CenterCrop())
+                .into(binding.ivPosterImage)
+        }else{
+            Glide.with(requireContext())
+                .load(R.drawable.illus_empty_poster)
+                .transform(CenterInside())
+                .into(binding.ivPosterImage)
+        }
 
         binding.tvExhibitionName.text = exhibitionInfoData?.exhibitionName
         binding.tvAddress.text = exhibitionInfoData?.place?.address

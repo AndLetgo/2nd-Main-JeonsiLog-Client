@@ -60,7 +60,7 @@ class OtherUserViewModel: ViewModel() {
                 userData = if(response.isSuccessful && response.body()!!.check){
                     response.body()!!.information
                 } else {
-                    MyInfoInformation(0, "알 수 없음", "null", 0, 0)
+                    MyInfoInformation(0, false,"알 수 없음", "null", 0, 0)
                 }
             }
 

@@ -28,6 +28,7 @@ class UserRepositoryImpl: UserRepository {
 
         return if(response.isSuccessful && response.body()?.check == true){
             encryptedPrefs.setNN(response.body()!!.information.nickname)
+            encryptedPrefs.setCheckAdmin(response.body()!!.information.isAdmin)
             encryptedPrefs.setUI(response.body()!!.information.userId)
             encryptedPrefs.setURL(response.body()!!.information.profileImgUrl)
             encryptedPrefs.setNumFollowing(response.body()!!.information.numFollowing)

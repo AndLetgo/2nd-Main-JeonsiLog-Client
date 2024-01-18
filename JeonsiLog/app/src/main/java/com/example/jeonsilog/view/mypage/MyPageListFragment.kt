@@ -12,7 +12,7 @@ class MyPageListFragment(private val startTab: Int): BaseFragment<FragmentMyPage
 
     override fun init() {
         try{
-            (activity as MainActivity).setStateBn(false)
+            (activity as MainActivity).setStateBn(false, "user")
         }catch (e:ClassCastException){
 
         }

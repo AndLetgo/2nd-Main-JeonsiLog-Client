@@ -25,7 +25,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
 
     override fun init() {
         try{
-            (activity as MainActivity).setStateBn(false)
+            (activity as MainActivity).setStateBn(false, "user")
         }catch (e:ClassCastException){
 
         }

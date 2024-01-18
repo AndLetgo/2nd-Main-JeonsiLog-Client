@@ -1,6 +1,9 @@
 package com.example.jeonsilog.widget.utils
 
+import android.app.Activity
+import android.content.Context
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.PopupMenu
 import androidx.fragment.app.FragmentManager
 import com.example.jeonsilog.R
@@ -17,5 +20,13 @@ class DialogUtil {
         }
         popupMenu.menu.getItem(0).setActionView(R.layout.item_popup_menu)
         return popupMenu
+    }
+
+    fun hideSoftKeyboard(activity: Activity) {
+        val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocus = activity.currentFocus
+        if (currentFocus != null) {
+            inputMethodManager.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        }
     }
 }

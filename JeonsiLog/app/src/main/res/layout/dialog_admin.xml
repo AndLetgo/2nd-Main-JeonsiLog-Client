@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_corner_round_dialog"
+        android:paddingHorizontal="@dimen/margin_20"
+        android:paddingTop="@dimen/margin_24"
+        android:paddingBottom="@dimen/margin_20"
+        tools:context=".view.admin.DialogAdmin">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/L_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="title"
+            android:textColor="@color/basic_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_dialog_admin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_0"
+            android:layout_marginTop="@dimen/margin_24"
+            android:background="@drawable/shape_edit_round"
+            style="@style/M_regular"
+            android:textColor="@color/basic_black"
+            android:padding="@dimen/margin_12"
+            android:gravity="top|start"
+            app:layout_constraintDimensionRatio="1:1.13"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintBottom_toTopOf="@id/btn_cancel" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="@dimen/item_0"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/btn_confirm"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_dialog_admin"
+            tools:layout_editor_absoluteY="24dp"
+            android:background="@drawable/shape_corner_round_start_btn"
+            android:layout_marginEnd="@dimen/margin_4"
+            android:text="@string/btn_cancel"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:textSize="@dimen/text_16"
+            android:lineSpacingExtra="@dimen/linespacing_24"
+            android:includeFontPadding="false"
+            android:textColor="@color/gray_medium"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_marginTop="@dimen/margin_24"
+            app:layout_goneMarginEnd="@dimen/margin_4"/>
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="@dimen/item_0"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_cancel"
+            app:layout_constraintTop_toBottomOf="@id/et_dialog_admin"
+            tools:layout_editor_absoluteY="24dp"
+            android:background="@drawable/shape_corner_round_start_btn_activate"
+            android:text="@string/btn_modify"
+            android:fontFamily="@font/noto_sans_kr_medium"
+            android:textSize="@dimen/text_16"
+            android:lineSpacingExtra="@dimen/linespacing_24"
+            android:includeFontPadding="false"
+            style="?android:attr/borderlessButtonStyle"
+            android:textColor="@color/basic_white"
+            android:layout_marginTop="@dimen/margin_24"
+            android:layout_marginStart="@dimen/margin_4"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

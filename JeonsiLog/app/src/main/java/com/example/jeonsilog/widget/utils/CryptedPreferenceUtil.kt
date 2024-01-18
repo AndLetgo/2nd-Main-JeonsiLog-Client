@@ -42,6 +42,10 @@ class CryptedPreferenceUtil(context: Context) {
         encryptedPrefs.edit().putString("at", p).apply()
     }
 
+    fun setCheckAdmin(p: Boolean){
+        encryptedPrefs.edit().putBoolean("checkAdmin", p).apply()
+    }
+
     fun setRT(p: String){
         encryptedPrefs.edit().putString("rt", p).apply()
     }
@@ -80,6 +84,10 @@ class CryptedPreferenceUtil(context: Context) {
 
     fun getAT(): String{
         return encryptedPrefs.getString("at", null).toString()
+    }
+
+    fun getCheckAdmin(): Boolean{
+        return encryptedPrefs.getBoolean("checkAdmin", false)
     }
 
     fun getRT(): String {

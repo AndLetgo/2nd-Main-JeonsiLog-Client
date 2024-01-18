@@ -17,7 +17,8 @@ class NotificationFragment(private val action:String) : BaseFragment<FragmentNot
     R.layout.fragment_notification) {
 
     override fun init() {
-        (context as MainActivity).setStateBn(true)
+        (context as MainActivity).setStateBn(true, "user")
+
         val tabTextList = listOf(getString(R.string.noti_activity_tab), getString(R.string.noti_exhibition_tab))
 
 

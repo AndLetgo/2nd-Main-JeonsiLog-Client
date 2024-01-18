@@ -33,6 +33,7 @@ import com.example.jeonsilog.data.remote.dto.calendar.PostPhotoFromGalleryReques
 import com.example.jeonsilog.data.remote.dto.calendar.UploadImageReqEntity
 import com.example.jeonsilog.databinding.ViewLoadDialogBinding
 import com.example.jeonsilog.repository.calendar.CalendarRepositoryImpl
+import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.ImageUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -152,7 +153,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         //클릭설정
         binding.btSetDeleteImage.setOnClickListener {
             runBlocking(Dispatchers.IO) {
-                val body= DeletePhotoRequest(monthYearFromDate(selectedDate))
+                val body= DeletePhotoRequest(DateUtil().monthYearFromDate(selectedDate))
                 val response = CalendarRepositoryImpl().deletePhoto(encryptedPrefs.getAT(),body)
                 if(response.isSuccessful && response.body()!!.check){
                 }
@@ -278,7 +279,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         val imageRequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         val filePart = MultipartBody.Part.createFormData("img", file.name, imageRequestBody)
 
-        val uploadImageReq = UploadImageReqEntity(monthYearFromDate(selectedDate))
+        val uploadImageReq = UploadImageReqEntity(DateUtil().monthYearFromDate(selectedDate))
         val requestJson = Gson().toJson(uploadImageReq)
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(),requestJson)
 
@@ -294,11 +295,11 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
             dismissListener?.onDismiss()
         }
     }
-    private fun monthYearFromDate(date: LocalDate): String{
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        // 받아온 날짜를 해당 포맷으로 변경
-        return date.format(formatter)
-    }
+//    private fun monthYearFromDate(date: LocalDate): String{
+//        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+//        // 받아온 날짜를 해당 포맷으로 변경
+//        return date.format(formatter)
+//    }
     fun setOnDismissListener(listener: OnDismissListener) {
         dismissListener = listener
     }

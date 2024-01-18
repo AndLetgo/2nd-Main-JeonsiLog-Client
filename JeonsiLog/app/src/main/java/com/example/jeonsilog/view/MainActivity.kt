@@ -3,6 +3,11 @@ package com.example.jeonsilog.view
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Intent
+import androidx.navigation.findNavController
+import com.example.jeonsilog.view.admin.AdminManagingFragment
+import com.example.jeonsilog.view.admin.AdminReportFragment
+import com.example.jeonsilog.view.home.HomeFragment
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import android.util.Log
 import android.content.Context
 import android.content.pm.PackageManager
@@ -16,6 +21,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
+import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,8 +33,8 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseActivity
 import com.example.jeonsilog.databinding.ActivityMainBinding
 import com.example.jeonsilog.fcm.services.FcmDialog
+import com.example.jeonsilog.view.admin.AdminSearchFragment
 import com.example.jeonsilog.view.exhibition.ExtraActivity
-import com.example.jeonsilog.view.home.HomeFragment
 import com.example.jeonsilog.view.spalshpage.SplashActivity
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isFinish
 import com.kakao.sdk.user.UserApiClient
@@ -35,16 +43,15 @@ import com.example.jeonsilog.view.photocalendar.PhotoCalendarFragment
 import com.example.jeonsilog.view.notification.NotificationFragment
 import com.example.jeonsilog.view.otheruser.OtherUserFragment
 import com.example.jeonsilog.view.search.RecordSearchFragment
-import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
-
 import com.example.jeonsilog.view.search.SearchResultFragment
+import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.extension.NetworkDialog
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.networkState
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReviewId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.prefs
-import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import java.net.URLDecoder
@@ -55,13 +62,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private var networkDialog: NetworkDialog? = null
     private var backPressedTime: Long = 0L
     private var alertDialog: AlertDialog.Builder? = null
+    private val adminViewModel: AdminViewModel by viewModels()
+
     private var isPermissionDenied = false
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if(supportFragmentManager.backStackEntryCount != 0){
                 supportFragmentManager.popBackStack()
-            } else {
+            }else if(isAdminExhibitionOpen){
+                Navigation.findNavController(binding.fcvNavAdmin).popBackStack()
+            }else{
                 if (System.currentTimeMillis() - backPressedTime <= 2000) {
                     finish()
                 } else {
@@ -73,6 +84,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
     override fun init() {
+        //admin 계정 체크
+        if(encryptedPrefs.getCheckAdmin()){
+            adminViewModel.setIsAdminPage(true)
+        }
+        checkAdmin(encryptedPrefs.getCheckAdmin())
+
         this.onBackPressedDispatcher.addCallback(this, callback)
 
         networkState.observe(this) {
@@ -87,8 +104,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             }
         }
 
-        supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
-
+        //Main Bottom Nav
         binding.bnvMain.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.item_home->{
@@ -118,6 +134,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             true
         }
 
+        //Admin Bottom Nav
+        binding.bnvAdmin.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.item_admin_home->{
+                    setStateFcm(true)
+                    val navController = findNavController(R.id.fcv_nav_admin)
+                    navController.navigate(R.id.homeFragment)
+                }
+                R.id.item_admin_search->{
+                    setStateFcm(false)
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminSearchFragment()).commit()
+                }
+                R.id.item_admin_report->{
+                    setStateFcm(false)
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminReportFragment()).commit()
+                }
+                R.id.item_admin_managing->{
+                    setStateFcm(false)
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminManagingFragment()).commit()
+                }
+            }
+            true
+        }
+
         isFinish.observe(this){
             Log.d(tag, "isFinish: $it")
             if(it){kakaoLogOut("RefreshToken 만료로 인한")}
@@ -127,6 +167,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         getToken()
     }
 
+    fun setStateBn(isVisible:Boolean, type:String){
+        var view = binding.bnvMain
+        //관리자 계정 체크
+        when(type){
+            "user" -> view = binding.bnvMain
+            "admin" -> view = binding.bnvAdmin
+        }
+        view.isVisible = isVisible
+    }
+    fun setStateFcm(isVisible: Boolean){
+        if(isVisible){
+            binding.fcvNavAdmin.visibility = View.VISIBLE
+            binding.flMain.visibility = View.GONE
+        }else{
+            binding.fcvNavAdmin.visibility = View.GONE
+            binding.flMain.visibility = View.VISIBLE
+        }
+    }
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
@@ -137,13 +195,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 binding.bnvMain.selectedItemId = R.id.item_notification
                 moveNotificationFragment(targetFragment.toString())
             }
-        }
-    }
-    fun setStateBn(isVisible:Boolean){
-        if(isVisible){
-            binding.bnvMain.visibility = View.VISIBLE
-        }else{
-            binding.bnvMain.visibility = View.GONE
         }
     }
 
@@ -177,6 +228,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+    //admin 계정 체크
+    fun checkAdmin(check:Boolean){
+        if(check){
+            //관리자
+            binding.bnvMain.visibility = View.GONE
+            binding.bnvAdmin.visibility = View.VISIBLE
+            setStateFcm(true)
+        }else{
+            //일반 유저
+            binding.bnvMain.visibility = View.VISIBLE
+            binding.bnvAdmin.visibility = View.GONE
+            setStateFcm(false)
+            supportFragmentManager.beginTransaction().replace(R.id.fl_main, HomeFragment()).commit()
+        }
+        adminViewModel.setIsAdminPage(check)
     }
 
     fun loadExtraActivity(type:Int, newTargetId:Int){
@@ -266,6 +333,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_main, fragment)
             .commit()
+    }
+    fun refreshFragmentInAdmin(fragmentId: Int) {
+        val navController = Navigation.findNavController(binding.fcvNavAdmin)
+        navController.popBackStack()
+        navController.navigate(fragmentId)
     }
     fun setBottomNavCurrentItem(index:Int){
         binding.bnvMain.menu.getItem(index).isChecked = true

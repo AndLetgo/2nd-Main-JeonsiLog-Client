@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/keyword_state_before" android:id="@+id/menu_keyword_state_before" />
+    <item android:title="@string/keyword_state_on" android:id="@+id/menu_keyword_state_on"/>
+    <item android:title="@string/keyword_free" android:id="@+id/menu_keyword_free" />
+</menu>

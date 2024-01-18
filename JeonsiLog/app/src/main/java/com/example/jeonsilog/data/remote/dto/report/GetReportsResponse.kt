@@ -6,7 +6,13 @@ data class GetReportsResponse(
     @SerializedName("check")
     val check: Boolean,
     @SerializedName("information")
-    val information: GetReportsInformation
+    val information: ReportsResponseData
+)
+data class ReportsResponseData(
+    @SerializedName("hasNextPage")
+    val hasNextPage: Boolean,
+    @SerializedName("data")
+    val data: List<GetReportsInformation>
 )
 
 data class GetReportsInformation(
@@ -18,5 +24,9 @@ data class GetReportsInformation(
     @SerializedName("reportType")
     val reportType: String,
     @SerializedName("reportedId")
-    val reportedId: Int
+    val reportedId: Int,
+    @SerializedName("clickId")
+    val clickId: Int,
+    @SerializedName("isChecked")
+    val isChecked: Boolean
 )
