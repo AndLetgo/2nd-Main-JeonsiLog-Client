@@ -84,7 +84,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     }
 
     override fun init() {
-        Log.d("admin", "init: MainActivity init")
         //admin 계정 체크
         if(encryptedPrefs.getCheckAdmin()){
             adminViewModel.setIsAdminPage(true)
@@ -145,7 +144,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
                 }
                 R.id.item_admin_search->{
                     setStateFcm(false)
-//                    supportFragmentManager.beginTransaction().replace(R.id.fl_main,RecordSearchFragment()).setReorderingAllowed(true).commitAllowingStateLoss()
                     supportFragmentManager.beginTransaction().replace(R.id.fl_main,AdminSearchFragment()).commit()
                 }
                 R.id.item_admin_report->{

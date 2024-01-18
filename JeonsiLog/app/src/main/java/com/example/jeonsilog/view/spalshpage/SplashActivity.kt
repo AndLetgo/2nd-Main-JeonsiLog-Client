@@ -74,6 +74,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
                                 if(AuthRepositoryImpl().signIn(data)){
                                     Log.d(tag, "서버 로그인 성공")
                                     CoroutineScope(Dispatchers.Main).launch {
+                                        UserRepositoryImpl().getMyInfo(encryptedPrefs.getAT())
                                         moveActivity(MainActivity())
                                     }
                                 } else {
@@ -94,6 +95,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
                                 Log.d(tag, "회원 정보 존재함 -> 로그인 진행")
                                 prefs.setSignUpFinished(true)
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    UserRepositoryImpl().getMyInfo(encryptedPrefs.getAT())
                                     moveActivity(MainActivity())
                                 }
                             } else {
