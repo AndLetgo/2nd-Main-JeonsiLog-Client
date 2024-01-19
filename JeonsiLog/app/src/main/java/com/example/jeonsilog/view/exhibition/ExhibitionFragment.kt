@@ -9,6 +9,7 @@ import android.net.Uri
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
 import android.widget.Toast
@@ -201,17 +202,31 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         })
 
-        exhibitionViewModel.information.observe(this){
-            runBlocking {
-                binding.tvInformation.text = exhibitionViewModel.information.value
-            }
-            Log.d("TAG", "init: binding.tvInformation.lineCount: ${binding.tvInformation.lineCount }")
-            if(binding.tvInformation.lineCount >=3 && check){
-                binding.tvReadMoreInfo.visibility = View.VISIBLE
-            }else{
-                binding.tvReadMoreInfo.visibility = View.GONE
-            }
-        }
+//        binding.clLayout.viewTreeObserver.addOnDrawListener(object : ViewTreeObserver.OnDrawListener{
+//            override fun onDraw() {
+//                runBlocking {
+//                    Log.d("admin", "init: binding.tvInformation.lineCount: ${binding.tvInformation.lineCount}")
+//                    if(binding.tvInformation.lineCount >=3 && check){
+//                        binding.tvReadMoreInfo.visibility = View.VISIBLE
+//                    }else{
+//                        binding.tvReadMoreInfo.visibility = View.GONE
+//                    }
+//                }
+//                binding.clLayout.viewTreeObserver.removeOnDrawListener(this)
+//            }
+//        })
+
+//        exhibitionViewModel.information.observe(this){
+//            runBlocking {
+//                binding.tvInformation.text = exhibitionViewModel.information.value
+//            }
+//            Log.d("TAG", "init: binding.tvInformation.lineCount: ${binding.tvInformation.lineCount}")
+//            if(binding.tvInformation.lineCount >=3 && check){
+//                binding.tvReadMoreInfo.visibility = View.VISIBLE
+//            }else{
+//                binding.tvReadMoreInfo.visibility = View.GONE
+//            }
+//        }
     }
 
     private fun setBottomSheet(){
@@ -278,12 +293,30 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         //전시회 정보
         if(information!=null){
             exhibitionViewModel.setInformation(information)
+            binding.tvInformation.text = information
         }else{
             Log.d("information", "getExhibitionInfo: null")
             binding.tvInfoTitle.visibility = View.GONE
             binding.tvInformation.visibility = View.GONE
             binding.tvReadMoreInfo.visibility = View.GONE
         }
+
+        val onDrawListener = ViewTreeObserver.OnDrawListener {
+            // onDraw 이전에 수행할 작업
+            Log.d("admin", "init: binding.tvInformation.lineCount: ${binding.tvInformation.lineCount}")
+            if(binding.tvInformation.lineCount >=3 && check){
+                binding.tvReadMoreInfo.visibility = View.VISIBLE
+            }else{
+                binding.tvReadMoreInfo.visibility = View.GONE
+            }
+            true
+        }
+
+        // 이벤트 등록
+        binding.clLayout.viewTreeObserver.addOnDrawListener(onDrawListener)
+
+        // 이벤트 해제
+        binding.clLayout.viewTreeObserver.removeOnDrawListener(onDrawListener)
     }
     private fun setRatings(){
         //평균 별점
