@@ -206,7 +206,6 @@
                         style="@style/S_regular"
                         android:text="@string/admin_exhibition_information_empty"
                         android:textColor="@color/gray_medium"
-                        android:maxLines="3"
                         app:layout_constraintTop_toBottomOf="@id/tv_info_title"
                         android:layout_marginHorizontal="@dimen/margin_24"
                         android:layout_marginTop="@dimen/margin_4"/>
