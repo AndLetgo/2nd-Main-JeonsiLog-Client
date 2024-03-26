@@ -49,7 +49,9 @@
     <dimen name="item_100">100dp</dimen>
     <dimen name="item_108">108dp</dimen>
     <dimen name="item_132">132dp</dimen>
+    <dimen name="item_140">140dp</dimen>
     <dimen name="item_142">142dp</dimen>
+    <dimen name="item_168">168dp</dimen>
 
     <!--    Text Size(sp)-->
     <dimen name="text_11">11sp</dimen>
