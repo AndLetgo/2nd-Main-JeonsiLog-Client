@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.home
 
 
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -21,9 +22,17 @@ import kotlinx.coroutines.runBlocking
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val adminViewModel: AdminViewModel by activityViewModels()
-    private lateinit var homeRvAdapter: HomeRvAdapter
-    private var homeRvList = mutableListOf<ExhibitionsInfo>()
-    private var exhibitionPage = 0
+    private lateinit var homePopularRvAdapter: HomePopularRvAdapter
+    private lateinit var homeArtisticRvAdapter: HomeArtisticRvAdapter
+    private lateinit var homeEndSoonRvAdapter: HomeEndSoonRvAdapter
+    private lateinit var homeNewStartRvAdapter: HomeNewStartRvAdapter
+
+    private var homePopularRvList = mutableListOf<ExhibitionsInfo>()
+    private var homeArtisticRvList = mutableListOf<ExhibitionsInfo>()
+    private var homeEndSoonRvList = mutableListOf<ExhibitionsInfo>()
+    private var homeNewStartRvList = mutableListOf<ExhibitionsInfo>()
+
+//    private var exhibitionPage = 0
     private var hasNextPage = true
 
     override fun init() {
@@ -40,22 +49,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             binding.btnChangeAdminUser.visibility = View.GONE
         }
         if(adminViewModel.isAdminPage.value!!){
-            binding.ibFabTop.visibility = View.GONE
-            binding.ibFabTopAdmin.visibility = View.VISIBLE
+//            binding.ibFabTop.visibility = View.GONE
+//            binding.ibFabTopAdmin.visibility = View.VISIBLE
             binding.btnChangeAdminUser.text = getString(R.string.btn_change_to_user)
             (activity as MainActivity).setStateBn(true, "admin")
         }else{
-            binding.ibFabTop.visibility = View.VISIBLE
-            binding.ibFabTopAdmin.visibility = View.GONE
+//            binding.ibFabTop.visibility = View.VISIBLE
+//            binding.ibFabTopAdmin.visibility = View.GONE
             binding.btnChangeAdminUser.text = getString(R.string.btn_change_to_admin)
             (activity as MainActivity).setStateBn(true, "user")
         }
 
-        homeRvAdapter = HomeRvAdapter(homeRvList, requireContext())
-        binding.rvHomeExhibition.adapter = homeRvAdapter
-        binding.rvHomeExhibition.layoutManager = LinearLayoutManager(this.context)
+        homePopularRvAdapter = HomePopularRvAdapter(homePopularRvList, requireContext())
+        binding.rvPopular.adapter = homePopularRvAdapter
+        binding.rvPopular.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
-        homeRvAdapter.setOnItemClickListener(object : HomeRvAdapter.OnItemClickListener{
+        homeArtisticRvAdapter = HomeArtisticRvAdapter(homeArtisticRvList, requireContext())
+        binding.rvArtistic.adapter = homeArtisticRvAdapter
+        binding.rvArtistic.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+
+        homeEndSoonRvAdapter = HomeEndSoonRvAdapter(homeEndSoonRvList, requireContext())
+        binding.rvEndSoon.adapter = homeEndSoonRvAdapter
+        binding.rvEndSoon.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+
+        homeNewStartRvAdapter = HomeNewStartRvAdapter(homeNewStartRvList, requireContext())
+        binding.rvNewStart.adapter = homeNewStartRvAdapter
+        binding.rvNewStart.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+
+        homePopularRvAdapter.setOnItemClickListener(object : HomePopularRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
                 //관리자 체크
                 if(adminViewModel.isAdminPage.value!!){
@@ -64,33 +85,37 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                     isAdminExhibitionOpen = true
                 }else{
                     (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
+                    Log.d("home", "onItemClick: ${data.exhibitionId}")
                 }
             }
         })
 
-        setExhibitionRvByPage(0)
+        getRvData(homePopularRvList)
+        getRvData(homeArtisticRvList)
+        getRvData(homeEndSoonRvList)
+        getRvData(homeNewStartRvList)
 
         //recyclerView 페이징 처리
-        binding.rvHomeExhibition.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
-                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
-                if(rvPosition == totalCount && hasNextPage){
-                    setExhibitionRvByPage(totalCount)
-                }
-            }
-        })
+//        binding.rvPopular.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+//                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
+//                if(rvPosition == totalCount && hasNextPage){
+//                    setExhibitionRvByPage(totalCount)
+//                }
+//            }
+//        })
 
-        binding.ibFabTop.setOnClickListener {
-            binding.rvHomeExhibition.smoothScrollToPosition(0)
-        }
-        binding.ibFabTopAdmin.setOnClickListener {
-            binding.rvHomeExhibition.smoothScrollToPosition(0)
-        }
-        binding.ivLogo.setOnClickListener {
-            binding.rvHomeExhibition.smoothScrollToPosition(0)
-        }
+//        binding.ibFabTop.setOnClickListener {
+//            binding.rvHomeExhibition.smoothScrollToPosition(0)
+//        }
+//        binding.ibFabTopAdmin.setOnClickListener {
+//            binding.rvHomeExhibition.smoothScrollToPosition(0)
+//        }
+//        binding.ivLogo.setOnClickListener {
+//            binding.rvPopular.smoothScrollToPosition(0)
+//        }
 
         binding.btnChangeAdminUser.setOnClickListener {
             when(binding.btnChangeAdminUser.text){
@@ -105,18 +130,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     //recyclerView 페이징
-    private fun setExhibitionRvByPage(totalCount:Int){
-        var addItemCount = 0
+//    private fun setExhibitionRvByPage(totalCount:Int){
+//        var addItemCount = 0
+//        runBlocking(Dispatchers.IO) {
+//            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),exhibitionPage)
+//            if(response.isSuccessful && response.body()!!.check ){
+//                homePopularRvList.addAll(response.body()!!.information.data)
+//                addItemCount = response.body()!!.information.data.size
+//                hasNextPage = response.body()!!.information.hasNextPage
+//            }
+//        }
+//        homePopularRvAdapter.notifyItemRangeInserted(totalCount+2, addItemCount)
+//        exhibitionPage++
+//    }
+
+    private fun getRvData(list: MutableList<ExhibitionsInfo>){
         runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),exhibitionPage)
+            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),0)
             if(response.isSuccessful && response.body()!!.check ){
-                homeRvList.addAll(response.body()!!.information.data)
-                addItemCount = response.body()!!.information.data.size
-                hasNextPage = response.body()!!.information.hasNextPage
+                list.addAll(response.body()!!.information.data)
             }
         }
-        homeRvAdapter.notifyItemRangeInserted(totalCount+2, addItemCount)
-        exhibitionPage++
     }
-
 }

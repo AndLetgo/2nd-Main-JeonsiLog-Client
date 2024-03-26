@@ -67,7 +67,8 @@ class CryptedPreferenceUtil(context: Context) {
     }
 
     fun getCheckAdmin(): Boolean{
-        return encryptedPrefs.getBoolean("checkAdmin", false)
+//        return encryptedPrefs.getBoolean("checkAdmin", false)
+        return false
     }
 
     fun getRT(): String {

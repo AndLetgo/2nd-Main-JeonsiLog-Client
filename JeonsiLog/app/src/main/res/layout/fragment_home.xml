@@ -44,38 +44,94 @@
                 android:layout_marginEnd="@dimen/margin_16"/>
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_home_exhibition"
+        <ScrollView
+            android:id="@+id/sv_home"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/item_0"
-            tools:listitem="@layout/item_home_exhibition"
-            android:clipToPadding="false"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:paddingBottom="@dimen/margin_56"/>
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/margin_56">
+            <LinearLayout
+                android:id="@+id/ll_in_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_title_popular"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_52"
+                    android:text="@string/home_title_popular"
+                    style="@style/XL_bold"
+                    android:textColor="@color/basic_black"
+                    android:paddingStart="@dimen/margin_16"
+                    android:gravity="center_vertical"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_popular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/margin_16"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_home_exhibition_ver2" />
 
-        <ImageButton
-            android:id="@+id/ib_fab_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/btn_home_fab"
-            android:background="@drawable/shape_round_iv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="@dimen/margin_28"
-            android:layout_marginBottom="@dimen/margin_32"
-            android:elevation="@dimen/shadow_12"/>
-        <ImageButton
-            android:id="@+id/ib_fab_top_admin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/btn_home_fab"
-            android:background="@drawable/shape_round_iv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="@dimen/margin_28"
-            android:layout_marginBottom="@dimen/margin_88"
-            android:elevation="@dimen/shadow_12"
-            android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/tv_title_artistic"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_52"
+                    android:text="@string/home_title_artistic"
+                    style="@style/XL_bold"
+                    android:textColor="@color/basic_black"
+                    android:paddingStart="@dimen/margin_16"
+                    android:gravity="center_vertical"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_artistic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/margin_16"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_home_exhibition_ver2" />
+
+                <TextView
+                    android:id="@+id/tv_title_end_soon"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_52"
+                    android:text="@string/home_title_end_soon"
+                    style="@style/XL_bold"
+                    android:textColor="@color/basic_black"
+                    android:paddingStart="@dimen/margin_16"
+                    android:gravity="center_vertical"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_end_soon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_home_exhibition_ver2"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/margin_16"/>
+                <TextView
+                    android:id="@+id/tv_title_new_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_52"
+                    android:text="@string/home_title_new_start"
+                    style="@style/XL_bold"
+                    android:textColor="@color/basic_black"
+                    android:paddingStart="@dimen/margin_16"
+                    android:gravity="center_vertical"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_new_start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_home_exhibition_ver2"
+                    android:clipToPadding="false"
+                    android:paddingHorizontal="@dimen/margin_16"/>
+            </LinearLayout>
+        </ScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

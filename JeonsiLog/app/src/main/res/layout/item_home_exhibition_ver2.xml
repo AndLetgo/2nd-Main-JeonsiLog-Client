@@ -17,13 +17,16 @@
             android:layout_height="@dimen/item_168"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/illus_empty_poster"/>
         <TextView
             android:id="@+id/tv_exhibition_name"
             android:layout_width="@dimen/item_140"
             android:layout_height="wrap_content"
             style="@style/M_medium"
             android:textColor="@color/basic_black"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@id/iv_exhibition_img"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

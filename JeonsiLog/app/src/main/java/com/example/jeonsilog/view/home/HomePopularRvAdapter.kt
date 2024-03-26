@@ -11,29 +11,32 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
-import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
+import com.example.jeonsilog.databinding.ItemHomeExhibitionVer2Binding
 import com.example.jeonsilog.databinding.RvTitleAreaBinding
+import com.example.jeonsilog.view.exhibition.ExhibitionReplyRvAdapter
 import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
-class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val context:Context): RecyclerView.Adapter<ViewHolder>(){
+class HomePopularRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val context:Context):
+    RecyclerView.Adapter<HomePopularRvAdapter.RecycleViewHolder>(){
     private val tag = this.javaClass.simpleName
     private var listener: OnItemClickListener? = null
 
-    inner class ViewHolder(val binding: ItemHomeExhibitionBinding):
+    inner class RecycleViewHolder(val binding: ItemHomeExhibitionVer2Binding):
         RecyclerView.ViewHolder(binding.root){
-        fun bind(item: ExhibitionsInfo){
-            binding.tvTitle.text = item.exhibitionName
+        fun bind(position: Int){
+            val item = homeRvList[position]
+            binding.tvExhibitionName.text = item.exhibitionName
 
-            if(item.place.placeAddress != null){
-                val addressList = item.place.placeAddress.split(" ")
-                val address = "${addressList[0]} ${addressList[1]}"
-                binding.tvAddress.text = address
-            }
+//            if(item.place.placeAddress != null){
+//                val addressList = item.place.placeAddress.split(" ")
+//                val address = "${addressList[0]} ${addressList[1]}"
+//                binding.tvAddress.text = address
+//            }
 
             if(item.place.placeName !=null){
-                binding.tvPlace.text = item.place.placeName
+                binding.tvExhibitionPlace.text = item.place.placeName
             }
 
             var operatingKeyword = ""
@@ -65,45 +68,31 @@ class HomeRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val co
             Glide.with(context)
                 .load(item.imageUrl)
                 .transform(CenterCrop(), RoundedCorners(16))
-                .into(binding.ivPoster)
+                .into(binding.ivExhibitionImg)
 
         }
     }
 
-    class HeaderHolder(val binding:RvTitleAreaBinding):RecyclerView.ViewHolder(binding.root)
-    override fun getItemViewType(position: Int): Int {
-        return if(position==0){
-            ITEM_VIEW_TYPE_HEADER
-        }else{
-            ITEM_VIEW_TYPE_ITEM
-        }
+//    class HeaderHolder(val binding:RvTitleAreaBinding):RecyclerView.ViewHolder(binding.root)
+//    override fun getItemViewType(position: Int): Int = ITEM_VIEW_TYPE_ITEM
+
+    override fun onCreateViewHolder(parent:ViewGroup, viewType: Int): RecycleViewHolder {
+        val binding = ItemHomeExhibitionVer2Binding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return RecycleViewHolder(binding)
     }
 
-    override fun onCreateViewHolder(parent:ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
-            ITEM_VIEW_TYPE_HEADER -> HeaderHolder(
-                RvTitleAreaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            )
-            ITEM_VIEW_TYPE_ITEM -> ViewHolder(
-                ItemHomeExhibitionBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-            )
-            else -> throw ClassCastException("Unknown viewType $viewType")
-        }
-    }
+    override fun getItemCount(): Int = 10
 
-    override fun getItemCount(): Int = homeRvList.size +1
+    override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
+        holder.bind(position)
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder){
-            is HeaderHolder -> {}
-            is ViewHolder -> {
-                holder.bind(homeRvList[position-1])
-
-                if(position != RecyclerView.NO_POSITION){
-                    holder.itemView.setOnClickListener {
-                        listener?.onItemClick(holder.itemView, homeRvList[position-1], position)
-                    }
-                }
+        if(position != RecyclerView.NO_POSITION){
+            holder.itemView.setOnClickListener{
+                listener?.onItemClick(holder.itemView, homeRvList[position], position)
             }
         }
     }
