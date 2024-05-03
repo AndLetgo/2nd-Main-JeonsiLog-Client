@@ -10,7 +10,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -153,19 +152,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
         //Call
         binding.ibCall.setOnClickListener {
-            //null 처리 필요
             if(exhibitionInfoData?.place?.tel !=null){
                 val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.tel)
                 clipboardManager.setPrimaryClip(clipData)
-                Toast.makeText(requireContext(), "copy success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_copy_success), Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_call_empty), Toast.LENGTH_SHORT).show()
             }
         }
         //Link
         binding.ibGoWeb.setOnClickListener {
-            //null 처리 필요
             if(exhibitionInfoData?.place?.homePage != null){
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(exhibitionInfoData?.place?.homePage))
                 startActivity(intent)    

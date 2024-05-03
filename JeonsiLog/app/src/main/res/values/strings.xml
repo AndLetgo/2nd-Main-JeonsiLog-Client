@@ -69,6 +69,8 @@
     <string name="dialog_admin_edit_exhibition_information">전시회 정보 수정</string>
 
     <!-- Toast Message -->
+    <string name="toast_copy_success">복사 성공!</string>
+
     <string name="toast_save_success">저장 성공!</string>
     <string name="toast_save_failure">저장 실패!</string>
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
