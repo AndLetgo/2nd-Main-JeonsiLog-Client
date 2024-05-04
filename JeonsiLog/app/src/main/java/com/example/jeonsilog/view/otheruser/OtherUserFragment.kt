@@ -2,6 +2,7 @@ package com.example.jeonsilog.view.otheruser
 
 import android.content.Context
 import android.util.Log
+import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import com.example.jeonsilog.R
@@ -26,7 +27,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
         try{
             (activity as MainActivity).setStateBn(false, "user")
         }catch (e:ClassCastException){
-
+            Log.e(this.javaClass.simpleName, e.message.toString())
         }
 
 
@@ -113,6 +114,30 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
                 transaction.commit()
             }
 
+        }
+
+        viewModel.level.observe(this){
+            when(it){
+                "BEGINNER" -> { // 3~9
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_1_beginner)
+                }
+                "INTERMEDIATE" -> { // 10~19
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_2_intermediate)
+                }
+                "ADVANCED" -> {
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_3_expert)
+                }
+                "MASTER" -> {
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_4_master)
+                }
+                else -> {
+                    binding.ivLevel.visibility = View.GONE
+                }
+            }
         }
     }
 

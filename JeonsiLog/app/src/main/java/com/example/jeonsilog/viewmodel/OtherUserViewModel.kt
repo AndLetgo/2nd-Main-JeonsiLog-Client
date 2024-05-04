@@ -29,6 +29,10 @@ class OtherUserViewModel: ViewModel() {
     val nick: LiveData<String>
         get() = _nick
 
+    private var _level = MutableLiveData<String>()
+    val level: LiveData<String>
+        get() = _level
+
     private var _profileImg = MutableLiveData<String>()
     val profileImg: LiveData<String>
         get() = _profileImg
@@ -60,7 +64,7 @@ class OtherUserViewModel: ViewModel() {
                 userData = if(response.isSuccessful && response.body()!!.check){
                     response.body()!!.information
                 } else {
-                    MyInfoInformation(0, false,"알 수 없음", "null", 0, 0)
+                    MyInfoInformation(0, false,"알 수 없음", "null", 0, 0, 0, "NON")
                 }
             }
 
@@ -94,6 +98,7 @@ class OtherUserViewModel: ViewModel() {
                 _profileImg.value = userData.profileImgUrl
                 _follower.value = userData.numFollower.toString()
                 _following.value = userData.numFollowing.toString()
+                _level.value = userData.userLevel
             }
         } catch (e: Exception) {throw IllegalArgumentException("타유저 정보 요청 실패")}
     }
