@@ -97,4 +97,8 @@ dependencies {
     // spin kit
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
+    //구글 에드몹
+    implementation project(':nativetemplates')
+    implementation 'com.google.android.gms:play-services-ads:20.1.0'
+
 }
