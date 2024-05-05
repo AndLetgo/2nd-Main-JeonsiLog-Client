@@ -7,6 +7,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.GetRandomPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
+import com.example.jeonsilog.data.remote.dto.exhibition.GetHomeExhibitionsResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionSequenceRequest
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchByNameResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
@@ -24,11 +25,28 @@ import retrofit2.http.Query
 
 interface ExhibitionRepository {
 
-    @GET("/api/exhibitions")
-    suspend fun getExhibitions(
-        @Header("Authorization") token: String,
-        @Query("page") page: Int
+//    @GET("/api/exhibitions")
+//    suspend fun getExhibitions(
+//        @Header("Authorization") token: String,
+//        @Query("page") page: Int
+//    ): Response<GetExhibitionsResponse>
+    //Home
+    @GET("/api/exhibitions/recently")
+    suspend fun getExhibitionsRecently(
+        @Header("Authorization") token: String
     ): Response<GetExhibitionsResponse>
+    @GET("/api/exhibitions/colorful")
+    suspend fun getExhibitionsColorful(
+        @Header("Authorization") token: String
+    ): Response<GetHomeExhibitionsResponse>
+    @GET("/api/exhibitions/endingSoon")
+    suspend fun getExhibitionsEndingSoon(
+        @Header("Authorization") token: String
+    ): Response<GetHomeExhibitionsResponse>
+    @GET("/api/exhibitions/new")
+    suspend fun getExhibitionsNew(
+        @Header("Authorization") token: String
+    ): Response<GetHomeExhibitionsResponse>
 
     @GET("/api/exhibitions/{id}")
     suspend fun getExhibition(
