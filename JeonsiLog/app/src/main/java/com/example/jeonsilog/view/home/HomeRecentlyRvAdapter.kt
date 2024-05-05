@@ -5,21 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.ItemHomeExhibitionVer2Binding
-import com.example.jeonsilog.databinding.RvTitleAreaBinding
-import com.example.jeonsilog.view.exhibition.ExhibitionReplyRvAdapter
-import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ITEM = 1
-class HomePopularRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val context:Context):
-    RecyclerView.Adapter<HomePopularRvAdapter.RecycleViewHolder>(){
+class HomeRecentlyRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val context:Context):
+    RecyclerView.Adapter<HomeRecentlyRvAdapter.RecycleViewHolder>(){
     private val tag = this.javaClass.simpleName
     private var listener: OnItemClickListener? = null
 

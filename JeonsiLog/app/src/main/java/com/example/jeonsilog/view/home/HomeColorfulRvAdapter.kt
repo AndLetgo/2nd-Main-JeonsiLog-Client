@@ -12,8 +12,8 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
 import com.example.jeonsilog.databinding.ItemHomeExhibitionVer2Binding
 
-class HomeArtisticRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val context:Context):
-    RecyclerView.Adapter<HomeArtisticRvAdapter.RecycleViewHolder>(){
+class HomeColorfulRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private val context:Context):
+    RecyclerView.Adapter<HomeColorfulRvAdapter.RecycleViewHolder>(){
     private var listener: OnItemClickListener? = null
 
     inner class RecycleViewHolder(val binding: ItemHomeExhibitionVer2Binding):

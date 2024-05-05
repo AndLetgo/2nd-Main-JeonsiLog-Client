@@ -6,7 +6,6 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionsInfo
@@ -22,18 +21,18 @@ import kotlinx.coroutines.runBlocking
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val adminViewModel: AdminViewModel by activityViewModels()
-    private lateinit var homePopularRvAdapter: HomePopularRvAdapter
-    private lateinit var homeArtisticRvAdapter: HomeArtisticRvAdapter
+    private lateinit var homeRecentlyRvAdapter: HomeRecentlyRvAdapter
+    private lateinit var homeColorfulRvAdapter: HomeColorfulRvAdapter
     private lateinit var homeEndSoonRvAdapter: HomeEndSoonRvAdapter
     private lateinit var homeNewStartRvAdapter: HomeNewStartRvAdapter
 
-    private var homePopularRvList = mutableListOf<ExhibitionsInfo>()
-    private var homeArtisticRvList = mutableListOf<ExhibitionsInfo>()
+    private var homeRecentlyRvList = mutableListOf<ExhibitionsInfo>()
+    private var homeColorfulRvList = mutableListOf<ExhibitionsInfo>()
     private var homeEndSoonRvList = mutableListOf<ExhibitionsInfo>()
     private var homeNewStartRvList = mutableListOf<ExhibitionsInfo>()
 
 //    private var exhibitionPage = 0
-    private var hasNextPage = true
+    val TAG = "homeTest"
 
     override fun init() {
         adminViewModel.resetExhibitionInfo()
@@ -60,12 +59,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             (activity as MainActivity).setStateBn(true, "user")
         }
 
-        homePopularRvAdapter = HomePopularRvAdapter(homePopularRvList, requireContext())
-        binding.rvPopular.adapter = homePopularRvAdapter
+        homeRecentlyRvAdapter = HomeRecentlyRvAdapter(homeColorfulRvList, requireContext())
+        binding.rvPopular.adapter = homeRecentlyRvAdapter
         binding.rvPopular.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
-        homeArtisticRvAdapter = HomeArtisticRvAdapter(homeArtisticRvList, requireContext())
-        binding.rvArtistic.adapter = homeArtisticRvAdapter
+        homeColorfulRvAdapter = HomeColorfulRvAdapter(homeColorfulRvList, requireContext())
+        binding.rvArtistic.adapter = homeColorfulRvAdapter
         binding.rvArtistic.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
         homeEndSoonRvAdapter = HomeEndSoonRvAdapter(homeEndSoonRvList, requireContext())
@@ -76,7 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         binding.rvNewStart.adapter = homeNewStartRvAdapter
         binding.rvNewStart.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
-        homePopularRvAdapter.setOnItemClickListener(object : HomePopularRvAdapter.OnItemClickListener{
+        homeRecentlyRvAdapter.setOnItemClickListener(object : HomeRecentlyRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
                 //관리자 체크
                 if(adminViewModel.isAdminPage.value!!){
@@ -90,32 +89,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             }
         })
 
-        getRvData(homePopularRvList)
-        getRvData(homeArtisticRvList)
-        getRvData(homeEndSoonRvList)
-        getRvData(homeNewStartRvList)
-
-        //recyclerView 페이징 처리
-//        binding.rvPopular.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//                val rvPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
-//                val totalCount = recyclerView.adapter?.itemCount?.minus(2)
-//                if(rvPosition == totalCount && hasNextPage){
-//                    setExhibitionRvByPage(totalCount)
-//                }
-//            }
-//        })
-
-//        binding.ibFabTop.setOnClickListener {
-//            binding.rvHomeExhibition.smoothScrollToPosition(0)
-//        }
-//        binding.ibFabTopAdmin.setOnClickListener {
-//            binding.rvHomeExhibition.smoothScrollToPosition(0)
-//        }
-//        binding.ivLogo.setOnClickListener {
-//            binding.rvPopular.smoothScrollToPosition(0)
-//        }
+        getRvData()
 
         binding.btnChangeAdminUser.setOnClickListener {
             when(binding.btnChangeAdminUser.text){
@@ -129,26 +103,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
     }
 
-    //recyclerView 페이징
-//    private fun setExhibitionRvByPage(totalCount:Int){
-//        var addItemCount = 0
-//        runBlocking(Dispatchers.IO) {
-//            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),exhibitionPage)
-//            if(response.isSuccessful && response.body()!!.check ){
-//                homePopularRvList.addAll(response.body()!!.information.data)
-//                addItemCount = response.body()!!.information.data.size
-//                hasNextPage = response.body()!!.information.hasNextPage
-//            }
-//        }
-//        homePopularRvAdapter.notifyItemRangeInserted(totalCount+2, addItemCount)
-//        exhibitionPage++
-//    }
-
-    private fun getRvData(list: MutableList<ExhibitionsInfo>){
+    private fun getRvData(){
         runBlocking(Dispatchers.IO) {
-            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(),0)
+            val response = ExhibitionRepositoryImpl().getExhibitionsRecently(encryptedPrefs.getAT())
             if(response.isSuccessful && response.body()!!.check ){
-                list.addAll(response.body()!!.information.data)
+                homeRecentlyRvList.addAll(response.body()!!.information.data)
+                Log.d(TAG, "getRvData: recently")
+            }
+        }
+        runBlocking(Dispatchers.IO) {
+            val response = ExhibitionRepositoryImpl().getExhibitionsColorful(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check ){
+                homeColorfulRvList.addAll(response.body()!!.information)
+                Log.d(TAG, "getRvData: colorful")
+            }
+        }
+        runBlocking(Dispatchers.IO) {
+            val response = ExhibitionRepositoryImpl().getExhibitionsEndingSoon(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check ){
+                homeEndSoonRvList.addAll(response.body()!!.information)
+                Log.d(TAG, "getRvData: endingSoon")
+            }
+        }
+        runBlocking(Dispatchers.IO) {
+            val response = ExhibitionRepositoryImpl().getExhibitionsNew(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check ){
+                homeNewStartRvList.addAll(response.body()!!.information)
+                Log.d(TAG, "getRvData: newStartt")
             }
         }
     }
