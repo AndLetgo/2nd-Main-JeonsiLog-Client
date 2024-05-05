@@ -107,7 +107,10 @@
     <string name="login_nick_check_is_pair">자음 또는 모음을 홀로 사용할 수 없어요.</string>
 
     <!-- Home -->
-    <string name="home_title">요즘 뜨는 전시</string>
+    <string name="home_title_popular">요즘 뜨는 전시</string>
+    <string name="home_title_artistic">다채로운 예술의 향연</string>
+    <string name="home_title_end_soon">곧 종료되는 전시</string>
+    <string name="home_title_new_start">새로 시작한 전시</string>
 
     <!-- Keyword -->
     <string name="keyword_state_before">시작전</string>

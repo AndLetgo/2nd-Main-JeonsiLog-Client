@@ -67,7 +67,8 @@ class CryptedPreferenceUtil(context: Context) {
     }
 
     fun getCheckAdmin(): Boolean{
-        return encryptedPrefs.getBoolean("checkAdmin", false)
+//        return encryptedPrefs.getBoolean("checkAdmin", false)
+        return false
     }
 
     fun getRT(): String {
@@ -92,5 +93,22 @@ class CryptedPreferenceUtil(context: Context) {
 
     fun getNumFollower(): Int {
         return encryptedPrefs.getInt("numFollower", 0)
+    }
+
+    // 개선 - 레벨 추가
+    fun setReviewCount(p: Int){
+        encryptedPrefs.edit().putInt("reviewCount", p).apply()
+    }
+
+    fun getReviewCount(): Int {
+        return encryptedPrefs.getInt("reviewCount", 0)
+    }
+
+    fun setUserLevel(p: String){
+        encryptedPrefs.edit().putString("userLevel", p).apply()
+    }
+
+    fun getUserLevel(): String? {
+        return encryptedPrefs.getString("userLevel", null)
     }
 }
