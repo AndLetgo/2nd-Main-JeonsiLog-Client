@@ -21,5 +21,9 @@ data class MyInfoInformation(
     @SerializedName("numFollowing")
     val numFollowing: Int,
     @SerializedName("numFollower")
-    val numFollower: Int
+    val numFollower: Int,
+    @SerializedName("reviewCount")
+    val reviewCount: Int,
+    @SerializedName("userLevel")
+    val userLevel: String
 )
