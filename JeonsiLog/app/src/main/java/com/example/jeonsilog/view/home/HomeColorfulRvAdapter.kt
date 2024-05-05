@@ -26,29 +26,31 @@ class HomeColorfulRvAdapter(private val homeRvList:List<ExhibitionsInfo>, privat
                 binding.tvExhibitionPlace.text = item.place.placeName
             }
 
-            var operatingKeyword = ""
+            var operatingKeyword:String? = null
             when(item.operatingKeyword){
                 "ON_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_on)
                 "BEFORE_DISPLAY" -> operatingKeyword = context.getString(R.string.keyword_state_before)
             }
-            var priceKeyword = ""
+            var priceKeyword:String? = null
             when(item.priceKeyword){
                 "FREE" -> priceKeyword = context.getString(R.string.keyword_free)
-                else -> binding.tvKeywordSecond.visibility = View.INVISIBLE
+                else -> binding.tvKeywordSecond.visibility = View.GONE
             }
 
-            if(operatingKeyword!=""){
+            if(!operatingKeyword.isNullOrEmpty()){
                 binding.tvKeywordFirst.visibility = View.VISIBLE
-                binding.tvKeywordSecond.visibility = View.VISIBLE
                 binding.tvKeywordFirst.text = operatingKeyword
-                binding.tvKeywordSecond.text = priceKeyword
+                if(!priceKeyword.isNullOrEmpty()){
+                    binding.tvKeywordSecond.visibility = View.VISIBLE
+                    binding.tvKeywordSecond.text = priceKeyword
+                }
             }else{
-                if(priceKeyword!=""){
-                    binding.tvKeywordSecond.visibility = View.INVISIBLE
+                if(!priceKeyword.isNullOrEmpty()){
+                    binding.tvKeywordSecond.visibility = View.GONE
                     binding.tvKeywordFirst.visibility = View.VISIBLE
                     binding.tvKeywordFirst.text = priceKeyword
                 }else {
-                    binding.tvKeywordFirst.visibility = View.INVISIBLE
+                    binding.tvKeywordFirst.visibility = View.GONE
                 }
             }
 
