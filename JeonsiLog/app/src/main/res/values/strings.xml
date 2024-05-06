@@ -28,6 +28,7 @@
     <string name="btn_load_poster">전시회 포스터 불러오기</string>
     <string name="btn_set_delete_image">이미지 삭제하기</string>
     <string name="btn_set_defalut_image">기본 이미지로 변경</string>
+    <string name="btn_move_exhibition">전시회 바로가기</string>
 
     <string name="btn_following">팔로잉</string>
     <string name="btn_follow">팔로우</string>

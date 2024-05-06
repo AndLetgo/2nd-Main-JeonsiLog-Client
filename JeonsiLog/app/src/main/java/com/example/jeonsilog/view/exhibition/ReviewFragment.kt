@@ -11,6 +11,7 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -46,10 +47,18 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
     private var hasNextPage = true
+    private var isFromNoti = false
     val TAG = "reply"
 
     override fun init() {
         replyPage = 0
+
+        if(extraActivityReference == 1){
+            isFromNoti = true
+            binding.tvBtnMoveExhibition.visibility = ViewGroup.VISIBLE
+        }else{
+            binding.tvBtnMoveExhibition.visibility = ViewGroup.GONE
+        }
 
         isRefresh.observe(this){
             if(it){
@@ -156,6 +165,12 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         }
 
+        binding.tvBtnMoveExhibition.setOnClickListener {
+            isFromNoti = false
+            extraActivityReference = 0
+//            requireActivity().supportFragmentManager.popBackStack()
+            requireActivity().onBackPressed()
+        }
 
     }
     private fun getReviewInfo(reviewId: Int): GetReviewsExhibitionInformationEntity?{
@@ -280,7 +295,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(extraActivityReference == 1){
+                if(isFromNoti){
                     activity?.finish()
                 }else{
                     isEnabled = false
