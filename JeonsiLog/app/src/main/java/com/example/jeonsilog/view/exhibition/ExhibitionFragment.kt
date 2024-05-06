@@ -25,12 +25,14 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.rating.PostRatingRequest
+import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.data.remote.dto.review.CheckReviewEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
+import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
@@ -159,6 +161,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 Toast.makeText(requireContext(), getString(R.string.toast_copy_success), Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_call_empty), Toast.LENGTH_SHORT).show()
+                reportInfo("PHONE_NUMBER")
             }
         }
         //Link
@@ -168,6 +171,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 startActivity(intent)    
             }else{
                 Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_homepage_empty), Toast.LENGTH_SHORT).show()
+                reportInfo("LINK")
             }
         }
         //address
@@ -179,6 +183,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 Toast.makeText(requireContext(), getString(R.string.toast_copy_success), Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_address_empty), Toast.LENGTH_SHORT).show()
+                reportInfo("ADDRESS")
             }
         }
 
@@ -504,6 +509,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
         if(checkReviewEntity!=null){
             exhibitionViewModel.setCheckReviewEntity(checkReviewEntity!!)
+        }
+    }
+
+    //신고하기
+    private fun reportInfo(type: String){
+        runBlocking(Dispatchers.IO){
+            val body = PostReportRequest(type, thisExhibitionId)
+            val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
+            if(response.isSuccessful && response.body()!!.check){
+                Log.d("report", "reportInfo: successful")
+            }
         }
     }
 }
