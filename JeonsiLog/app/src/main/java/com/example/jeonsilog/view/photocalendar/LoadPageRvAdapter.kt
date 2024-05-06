@@ -110,7 +110,7 @@ class LoadPageRvAdapter(
             //현재 날짜 : selectedDate
             //처리해야할것 01 : 존재하지 않으면 그냥 추가
             runBlocking(Dispatchers.IO) {
-                val body= PostPhotoFromPosterRequest(monthYearFromDate(selectedMonth),list[position].imageUrl)
+                val body= PostPhotoFromPosterRequest(monthYearFromDate(selectedMonth),list[position].imageUrl,"")
                 val response = CalendarRepositoryImpl().postPhotoFromPoster(encryptedPrefs.getAT(),body)
                 Log.d("tag", "$response")
                 if(response.isSuccessful && response.body()!!.check){

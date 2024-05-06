@@ -7,3 +7,4 @@ interface CommunicationListener {
     fun onDialogButtonClick(data: String)
     fun onRecyclerViewItemClick(position: Int)
 }
+

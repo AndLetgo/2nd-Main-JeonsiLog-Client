@@ -1,9 +1,15 @@
 package com.example.jeonsilog.view.photocalendar
 
+import CaptionDialog
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -79,7 +85,11 @@ class SingleFragment(private val position:Int) : Fragment(),
         // 받아온 날짜를 해당 포맷으로 변경
         return date.format(formatter)
     }
-
+    private fun yearMonthDayFromDate(date: LocalDate): String{
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        // 받아온 날짜를 해당 포맷으로 변경
+        return date.format(formatter)
+    }
 
     //날짜 생성
     private fun dayInMonthArray(date: LocalDate): ArrayList<String>{
@@ -114,10 +124,35 @@ class SingleFragment(private val position:Int) : Fragment(),
     //아이템 클릭 이벤트
     override fun onItemClick(itemDate: LocalDate) {
         if (itemDate<=LocalDate.now()){
-            bottomSheetDialogFragment = LoadBottomDialog(itemDate,this)
-            bottomSheetDialogFragment!!.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
-            bottomSheetDialogFragment!!.setOnDismissListener(this)
-            bottomSheetDialogFragment!!.show(childFragmentManager, bottomSheetDialogFragment!!.tag)
+            lateinit var  list: List<GetPhotoInformation>
+            var yearMonth = yearMonthFromDate(selectedDate)
+            runBlocking(Dispatchers.IO) {
+                val response = CalendarRepositoryImpl().getMyPhotoMonth(encryptedPrefs.getAT(),yearMonth)
+                if(response.isSuccessful && response.body()!!.check){
+                    list= response.body()!!.information
+                } else {
+                    list= response.body()!!.information
+                }
+            }
+            var yearMonthDay=yearMonthDayFromDate(itemDate)
+            Log.d("itemDateitemDateitemDate", "$yearMonthDay")
+            Log.d("yearMonthDayyearMonthDayyearMonthDay", "$yearMonthDay")
+            if (list.any { it.date == yearMonthDay }){
+                val customDialog = CaptionDialog(itemDate,this)
+
+
+                customDialog.show(childFragmentManager, "ssss")
+//                customDialog.setOnDismissListener {
+//                    checkPosition()
+//                    setMonthView()
+//                }
+            }else{
+                bottomSheetDialogFragment = LoadBottomDialog(itemDate,this)
+                bottomSheetDialogFragment!!.setStyle(DialogFragment.STYLE_NORMAL, R.style.RoundCornerBottomSheetDialogTheme)
+                bottomSheetDialogFragment!!.setOnDismissListener(this)
+                bottomSheetDialogFragment!!.show(childFragmentManager, bottomSheetDialogFragment!!.tag)
+            }
+
         }
     }
     override fun onDismiss() {

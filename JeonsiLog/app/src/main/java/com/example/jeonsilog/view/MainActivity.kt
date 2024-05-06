@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.navigation.findNavController
@@ -62,9 +63,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private var backPressedTime: Long = 0L
     private var alertDialog: AlertDialog.Builder? = null
     private val adminViewModel: AdminViewModel by viewModels()
-
     private var isPermissionDenied = false
-
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if(supportFragmentManager.backStackEntryCount != 0){
@@ -184,6 +183,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             binding.flMain.visibility = View.VISIBLE
         }
     }
+    @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
@@ -357,6 +357,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
+
+    //registerForActivityResult
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
