@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
 import com.example.jeonsilog.databinding.ItemUserSearchBinding
@@ -28,7 +29,10 @@ class AdminSearchUserRvAdapter(
             binding.tvUserName.text= item.nickname
 
             itemView.setOnClickListener {
-                (context as MainActivity).moveOtherUserProfile(item.userId, item.nickname)
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_main, AdminUserFragment(item.userId, item.nickname))
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }
