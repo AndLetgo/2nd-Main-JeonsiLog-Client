@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
 import com.example.jeonsilog.databinding.FragmentAdminSearchPlaceBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.utils.DialogUtil
 
@@ -55,6 +57,15 @@ class AdminSearchPlaceFragment: BaseFragment<FragmentAdminSearchPlaceBinding>(R.
                         adminViewModel.searchPlace()
                     }
                 }
+            }
+        })
+
+        adapter.setOnItemClickListener(object : AdminSearchPlaceRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: SearchPlacesInformationEntity, position: Int) {
+                (requireActivity() as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_main, AdminPlaceFragment(data.placeId, data.placeName))
+                    .addToBackStack(null)
+                    .commit()
             }
         })
     }

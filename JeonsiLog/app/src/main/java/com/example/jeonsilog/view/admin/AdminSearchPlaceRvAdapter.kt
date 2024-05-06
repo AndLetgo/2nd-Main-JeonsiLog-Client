@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
 import com.example.jeonsilog.databinding.ItemExihibitionSearchBinding
 
@@ -23,6 +22,9 @@ class AdminSearchPlaceRvAdapter(
                 binding.tvExhibitionPlaceAddress.text = "${words[0]} ${words[1]}"
             }
 
+            itemView.setOnClickListener {
+                listener?.onItemClick(itemView, item, adapterPosition)
+            }
         }
     }
 
@@ -42,7 +44,7 @@ class AdminSearchPlaceRvAdapter(
     override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
-        fun onItemClick(v: View, data: SearchInformationEntity, position: Int)
+        fun onItemClick(v: View, data: SearchPlacesInformationEntity, position: Int)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){
