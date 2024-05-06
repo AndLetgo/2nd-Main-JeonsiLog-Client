@@ -7,10 +7,17 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.example.jeonsilog.R
+import com.example.jeonsilog.data.remote.dto.stop.StopReq
 import com.example.jeonsilog.databinding.DialogStopReasonBinding
+import com.example.jeonsilog.repository.stop.StopRepositoryImpl
+import com.example.jeonsilog.widget.utils.GlobalApplication
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DialogStopReason(private val userId: Int): DialogFragment() {
     private var _binding: DialogStopReasonBinding? = null
@@ -47,9 +54,17 @@ class DialogStopReason(private val userId: Int): DialogFragment() {
         }
 
         binding.btnSave.setOnClickListener {
-
+            if(binding.etStopReason.text.length >= 2) stopUser()
+            else Toast.makeText(requireContext(), "2자 이상 입력해주세요", Toast.LENGTH_SHORT).show()
         }
 
         return binding.root
+    }
+
+    private fun stopUser(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val res = StopRepositoryImpl().stopUser(GlobalApplication.encryptedPrefs.getAT(), StopReq(userId = userId, reason = binding.etStopReason.text.toString()))
+            if(res.isSuccessful && res.body()!!.check) dismiss() else Toast.makeText(requireContext(), "정지 요청 실패", Toast.LENGTH_SHORT).show()
+        }
     }
 }
