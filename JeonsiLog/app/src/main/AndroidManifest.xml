@@ -26,7 +26,8 @@
         tools:targetApi="tiramisu">
         <activity
             android:name=".view.exhibition.ExtraActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".view.spalshpage.SplashActivity"
             android:exported="true">
