@@ -30,16 +30,17 @@
 
             <Button
                 android:id="@+id/btn_stop"
-                android:layout_width="72dp"
-                android:layout_height="32dp"
+                android:layout_width="50dp"
+                android:layout_height="38dp"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:layout_gravity="end"
                 android:padding="0dp"
-                android:background="@drawable/shape_corner_round_follower_btn"
+                android:background="@drawable/shape_stop_btn"
                 android:text="@string/btn_stop"
-                android:textColor="@color/gray_medium"
+                android:textSize="14sp"
+                android:textColor="@color/basic_point"
                 style="@style/S_regular"
-                android:outlineProvider="none" />
+                />
 
         </androidx.appcompat.widget.Toolbar>
 

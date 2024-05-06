@@ -32,7 +32,7 @@ class AdminUserFragment(private val otherUserId: Int, private val otherUserNick:
         }
 
         binding.btnStop.setOnClickListener {
-
+            DialogStopSelector(otherUserId).show(requireActivity().supportFragmentManager, "Stop_Dialog")
         }
 
         val tabTextList = listOf(getString(R.string.other_rating), getString(R.string.other_review), getString(R.string.other_photo))
