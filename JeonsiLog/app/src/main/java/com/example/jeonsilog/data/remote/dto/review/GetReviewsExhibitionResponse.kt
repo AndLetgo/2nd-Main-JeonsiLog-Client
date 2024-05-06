@@ -32,5 +32,7 @@ data class GetReviewsExhibitionInformationEntity(
     @SerializedName("numReply")
     var numReply: Int,
     @SerializedName("createdDate")
-    val createdDate: String
+    val createdDate: String,
+    @SerializedName("userLevel")
+    val userLevel: String
 )

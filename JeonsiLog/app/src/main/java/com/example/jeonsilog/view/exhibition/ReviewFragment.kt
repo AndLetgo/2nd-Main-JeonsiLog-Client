@@ -1,10 +1,12 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -183,6 +185,15 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             .load(review.imgUrl)
             .transform(CenterCrop(), RoundedCorners(80))
             .into(binding.ivProfile)
+
+        val userLevelDrawable:Drawable? = setUserLevel(review.userLevel)
+        if(userLevelDrawable!=null){
+            Glide.with(this)
+                .load(userLevelDrawable)
+                .into(binding.ivIcUserLevel)
+        }else{
+            binding.ivIcUserLevel.visibility = ViewGroup.GONE
+        }
     }
     private fun getReplyList(){
         replyList = mutableListOf()
@@ -236,7 +247,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         }
         val createdDate = LocalDateTime.now()
         val newReply = GetReplyInformation(replyList.size, replyContent, createdDate.toString(), UserEntity(
-            encryptedPrefs.getUI(), encryptedPrefs.getNN()!!, encryptedPrefs.getURL()!!
+            encryptedPrefs.getUI(), encryptedPrefs.getNN()!!, encryptedPrefs.getURL()!!, encryptedPrefs.getUserLevel()!!
         ))
         replyList.add(newReply)
         binding.rvExhibitionReviewReply.adapter?.notifyItemInserted(replyList.size)
@@ -293,5 +304,16 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             }
         }
         return check
+    }
+
+    private fun setUserLevel(level:String): Drawable?{
+        var img: Drawable? = null
+        when(level){
+            "BEGINNER" -> img = context?.getDrawable(R.drawable.ic_user_level_1_beginner)
+            "INTERMEDIATE" -> img = context?.getDrawable(R.drawable.ic_user_level_2_intermediate)
+            "ADVANCED" -> img = context?.getDrawable(R.drawable.ic_user_level_3_expert)
+            "MASTER" -> img = context?.getDrawable(R.drawable.ic_user_level_4_master)
+        }
+        return img
     }
 }
