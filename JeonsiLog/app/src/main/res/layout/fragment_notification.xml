@@ -48,7 +48,7 @@
             android:id="@+id/nat_small_template"
             app:gnt_template_type="@layout/gnt_small_template_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="90dp" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_noti"
