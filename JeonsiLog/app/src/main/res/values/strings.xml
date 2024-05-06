@@ -81,6 +81,7 @@
 
     <string name="toast_exhibition_place_call_empty">등록된 전화번호가 없어요.</string>
     <string name="toast_exhibition_place_homepage_empty">등록된 링크가 없어요.</string>
+    <string name="toast_exhibition_place_address_empty">등록된 전시장 주소 정보가 없어요.</string>
     <string name="toast_delete_review">감상평이 삭제되었어요.</string>
     <string name="toast_exhibition_name_empty">전시회 이름은 비워둘 수 없어요!</string>
     <string name="toast_exhibition_update">전시회 정보가 업데이트 되었습니다.</string>
@@ -119,6 +120,7 @@
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>
+    <string name="exhibition_address_empty">전시장 주소 정보가 없어요</string>
     <string name="exhibition_more_info">| &#160;...더보기</string>
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>

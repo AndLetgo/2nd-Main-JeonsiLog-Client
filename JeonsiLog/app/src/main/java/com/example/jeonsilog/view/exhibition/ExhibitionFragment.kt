@@ -170,6 +170,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                 Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_homepage_empty), Toast.LENGTH_SHORT).show()
             }
         }
+        //address
+        binding.tvAddress.setOnClickListener {
+            if(exhibitionInfoData?.place?.address !=null){
+                val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.address)
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(requireContext(), getString(R.string.toast_copy_success), Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_address_empty), Toast.LENGTH_SHORT).show()
+            }
+        }
 
         //전시회 정보 더보기 버튼 처리
         binding.tvReadMoreInfo.setOnClickListener {
@@ -265,7 +276,12 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
 
         binding.tvExhibitionName.text = exhibitionInfoData?.exhibitionName
-        binding.tvAddress.text = exhibitionInfoData?.place?.address
+        if(exhibitionInfoData?.place?.address!=null){
+            binding.tvAddress.text = exhibitionInfoData?.place?.address
+        }else{
+            binding.tvAddress.text = getString(R.string.exhibition_address_empty)
+        }
+
 
         if(exhibitionInfoData?.place?.placeName !=null){
             binding.tvPlaceName.text = exhibitionInfoData?.place?.placeName
