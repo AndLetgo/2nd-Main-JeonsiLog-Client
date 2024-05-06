@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">전시로그</string>
 
+    <!-- User Level -->
+    <string name="user_level_beginner">전시초보</string>
+    <string name="user_level_intermediate">전시중수</string>
+    <string name="user_level_advanced">전시고수</string>
+    <string name="user_level_master">전시마스터</string>
+    
     <!-- Button -->
     <string name="btn_delete">삭제</string>
     <string name="btn_delete_dialog">삭제하기</string>
@@ -11,6 +17,7 @@
     <string name="btn_move">이동</string>
     <string name="btn_close">닫기</string>
     <string name="btn_setting">설정</string>
+    <string name="btn_confirm">확인</string>
     <string name="btn_wrting_review_close">창 닫기</string>
     <string name="btn_save">저장하기</string>
 
@@ -67,6 +74,9 @@
     <string name="dialog_admin_edit_place_call">전시공간 전화번호 수정</string>
     <string name="dialog_admin_edit_place_homepage">전시공간 홈페이지 링크 수정</string>
     <string name="dialog_admin_edit_exhibition_information">전시회 정보 수정</string>
+
+    <string name="dialog_level_up_first">감상평을 남기셨군요!\n우리 전시마스터를 향해 가볼까요?</string>
+    <string name="dialog_level_up">축하합니다!\n %1$s가 되었어요!</string>
 
     <!-- Toast Message -->
     <string name="toast_copy_success">복사 성공!</string>

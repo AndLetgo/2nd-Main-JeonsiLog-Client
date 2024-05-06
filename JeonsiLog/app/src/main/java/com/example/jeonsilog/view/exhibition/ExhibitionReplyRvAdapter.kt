@@ -93,7 +93,7 @@ class ExhibitionReplyRvAdapter(private val replyList: MutableList<GetReplyInform
         when(level){
             "BEGINNER" -> img = context.getDrawable(R.drawable.ic_user_level_1_beginner)
             "INTERMEDIATE" -> img = context.getDrawable(R.drawable.ic_user_level_2_intermediate)
-            "ADVANCED" -> img = context.getDrawable(R.drawable.ic_user_level_3_expert)
+            "ADVANCED" -> img = context.getDrawable(R.drawable.ic_user_level_3_advanced)
             "MASTER" -> img = context.getDrawable(R.drawable.ic_user_level_4_master)
         }
         return img

@@ -53,7 +53,6 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                Log.d("writing", "onTextChanged: s?.length: ${s?.length}")
                 viewModel.setWritingCount(s?.length.toString())
 
                 if(s?.length!! > 0 ){
@@ -86,7 +85,6 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
                         val body = PostReviewRequest(thisExhibitionId, binding.etWritingReview.text.toString())
                         val response = ReviewRepositoryImpl().postReview(encryptedPrefs.getAT(), body)
                         if(response.isSuccessful && response.body()!!.check){
-                            Log.d(TAG, "init: post successful")
                             isSuccess = true
                         }else{
                             null
@@ -95,6 +93,8 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
                 }
                 if(isSuccess){
                     Log.d(TAG, "init: 성공")
+                    checkLevelUp()
+                    encryptedPrefs.setReviewCount(encryptedPrefs.getReviewCount()+1)
                     exhibitionViewModel.setUserReview(binding.etWritingReview.text.toString())
 
                     exhibitionViewModel.resetCheckReviewEntity()
@@ -104,7 +104,6 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
         }
 
         viewModel.writingCount.observe(this){
-            Log.d(TAG, "init: viewModel.writingCount: $it")
             binding.tvCountWritingReview.text =
                 getString(R.string.exhibition_writing_review_count, it)
         }
@@ -116,4 +115,22 @@ class WritingReviewFragment : BaseFragment<FragmentWritingReviewBinding>(
     }
 
     override fun confirmButtonClick(position: Int) {}
+
+    private fun showLevelUpDialog(userLevel:String){
+        val dialog = DialogLevelUp(requireContext(), userLevel)
+        dialog.show()
+    }
+    private fun checkLevelUp(){
+        Log.d(TAG, "checkLevelUp: ${encryptedPrefs.getReviewCount()}")
+        if(encryptedPrefs.getUserLevel()=="NON"){
+            showLevelUpDialog("NON")
+        }else{
+            when(encryptedPrefs.getReviewCount()){
+                2 -> showLevelUpDialog(getString(R.string.user_level_beginner))
+                9 -> showLevelUpDialog(getString(R.string.user_level_intermediate))
+                19 -> showLevelUpDialog(getString(R.string.user_level_advanced))
+                29 -> showLevelUpDialog(getString(R.string.user_level_master))
+            }
+        }
+    }
 }

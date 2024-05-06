@@ -128,7 +128,7 @@ class OtherUserFragment(private val otherUserId: Int, private val otherUserNick:
                 }
                 "ADVANCED" -> {
                     binding.ivLevel.visibility = View.VISIBLE
-                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_3_expert)
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_3_advanced)
                 }
                 "MASTER" -> {
                     binding.ivLevel.visibility = View.VISIBLE
