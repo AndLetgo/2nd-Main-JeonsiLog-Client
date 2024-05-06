@@ -47,16 +47,4 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
             adminViewModel.setSearchWord("")
         }
     }
-
-//        adminSearchRvAdapter.setOnItemClickListener(object : AdminSearchExhibitionRvAdapter.OnItemClickListener{
-//            override fun onItemClick(v: View, data: SearchInformationEntity, position: Int) {
-//                val navController = findNavController()
-//                navController.navigate(R.id.adminExhibitionFragment)
-//                (activity as MainActivity).setStateFcm(true)
-//                isAdminExhibitionOpen =true
-//                adminViewModel.setIsReport(true)
-//                exhibitionId = data.exhibitionId
-//            }
-//        })
-
 }

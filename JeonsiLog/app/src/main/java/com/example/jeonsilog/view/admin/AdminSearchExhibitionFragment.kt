@@ -3,13 +3,18 @@ package com.example.jeonsilog.view.admin
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.databinding.FragmentAdminSearchExhibitionBinding
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.utils.DialogUtil
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 
 class AdminSearchExhibitionFragment: BaseFragment<FragmentAdminSearchExhibitionBinding>(R.layout.fragment_admin_search_exhibition) {
     private val adminViewModel: AdminViewModel by activityViewModels()
@@ -55,6 +60,17 @@ class AdminSearchExhibitionFragment: BaseFragment<FragmentAdminSearchExhibitionB
                         adminViewModel.searchExhibition()
                     }
                 }
+            }
+        })
+
+        adapter.setOnItemClickListener(object : AdminSearchExhibitionRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: SearchInformationEntity, position: Int) {
+                val navController = findNavController()
+                navController.navigate(R.id.adminExhibitionFragment)
+                (activity as MainActivity).setStateFcm(true)
+                isAdminExhibitionOpen =true
+                adminViewModel.setIsReport(true)
+                exhibitionId = data.exhibitionId
             }
         })
     }
