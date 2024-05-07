@@ -63,7 +63,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
 
     override fun init() {
         (activity as MainActivity).setStateToolBar(false)
-        
+
         isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragmentInAdmin(R.id.adminExhibitionFragment)
