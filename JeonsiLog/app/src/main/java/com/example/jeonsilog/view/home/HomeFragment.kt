@@ -35,29 +35,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     val TAG = "homeTest"
 
     override fun init() {
+        (activity as MainActivity).setStateToolBar(true)
+
         adminViewModel.resetExhibitionInfo()
         if(adminViewModel.isChanged.value!!){
             (activity as MainActivity).refreshFragmentInAdmin(R.id.homeFragment)
             adminViewModel.setIsChanged(false)
         }
         isAdminExhibitionOpen = false
-        //관리자 체크
-        if(encryptedPrefs.getCheckAdmin()){
-            binding.btnChangeAdminUser.visibility = View.VISIBLE
-        }else{
-            binding.btnChangeAdminUser.visibility = View.GONE
-        }
-        if(adminViewModel.isAdminPage.value!!){
-//            binding.ibFabTop.visibility = View.GONE
-//            binding.ibFabTopAdmin.visibility = View.VISIBLE
-            binding.btnChangeAdminUser.text = getString(R.string.btn_change_to_user)
-            (activity as MainActivity).setStateBn(true, "admin")
-        }else{
-//            binding.ibFabTop.visibility = View.VISIBLE
-//            binding.ibFabTopAdmin.visibility = View.GONE
-            binding.btnChangeAdminUser.text = getString(R.string.btn_change_to_admin)
-            (activity as MainActivity).setStateBn(true, "user")
-        }
 
         homeRecentlyRvAdapter = HomeRecentlyRvAdapter(homeColorfulRvList, requireContext())
         binding.rvPopular.adapter = homeRecentlyRvAdapter
@@ -90,17 +75,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         })
 
         getRvData()
-
-        binding.btnChangeAdminUser.setOnClickListener {
-            when(binding.btnChangeAdminUser.text){
-                getString(R.string.btn_change_to_admin) -> {
-                    (activity as MainActivity).checkAdmin(true)
-                }
-                getString(R.string.btn_change_to_user) -> {
-                    (activity as MainActivity).checkAdmin(false)
-                }
-            }
-        }
     }
 
     private fun getRvData(){

@@ -24,6 +24,7 @@ class PhotoCalendarFragment : BaseFragment<FragmentPhotoCalendarBinding>(
     lateinit var selectedDateCurrent: LocalDate
     lateinit var selectedDate: LocalDate
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
 
         val viewModel = ViewModelProvider(requireActivity()).get(PhotoCalendarViewModel::class.java)
         binding.lifecycleOwner=requireActivity()

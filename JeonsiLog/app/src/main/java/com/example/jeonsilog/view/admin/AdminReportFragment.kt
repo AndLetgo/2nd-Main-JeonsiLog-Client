@@ -25,6 +25,8 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
     private var reportPage = 0
     private var hasNextPage = true
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+
         GlobalApplication.isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragment(AdminReportFragment())

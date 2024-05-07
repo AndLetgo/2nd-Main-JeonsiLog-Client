@@ -12,43 +12,70 @@
         android:layout_height="match_parent"
         tools:context=".view.home.HomeFragment"
         android:background="@color/basic_white">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-            <ImageView
-                android:layout_width="@dimen/item_32"
-                android:layout_height="@dimen/item_32"
-                android:src="@drawable/logo_jeonsilog"/>
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="81dp"
-                android:layout_height="20dp"
-                android:src="@drawable/illus_jeonsilog_title"
-                android:layout_marginStart="@dimen/margin_28"/>
-            <Button
-                android:id="@+id/btn_change_admin_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/item_0"
-                android:minWidth="@dimen/item_0"
-                android:paddingHorizontal="@dimen/margin_16"
-                android:paddingVertical="@dimen/margin_8"
-                android:text="@string/btn_change_to_user"
-                style="@style/S_regular"
-                android:textColor="@color/basic_point"
-                android:background="@drawable/shape_btn_stroke_r4"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/margin_16"/>
-        </androidx.appcompat.widget.Toolbar>
-
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent">-->
+<!--            <ImageView-->
+<!--                android:layout_width="@dimen/item_32"-->
+<!--                android:layout_height="@dimen/item_32"-->
+<!--                android:src="@drawable/logo_jeonsilog"/>-->
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_logo"-->
+<!--                android:layout_width="81dp"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:src="@drawable/illus_jeonsilog_title"-->
+<!--                android:layout_marginStart="@dimen/margin_28"/>-->
+<!--        </androidx.appcompat.widget.Toolbar>-->
+<!--        <androidx.appcompat.widget.SwitchCompat-->
+<!--            android:id="@+id/sc_switch_admin_user"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:thumb="@drawable/shape_toggle_admin_thumb"-->
+<!--            app:track="@drawable/shape_toggle_admin_track"-->
+<!--            android:textOff="@string/toggle_change_to_admin"-->
+<!--            android:textOn="@string/toggle_change_to_user"-->
+<!--            android:textColor="@color/gray_medium"-->
+<!--            app:layout_constraintTop_toTopOf="@id/toolbar"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/toolbar"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/toolbar"-->
+<!--            android:layout_marginEnd="@dimen/margin_16" />-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="@dimen/item_0"-->
+<!--            android:layout_height="@dimen/item_0"-->
+<!--            app:layout_constraintStart_toStartOf="@id/sc_switch_admin_user"-->
+<!--            app:layout_constraintTop_toTopOf="@id/sc_switch_admin_user"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/sc_switch_admin_user"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/sc_switch_admin_user"-->
+<!--            android:weightSum="2"-->
+<!--            android:gravity="center"-->
+<!--            android:paddingBottom="@dimen/margin_1">-->
+<!--            <TextView-->
+<!--                android:id="@+id/tv_switch_admin"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                style="@style/S_regular"-->
+<!--                android:textColor="@color/basic_white"-->
+<!--                android:text="@string/toggle_change_to_admin"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/tv_switch_user"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                style="@style/S_regular"-->
+<!--                android:textColor="@color/gray_medium"-->
+<!--                android:text="@string/toggle_change_to_user"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"/>-->
+<!--        </LinearLayout>-->
         <ScrollView
             android:id="@+id/sv_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/margin_56">
             <LinearLayout
@@ -65,6 +92,7 @@
                     android:textColor="@color/basic_black"
                     android:paddingStart="@dimen/margin_16"
                     android:gravity="center_vertical"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_popular"
                     android:layout_width="match_parent"

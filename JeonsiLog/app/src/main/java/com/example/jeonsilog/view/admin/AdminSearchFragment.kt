@@ -16,6 +16,8 @@ class AdminSearchFragment : BaseFragment<FragmentAdminSearchBinding>(R.layout.fr
     private val tabTextList = listOf("전시", "전시장", "사용자")
 
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+        
         GlobalApplication.isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragment(AdminSearchFragment())
