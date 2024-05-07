@@ -61,7 +61,7 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
                         navController.navigate(R.id.adminReviewFragment)
                     }
                 }
-                checkReport(data.reportId)
+                checkReport(data.reportedId)
                 isAdminExhibitionOpen = true
                 (activity as MainActivity).setStateFcm(true)
             }
