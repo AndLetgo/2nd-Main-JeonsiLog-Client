@@ -36,6 +36,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     override fun init() {
         (activity as MainActivity).setStateToolBar(true)
+        if(adminViewModel.isAdminPage.value!!){
+            (activity as MainActivity).setStateBn(true, "admin")
+        }
 
         adminViewModel.resetExhibitionInfo()
         if(adminViewModel.isChanged.value!!){

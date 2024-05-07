@@ -62,6 +62,8 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     private val adminViewModel: AdminViewModel by activityViewModels()
 
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+        
         isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragmentInAdmin(R.id.adminExhibitionFragment)
