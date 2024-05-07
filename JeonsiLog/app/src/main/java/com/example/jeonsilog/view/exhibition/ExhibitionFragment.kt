@@ -60,6 +60,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private var hasNextPage = true
 
     override fun init() {
+        reviewPage = 0
+        reviewList = mutableListOf()
+
         isRefresh.observe(this){
             if(it){
                 (activity as ExtraActivity).refreshFragment(R.id.exhibitionFragment)
@@ -85,7 +88,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }else{
             thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.getCurrentExhibitionsSize()-1]
         }
-        Log.d("exhibitionID", "init: exhibitionID: ${thisExhibitionId}")
 
         getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
@@ -366,7 +368,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                     }
                 }
             }
-            regetExhibitionRate()
+            reGetExhibitionRate()
 
             if(exhibitionViewModel.myReviewItem.value!=null){
                 val review = exhibitionViewModel.myReviewItem.value
@@ -376,7 +378,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         }
     }
-    private fun regetExhibitionRate(){
+    private fun reGetExhibitionRate(){
         exhibitionInfoData = runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(), thisExhibitionId)
             if(response.isSuccessful && response.body()!!.check){
@@ -412,7 +414,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
     }
     private fun getReviewInfo(){
-        Log.d("TAG", "getReviewInfo: 실행 $reviewPage")
+        Log.d("notiTest", "getReviewInfo: 실행 $reviewPage")
         exhibitionRvAdapter = ExhibitionReviewRvAdapter(reviewList, requireContext())
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         binding.rvExhibitionReview.layoutManager = LinearLayoutManager(context)
@@ -478,7 +480,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d("tag", "onAttach Back")
                 view?.let { exhibitionViewModel.removeLastExhibitionId() }
                 exhibitionViewModel.resetMyReviewItem()
                 isEnabled = false

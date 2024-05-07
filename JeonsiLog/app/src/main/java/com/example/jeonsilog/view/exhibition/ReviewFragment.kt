@@ -32,6 +32,7 @@ import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReplyId
@@ -168,7 +169,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         binding.tvBtnMoveExhibition.setOnClickListener {
             isFromNoti = false
             extraActivityReference = 0
-//            requireActivity().supportFragmentManager.popBackStack()
+            exhibitionViewModel.setCurrentExhibitionIds(exhibitionId)
             requireActivity().onBackPressed()
         }
 
@@ -184,6 +185,8 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         return newReview
     }
     private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
+        exhibitionId = review.exhibitionId
+
         binding.tvUserName.text = review.nickname
         if(review.rate==0.0){
             binding.brbExhibitionReview.visibility = View.GONE
