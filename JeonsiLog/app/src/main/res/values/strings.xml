@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">전시로그</string>
 
+    <!-- User Level -->
+    <string name="user_level_beginner">전시초보</string>
+    <string name="user_level_intermediate">전시중수</string>
+    <string name="user_level_advanced">전시고수</string>
+    <string name="user_level_master">전시마스터</string>
+    
     <!-- Button -->
     <string name="btn_delete">삭제</string>
     <string name="btn_delete_dialog">삭제하기</string>
@@ -11,6 +17,7 @@
     <string name="btn_move">이동</string>
     <string name="btn_close">닫기</string>
     <string name="btn_setting">설정</string>
+    <string name="btn_confirm">확인</string>
     <string name="btn_wrting_review_close">창 닫기</string>
     <string name="btn_save">저장하기</string>
 
@@ -21,6 +28,7 @@
     <string name="btn_load_poster">전시회 포스터 불러오기</string>
     <string name="btn_set_delete_image">이미지 삭제하기</string>
     <string name="btn_set_defalut_image">기본 이미지로 변경</string>
+    <string name="btn_move_exhibition">전시회 바로가기</string>
 
     <string name="btn_following">팔로잉</string>
     <string name="btn_follow">팔로우</string>
@@ -68,7 +76,12 @@
     <string name="dialog_admin_edit_place_homepage">전시공간 홈페이지 링크 수정</string>
     <string name="dialog_admin_edit_exhibition_information">전시회 정보 수정</string>
 
+    <string name="dialog_level_up_first">감상평을 남기셨군요!\n우리 전시마스터를 향해 가볼까요?</string>
+    <string name="dialog_level_up">축하합니다!\n %1$s가 되었어요!</string>
+
     <!-- Toast Message -->
+    <string name="toast_copy_success">복사 성공!</string>
+
     <string name="toast_save_success">저장 성공!</string>
     <string name="toast_save_failure">저장 실패!</string>
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
@@ -79,6 +92,7 @@
 
     <string name="toast_exhibition_place_call_empty">등록된 전화번호가 없어요.</string>
     <string name="toast_exhibition_place_homepage_empty">등록된 링크가 없어요.</string>
+    <string name="toast_exhibition_place_address_empty">등록된 전시장 주소 정보가 없어요.</string>
     <string name="toast_delete_review">감상평이 삭제되었어요.</string>
     <string name="toast_exhibition_name_empty">전시회 이름은 비워둘 수 없어요!</string>
     <string name="toast_exhibition_update">전시회 정보가 업데이트 되었습니다.</string>
@@ -117,6 +131,7 @@
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>
+    <string name="exhibition_address_empty">전시장 주소 정보가 없어요</string>
     <string name="exhibition_more_info">| &#160;...더보기</string>
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>
