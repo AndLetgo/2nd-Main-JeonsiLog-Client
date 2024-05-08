@@ -152,11 +152,20 @@ class CaptionDialog(
         }
 
         binding.btSave.setOnClickListener {
+            var date =list[index!!].date
+            var url =list[index!!].imgUrl
+            var captionStr=userInput
             runBlocking(Dispatchers.IO) {
-                val body= PostPhotoFromPosterRequest(list[index!!].date,list[index!!].imgUrl,userInput)
+                val body= DeletePhotoRequest(DateUtil().monthYearFromDate(localDate))
+                val response = CalendarRepositoryImpl().deletePhoto(GlobalApplication.encryptedPrefs.getAT(),body)
+                if(response.isSuccessful && response.body()!!.check){
+                }
+            }
+            runBlocking(Dispatchers.IO) {
+                val body= PostPhotoFromPosterRequest(date,url,captionStr)
                 val response = CalendarRepositoryImpl().postPhotoFromPoster(
                     GlobalApplication.encryptedPrefs.getAT(),body)
-
+                Log.d("tag", "$response")
                 if(response.isSuccessful && response.body()!!.check){
                     Log.d("UpCaption", "Image uploaded successfully : ${response.body()}")
 
@@ -189,19 +198,9 @@ class CaptionDialog(
                 val response = CalendarRepositoryImpl().deletePhoto(GlobalApplication.encryptedPrefs.getAT(),body)
                 if(response.isSuccessful && response.body()!!.check){
                 }
-
             }
             dismiss()
             listener.onRecyclerViewItemClick(0)
-            ////
-            ////
-            //디스미스 콜백
-            /////
-            ////
-            ////
-            /////
-            ////
-            /////
         }
 
 
