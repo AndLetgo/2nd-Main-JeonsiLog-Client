@@ -52,7 +52,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         }
         isAdminExhibitionOpen = false
 
-        homeRecentlyRvAdapter = HomeRecentlyRvAdapter(homeColorfulRvList, requireContext())
+        homeRecentlyRvAdapter = HomeRecentlyRvAdapter(homeRecentlyRvList, requireContext())
         binding.rvPopular.adapter = homeRecentlyRvAdapter
         binding.rvPopular.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
