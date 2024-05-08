@@ -44,8 +44,8 @@
     <string name="btn_refresh">새로고침</string>
     <string name="btn_duplicate">중복확인</string>
 
-    <string name="btn_change_to_admin">관리자 화면</string>
-    <string name="btn_change_to_user">사용자 화면</string>
+    <string name="toggle_change_to_admin">관리자</string>
+    <string name="toggle_change_to_user">사용자</string>
 
     <!-- Date -->
     <string name="date_now">지금</string>
@@ -218,9 +218,13 @@
     <string name="admin_exhibition_poster_empty">포스터 이미지를 추가해주세요.</string>
 
     <string name="admin_report_title">접수된 신고</string>
-    <string name="admin_report_review_content">%1$s 님의 감상평이 신고됐어요.</string>
-    <string name="admin_report_reply_content">%1$s 님의 댓글이 신고됐어요.</string>
-    <string name="admin_report_poster_content">%1$s 포스터 등록이 필요해요.</string>
+    <string name="admin_report_review_content">"<b>%1$s</b> 님의 감상평이 신고됐어요."</string>
+    <string name="admin_report_reply_content">"<b>%1$s</b> 님의 댓글이 신고됐어요."</string>
+    <string name="admin_report_poster_content">"<b>[%1$s]</b> 포스터 등록이 필요해요."</string>
+    <string name="admin_report_phone_content">"<b>[%1$s]</b> 전화번호 등록이 필요해요."</string>
+    <string name="admin_report_link_content">"<b>[%1$s]</b> 링크 등록이 필요해요."</string>
+    <string name="admin_report_address_content">"<b>[%1$s]</b> 주소 등록이 필요해요."</string>
+    <string name="admin_report_count_over_nine">9+</string>
 
     <string name="admin_managing_search_hint">전시회명을 입력하세요.</string>
 

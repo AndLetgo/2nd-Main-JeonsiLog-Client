@@ -43,6 +43,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         nowActivityName=context.javaClass.simpleName
     }
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+
         try{
             (activity as MainActivity).setStateBn(true,"user")
         }catch (e:ClassCastException){

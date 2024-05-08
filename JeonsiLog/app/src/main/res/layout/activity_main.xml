@@ -7,13 +7,76 @@
         android:layout_width="match_parent"
         android:background="@color/basic_white"
         android:layout_height="match_parent">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <ImageView
+                android:layout_width="@dimen/item_32"
+                android:layout_height="@dimen/item_32"
+                android:src="@drawable/logo_jeonsilog"/>
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="81dp"
+                android:layout_height="20dp"
+                android:src="@drawable/illus_jeonsilog_title"
+                android:layout_marginStart="@dimen/margin_28"/>
+        </androidx.appcompat.widget.Toolbar>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sc_switch_admin_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:thumb="@drawable/shape_toggle_admin_thumb"
+            app:track="@drawable/shape_toggle_admin_track"
+            android:textOff="@string/toggle_change_to_admin"
+            android:textOn="@string/toggle_change_to_user"
+            android:textColor="@color/gray_medium"
+            app:layout_constraintTop_toTopOf="@id/toolbar"
+            app:layout_constraintEnd_toEndOf="@id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@id/toolbar"
+            android:layout_marginEnd="@dimen/margin_16" />
+        <LinearLayout
+            android:layout_width="@dimen/item_0"
+            android:layout_height="@dimen/item_0"
+            app:layout_constraintStart_toStartOf="@id/sc_switch_admin_user"
+            app:layout_constraintTop_toTopOf="@id/sc_switch_admin_user"
+            app:layout_constraintEnd_toEndOf="@id/sc_switch_admin_user"
+            app:layout_constraintBottom_toBottomOf="@id/sc_switch_admin_user"
+            android:weightSum="2"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin_1">
+            <TextView
+                android:id="@+id/tv_switch_admin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/S_regular"
+                android:textColor="@color/basic_white"
+                android:text="@string/toggle_change_to_admin"
+                android:layout_weight="1"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/tv_switch_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/S_regular"
+                android:textColor="@color/gray_medium"
+                android:text="@string/toggle_change_to_user"
+                android:layout_weight="1"
+                android:gravity="center"/>
+        </LinearLayout>
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv_nav_admin"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/item_0"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_admin"/>
+            app:navGraph="@navigation/nav_admin"
+            app:layout_constraintBottom_toTopOf="@+id/bnv_main"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
         <FrameLayout
             android:id="@+id/fl_main"
             android:layout_width="match_parent"
@@ -21,7 +84,7 @@
             app:layout_constraintBottom_toTopOf="@+id/bnv_main"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bnv_main"

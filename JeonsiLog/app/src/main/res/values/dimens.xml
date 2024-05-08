@@ -35,6 +35,7 @@
     <dimen name="item_24">24dp</dimen>
     <dimen name="item_28">28dp</dimen>
     <dimen name="item_32">32dp</dimen>
+    <dimen name="item_36">36dp</dimen>
     <dimen name="item_40">40dp</dimen>
     <dimen name="item_44">44dp</dimen>
     <dimen name="item_45">45dp</dimen>

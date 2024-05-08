@@ -10,6 +10,7 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
 import com.example.jeonsilog.databinding.FragmentUserSearchBinding
 import com.example.jeonsilog.repository.user.UserRepositoryImpl
+import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.SearchViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
 import kotlinx.coroutines.Dispatchers

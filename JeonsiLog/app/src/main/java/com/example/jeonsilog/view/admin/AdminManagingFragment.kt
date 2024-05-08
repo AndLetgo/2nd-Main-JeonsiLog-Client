@@ -32,6 +32,8 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
     private var selectedExhibitionName = ""
     val TAG = "managing"
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+
         GlobalApplication.isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragment(AdminManagingFragment())

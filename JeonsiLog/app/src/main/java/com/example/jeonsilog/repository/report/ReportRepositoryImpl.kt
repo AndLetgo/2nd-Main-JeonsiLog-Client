@@ -5,6 +5,7 @@ import com.example.jeonsilog.data.remote.api.ReportApi
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.data.remote.dto.report.GetReportsResponse
+import com.example.jeonsilog.data.remote.dto.report.PatchReportRequest
 import retrofit2.Response
 
 class ReportRepositoryImpl: ReportRepository {
@@ -33,8 +34,8 @@ class ReportRepositoryImpl: ReportRepository {
         }
     }
 
-    override suspend fun patchCheckReport(token: String, reportId: Int): Response<OnlyMsgResponse> {
-        val response = service.patchCheckReport(token, reportId)
+    override suspend fun patchCheckReport(token: String, body: PatchReportRequest): Response<OnlyMsgResponse> {
+        val response = service.patchCheckReport("Bearer $token", body)
 
         return if(response.isSuccessful && response.body()!!.check){
             response
