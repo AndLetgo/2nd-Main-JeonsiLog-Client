@@ -13,5 +13,7 @@ data class PostPhotoFromGalleryRequest (
 
 data class UploadImageReqEntity(
     @SerializedName("date")
-    val date: String
+    val date: String,
+    @SerializedName("caption")
+    val caption: String
 )
