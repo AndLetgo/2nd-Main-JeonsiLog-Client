@@ -69,7 +69,7 @@ class AdminSearchExhibitionFragment: BaseFragment<FragmentAdminSearchExhibitionB
                 navController.navigate(R.id.adminExhibitionFragment)
                 (activity as MainActivity).setStateFcm(true)
                 isAdminExhibitionOpen =true
-                adminViewModel.setIsReport(true)
+                adminViewModel.setIsReport(false)
                 exhibitionId = data.exhibitionId
             }
         })

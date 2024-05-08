@@ -46,7 +46,7 @@ class AdminPlaceFragment(private val placeId: Int, private val placeName: String
                 navController.navigate(R.id.adminExhibitionFragment)
                 (activity as MainActivity).setStateFcm(true)
                 GlobalApplication.isAdminExhibitionOpen =true
-                adminViewModel.setIsReport(true)
+                adminViewModel.setIsReport(false)
                 GlobalApplication.exhibitionId = data.exhibitionId
             }
         })
