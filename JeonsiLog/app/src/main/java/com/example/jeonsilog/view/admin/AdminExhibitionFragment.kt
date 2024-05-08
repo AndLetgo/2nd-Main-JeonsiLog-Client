@@ -55,7 +55,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     private var exhibitionInfoData: ExhibitionInfo? = null
     private var thisExhibitionId = 0
     private var hasNextPage = true
-    val TAG = "report"
+    val TAG = "search"
     //감상평
     private var reviewList = mutableListOf<GetReviewsExhibitionInformationEntity>()
     private var reviewPage = 0
@@ -74,7 +74,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
 
         //신고 -> 포스터
         Log.d(TAG, "init: adminViewModel.reportExhibitionId.value: ${adminViewModel.reportExhibitionId.value}")
-        Log.d("report", "init:isReport: ${adminViewModel.isReport.value!!}")
+        Log.d(TAG, "init:isReport: ${adminViewModel.isReport.value!!}")
         if(adminViewModel.isReport.value!!){
             thisExhibitionId = adminViewModel.reportExhibitionId.value!!
             exhibitionId = adminViewModel.reportExhibitionId.value!!

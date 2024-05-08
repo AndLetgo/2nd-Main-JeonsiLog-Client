@@ -71,6 +71,7 @@ class AdminSearchExhibitionFragment: BaseFragment<FragmentAdminSearchExhibitionB
                 isAdminExhibitionOpen =true
                 adminViewModel.setIsReport(false)
                 exhibitionId = data.exhibitionId
+                adminViewModel.setReportExhibitionId(data.exhibitionId)
             }
         })
     }
