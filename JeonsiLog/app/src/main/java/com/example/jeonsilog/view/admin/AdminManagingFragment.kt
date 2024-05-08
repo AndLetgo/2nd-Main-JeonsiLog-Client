@@ -32,6 +32,8 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
     private var selectedExhibitionName = ""
     val TAG = "managing"
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+
         GlobalApplication.isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragment(AdminManagingFragment())
@@ -40,7 +42,7 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
         }
 
         adminViewModel.setCheckListCount(false)
-        setRecyclerView()
+//        setRecyclerView()
 
         binding.vm = adminViewModel
         binding.lifecycleOwner = this
@@ -94,16 +96,16 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
     }
 
     private fun setRecyclerView(){
-        runBlocking(Dispatchers.IO){
-            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(), 0)
-            if(response.isSuccessful && response.body()!!.check){
-                val data =response.body()!!.information.data
-                for(i in 0..9){
-                    val item = SearchByNameEntity(data[i].exhibitionId, data[i].exhibitionName)
-                    exhibitionList.add(i,item)
-                }
-            }
-        }
+//        runBlocking(Dispatchers.IO){
+//            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(), 0)
+//            if(response.isSuccessful && response.body()!!.check){
+//                val data =response.body()!!.information.data
+//                for(i in 0..9){
+//                    val item = SearchByNameEntity(data[i].exhibitionId, data[i].exhibitionName)
+//                    exhibitionList.add(i,item)
+//                }
+//            }
+//        }
         adminManagingRvAdapter = AdminManagingRvAdapter(exhibitionList, requireContext())
         binding.rvExhibitionList.adapter = adminManagingRvAdapter
         binding.rvExhibitionList.layoutManager = LinearLayoutManager(requireContext())

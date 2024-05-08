@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -42,6 +43,8 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         nowActivityName=context.javaClass.simpleName
     }
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+
         try{
             (activity as MainActivity).setStateBn(true,"user")
         }catch (e:ClassCastException){
@@ -157,7 +160,32 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 transaction.commit()
             }
         }
+
+        viewModel.level.observe(this){
+            when(it){
+                "BEGINNER" -> { // 3~9
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_1_beginner)
+                }
+                "INTERMEDIATE" -> { // 10~19
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_2_intermediate)
+                }
+                "ADVANCED" -> {
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_3_advanced)
+                }
+                "MASTER" -> {
+                    binding.ivLevel.visibility = View.VISIBLE
+                    binding.ivLevel.setImageResource(R.drawable.ic_user_level_4_master)
+                }
+                else -> {
+                    binding.ivLevel.visibility = View.GONE
+                }
+            }
+        }
     }
+
     private fun showCustomDialog() {
         val customDialogFragment = MyPageNickEditDialog(viewModel)
         customDialogFragment.show(parentFragmentManager, "MyPageNickEditDialog")
@@ -214,19 +242,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 Log.e("Upload", "Image upload failed")
             }
         }
-
-//        val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.illus_default_profile)
-//        val bitmap = (drawable as BitmapDrawable).bitmap
-//
-//        val file = File(requireContext().cacheDir, "default.png")
-//        val outputStream: OutputStream = FileOutputStream(file)
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-//        outputStream.flush()
-//        outputStream.close()
-//
-//        val uri = Uri.fromFile(file)
-//
-//        patchMyProfileImg(uri)
     }
 
 

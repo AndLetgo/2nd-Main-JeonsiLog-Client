@@ -13,9 +13,9 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
 import com.example.jeonsilog.databinding.ItemHomeExhibitionBinding
 
-class AdminSearchRvAdapter(
-    var exhibitionList:MutableList<SearchInformationEntity>, private val context: Context):
-    RecyclerView.Adapter<AdminSearchRvAdapter.RecycleViewHolder>() {
+class AdminSearchExhibitionRvAdapter(
+    var list: MutableList<SearchInformationEntity>, private val context: Context):
+    RecyclerView.Adapter<AdminSearchExhibitionRvAdapter.RecycleViewHolder>() {
     private var listener: OnItemClickListener? = null
 
     inner class RecycleViewHolder(private val binding: ItemHomeExhibitionBinding):
@@ -75,16 +75,16 @@ class AdminSearchRvAdapter(
     }
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
-        holder.bind(exhibitionList[position])
+        holder.bind(list[position])
 
         if(position != RecyclerView.NO_POSITION){
             holder.itemView.setOnClickListener {
-                listener?.onItemClick(holder.itemView, exhibitionList[position], position)
+                listener?.onItemClick(holder.itemView, list[position], position)
             }
         }
     }
 
-    override fun getItemCount(): Int = exhibitionList.size
+    override fun getItemCount(): Int = list.size
 
     interface OnItemClickListener {
         fun onItemClick(v: View, data: SearchInformationEntity, position: Int)
@@ -94,7 +94,9 @@ class AdminSearchRvAdapter(
         this.listener = listener
     }
 
-    fun notifyList(startPosition:Int, itemCount:Int){
-        notifyList(startPosition, itemCount)
+    fun notifyList(newList: List<SearchInformationEntity>){
+        list.clear()
+        list.addAll(newList)
+        notifyDataSetChanged()
     }
 }

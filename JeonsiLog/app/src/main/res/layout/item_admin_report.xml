@@ -30,8 +30,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_icon"
+            app:layout_constraintEnd_toStartOf="@id/tv_count_badge"
+            android:layout_marginHorizontal="@dimen/margin_16" />
+        <TextView
+            android:id="@+id/tv_count_badge"
+            android:layout_width="@dimen/item_36"
+            android:layout_height="@dimen/item_24"
+            android:background="@drawable/shape_badge_count"
+            style="@style/S_bold"
+            android:textColor="@color/basic_white"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@id/tv_report_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/margin_16"
             android:layout_marginEnd="@dimen/margin_20" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

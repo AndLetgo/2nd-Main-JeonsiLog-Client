@@ -10,7 +10,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
-import android.view.ViewTreeObserver.OnPreDrawListener
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -26,12 +25,14 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
 import com.example.jeonsilog.data.remote.dto.rating.PostRatingRequest
+import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.data.remote.dto.review.CheckReviewEntity
 import com.example.jeonsilog.data.remote.dto.review.GetReviewsExhibitionInformationEntity
 import com.example.jeonsilog.databinding.FragmentExhibitionBinding
 import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
 import com.example.jeonsilog.repository.interest.InterestRepositoryImpl
 import com.example.jeonsilog.repository.rating.RatingRepositoryImpl
+import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.repository.review.ReviewRepositoryImpl
 import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.viewmodel.UpdateReviewItem
@@ -59,6 +60,9 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
     private var hasNextPage = true
 
     override fun init() {
+        reviewPage = 0
+        reviewList = mutableListOf()
+
         isRefresh.observe(this){
             if(it){
                 (activity as ExtraActivity).refreshFragment(R.id.exhibitionFragment)
@@ -84,7 +88,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }else{
             thisExhibitionId = exhibitionViewModel.currentExhibitionIds.value!![exhibitionViewModel.getCurrentExhibitionsSize()-1]
         }
-        Log.d("exhibitionID", "init: exhibitionID: ${thisExhibitionId}")
 
         getExhibitionInfo() //페이지 세팅
         setBottomSheet() //바텀시트 세팅
@@ -153,24 +156,36 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
         //Call
         binding.ibCall.setOnClickListener {
-            //null 처리 필요
             if(exhibitionInfoData?.place?.tel !=null){
                 val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.tel)
                 clipboardManager.setPrimaryClip(clipData)
-                Toast.makeText(requireContext(), "copy success", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_copy_success), Toast.LENGTH_SHORT).show()
             }else{
                 Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_call_empty), Toast.LENGTH_SHORT).show()
+                reportInfo("PHONE_NUMBER")
             }
         }
         //Link
         binding.ibGoWeb.setOnClickListener {
-            //null 처리 필요
             if(exhibitionInfoData?.place?.homePage != null){
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(exhibitionInfoData?.place?.homePage))
                 startActivity(intent)    
             }else{
                 Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_homepage_empty), Toast.LENGTH_SHORT).show()
+                reportInfo("LINK")
+            }
+        }
+        //address
+        binding.tvAddress.setOnClickListener {
+            if(exhibitionInfoData?.place?.address !=null){
+                val clipboardManager = requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("label", exhibitionInfoData?.place?.address)
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(requireContext(), getString(R.string.toast_copy_success), Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(requireContext(), getString(R.string.toast_exhibition_place_address_empty), Toast.LENGTH_SHORT).show()
+                reportInfo("ADDRESS")
             }
         }
 
@@ -268,7 +283,12 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
 
         binding.tvExhibitionName.text = exhibitionInfoData?.exhibitionName
-        binding.tvAddress.text = exhibitionInfoData?.place?.address
+        if(exhibitionInfoData?.place?.address!=null){
+            binding.tvAddress.text = exhibitionInfoData?.place?.address
+        }else{
+            binding.tvAddress.text = getString(R.string.exhibition_address_empty)
+        }
+
 
         if(exhibitionInfoData?.place?.placeName !=null){
             binding.tvPlaceName.text = exhibitionInfoData?.place?.placeName
@@ -348,7 +368,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
                     }
                 }
             }
-            regetExhibitionRate()
+            reGetExhibitionRate()
 
             if(exhibitionViewModel.myReviewItem.value!=null){
                 val review = exhibitionViewModel.myReviewItem.value
@@ -358,7 +378,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
             }
         }
     }
-    private fun regetExhibitionRate(){
+    private fun reGetExhibitionRate(){
         exhibitionInfoData = runBlocking(Dispatchers.IO) {
             val response = ExhibitionRepositoryImpl().getExhibition(encryptedPrefs.getAT(), thisExhibitionId)
             if(response.isSuccessful && response.body()!!.check){
@@ -394,7 +414,7 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
     }
     private fun getReviewInfo(){
-        Log.d("TAG", "getReviewInfo: 실행 $reviewPage")
+        Log.d("notiTest", "getReviewInfo: 실행 $reviewPage")
         exhibitionRvAdapter = ExhibitionReviewRvAdapter(reviewList, requireContext())
         binding.rvExhibitionReview.adapter = exhibitionRvAdapter
         binding.rvExhibitionReview.layoutManager = LinearLayoutManager(context)
@@ -460,7 +480,6 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d("tag", "onAttach Back")
                 view?.let { exhibitionViewModel.removeLastExhibitionId() }
                 exhibitionViewModel.resetMyReviewItem()
                 isEnabled = false
@@ -491,6 +510,17 @@ class ExhibitionFragment : BaseFragment<FragmentExhibitionBinding>(R.layout.frag
         }
         if(checkReviewEntity!=null){
             exhibitionViewModel.setCheckReviewEntity(checkReviewEntity!!)
+        }
+    }
+
+    //신고하기
+    private fun reportInfo(type: String){
+        runBlocking(Dispatchers.IO){
+            val body = PostReportRequest(type, thisExhibitionId)
+            val response = ReportRepositoryImpl().postReport(encryptedPrefs.getAT(), body)
+            if(response.isSuccessful && response.body()!!.check){
+                Log.d("report", "reportInfo: successful")
+            }
         }
     }
 }

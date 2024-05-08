@@ -17,8 +17,8 @@ data class ReportsResponseData(
 
 data class GetReportsInformation(
 
-    @SerializedName("reportId")
-    val reportId: Int,
+//    @SerializedName("reportId")
+//    val reportId: Int,
     @SerializedName("name")
     val name: String,
     @SerializedName("reportType")
@@ -28,5 +28,7 @@ data class GetReportsInformation(
     @SerializedName("clickId")
     val clickId: Int,
     @SerializedName("isChecked")
-    val isChecked: Boolean
+    val isChecked: Boolean,
+    @SerializedName("counting")
+    val counting: Int
 )

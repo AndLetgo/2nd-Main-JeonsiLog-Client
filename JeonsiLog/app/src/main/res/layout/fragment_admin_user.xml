@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.example.jeonsilog.viewmodel.OtherUserViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/basic_white">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <TextView
+                android:id="@+id/tv_other_user_nick_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.title}"
+                style="@style/XL_bold"
+                android:textColor="@color/basic_black"
+                android:layout_marginStart="@dimen/margin_16"/>
+
+            <Button
+                android:id="@+id/btn_stop"
+                android:layout_width="50dp"
+                android:layout_height="38dp"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_gravity="end"
+                android:padding="0dp"
+                android:background="@drawable/shape_stop_btn"
+                android:text="@string/btn_stop"
+                android:textSize="14sp"
+                android:textColor="@color/basic_point"
+                style="@style/S_regular"
+                />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="198dp">
+
+            <ImageView
+                android:id="@+id/iv_other_user_profile"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/illus_default_profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/margin_24"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/iv_level"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:src="@drawable/ic_user_level_1_beginner"
+                app:layout_constraintTop_toTopOf="@id/iv_other_user_profile"
+                app:layout_constraintStart_toStartOf="@id/iv_other_user_profile"
+                android:layout_marginStart="-16dp"
+                android:layout_marginTop="-8dp"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_other_user_nick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.nick}"
+                style="@style/L_bold"
+                android:textColor="@color/basic_black"
+                app:layout_constraintTop_toBottomOf="@+id/iv_other_user_profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/margin_12"/>
+
+            <LinearLayout
+                android:id="@+id/ll_other_user_follower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tv_other_user_nick"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ll_other_user_following"
+                android:layout_marginTop="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/margin_20"
+                app:layout_constraintHorizontal_chainStyle="packed">
+
+                <TextView
+                    android:id="@+id/tv_other_user_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mypage_follower"
+                    style="@style/M_regular"
+                    android:textColor="@color/basic_black"/>
+
+                <TextView
+                    android:id="@+id/tv_other_user_follow_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.follower}"
+                    style="@style/M_regular"
+                    android:textColor="@color/basic_point"
+                    android:layout_marginStart="@dimen/margin_4"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_other_user_following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tv_other_user_nick"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ll_other_user_follower"
+                android:layout_marginTop="@dimen/margin_8">
+
+                <TextView
+                    android:id="@+id/tv_other_user_following"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mypage_following"
+                    style="@style/M_regular"
+                    android:textColor="@color/basic_black"/>
+
+                <TextView
+                    android:id="@+id/tv_mypage_following_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.following}"
+                    style="@style/M_regular"
+                    android:textColor="@color/basic_point"
+                    android:layout_marginStart="@dimen/margin_4"/>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_other_user"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+
+            app:tabGravity="fill"
+            app:tabRippleColor="@null"
+
+            app:tabTextColor="@color/gray_light_medium"
+            app:tabSelectedTextColor="@color/basic_point"
+            app:tabTextAppearance="@style/M_medium"
+
+            app:tabIndicatorColor="@color/basic_point"
+            tools:ignore="SpeakableTextPresentCheck"
+
+            app:tabBackground="@drawable/shape_tab_underline"
+            />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_other_user"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+</layout>

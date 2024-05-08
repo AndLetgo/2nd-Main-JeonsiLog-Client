@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +46,15 @@ class ExhibitionReviewRvAdapter(
                 .load(item.imgUrl)
                 .transform(CenterCrop(), RoundedCorners(80))
                 .into(binding.ivProfile)
+
+            val userLevelDrawable:Drawable? = setUserLevel(item.userLevel)
+            if(userLevelDrawable!=null){
+                Glide.with(context)
+                    .load(userLevelDrawable)
+                    .into(binding.ivIcUserLevel)
+            }else{
+                binding.ivIcUserLevel.visibility = ViewGroup.GONE
+            }
 
             binding.ibMenu.setOnClickListener{
                 if(item.userId == encryptedPrefs.getUI()){
@@ -97,5 +107,16 @@ class ExhibitionReviewRvAdapter(
             reviewList[position] = review
             notifyItemChanged(position)
         }
+    }
+
+    private fun setUserLevel(level:String):Drawable?{
+        var img:Drawable? = null
+        when(level){
+            "BEGINNER" -> img = context.getDrawable(R.drawable.ic_user_level_1_beginner)
+            "INTERMEDIATE" -> img = context.getDrawable(R.drawable.ic_user_level_2_intermediate)
+            "ADVANCED" -> img = context.getDrawable(R.drawable.ic_user_level_3_advanced)
+            "MASTER" -> img = context.getDrawable(R.drawable.ic_user_level_4_master)
+        }
+        return img
     }
 }

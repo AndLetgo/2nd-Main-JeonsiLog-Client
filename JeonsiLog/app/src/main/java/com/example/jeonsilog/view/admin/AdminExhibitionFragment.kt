@@ -55,13 +55,15 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
     private var exhibitionInfoData: ExhibitionInfo? = null
     private var thisExhibitionId = 0
     private var hasNextPage = true
-    val TAG = "report"
+    val TAG = "search"
     //감상평
     private var reviewList = mutableListOf<GetReviewsExhibitionInformationEntity>()
     private var reviewPage = 0
     private val adminViewModel: AdminViewModel by activityViewModels()
 
     override fun init() {
+        (activity as MainActivity).setStateToolBar(false)
+
         isRefresh.observe(this){
             if(it){
                 (activity as MainActivity).refreshFragmentInAdmin(R.id.adminExhibitionFragment)
@@ -72,10 +74,12 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
 
         //신고 -> 포스터
         Log.d(TAG, "init: adminViewModel.reportExhibitionId.value: ${adminViewModel.reportExhibitionId.value}")
-        if(adminViewModel.reportExhibitionId.value!=null){
+        Log.d(TAG, "init:isReport: ${adminViewModel.isReport.value!!}")
+        if(adminViewModel.isReport.value!!){
             thisExhibitionId = adminViewModel.reportExhibitionId.value!!
             exhibitionId = adminViewModel.reportExhibitionId.value!!
         }else{
+            Log.d(TAG, "init: false: ${exhibitionId}")
             thisExhibitionId = exhibitionId
         }
 
@@ -235,10 +239,9 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         }
 
         //신고 -> 포스터
-        if(adminViewModel.reportExhibitionId.value!=null){
+        if(adminViewModel.isReport.value!!){
             Log.d(TAG, "init: go poster")
             Navigation.findNavController(binding.ivPosterImage).navigate(R.id.action_adminExhibitionFragment_to_adminPosterFragment)
-            adminViewModel.setReportExhibitionId(null)
         }
     }
     private fun setBottomSheet(){
@@ -606,12 +609,14 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         super.onAttach(context)
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(adminViewModel.isReport.value!!){
+                Log.d(TAG, "exhibition back: adminViewModel.reportExhibitionId.value: ${adminViewModel.reportExhibitionId.value}")
+                if(adminViewModel.reportExhibitionId.value!=null){
                     (activity as MainActivity).setStateFcm(false)
                     Navigation.findNavController(binding.btnSaveAll).popBackStack()
                     (activity as MainActivity).setStateBn(true, "admin")
                     isAdminExhibitionOpen = false
-                    adminViewModel.setIsReport(false)
+                    adminViewModel.setIsReport(true)
+                    adminViewModel.setReportExhibitionId(null)
                 }else{
                     isEnabled = false
                     requireActivity().onBackPressed()

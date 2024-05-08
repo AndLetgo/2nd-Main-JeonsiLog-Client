@@ -35,6 +35,7 @@
     <dimen name="item_24">24dp</dimen>
     <dimen name="item_28">28dp</dimen>
     <dimen name="item_32">32dp</dimen>
+    <dimen name="item_36">36dp</dimen>
     <dimen name="item_40">40dp</dimen>
     <dimen name="item_44">44dp</dimen>
     <dimen name="item_45">45dp</dimen>
@@ -42,6 +43,7 @@
     <dimen name="item_48">48dp</dimen>
     <dimen name="item_52">52dp</dimen>
     <dimen name="item_56">56dp</dimen>
+    <dimen name="item_70">70dp</dimen>
     <dimen name="item_74">74dp</dimen>
     <dimen name="item_76">76dp</dimen>
     <dimen name="item_84">84dp</dimen>
@@ -49,7 +51,10 @@
     <dimen name="item_100">100dp</dimen>
     <dimen name="item_108">108dp</dimen>
     <dimen name="item_132">132dp</dimen>
+    <dimen name="item_140">140dp</dimen>
     <dimen name="item_142">142dp</dimen>
+    <dimen name="item_168">168dp</dimen>
+    <dimen name="item_324">324dp</dimen>
 
     <!--    Text Size(sp)-->
     <dimen name="text_11">11sp</dimen>

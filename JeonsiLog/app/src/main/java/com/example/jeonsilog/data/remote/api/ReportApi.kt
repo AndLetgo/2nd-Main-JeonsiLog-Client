@@ -3,6 +3,7 @@ package com.example.jeonsilog.data.remote.api
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.reply.PostReportRequest
 import com.example.jeonsilog.data.remote.dto.report.GetReportsResponse
+import com.example.jeonsilog.data.remote.dto.report.PatchReportRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,9 +26,9 @@ interface ReportApi {
         @Body body: PostReportRequest
     ): Response<OnlyMsgResponse>
 
-    @PATCH("/api/reports/check/{reportId}")
+    @PATCH("/api/reports/check")
     suspend fun patchCheckReport(
         @Header("Authorization") token: String,
-        @Path("reportId") reportId: Int
+        @Body body: PatchReportRequest
     ): Response<OnlyMsgResponse>
 }

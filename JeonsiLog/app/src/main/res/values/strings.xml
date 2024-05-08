@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">전시로그</string>
 
+    <!-- User Level -->
+    <string name="user_level_beginner">전시초보</string>
+    <string name="user_level_intermediate">전시중수</string>
+    <string name="user_level_advanced">전시고수</string>
+    <string name="user_level_master">전시마스터</string>
+    
     <!-- Button -->
     <string name="btn_delete">삭제</string>
     <string name="btn_delete_dialog">삭제하기</string>
@@ -11,6 +17,7 @@
     <string name="btn_move">이동</string>
     <string name="btn_close">닫기</string>
     <string name="btn_setting">설정</string>
+    <string name="btn_confirm">확인</string>
     <string name="btn_wrting_review_close">창 닫기</string>
     <string name="btn_save">저장하기</string>
 
@@ -21,6 +28,7 @@
     <string name="btn_load_poster">전시회 포스터 불러오기</string>
     <string name="btn_set_delete_image">이미지 삭제하기</string>
     <string name="btn_set_defalut_image">기본 이미지로 변경</string>
+    <string name="btn_move_exhibition">전시회 바로가기</string>
 
     <string name="btn_following">팔로잉</string>
     <string name="btn_follow">팔로우</string>
@@ -36,8 +44,8 @@
     <string name="btn_refresh">새로고침</string>
     <string name="btn_duplicate">중복확인</string>
 
-    <string name="btn_change_to_admin">관리자 화면</string>
-    <string name="btn_change_to_user">사용자 화면</string>
+    <string name="toggle_change_to_admin">관리자</string>
+    <string name="toggle_change_to_user">사용자</string>
 
     <!-- Date -->
     <string name="date_now">지금</string>
@@ -68,7 +76,12 @@
     <string name="dialog_admin_edit_place_homepage">전시공간 홈페이지 링크 수정</string>
     <string name="dialog_admin_edit_exhibition_information">전시회 정보 수정</string>
 
+    <string name="dialog_level_up_first">감상평을 남기셨군요!\n우리 전시마스터를 향해 가볼까요?</string>
+    <string name="dialog_level_up">축하합니다!\n %1$s가 되었어요!</string>
+
     <!-- Toast Message -->
+    <string name="toast_copy_success">복사 성공!</string>
+
     <string name="toast_save_success">저장 성공!</string>
     <string name="toast_save_failure">저장 실패!</string>
     <string name="toast_poster_download_failure">저장 실패. 다시 시도해주세요.</string>
@@ -79,6 +92,7 @@
 
     <string name="toast_exhibition_place_call_empty">등록된 전화번호가 없어요.</string>
     <string name="toast_exhibition_place_homepage_empty">등록된 링크가 없어요.</string>
+    <string name="toast_exhibition_place_address_empty">등록된 전시장 주소 정보가 없어요.</string>
     <string name="toast_delete_review">감상평이 삭제되었어요.</string>
     <string name="toast_exhibition_name_empty">전시회 이름은 비워둘 수 없어요!</string>
     <string name="toast_exhibition_update">전시회 정보가 업데이트 되었습니다.</string>
@@ -105,7 +119,10 @@
     <string name="login_nick_check_is_pair">자음 또는 모음을 홀로 사용할 수 없어요.</string>
 
     <!-- Home -->
-    <string name="home_title">요즘 뜨는 전시</string>
+    <string name="home_title_popular">요즘 뜨는 전시</string>
+    <string name="home_title_artistic">다채로운 예술의 향연</string>
+    <string name="home_title_end_soon">곧 종료되는 전시</string>
+    <string name="home_title_new_start">새로 시작한 전시</string>
 
     <!-- Keyword -->
     <string name="keyword_state_before">시작전</string>
@@ -114,6 +131,7 @@
 
     <!-- Exhibition -->
     <string name="exhibition_information">전시회 정보</string>
+    <string name="exhibition_address_empty">전시장 주소 정보가 없어요</string>
     <string name="exhibition_more_info">| &#160;...더보기</string>
     <string name="exhibition_rating">평균 별점</string>
     <string name="exhibition_review">감상평</string>
@@ -200,9 +218,13 @@
     <string name="admin_exhibition_poster_empty">포스터 이미지를 추가해주세요.</string>
 
     <string name="admin_report_title">접수된 신고</string>
-    <string name="admin_report_review_content">%1$s 님의 감상평이 신고됐어요.</string>
-    <string name="admin_report_reply_content">%1$s 님의 댓글이 신고됐어요.</string>
-    <string name="admin_report_poster_content">%1$s 포스터 등록이 필요해요.</string>
+    <string name="admin_report_review_content">"<b>%1$s</b> 님의 감상평이 신고됐어요."</string>
+    <string name="admin_report_reply_content">"<b>%1$s</b> 님의 댓글이 신고됐어요."</string>
+    <string name="admin_report_poster_content">"<b>[%1$s]</b> 포스터 등록이 필요해요."</string>
+    <string name="admin_report_phone_content">"<b>[%1$s]</b> 전화번호 등록이 필요해요."</string>
+    <string name="admin_report_link_content">"<b>[%1$s]</b> 링크 등록이 필요해요."</string>
+    <string name="admin_report_address_content">"<b>[%1$s]</b> 주소 등록이 필요해요."</string>
+    <string name="admin_report_count_over_nine">9+</string>
 
     <string name="admin_managing_search_hint">전시회명을 입력하세요.</string>
 
@@ -237,10 +259,10 @@
     <string name="permission_modify">해제를 원하시면 설정에서 해당 권한을 직접 거부하셔야 합니다.</string>
     <string name="permission_denied">사진 접근 권한이 거부되었습니다.\n사용을 원하시면 설정에서 해당 권한을 직접 허용하셔야 합니다.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <!-- fcm 토큰 -->
     <string name="msg_token_fmt">FCM 토큰: %1$s</string>
+
+    <!-- 정지 -->
+    <string name="btn_stop">정지</string>
 
 </resources>

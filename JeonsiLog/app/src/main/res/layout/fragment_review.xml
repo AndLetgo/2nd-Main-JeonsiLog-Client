@@ -28,6 +28,18 @@
                 android:text="@string/exhibition_review"
                 style="@style/XL_bold"
                 android:textColor="@color/basic_black"/>
+            <TextView
+                android:id="@+id/tv_btn_move_exhibition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_btn_stroke_r4"
+                style="@style/S_regular"
+                android:textColor="@color/basic_point"
+                android:text="@string/btn_move_exhibition"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:paddingHorizontal="@dimen/margin_12"
+                android:paddingVertical="@dimen/margin_8"/>
         </androidx.appcompat.widget.Toolbar>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_review"
@@ -62,7 +74,11 @@
                     android:textColor="@color/gray_dark"
                     android:layout_marginStart="@dimen/margin_8"
                     />
-
+                <ImageView
+                    android:id="@+id/iv_ic_user_level"
+                    android:layout_width="@dimen/item_24"
+                    android:layout_height="@dimen/item_24"
+                    android:layout_marginStart="@dimen/margin_4"/>
             </LinearLayout>
 
             <com.willy.ratingbar.BaseRatingBar

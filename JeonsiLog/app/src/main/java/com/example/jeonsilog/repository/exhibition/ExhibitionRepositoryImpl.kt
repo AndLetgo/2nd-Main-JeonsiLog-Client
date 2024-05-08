@@ -9,6 +9,7 @@ import com.example.jeonsilog.data.remote.dto.exhibition.GetRandomPosterResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionRequest
 import com.example.jeonsilog.data.remote.dto.OnlyMsgResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.GetCalendarExhibitionResponse
+import com.example.jeonsilog.data.remote.dto.exhibition.GetHomeExhibitionsResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.PatchExhibitionSequenceRequest
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchByNameResponse
 import com.example.jeonsilog.data.remote.dto.exhibition.SearchResponse
@@ -20,11 +21,43 @@ import retrofit2.Response
 class ExhibitionRepositoryImpl: ExhibitionRepository {
     private val service = RetrofitClient.getRetrofit()!!.create(ExhibitionApi::class.java)
 
-    override suspend fun getExhibitions(
-        token: String,
-        page: Int
+    override suspend fun getExhibitionsRecently(
+        token: String
     ): Response<GetExhibitionsResponse> {
-        val response = service.getExhibitions("Bearer $token", page)
+        val response = service.getExhibitionsRecently("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+    override suspend fun getExhibitionsColorful(
+        token: String
+    ): Response<GetHomeExhibitionsResponse> {
+        val response = service.getExhibitionsColorful("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+    override suspend fun getExhibitionsEndingSoon(
+        token: String
+    ): Response<GetHomeExhibitionsResponse> {
+        val response = service.getExhibitionsEndingSoon("Bearer $token")
+
+        return if(response.isSuccessful && response.body()!!.check){
+            response
+        } else {
+            response
+        }
+    }
+    override suspend fun getExhibitionsNew(
+        token: String
+    ): Response<GetHomeExhibitionsResponse> {
+        val response = service.getExhibitionsNew("Bearer $token")
 
         return if(response.isSuccessful && response.body()!!.check){
             response

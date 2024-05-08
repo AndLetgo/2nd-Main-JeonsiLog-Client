@@ -25,6 +25,7 @@ import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentAdminPosterBinding
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import java.io.IOException
+import kotlin.math.log
 
 class AdminPosterFragment : BaseFragment<FragmentAdminPosterBinding>(R.layout.fragment_admin_poster) {
     private val adminViewModel:AdminViewModel by activityViewModels()
@@ -169,13 +170,13 @@ class AdminPosterFragment : BaseFragment<FragmentAdminPosterBinding>(R.layout.fr
     //Back Button 눌렀을 때
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d(TAG, "onAttach: ")
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d(TAG, "handleOnBackPressed: adminViewModel.isReport.value!!: ${adminViewModel.isReport.value!!}")
+                Log.d(TAG, "poster back: adminViewModel.isReport.value!!: ${adminViewModel.isReport.value!!}")
                 if(adminViewModel.isReport.value!!){
-                    Log.d(TAG, "handleOnBackPressed: ")
                     Navigation.findNavController(binding.ibGetPosterFromGallery).popBackStack()
+                    Log.d(TAG, "poster back:adminViewModel.reportExhibitionId.value: ${adminViewModel.reportExhibitionId.value} ")
+                    adminViewModel.setIsReport(false)
                 }else{
                     isEnabled = false
                     requireActivity().onBackPressed()

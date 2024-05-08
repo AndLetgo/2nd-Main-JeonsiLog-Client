@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.navigation.findNavController
@@ -17,6 +18,7 @@ import android.os.Build
 import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -62,9 +64,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
     private var backPressedTime: Long = 0L
     private var alertDialog: AlertDialog.Builder? = null
     private val adminViewModel: AdminViewModel by viewModels()
-
     private var isPermissionDenied = false
-
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if(supportFragmentManager.backStackEntryCount != 0){
@@ -86,6 +86,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         //admin 계정 체크
         if(encryptedPrefs.getCheckAdmin()){
             adminViewModel.setIsAdminPage(true)
+            binding.scSwitchAdminUser.visibility = View.VISIBLE
+        }else{
+            binding.scSwitchAdminUser.visibility = View.GONE
         }
         checkAdmin(encryptedPrefs.getCheckAdmin())
 
@@ -164,6 +167,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         isPermissionDenied=prefs.getIsAllowNotify()
         askNotificationPermission()
         getToken()
+
+        setSwitchAdmin()
     }
 
     fun setStateBn(isVisible:Boolean, type:String){
@@ -184,6 +189,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             binding.flMain.visibility = View.VISIBLE
         }
     }
+    @SuppressLint("MissingSuperCall")
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent != null) {
@@ -229,7 +235,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         return super.dispatchTouchEvent(event)
     }
     //admin 계정 체크
-    fun checkAdmin(check:Boolean){
+    private fun checkAdmin(check:Boolean){
         if(check){
             //관리자
             binding.bnvMain.visibility = View.GONE
@@ -357,6 +363,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
             //Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
+
+    //registerForActivityResult
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
@@ -398,4 +407,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>({ActivityMainBinding.infl
         dialog.show(fragmentManager, "FcmDialog")
     }
 
+    private fun setSwitchAdmin(){
+        binding.scSwitchAdminUser.setOnCheckedChangeListener { _, isChecked ->
+            when{
+                isChecked -> {
+                    //user 활성화
+                    checkAdmin(false)
+                    binding.tvSwitchAdmin.setTextColor(getColor(R.color.gray_medium))
+                    binding.tvSwitchUser.setTextColor(getColor(R.color.basic_white))
+                }
+                else -> {
+                    //admin 활성화
+                    checkAdmin(true)
+                    binding.tvSwitchAdmin.setTextColor(getColor(R.color.basic_white))
+                    binding.tvSwitchUser.setTextColor(getColor(R.color.gray_medium))
+                }
+            }
+        }
+    }
+    fun setStateToolBar(state:Boolean){
+        when{
+            state -> binding.toolbar.isVisible = true
+            else -> binding.toolbar.isVisible = false
+        }
+    }
 }

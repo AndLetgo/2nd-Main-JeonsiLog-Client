@@ -15,5 +15,7 @@ data class GetPhotoInformation(
     @SerializedName("date")
     val date: String,
     @SerializedName("imgUrl")
-    val imgUrl: String
+    val imgUrl: String,
+    @SerializedName("caption")
+    val caption: String
 )

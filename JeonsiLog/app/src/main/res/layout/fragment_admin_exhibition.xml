@@ -145,7 +145,8 @@
                                 android:id="@+id/ib_keyword_operating"
                                 android:layout_width="@dimen/item_16"
                                 android:layout_height="@dimen/item_16"
-                                android:background="@drawable/ic_delete"/>
+                                android:background="@drawable/ic_delete"
+                                android:layout_marginEnd="@dimen/margin_8"/>
                         </LinearLayout>
                         <LinearLayout
                             android:id="@+id/ll_keyword_price"
@@ -170,7 +171,8 @@
                                 android:id="@+id/ib_keyword_price"
                                 android:layout_width="@dimen/item_16"
                                 android:layout_height="@dimen/item_16"
-                                android:background="@drawable/ic_delete"/>
+                                android:background="@drawable/ic_delete"
+                                android:layout_marginEnd="@dimen/margin_8"/>
                         </LinearLayout>
                         <ImageButton
                             android:id="@+id/ib_keyword_add"

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.admin.AdminSearchFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_place"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="iv_empty, tv_empty01, tv_empty02"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/iv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_212"
+            android:src="@drawable/illus_empty_search"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_empty01"
+            style="@style/XL_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            android:text="@string/empty_search_title"
+            app:layout_constraintEnd_toEndOf="@+id/iv_empty"
+            app:layout_constraintStart_toStartOf="@+id/iv_empty"
+            app:layout_constraintTop_toBottomOf="@+id/iv_empty" />
+
+        <TextView
+            android:id="@+id/tv_empty02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4"
+            style="@style/XL_regular"
+            android:text="@string/empty_search_description"
+            android:fontFamily="@font/noto_sans_kr_regular"
+            app:layout_constraintEnd_toEndOf="@+id/iv_empty"
+            app:layout_constraintStart_toStartOf="@+id/iv_empty"
+            app:layout_constraintTop_toBottomOf="@+id/tv_empty01" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

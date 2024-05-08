@@ -1,6 +1,7 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.jeonsilog.R
 import com.example.jeonsilog.data.remote.dto.reply.GetReplyInformation
 import com.example.jeonsilog.databinding.ItemReviewReplyBinding
 import com.example.jeonsilog.widget.utils.DateUtil
@@ -38,6 +40,15 @@ class ExhibitionReplyRvAdapter(private val replyList: MutableList<GetReplyInform
                 .load(item.user.profileImgUrl)
                 .transform(CenterCrop(), RoundedCorners(80))
                 .into(binding.ivUserProfile)
+
+            val userLevelDrawable:Drawable? = setUserLevel(item.user.userLevel)
+            if(userLevelDrawable!=null){
+                Glide.with(context)
+                    .load(userLevelDrawable)
+                    .into(binding.ivIcUserLevel)
+            }else{
+                binding.ivIcUserLevel.visibility = ViewGroup.GONE
+            }
 
             binding.ivUserProfile.setOnClickListener{
                 (context as ExtraActivity).moveOtherUserProfile(item.user.userId, item.user.nickname)
@@ -75,5 +86,16 @@ class ExhibitionReplyRvAdapter(private val replyList: MutableList<GetReplyInform
     fun removeItem(position: Int){
         replyList.removeAt(position)
         notifyItemRemoved(position)
+    }
+
+    private fun setUserLevel(level:String): Drawable?{
+        var img: Drawable? = null
+        when(level){
+            "BEGINNER" -> img = context.getDrawable(R.drawable.ic_user_level_1_beginner)
+            "INTERMEDIATE" -> img = context.getDrawable(R.drawable.ic_user_level_2_intermediate)
+            "ADVANCED" -> img = context.getDrawable(R.drawable.ic_user_level_3_advanced)
+            "MASTER" -> img = context.getDrawable(R.drawable.ic_user_level_4_master)
+        }
+        return img
     }
 }

@@ -42,6 +42,7 @@ class RecordSearchFragment: BaseFragment<FragmentSearchRecordBinding>(R.layout.f
 
         (requireActivity() as MainActivity).setStateBn(true, "user")
         (requireActivity()  as MainActivity).setBottomNavCurrentItem(1)
+        (activity as MainActivity).setStateToolBar(false)
 
         binding.searchData=viewModel
         binding.lifecycleOwner = this

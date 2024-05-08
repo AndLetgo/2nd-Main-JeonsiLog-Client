@@ -239,7 +239,6 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         startActivity(intent)
     }
 
-
     private fun accessGallery(){
         // 갤러리 열기 Intent 생성
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -267,7 +266,7 @@ class LoadBottomDialog(private var selectedDate: LocalDate, private val listener
         val imageRequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         val filePart = MultipartBody.Part.createFormData("img", file.name, imageRequestBody)
 
-        val uploadImageReq = UploadImageReqEntity(DateUtil().monthYearFromDate(selectedDate))
+        val uploadImageReq = UploadImageReqEntity(DateUtil().monthYearFromDate(selectedDate),"")
         val requestJson = Gson().toJson(uploadImageReq)
         val requestBody = RequestBody.create("application/json".toMediaTypeOrNull(),requestJson)
 
