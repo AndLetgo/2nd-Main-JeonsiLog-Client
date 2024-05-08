@@ -74,7 +74,8 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
 
         //신고 -> 포스터
         Log.d(TAG, "init: adminViewModel.reportExhibitionId.value: ${adminViewModel.reportExhibitionId.value}")
-        if(adminViewModel.reportExhibitionId.value!=null){
+        Log.d("report", "init:isReport: ${adminViewModel.isReport.value!!}")
+        if(adminViewModel.isReport.value!!){
             thisExhibitionId = adminViewModel.reportExhibitionId.value!!
             exhibitionId = adminViewModel.reportExhibitionId.value!!
         }else{

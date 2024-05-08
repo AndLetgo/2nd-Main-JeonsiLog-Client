@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.data.remote.dto.report.GetReportsInformation
+import com.example.jeonsilog.data.remote.dto.report.PatchReportRequest
 import com.example.jeonsilog.databinding.FragmentAdminReportBinding
 import com.example.jeonsilog.repository.report.ReportRepositoryImpl
 import com.example.jeonsilog.view.MainActivity
@@ -60,8 +61,12 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
                         adminViewModel.setReportReviewId(data.clickId)
                         navController.navigate(R.id.adminReviewFragment)
                     }
+                    else -> {
+                        adminViewModel.setReportExhibitionId(data.clickId)
+                        navController.navigate(R.id.adminExhibitionFragment)
+                    }
                 }
-                checkReport(data.reportedId)
+                checkReport(data.reportType,data.reportedId)
                 isAdminExhibitionOpen = true
                 (activity as MainActivity).setStateFcm(true)
             }
@@ -98,9 +103,10 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
     }
 
     //신고 확인
-    private fun checkReport(reportId:Int){
+    private fun checkReport(reportType:String, reportedId:Int){
+        val body = PatchReportRequest(reportType, reportedId)
         runBlocking(Dispatchers.IO){
-            ReportRepositoryImpl().patchCheckReport(encryptedPrefs.getAT(), reportId)
+            ReportRepositoryImpl().patchCheckReport(encryptedPrefs.getAT(), body)
         }
     }
 }
