@@ -33,5 +33,7 @@ data class UserEntity(
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImgUrl")
-    val profileImgUrl: String
+    val profileImgUrl: String,
+    @SerializedName("userLevel")
+    val userLevel: String
 )

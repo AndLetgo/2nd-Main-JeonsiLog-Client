@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="content"
+            type="String" />
+        <variable
+            name="btnText"
+            type="String" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/item_324"
+        android:layout_height="wrap_content"
+        android:background="@color/basic_white"
+        app:cardCornerRadius="@dimen/radius_16">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_16">
+            <ImageView
+                android:id="@+id/iv_illus"
+                android:layout_width="@dimen/item_70"
+                android:layout_height="@dimen/item_70"
+                android:background="@drawable/illus_level_up_dialog"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/margin_20"/>
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/M_medium"
+                android:textColor="@color/basic_black"
+                android:text="@{content}"
+                app:layout_constraintTop_toBottomOf="@id/iv_illus"
+                android:layout_marginTop="@dimen/margin_20"
+                android:gravity="center"/>
+            <Button
+                android:id="@id/btn_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_corner_round_start_btn_activate"
+                style="@style/M_medium"
+                android:textColor="@color/basic_white"
+                android:text="@{btnText}"
+                app:layout_constraintTop_toBottomOf="@id/tv_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="@dimen/margin_36"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

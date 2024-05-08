@@ -1,6 +1,5 @@
 package com.example.jeonsilog.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +12,10 @@ class MyPageViewModel: ViewModel() {
     private var _nick = MutableLiveData<String>()
     val nick: LiveData<String>
         get() = _nick
+
+    private var _level = MutableLiveData<String>()
+    val level: LiveData<String>
+        get() = _level
 
     private var _profileImg = MutableLiveData<String>()
     val profileImg: LiveData<String>
@@ -50,6 +53,6 @@ class MyPageViewModel: ViewModel() {
         _profileImg.value = encryptedPrefs.getURL()
         _following.value = encryptedPrefs.getNumFollowing().toString()
         _follower.value = encryptedPrefs.getNumFollower().toString()
-
+        _level.value = encryptedPrefs.getUserLevel()
     }
 }

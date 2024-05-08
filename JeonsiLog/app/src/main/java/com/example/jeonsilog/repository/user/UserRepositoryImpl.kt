@@ -33,6 +33,8 @@ class UserRepositoryImpl: UserRepository {
             encryptedPrefs.setURL(response.body()!!.information.profileImgUrl)
             encryptedPrefs.setNumFollowing(response.body()!!.information.numFollowing)
             encryptedPrefs.setNumFollower(response.body()!!.information.numFollower)
+            encryptedPrefs.setReviewCount(response.body()!!.information.reviewCount)
+            encryptedPrefs.setUserLevel(response.body()!!.information.userLevel)
             true
         } else {
             Log.e(tag, "내 정보 불러오기 실패")

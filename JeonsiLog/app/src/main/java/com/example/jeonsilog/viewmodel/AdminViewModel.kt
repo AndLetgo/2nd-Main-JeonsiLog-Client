@@ -5,7 +5,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.jeonsilog.data.remote.dto.exhibition.ExhibitionInfo
+import com.example.jeonsilog.data.remote.dto.exhibition.SearchInformationEntity
+import com.example.jeonsilog.data.remote.dto.place.SearchPlacesInformationEntity
+import com.example.jeonsilog.data.remote.dto.user.SearchUserInformationEntity
+import com.example.jeonsilog.repository.exhibition.ExhibitionRepositoryImpl
+import com.example.jeonsilog.repository.place.PlaceRepositoryImpl
+import com.example.jeonsilog.repository.user.UserRepositoryImpl
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AdminViewModel:ViewModel() {
     //현재 Admin || User 화면 체크
@@ -135,4 +145,112 @@ class AdminViewModel:ViewModel() {
         }
         _reviewItem.value = item
     }
+
+    // Admin Search 개선 관련
+    // 공통
+    val regexPattern = Regex("[!@#\\\$%^&*(),.?\\\":{}|<>;]")
+    private var _searchWord = MutableLiveData<String>()
+
+    val searchWord: LiveData<String>
+        get() = _searchWord
+
+    fun setSearchWord(p: String){
+        if(p != searchWord.value) _searchWord.value = p
+    }
+
+    // 전시회
+    var exhibitionHasNextPage = true
+    var exhibitionCurrentPage = 0
+    private var isLoadingExhibition = false
+    private var _exhibitionResultList = MutableLiveData<List<SearchInformationEntity>>()
+    val exhibitionResultList: LiveData<List<SearchInformationEntity>>
+        get() = _exhibitionResultList
+
+    // 전시장
+    var placeHasNextPage = true
+    var placeCurrentPage = 0
+    private var isLoadingPlace = false
+    private var _placeResultList = MutableLiveData<List<SearchPlacesInformationEntity>>()
+    val placeResultList: LiveData<List<SearchPlacesInformationEntity>>
+        get() = _placeResultList
+
+    // 유저
+    var userHasNextPage = true
+    var userCurrentPage = 0
+    private var isLoadingUser = false
+    private var _userResultList = MutableLiveData<List<SearchUserInformationEntity>>()
+    val userResultList: LiveData<List<SearchUserInformationEntity>>
+        get() = _userResultList
+
+    fun clearList(){
+        _exhibitionResultList.value = listOf()
+        _placeResultList.value = listOf()
+        _userResultList.value = listOf()
+    }
+    fun searchExhibition(){
+        if(!exhibitionHasNextPage) return
+        if(isLoadingExhibition) return
+        isLoadingExhibition = true
+
+        viewModelScope.launch(Dispatchers.IO){
+            val res = ExhibitionRepositoryImpl().searchExhibition(encryptedPrefs.getAT(), searchWord.value.toString(), exhibitionCurrentPage)
+
+            if(res.isSuccessful && res.body()!!.check){
+                exhibitionCurrentPage += 1
+                exhibitionHasNextPage = res.body()!!.information.hasNextPage
+
+                val tempList = exhibitionResultList.value?.toMutableList() ?: mutableListOf()
+                tempList.addAll(res.body()!!.information.data)
+
+                _exhibitionResultList.postValue(tempList)
+            }
+
+            isLoadingExhibition = false
+        }
+    }
+
+    fun searchPlace(){
+        if(!placeHasNextPage) return
+        if(isLoadingPlace) return
+        isLoadingPlace = true
+
+        viewModelScope.launch(Dispatchers.IO){
+            val res = PlaceRepositoryImpl().searchPlaces(encryptedPrefs.getAT(), searchWord.value.toString(), placeCurrentPage)
+
+            if(res.isSuccessful && res.body()!!.check){
+                placeCurrentPage += 1
+                placeHasNextPage = res.body()!!.information.hasNextPage
+
+                val tempList = placeResultList.value?.toMutableList() ?: mutableListOf()
+                tempList.addAll(res.body()!!.information.data)
+
+                _placeResultList.postValue(tempList)
+            }
+
+            isLoadingPlace = false
+        }
+    }
+
+    fun searchUser(){
+        if(!userHasNextPage) return
+        if(isLoadingUser) return
+        isLoadingUser = true
+
+        viewModelScope.launch(Dispatchers.IO){
+            val res = UserRepositoryImpl().searchUserInfo(encryptedPrefs.getAT(), searchWord.value.toString(), userCurrentPage)
+
+            if(res.isSuccessful && res.body()!!.check){
+                userCurrentPage += 1
+                userHasNextPage = res.body()!!.information.hasNextPage
+
+                val tempList = userResultList.value?.toMutableList() ?: mutableListOf()
+                tempList.addAll(res.body()!!.information.data)
+
+                _userResultList.postValue(tempList)
+            }
+
+            isLoadingUser = false
+        }
+    }
+
 }
