@@ -1,14 +1,17 @@
 package com.example.jeonsilog.view.exhibition
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -29,6 +32,7 @@ import com.example.jeonsilog.viewmodel.ExhibitionViewModel
 import com.example.jeonsilog.widget.utils.DateUtil
 import com.example.jeonsilog.widget.utils.DialogUtil
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.extraActivityReference
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isRefresh
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.newReplyId
@@ -44,10 +48,18 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
     private lateinit var reviewInfo: GetReviewsExhibitionInformationEntity
     private var replyPage = 0
     private var hasNextPage = true
+    private var isFromNoti = false
     val TAG = "reply"
 
     override fun init() {
         replyPage = 0
+
+        if(extraActivityReference == 1){
+            isFromNoti = true
+            binding.tvBtnMoveExhibition.visibility = ViewGroup.VISIBLE
+        }else{
+            binding.tvBtnMoveExhibition.visibility = ViewGroup.GONE
+        }
 
         isRefresh.observe(this){
             if(it){
@@ -154,6 +166,12 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         }
 
+        binding.tvBtnMoveExhibition.setOnClickListener {
+            isFromNoti = false
+            extraActivityReference = 0
+            exhibitionViewModel.setCurrentExhibitionIds(exhibitionId)
+            requireActivity().onBackPressed()
+        }
 
     }
     private fun getReviewInfo(reviewId: Int): GetReviewsExhibitionInformationEntity?{
@@ -167,6 +185,8 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         return newReview
     }
     private fun setReviewUi(review: GetReviewsExhibitionInformationEntity){
+        exhibitionId = review.exhibitionId
+
         binding.tvUserName.text = review.nickname
         if(review.rate==0.0){
             binding.brbExhibitionReview.visibility = View.GONE
@@ -183,6 +203,15 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             .load(review.imgUrl)
             .transform(CenterCrop(), RoundedCorners(80))
             .into(binding.ivProfile)
+
+        val userLevelDrawable:Drawable? = setUserLevel(review.userLevel)
+        if(userLevelDrawable!=null){
+            Glide.with(this)
+                .load(userLevelDrawable)
+                .into(binding.ivIcUserLevel)
+        }else{
+            binding.ivIcUserLevel.visibility = ViewGroup.GONE
+        }
     }
     private fun getReplyList(){
         replyList = mutableListOf()
@@ -236,7 +265,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         }
         val createdDate = LocalDateTime.now()
         val newReply = GetReplyInformation(replyList.size, replyContent, createdDate.toString(), UserEntity(
-            encryptedPrefs.getUI(), encryptedPrefs.getNN()!!, encryptedPrefs.getURL()!!
+            encryptedPrefs.getUI(), encryptedPrefs.getNN()!!, encryptedPrefs.getURL()!!, encryptedPrefs.getUserLevel()!!
         ))
         replyList.add(newReply)
         binding.rvExhibitionReviewReply.adapter?.notifyItemInserted(replyList.size)
@@ -269,7 +298,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(extraActivityReference == 1){
+                if(isFromNoti){
                     activity?.finish()
                 }else{
                     isEnabled = false
@@ -293,5 +322,16 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
             }
         }
         return check
+    }
+
+    private fun setUserLevel(level:String): Drawable?{
+        var img: Drawable? = null
+        when(level){
+            "BEGINNER" -> img = context?.getDrawable(R.drawable.ic_user_level_1_beginner)
+            "INTERMEDIATE" -> img = context?.getDrawable(R.drawable.ic_user_level_2_intermediate)
+            "ADVANCED" -> img = context?.getDrawable(R.drawable.ic_user_level_3_advanced)
+            "MASTER" -> img = context?.getDrawable(R.drawable.ic_user_level_4_master)
+        }
+        return img
     }
 }

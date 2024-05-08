@@ -75,6 +75,12 @@ class HomeEndSoonRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
         holder.bind(position)
+
+        if(position != RecyclerView.NO_POSITION){
+            holder.itemView.setOnClickListener{
+                listener?.onItemClick(holder.itemView, homeRvList[position], position)
+            }
+        }
     }
 
     interface OnItemClickListener {

@@ -70,15 +70,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
         homeRecentlyRvAdapter.setOnItemClickListener(object : HomeRecentlyRvAdapter.OnItemClickListener{
             override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
-                //관리자 체크
-                if(adminViewModel.isAdminPage.value!!){
-                    Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminExhibitionFragment)
-                    exhibitionId = data.exhibitionId
-                    isAdminExhibitionOpen = true
-                }else{
-                    (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
-                    Log.d("home", "onItemClick: ${data.exhibitionId}")
-                }
+                moveExhibitionDetail(v, data)
+            }
+        })
+        homeColorfulRvAdapter.setOnItemClickListener(object :HomeColorfulRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
+                moveExhibitionDetail(v, data)
+            }
+        })
+        homeEndSoonRvAdapter.setOnItemClickListener(object :HomeEndSoonRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
+                moveExhibitionDetail(v, data)
+            }
+        })
+        homeNewStartRvAdapter.setOnItemClickListener(object :HomeNewStartRvAdapter.OnItemClickListener{
+            override fun onItemClick(v: View, data: ExhibitionsInfo, position: Int) {
+                moveExhibitionDetail(v, data)
             }
         })
 
@@ -113,6 +120,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 homeNewStartRvList.addAll(response.body()!!.information)
                 Log.d(TAG, "getRvData: newStartt")
             }
+        }
+    }
+
+    private fun moveExhibitionDetail(v: View, data: ExhibitionsInfo){
+        //관리자 체크
+        if(adminViewModel.isAdminPage.value!!){
+            Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_adminExhibitionFragment)
+            exhibitionId = data.exhibitionId
+            isAdminExhibitionOpen = true
+        }else{
+            (activity as MainActivity).loadExtraActivity(0, data.exhibitionId)
+            Log.d("home", "onItemClick: ${data.exhibitionId}")
         }
     }
 }

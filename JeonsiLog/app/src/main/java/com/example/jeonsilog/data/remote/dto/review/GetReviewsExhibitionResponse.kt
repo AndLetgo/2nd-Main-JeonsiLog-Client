@@ -19,6 +19,8 @@ data class ReviewsExhibitionData(
 data class GetReviewsExhibitionInformationEntity(
     @SerializedName("reviewId")
     val reviewId: Int,
+    @SerializedName("exhibitionId")
+    val exhibitionId: Int,
     @SerializedName("userId")
     val userId: Int,
     @SerializedName("imgUrl")
@@ -32,5 +34,7 @@ data class GetReviewsExhibitionInformationEntity(
     @SerializedName("numReply")
     var numReply: Int,
     @SerializedName("createdDate")
-    val createdDate: String
+    val createdDate: String,
+    @SerializedName("userLevel")
+    val userLevel: String
 )
