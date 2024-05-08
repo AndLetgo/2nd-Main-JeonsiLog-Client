@@ -1,5 +1,6 @@
 package com.example.jeonsilog.view.admin
 
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,7 @@ import com.example.jeonsilog.view.MainActivity
 import com.example.jeonsilog.viewmodel.AdminViewModel
 import com.example.jeonsilog.widget.utils.GlobalApplication
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.encryptedPrefs
+import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.exhibitionId
 import com.example.jeonsilog.widget.utils.GlobalApplication.Companion.isAdminExhibitionOpen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -25,6 +27,7 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
     private lateinit var reportList: MutableList<GetReportsInformation>
     private var reportPage = 0
     private var hasNextPage = true
+
     override fun init() {
         (activity as MainActivity).setStateToolBar(false)
 
@@ -63,10 +66,12 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
                     }
                     else -> {
                         adminViewModel.setReportExhibitionId(data.clickId)
+                        Log.d("report", "onItemClick: clickId: ${data.clickId}")
+                        exhibitionId = data.clickId
                         navController.navigate(R.id.adminExhibitionFragment)
                     }
                 }
-                checkReport(data.reportType,data.reportedId)
+                checkReport(v, data.reportType,data.reportedId)
                 isAdminExhibitionOpen = true
                 (activity as MainActivity).setStateFcm(true)
             }
@@ -103,10 +108,11 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
     }
 
     //신고 확인
-    private fun checkReport(reportType:String, reportedId:Int){
+    private fun checkReport(view:View, reportType:String, reportedId:Int){
         val body = PatchReportRequest(reportType, reportedId)
         runBlocking(Dispatchers.IO){
             ReportRepositoryImpl().patchCheckReport(encryptedPrefs.getAT(), body)
         }
+        view.alpha = 0.4f
     }
 }

@@ -39,6 +39,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
         if(adminViewModel.isAdminPage.value!!){
             (activity as MainActivity).setStateBn(true, "admin")
         }
+        Log.d("report", "home: adminViewModel.isReport.value!!: ${adminViewModel.isReport.value!!}")
+        if(adminViewModel.isReport.value!!){
+            (activity as MainActivity).setStateToolBar(false)
+            adminViewModel.setIsReport(false)
+        }
 
         adminViewModel.resetExhibitionInfo()
         if(adminViewModel.isChanged.value!!){

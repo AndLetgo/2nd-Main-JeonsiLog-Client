@@ -79,6 +79,7 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
             thisExhibitionId = adminViewModel.reportExhibitionId.value!!
             exhibitionId = adminViewModel.reportExhibitionId.value!!
         }else{
+            Log.d(TAG, "init: false: ${exhibitionId}")
             thisExhibitionId = exhibitionId
         }
 
@@ -238,10 +239,9 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         }
 
         //신고 -> 포스터
-        if(adminViewModel.reportExhibitionId.value!=null){
+        if(adminViewModel.isReport.value!!){
             Log.d(TAG, "init: go poster")
             Navigation.findNavController(binding.ivPosterImage).navigate(R.id.action_adminExhibitionFragment_to_adminPosterFragment)
-            adminViewModel.setReportExhibitionId(null)
         }
     }
     private fun setBottomSheet(){
@@ -609,12 +609,14 @@ class AdminExhibitionFragment : BaseFragment<FragmentAdminExhibitionBinding>(R.l
         super.onAttach(context)
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if(adminViewModel.isReport.value!!){
+                Log.d(TAG, "exhibition back: adminViewModel.reportExhibitionId.value: ${adminViewModel.reportExhibitionId.value}")
+                if(adminViewModel.reportExhibitionId.value!=null){
                     (activity as MainActivity).setStateFcm(false)
                     Navigation.findNavController(binding.btnSaveAll).popBackStack()
                     (activity as MainActivity).setStateBn(true, "admin")
                     isAdminExhibitionOpen = false
-                    adminViewModel.setIsReport(false)
+                    adminViewModel.setIsReport(true)
+                    adminViewModel.setReportExhibitionId(null)
                 }else{
                     isEnabled = false
                     requireActivity().onBackPressed()
