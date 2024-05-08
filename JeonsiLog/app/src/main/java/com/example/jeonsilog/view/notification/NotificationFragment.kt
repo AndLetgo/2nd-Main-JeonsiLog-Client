@@ -1,5 +1,7 @@
 package com.example.jeonsilog.view.notification
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -7,6 +9,7 @@ import com.example.jeonsilog.R
 import com.example.jeonsilog.base.BaseFragment
 import com.example.jeonsilog.databinding.FragmentNotificationBinding
 import com.example.jeonsilog.view.MainActivity
+import com.google.android.ads.nativetemplates.NativeTemplateStyle
 import com.google.android.ads.nativetemplates.TemplateView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -22,18 +25,19 @@ class NotificationFragment(private val action:String) : BaseFragment<FragmentNot
         (context as MainActivity).setStateBn(true, "user")
 
         val tabTextList = listOf(getString(R.string.noti_activity_tab), getString(R.string.noti_exhibition_tab))
+        val background = ColorDrawable(Color.TRANSPARENT)
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+
         //테스트용 광고 ID : ca-app-pub-3940256099942544/2247696110
         MobileAds.initialize(requireActivity())
-//        val adLoader = AdLoader.Builder(requireActivity(), "ca-app-pub-3940256099942544/2247696110")
-//            .forNativeAd { nativeAd ->
-//                binding.natSmallTemplate.setNativeAd(nativeAd)
-//
-//            }
-//            .build()
-//
-//        adLoader.loadAd(AdRequest.Builder().build())
         val adLoader = AdLoader.Builder(requireActivity(), "ca-app-pub-3940256099942544/2247696110")
             .forNativeAd { nativeAd ->
+                // Create NativeTemplateStyle
+                val styles = NativeTemplateStyle.Builder().withMainBackgroundColor(background).build()
+
+                binding.natSmallTemplate.setStyles(styles)
                 binding.natSmallTemplate.setNativeAd(nativeAd)
                 Log.d("AdLoad", "광고가 성공적으로 로드되었습니다.")
             }
