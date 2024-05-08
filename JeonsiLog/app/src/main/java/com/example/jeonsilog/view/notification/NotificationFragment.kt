@@ -30,26 +30,26 @@ class NotificationFragment(private val action:String) : BaseFragment<FragmentNot
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
 
-        //테스트용 광고 ID : ca-app-pub-3940256099942544/2247696110
-        MobileAds.initialize(requireActivity())
-        val adLoader = AdLoader.Builder(requireActivity(), "ca-app-pub-3940256099942544/2247696110")
-            .forNativeAd { nativeAd ->
-                // Create NativeTemplateStyle
-                val styles = NativeTemplateStyle.Builder().withMainBackgroundColor(background).build()
-
-                binding.natSmallTemplate.setStyles(styles)
-                binding.natSmallTemplate.setNativeAd(nativeAd)
-                Log.d("AdLoad", "광고가 성공적으로 로드되었습니다.")
-            }
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    super.onAdFailedToLoad(adError)
-                    Log.d("AdLoad", "광고 로드 실패: ${adError.message}")
-                }
-            })
-            .build()
-
-        adLoader.loadAd(AdRequest.Builder().build())
+        //네이티브 테스트용 광고 ID : ca-app-pub-3940256099942544/4177191038
+//        MobileAds.initialize(requireActivity())
+//        val adLoader = AdLoader.Builder(requireActivity(), "ca-app-pub-3940256099942544/2247696110")
+//            .forNativeAd { nativeAd ->
+//                // Create NativeTemplateStyle
+//                val styles = NativeTemplateStyle.Builder().withMainBackgroundColor(background).build()
+//
+//                binding.natSmallTemplate.setStyles(styles)
+//                binding.natSmallTemplate.setNativeAd(nativeAd)
+//                Log.d("AdLoad", "광고가 성공적으로 로드되었습니다.")
+//            }
+//            .withAdListener(object : AdListener() {
+//                override fun onAdFailedToLoad(adError: LoadAdError) {
+//                    super.onAdFailedToLoad(adError)
+//                    Log.d("AdLoad", "광고 로드 실패: ${adError.message}")
+//                }
+//            })
+//            .build()
+//
+//        adLoader.loadAds(AdRequest.Builder().build(), 3)
 
 
 

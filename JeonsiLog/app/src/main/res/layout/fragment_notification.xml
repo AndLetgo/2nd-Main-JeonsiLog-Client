@@ -44,11 +44,9 @@
 
             app:tabBackground="@drawable/shape_tab_underline"
             />
-        <com.google.android.ads.nativetemplates.TemplateView
-            android:id="@+id/nat_small_template"
-            app:gnt_template_type="@layout/gnt_small_template_view"
-            android:layout_width="match_parent"
-            android:layout_height="90dp" />
+
+
+
         <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"
