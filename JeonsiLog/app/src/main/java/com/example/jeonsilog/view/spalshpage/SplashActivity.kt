@@ -73,15 +73,17 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(({ ActivitySplashBind
 
                                 if(AuthRepositoryImpl().signIn(data)){
                                     Log.d(tag, "서버 로그인 성공")
+                                    UserRepositoryImpl().getMyInfo(encryptedPrefs.getAT())
                                     CoroutineScope(Dispatchers.Main).launch {
-                                        UserRepositoryImpl().getMyInfo(encryptedPrefs.getAT())
                                         moveActivity(MainActivity())
                                     }
                                 } else {
                                     Log.d(tag, "서버 로그인 실패")
                                     prefs.clearAll()
                                     encryptedPrefs.clearAll()
-                                    Toast.makeText(this@SplashActivity, "카카오 계정 정보가 유효하지 않습니다.", Toast.LENGTH_LONG).show()
+                                    launch(Dispatchers.Main) {
+                                        Toast.makeText(this@SplashActivity, "카카오 계정 정보가 유효하지 않습니다.", Toast.LENGTH_LONG).show()
+                                    }
                                 }
                             }
                         } else {
