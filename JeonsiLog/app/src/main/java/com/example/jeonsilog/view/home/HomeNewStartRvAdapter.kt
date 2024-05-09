@@ -71,7 +71,7 @@ class HomeNewStartRvAdapter(private val homeRvList:List<ExhibitionsInfo>, privat
         return RecycleViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = 10
+    override fun getItemCount(): Int = homeRvList.size
 
     override fun onBindViewHolder(holder: RecycleViewHolder, position: Int) {
         holder.bind(position)

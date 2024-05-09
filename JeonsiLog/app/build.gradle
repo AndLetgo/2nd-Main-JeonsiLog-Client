@@ -13,8 +13,8 @@ android {
         applicationId "com.andletgo.jeonsilog"
         minSdk 29
         targetSdk 33
-        versionCode 12
-        versionName "2.0.1"
+        versionCode 13
+        versionName "2.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def properties = new Properties()
