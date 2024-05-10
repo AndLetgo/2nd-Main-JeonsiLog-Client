@@ -23,8 +23,10 @@ class HomeEndSoonRvAdapter(private val homeRvList:List<ExhibitionsInfo>, private
             binding.tvExhibitionName.text = item.exhibitionName
 
             if(item.place.placeName !=null){
+                binding.tvExhibitionPlace.visibility = View.VISIBLE
                 binding.tvExhibitionPlace.text = item.place.placeName
-            }
+            }else
+                binding.tvExhibitionPlace.visibility = View.GONE
 
             var operatingKeyword = ""
             when(item.operatingKeyword){
