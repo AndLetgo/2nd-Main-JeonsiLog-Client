@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="332dp"
         android:paddingVertical="@dimen/margin_12"
         android:paddingHorizontal="@dimen/margin_8">
         <ImageView
@@ -60,11 +60,10 @@
             android:background="@drawable/shape_item_keyword"
             style="@style/Keyword_bold"
             android:textColor="@color/basic_point"
-            app:layout_constraintTop_toBottomOf="@id/tv_exhibition_place"
+            app:layout_constraintTop_toTopOf="@id/tv_keyword_first"
             app:layout_constraintStart_toEndOf="@id/tv_keyword_first"
             android:layout_marginStart="@dimen/margin_4"
             android:paddingHorizontal="@dimen/margin_8"
-            android:paddingVertical="@dimen/margin_4"
-            android:layout_marginTop="@dimen/margin_12"/>
+            android:paddingVertical="@dimen/margin_4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

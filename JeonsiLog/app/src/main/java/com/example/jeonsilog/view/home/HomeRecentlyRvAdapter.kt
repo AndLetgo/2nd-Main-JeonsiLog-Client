@@ -32,8 +32,10 @@ class HomeRecentlyRvAdapter(private val homeRvList:List<ExhibitionsInfo>, privat
 //            }
 
             if(item.place.placeName !=null){
+                binding.tvExhibitionPlace.visibility = View.VISIBLE
                 binding.tvExhibitionPlace.text = item.place.placeName
-            }
+            }else
+                binding.tvExhibitionPlace.visibility = View.GONE
 
             var operatingKeyword = ""
             when(item.operatingKeyword){

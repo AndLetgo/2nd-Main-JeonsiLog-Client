@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".view.home.HomeFragment"
         android:background="@color/basic_white">
 <!--        <androidx.appcompat.widget.Toolbar-->
@@ -77,8 +77,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/margin_56">
-            <LinearLayout
+            android:layout_marginBottom="@dimen/margin_56">
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ll_in_scroll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,7 +91,9 @@
                     style="@style/XL_bold"
                     android:textColor="@color/basic_black"
                     android:paddingStart="@dimen/margin_16"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/rv_popular"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_popular"
@@ -101,6 +103,9 @@
                     android:orientation="horizontal"
                     android:paddingHorizontal="@dimen/margin_16"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_popular"
+                    app:layout_constraintBottom_toTopOf="@id/tv_title_artistic"
+                    tools:layout_editor_absoluteX="0dp"
                     tools:listitem="@layout/item_home_exhibition_ver2" />
 
                 <TextView
@@ -111,7 +116,10 @@
                     style="@style/XL_bold"
                     android:textColor="@color/basic_black"
                     android:paddingStart="@dimen/margin_16"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    app:layout_constraintTop_toBottomOf="@id/rv_popular"
+                    app:layout_constraintBottom_toTopOf="@id/rv_artistic"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_artistic"
                     android:layout_width="match_parent"
@@ -120,17 +128,24 @@
                     android:orientation="horizontal"
                     android:paddingHorizontal="@dimen/margin_16"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_artistic"
+                    app:layout_constraintBottom_toTopOf="@id/tv_title_end_soon"
+                    tools:layout_editor_absoluteX="0dp"
                     tools:listitem="@layout/item_home_exhibition_ver2" />
 
                 <TextView
                     android:id="@+id/tv_title_end_soon"
+                    style="@style/XL_bold"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_52"
-                    android:text="@string/home_title_end_soon"
-                    style="@style/XL_bold"
-                    android:textColor="@color/basic_black"
+                    android:gravity="center_vertical"
                     android:paddingStart="@dimen/margin_16"
-                    android:gravity="center_vertical"/>
+                    android:text="@string/home_title_end_soon"
+                    android:textColor="@color/basic_black"
+                    app:layout_constraintTop_toBottomOf="@id/rv_artistic"
+                    app:layout_constraintBottom_toTopOf="@id/rv_end_soon"
+                    tools:layout_editor_absoluteX="0dp" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_end_soon"
                     android:layout_width="match_parent"
@@ -139,7 +154,9 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_home_exhibition_ver2"
                     android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/margin_16"/>
+                    android:paddingHorizontal="@dimen/margin_16"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_end_soon"
+                    app:layout_constraintBottom_toTopOf="@id/tv_title_new_start"/>
                 <TextView
                     android:id="@+id/tv_title_new_start"
                     android:layout_width="match_parent"
@@ -148,7 +165,9 @@
                     style="@style/XL_bold"
                     android:textColor="@color/basic_black"
                     android:paddingStart="@dimen/margin_16"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    app:layout_constraintTop_toBottomOf="@id/rv_end_soon"
+                    app:layout_constraintBottom_toTopOf="@id/rv_new_start"/>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_new_start"
                     android:layout_width="match_parent"
@@ -157,8 +176,11 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_home_exhibition_ver2"
                     android:clipToPadding="false"
-                    android:paddingHorizontal="@dimen/margin_16"/>
-            </LinearLayout>
+                    android:paddingHorizontal="@dimen/margin_16"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title_new_start"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="@dimen/margin_16"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
