@@ -42,10 +42,10 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
         }
 
         adminViewModel.setCheckListCount(false)
-//        setRecyclerView()
+        setRecyclerView()
 
         binding.vm = adminViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = requireActivity()
         binding.etSearchRecord.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -92,6 +92,7 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
                 adminViewModel.setCheckListCount(true)
             }
             binding.rvExhibitionList.adapter!!.notifyItemInserted(exhibitionList.size-1)
+
         }
     }
 
@@ -145,6 +146,7 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
         }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.item_admin_managing_dropdown, exhibitionNameList)
+
         binding.etSearchRecord.setAdapter(adapter)
         binding.etSearchRecord.dropDownHeight = resources.getDimensionPixelSize(R.dimen.dropdown_height)
     }
