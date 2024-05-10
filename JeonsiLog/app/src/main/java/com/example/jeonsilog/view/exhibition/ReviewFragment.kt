@@ -11,7 +11,6 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -324,13 +323,14 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(R.layout.fragment_rev
         return check
     }
 
-    private fun setUserLevel(level:String): Drawable?{
+    private fun setUserLevel(level:String?): Drawable?{
         var img: Drawable? = null
         when(level){
             "BEGINNER" -> img = context?.getDrawable(R.drawable.ic_user_level_1_beginner)
             "INTERMEDIATE" -> img = context?.getDrawable(R.drawable.ic_user_level_2_intermediate)
             "ADVANCED" -> img = context?.getDrawable(R.drawable.ic_user_level_3_advanced)
             "MASTER" -> img = context?.getDrawable(R.drawable.ic_user_level_4_master)
+            null -> {}
         }
         return img
     }
