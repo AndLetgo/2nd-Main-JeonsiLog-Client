@@ -102,7 +102,7 @@ class AdminReportFragment : BaseFragment<FragmentAdminReportBinding>(R.layout.fr
                 hasNextPage = response.body()!!.information.hasNextPage
             }
         }
-        val startPosition = totalCount + 1
+        val startPosition = totalCount +2
         adminReportRvAdapter.notifyItemRangeInserted(startPosition, addItemCount)
         reportPage++
     }
