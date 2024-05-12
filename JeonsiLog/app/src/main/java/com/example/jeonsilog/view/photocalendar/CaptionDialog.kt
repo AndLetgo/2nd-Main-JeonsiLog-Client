@@ -149,6 +149,10 @@ class CaptionDialog(
             editState=true
             checkDim()
             checkEdit()
+            if(dimState==true){
+                val inputMethodManager = getSystemService(requireContext(), InputMethodManager::class.java)
+                inputMethodManager?.hideSoftInputFromWindow(binding.captionEdittext.windowToken, 0)
+            }
         }
 
         binding.btSave.setOnClickListener {
