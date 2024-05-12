@@ -145,43 +145,24 @@ class CaptionDialog(
 
         }
         binding.btText.setOnClickListener {
+            Log.d("captionTest", "onViewCreated: ******* $dimState ******")
             dimState=!dimState
-            editState=true
-            checkDim()
-            checkEdit()
-        }
+            if(dimState){
+                binding.btText.setImageDrawable(context?.getDrawable(R.drawable.ic_caption_text))
+                saveCaption()
 
-        binding.btSave.setOnClickListener {
-            var date =list[index!!].date
-            var url =list[index!!].imgUrl
-            var captionStr=userInput
-            runBlocking(Dispatchers.IO) {
-                val body= DeletePhotoRequest(DateUtil().monthYearFromDate(localDate))
-                val response = CalendarRepositoryImpl().deletePhoto(GlobalApplication.encryptedPrefs.getAT(),body)
-                if(response.isSuccessful && response.body()!!.check){
-                }
-            }
-            runBlocking(Dispatchers.IO) {
-                val body= PostPhotoFromPosterRequest(date,url,captionStr)
-                val response = CalendarRepositoryImpl().postPhotoFromPoster(
-                    GlobalApplication.encryptedPrefs.getAT(),body)
-                Log.d("tag", "$response")
-                if(response.isSuccessful && response.body()!!.check){
-                    Log.d("UpCaption", "Image uploaded successfully : ${response.body()}")
-
-                } else {
-                    Log.e("Upload", "Image upload failed")
-                }
+            }else{
+                binding.btText.setImageDrawable(context?.getDrawable(R.drawable.illus_save))
+                editState=true
                 checkDim()
+                checkEdit()
             }
-            val inputMethodManager = getSystemService(requireContext(), InputMethodManager::class.java)
-            inputMethodManager?.hideSoftInputFromWindow(binding.captionEdittext.windowToken, 0)
 
-            binding.captionEdittext.clearFocus()
-            dimState=!dimState
-            checkDim()
-            //binding.btSave.isGone=true
         }
+
+//        binding.btSave.setOnClickListener {
+//
+//        }
 
         binding.tvLoadPoster.setOnClickListener {
             // 새로운 다이얼로그 열기
@@ -229,7 +210,7 @@ class CaptionDialog(
 
     @SuppressLint("ResourceAsColor", "ClickableViewAccessibility")
     private fun checkDim() {
-        binding.btSave.isGone=dimState
+//        binding.btSave.isGone=dimState
         if (dimState) {
             binding.captionEdittext.isGone=true
             binding.ivPhoto.setColorFilter(
@@ -405,4 +386,34 @@ class CaptionDialog(
         editText.filters = inputFilters
     }
 
+    private fun saveCaption(){
+        var date =list[index!!].date
+        var url =list[index!!].imgUrl
+        var captionStr=userInput
+        runBlocking(Dispatchers.IO) {
+            val body= DeletePhotoRequest(DateUtil().monthYearFromDate(localDate))
+            val response = CalendarRepositoryImpl().deletePhoto(GlobalApplication.encryptedPrefs.getAT(),body)
+            if(response.isSuccessful && response.body()!!.check){
+            }
+        }
+        runBlocking(Dispatchers.IO) {
+            val body= PostPhotoFromPosterRequest(date,url,captionStr)
+            val response = CalendarRepositoryImpl().postPhotoFromPoster(
+                GlobalApplication.encryptedPrefs.getAT(),body)
+            Log.d("tag", "$response")
+            if(response.isSuccessful && response.body()!!.check){
+                Log.d("UpCaption", "Image uploaded successfully : ${response.body()}")
+            } else {
+                Log.e("Upload", "Image upload failed")
+            }
+//            checkDim()
+        }
+        val inputMethodManager = getSystemService(requireContext(), InputMethodManager::class.java)
+        inputMethodManager?.hideSoftInputFromWindow(binding.captionEdittext.windowToken, 0)
+
+        binding.captionEdittext.clearFocus()
+//        dimState=!dimState
+        checkDim()
+        //binding.btSave.isGone=true
+    }
 }
