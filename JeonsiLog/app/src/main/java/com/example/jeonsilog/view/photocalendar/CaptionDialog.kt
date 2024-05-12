@@ -172,12 +172,15 @@ class CaptionDialog(
                 } else {
                     Log.e("Upload", "Image upload failed")
                 }
+                checkDim()
             }
             val inputMethodManager = getSystemService(requireContext(), InputMethodManager::class.java)
             inputMethodManager?.hideSoftInputFromWindow(binding.captionEdittext.windowToken, 0)
 
             binding.captionEdittext.clearFocus()
-            binding.btSave.isGone=true
+            dimState=!dimState
+            checkDim()
+            //binding.btSave.isGone=true
         }
 
         binding.tvLoadPoster.setOnClickListener {
