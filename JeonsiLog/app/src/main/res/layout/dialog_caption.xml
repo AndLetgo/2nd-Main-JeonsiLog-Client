@@ -146,15 +146,15 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <ImageView
-            android:elevation="1dp"
-            android:id="@+id/bt_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="@+id/bt_text"
-            app:layout_constraintTop_toBottomOf="@+id/bt_text"
-            app:srcCompat="@drawable/illus_save" />
+<!--        <ImageView-->
+<!--            android:elevation="1dp"-->
+<!--            android:id="@+id/bt_save"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="12dp"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/bt_text"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/bt_text"-->
+<!--            app:srcCompat="@drawable/illus_save" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

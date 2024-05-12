@@ -156,6 +156,7 @@ class AdminReviewFragment : BaseFragment<FragmentAdminReviewBinding>(R.layout.fr
                 if(adminViewModel.reportReviewId.value!=null){
                     (activity as MainActivity).setStateFcm(false)
                     adminViewModel.setReportReviewId(null)
+                    adminViewModel.setIsReport(true)
                 }
                 isEnabled = false
                 requireActivity().onBackPressed()

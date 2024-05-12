@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,15 +27,10 @@ class AdminReportRvAdapter(
         RecyclerView.ViewHolder(binding.root){
         fun bind(position:Int){
             val item = reportList[position]
-            if (item.isChecked) {
-                itemView.alpha = 0.4f
-            } else {
-                itemView.alpha = 1.0f
-            }
 
             var icDrawable = ContextCompat.getDrawable(context, R.drawable.ic_admin_report_user)
             var content = ""
-            var nameIndex = item.name.length
+            var nameIndex = item.name.length+2
             val boldSpan = StyleSpan(Typeface.BOLD)
             when(item.reportType){
                 "EXHIBITION" -> {
@@ -100,6 +96,10 @@ class AdminReportRvAdapter(
                 }
                 binding.tvCountBadge.backgroundTintList = badgeColor(count)
             }
+
+            //읽은 신고 딤처리
+            if (item.isChecked) itemView.alpha = 0.4f
+            else itemView.alpha = 1.0f
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

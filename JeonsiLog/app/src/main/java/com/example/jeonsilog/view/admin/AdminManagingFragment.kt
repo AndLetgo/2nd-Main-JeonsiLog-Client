@@ -42,10 +42,10 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
         }
 
         adminViewModel.setCheckListCount(false)
-//        setRecyclerView()
+        setRecyclerView()
 
         binding.vm = adminViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = requireActivity()
         binding.etSearchRecord.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -92,20 +92,21 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
                 adminViewModel.setCheckListCount(true)
             }
             binding.rvExhibitionList.adapter!!.notifyItemInserted(exhibitionList.size-1)
+
         }
     }
 
     private fun setRecyclerView(){
-//        runBlocking(Dispatchers.IO){
-//            val response = ExhibitionRepositoryImpl().getExhibitions(encryptedPrefs.getAT(), 0)
-//            if(response.isSuccessful && response.body()!!.check){
-//                val data =response.body()!!.information.data
-//                for(i in 0..9){
-//                    val item = SearchByNameEntity(data[i].exhibitionId, data[i].exhibitionName)
-//                    exhibitionList.add(i,item)
-//                }
-//            }
-//        }
+        runBlocking(Dispatchers.IO){
+            val response = ExhibitionRepositoryImpl().getExhibitionsRecently(encryptedPrefs.getAT())
+            if(response.isSuccessful && response.body()!!.check){
+                val data =response.body()!!.information.data
+                for(i in 0..9){
+                    val item = SearchByNameEntity(data[i].exhibitionId, data[i].exhibitionName)
+                    exhibitionList.add(i,item)
+                }
+            }
+        }
         adminManagingRvAdapter = AdminManagingRvAdapter(exhibitionList, requireContext())
         binding.rvExhibitionList.adapter = adminManagingRvAdapter
         binding.rvExhibitionList.layoutManager = LinearLayoutManager(requireContext())
@@ -145,6 +146,7 @@ class AdminManagingFragment : BaseFragment<FragmentAdminManagingBinding>(R.layou
         }
 
         val adapter = ArrayAdapter(requireContext(), R.layout.item_admin_managing_dropdown, exhibitionNameList)
+
         binding.etSearchRecord.setAdapter(adapter)
         binding.etSearchRecord.dropDownHeight = resources.getDimensionPixelSize(R.dimen.dropdown_height)
     }
