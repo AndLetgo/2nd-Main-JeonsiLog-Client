@@ -27,11 +27,6 @@ class AdminReportRvAdapter(
         RecyclerView.ViewHolder(binding.root){
         fun bind(position:Int){
             val item = reportList[position]
-            if (item.isChecked) {
-                itemView.alpha = 0.4f
-            } else {
-                itemView.alpha = 1.0f
-            }
 
             var icDrawable = ContextCompat.getDrawable(context, R.drawable.ic_admin_report_user)
             var content = ""
@@ -101,6 +96,10 @@ class AdminReportRvAdapter(
                 }
                 binding.tvCountBadge.backgroundTintList = badgeColor(count)
             }
+
+            //읽은 신고 딤처리
+            if (item.isChecked) itemView.alpha = 0.4f
+            else itemView.alpha = 1.0f
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
